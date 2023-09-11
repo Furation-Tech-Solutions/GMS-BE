@@ -125,6 +125,15 @@ class ApiError extends ErrorClass {
   static brandLogoDeletionError(): ApiError {
     return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.BRAND_LOGO_DELETION_ERROR, "brandLogoDeletionError");
   }
+
+
+  static overlappingShift(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_SHIFT, "Overlapping");
+  }
+
+  static overlappingBlackoutDate(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_DATE , "dateoverlap");
+    
   static roleExist(): ApiError {
     return new ApiError(HttpStatus.ROLECONFLICT, ErrorMessage.ROLE_CONFLICT, "conflictWithRole");
   }
@@ -136,6 +145,7 @@ class ApiError extends ErrorClass {
   }
   static guestExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+
   }
 }
 
