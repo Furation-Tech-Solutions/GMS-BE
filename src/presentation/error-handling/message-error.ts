@@ -34,4 +34,9 @@ export const OVERLAPPING_SHIFT = "Overlapping shift already exists";
 
 export const OVERLAPPING_DATE = "You have already added that date";
 
+export const ROLE_CONFLICT="role is already exist"
+
+export const NAME_EXIST="name already exists";
+
+
 

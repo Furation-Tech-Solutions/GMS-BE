@@ -1,0 +1,274 @@
+
+
+[
+    {
+     "role":"Superuser",
+     "permissions":[
+        {
+            "101":"Auto-assign Requests",
+            "default":false
+        },
+        {
+            "102":"Automatically make follower on all reservations",
+            "default":false
+        },
+        {
+            "103":"Automatically make follower on reservations user creates",
+            "default":true
+        }
+     ]   
+    }, {
+        "role":"User Manager Only",
+        "permissions":[
+           {
+               "104":"Export User Access Data",
+               "default":false
+           }
+        ]   
+       },
+    {
+        "role":"Manager",
+        "permissions":[
+           {
+               "105":"Administrate Availability - Shifts and Access Rules",
+               "default":true
+           },
+           {
+            "106":"Administrate Availability - Blackout Dates and Daily Program",
+            "default":true
+        },
+        {
+            "107":"Administrate User Access",
+            "default":false
+        },
+        {
+            "108":"Administrate Widget Settings",
+            "default":true
+        },
+        {
+            "109":"Administrate Payment Gateway Integrations",
+            "default":true
+        },
+        {
+            "110":"Administrate General Settings",
+            "default":true
+        },
+        {
+            "111":"Access Client Tab",
+            "default":true
+        },
+        {
+            "112":"Access Marketing Tools",
+            "default":true
+        },
+        {
+            "113":"Access Private Line",
+            "default":false
+        },
+        {
+            "114":"View Client Spend Aggregates Data",
+            "default":true
+        },
+        {
+            "115":"View POS Check Data",
+            "default":true
+        },
+        {
+            "116":"View Reporting (Full)",
+            "default":true
+        },
+        {
+            "117":"Export Client Data",
+            "default":false
+        },
+        {
+            "118":"Export Actuals Data",
+            "default":false
+        },
+        {
+            "119":"View all clients' contact info",
+            "default":true
+        },
+        {
+            "120":"Manage reservation and client tags lists",
+            "default":true
+        },
+        {
+            "121":"Add/remove client tags from client profiles",
+            "default":false
+        },
+        {
+            "122":"Charge credit cards on reservations",
+            "default":true
+        },
+        {
+            "123":"Refund credit cards on reservations",
+            "default":true
+        },
+        {
+            "124":"Require manual input of Booked By on Mobile App",
+            "default":false
+        },
+        {
+            "125":"Book Guestlist",
+            "default":true
+        },
+        {
+            "126":"Auto-assign Requests",
+            "default":false
+        },
+        {
+            "127":"Automatically make follower on all reservations",
+            "default":false
+        },
+        {
+            "128":"Automatically make follower on reservations user creates",
+            "default":true
+        },
+        {
+            "129":"Override Maximum total covers for shift (Mobile only)",
+            "default":false
+        }
+        
+        ]   
+       },
+       {
+        "role":"Sub-Manager",
+        "permissions":[
+           {
+               "130":"Administrate Availability - Shifts and Access Rules",
+               "default":false
+           },
+           {
+               "131":"Administrate Availability - Blackout Dates and Daily Program",
+               "default":false
+           },
+           {
+               "132":"Administrate Widget Settings",
+               "default":false
+           },
+           {
+            "133":"Administrate General Settings",
+            "default":false
+        },
+        {
+            "134":"Access Client Tab",
+            "default":true
+        },
+        {
+            "135":"Access Marketing Tools",
+            "default":false
+        },
+        {
+            "136":"Access Private Line",
+            "default":false
+        },
+        {
+            "137":"View Client Spend Aggregates Data",
+            "default":true
+        },
+        {
+            "138":"View POS Check Data",
+            "default":true
+        },
+        {
+            "139":"View Reporting (Full)",
+            "default":false
+        },
+        {
+            "140":"Export Client Data",
+            "default":false
+        },
+        {
+            "141":"Export Actuals Data",
+            "default":false
+        },
+        {
+            "142":"View all clients' contact info",
+            "default":true
+        },
+        {
+            "143":"Access Operations Tabs",
+            "default":true
+        },
+        {
+            "144":"Manage reservation and client tags lists",
+            "default":false
+        },
+        {
+            "145":"Add/remove client tags from client profiles",
+            "default":false
+        },
+        {
+            "146":"Charge credit cards on reservations",
+            "default":true
+        },
+        {
+            "147":"Refund credit cards on reservations",
+            "default":true
+        },
+        {
+            "148":"Require manual input of Booked By on Mobile App",
+            "default":false
+        },
+        {
+            "149":"Book Guestlist",
+            "default":true
+        },
+        {
+            "150":"Auto-assign Requests",
+            "default":false
+        },
+        {
+            "151":"Automatically make follower on all reservations",
+            "default":false
+        },
+        {
+            "152":"Automatically make follower on reservations user creates",
+            "default":true
+        },
+        {
+            "153":"Overbook pacing limits",
+            "default":false
+        },
+        {
+            "154":"Overbook 'only larger tables available'",
+            "default":false
+        },
+        {
+            "155":"Overbook 'only smaller tables available'",
+            "default":false
+        },
+        {
+            "156":"Overbook 'no tables available'",
+            "default":false
+        },
+        {
+            "157":"Book on access rule table blocks",
+            "default":false
+        },
+        {
+            "158":"Overbook enforced shift party size limitations",
+            "default":false
+        },
+        {
+            "159":"Override shift-required payment when booking",
+            "default":false
+        },
+        {
+            "160":"Add/Edit Blocks",
+            "default":false
+        },
+        {
+            "161":"Allow user to edit floorplan settings (Tables, Rooms, Layouts, Etc.)",
+            "default":false
+        },
+        {
+            "162":"Override Maximum total covers for shift (Mobile only)",
+            "default":false
+        }
+        ]   
+       }
+       
+
+]

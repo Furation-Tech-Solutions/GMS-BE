@@ -1,13 +1,7 @@
-
-
-export class GetPresignedUrlEntity{
-  constructor(
-    public id:string="",
-  ){}
+export class GetPresignedUrlEntity {
+  constructor(public id: string = "") {}
 }
 
-export class outletMediaEntity{
-    constructor(
-        public url:string
-    ){}
+export class outletMediaEntity {
+  constructor(public url: string) {}
 }

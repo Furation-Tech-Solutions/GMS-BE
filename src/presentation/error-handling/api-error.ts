@@ -88,6 +88,13 @@ class ApiError extends ErrorClass {
   static emailExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
+  static nameExist(): ApiError {
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.NAME_EXIST,
+      "nameExist"
+    );
+  }
 
   static internalError(): ApiError {
     return new ApiError(
@@ -119,12 +126,26 @@ class ApiError extends ErrorClass {
     return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.BRAND_LOGO_DELETION_ERROR, "brandLogoDeletionError");
   }
 
+
   static overlappingShift(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_SHIFT, "Overlapping");
   }
 
   static overlappingBlackoutDate(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_DATE , "dateoverlap");
+    
+  static roleExist(): ApiError {
+    return new ApiError(HttpStatus.ROLECONFLICT, ErrorMessage.ROLE_CONFLICT, "conflictWithRole");
+  }
+  static clientExist(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+  }
+  static clienttagExist(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+  }
+  static guestExist(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+
   }
 }
 

@@ -27,7 +27,7 @@ async function connectToDatabase() {
       });
 
   } catch (error) {
-
+console.log("error is this-",error,"error")
     if(error instanceof ApiError){
         console.log(error.message )
     }
