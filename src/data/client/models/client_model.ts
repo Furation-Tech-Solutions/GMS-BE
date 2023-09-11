@@ -38,7 +38,7 @@ const clientSchema = new mongoose.Schema({
     },
     tags: {
         type: [String],
-        // ref: "ClientTags",
+        // ref: "ClientTags", give the id of tag from clientTagCategory.
     },
     email: {
         type: String,

@@ -115,7 +115,7 @@ class ApiError extends ErrorClass {
   static awsPresigningError(): ApiError {
     return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.AWS_PRESIGN_ERROR, "awsPresigningError");
   }
- static forbidden(): ApiError {
+  static forbidden(): ApiError {
     return new ApiError(
       HttpStatus.FORBIDDEN,
       ErrorMessage.FORBIDDEN,
@@ -135,6 +135,9 @@ class ApiError extends ErrorClass {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
   static guestExist(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+  }
+  static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
 }

@@ -2,6 +2,17 @@ import { strict } from "assert";
 import { array, boolean, object, string } from "joi";
 import mongoose from "mongoose";
 
+const resTagSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    note: {
+        type: String,
+        required: true,
+    },
+}, { _id: true });
+
 const reservationTagCategorySchema = new mongoose.Schema({
     name: {
         type: String,
@@ -29,6 +40,7 @@ const reservationTagCategorySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserAccount",
     }],
+    tags: [resTagSchema],
     createdAt: {
         type: Date,
         default: Date.now,
