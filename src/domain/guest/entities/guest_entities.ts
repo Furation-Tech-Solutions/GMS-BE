@@ -9,6 +9,8 @@ export class GuestModel {
     public aditionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
+    public bookedBy: string = "",
+    public status: string = "",
     public createdAt: string
   ) { }
 }
@@ -27,6 +29,8 @@ export class GuestEntity {
     public aditionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
+    public bookedBy: string = "",
+    public status: string = "",
     public createdAt: string
   ) { }
 }
@@ -65,10 +69,10 @@ export class GuestMapper {
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
             : existingguest.confirmationMailSending,
-        // bookedBy:
-        //   guestData.bookedBy !== undefined
-        //     ? guestData.bookedBy
-        //     : existingguest.bookedBy,
+        bookedBy:
+          guestData.bookedBy !== undefined
+            ? guestData.bookedBy
+            : existingguest.bookedBy,
         aditionalGuest:
           guestData.aditionalGuest !== undefined
             ? guestData.aditionalGuest
@@ -81,6 +85,10 @@ export class GuestMapper {
           guestData.notes !== undefined
             ? guestData.notes
             : existingguest.notes,
+        status:
+          guestData.status !== undefined
+            ? guestData.status
+            : existingguest.status,
         createdAt:
           guestData.createdAt !== undefined
             ? guestData.createdAt
@@ -100,10 +108,11 @@ export class GuestMapper {
         phone: guestData.phone,
         confirmationMailSending:
           guestData.confirmationMailSending,
-        // bookedBy: guestData.bookedBy,
+        bookedBy: guestData.bookedBy,
         aditionalGuest: guestData.aditionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
+        status: guestData.status,
         createdAt: guestData.createdAt,
       };
       return guestEntity;
@@ -117,10 +126,11 @@ export class GuestMapper {
       email: guest.email,
       phone: guest.phone,
       confirmationMailSending: guest.confirmationMailSending,
-      // bookedBy: guest.bookedBy,
+      bookedBy: guest.bookedBy,
       aditionalGuest: guest.aditionalGuest,
       reservationTags: guest.reservationTags,
       notes: guest.notes,
+      status: guest.status,
     };
   }
 }

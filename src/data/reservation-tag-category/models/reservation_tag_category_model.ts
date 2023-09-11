@@ -27,7 +27,7 @@ const reservationTagCategorySchema = new mongoose.Schema({
     },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
-        // ref: "User",
+        ref: "UserAccount",
     }],
     createdAt: {
         type: Date,
