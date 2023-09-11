@@ -48,6 +48,30 @@ const bookingChannels = new Schema({
     type: [String],
     enum: ["Direct Booking Channels", "Third Party Booking Channels", "Waitlist"]
   }
+},  { _id: false });
+
+const partySizeSchema = new Schema({
+  minPartySize: {
+    type: Number,
+    required: false,
+    default: 2,
+  },
+  maxPartySize: {
+    type: Number,
+    required: false,
+    default: 12,
+  },
+},  { _id: false });
+
+const seatingAreaSchema = new Schema({
+  SeatingAreaName: {
+    type: [String],
+    required: true,
+  },
+  exclusive: {
+    type: Boolean,
+    default: false,
+  },
 },  { _id: false })
 
 // Define the schema
@@ -102,30 +126,10 @@ const accessRuleSchema: Schema<IAccessRuleDocument> = new Schema({
     required: false
   },
   partySize: {
-    type: {
-      minPartySize: {
-        type: Number,
-        required: false,
-        default: 2,
-      },
-      maxPartySize: {
-        type: Number,
-        required: false,
-        default: 12,
-      },
-    }
+    type: partySizeSchema,
   },
   seatingAreas: {
-    type: {
-      SeatingAreaName: {
-        type: [String],
-        required: true,
-      },
-      exclusive: {
-        type: Boolean,
-        default: false,
-      },
-    },
+    type: seatingAreaSchema,
     required: false,
   },
   guestFacingDisplay: guestFacingSchema,
