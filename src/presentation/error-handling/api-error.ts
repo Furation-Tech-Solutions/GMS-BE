@@ -1,6 +1,6 @@
 import * as HttpStatus from "./http-status";
 
-import { executionAsyncId } from 'async_hooks';
+import { executionAsyncId } from "async_hooks";
 import * as ErrorMessage from "./message-error";
 
 export class ErrorClass extends Error {
@@ -38,11 +38,7 @@ class ApiError extends ErrorClass {
   }
 
   static delete(): ApiError {
-    return new ApiError(
-      HttpStatus.OK,
-      ErrorMessage.DELETED_SUCCESS,
-      "Deleted"
-    );
+    return new ApiError(HttpStatus.OK, ErrorMessage.DELETED_SUCCESS, "Deleted");
   }
 
   static noContent(): ApiError {
@@ -113,9 +109,13 @@ class ApiError extends ErrorClass {
   }
 
   static awsPresigningError(): ApiError {
-    return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.AWS_PRESIGN_ERROR, "awsPresigningError");
+    return new ApiError(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      ErrorMessage.AWS_PRESIGN_ERROR,
+      "awsPresigningError"
+    );
   }
- static forbidden(): ApiError {
+  static forbidden(): ApiError {
     return new ApiError(
       HttpStatus.FORBIDDEN,
       ErrorMessage.FORBIDDEN,
@@ -123,19 +123,34 @@ class ApiError extends ErrorClass {
     );
   }
   static brandLogoDeletionError(): ApiError {
-    return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.BRAND_LOGO_DELETION_ERROR, "brandLogoDeletionError");
+    return new ApiError(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      ErrorMessage.BRAND_LOGO_DELETION_ERROR,
+      "brandLogoDeletionError"
+    );
   }
 
-
   static overlappingShift(): ApiError {
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_SHIFT, "Overlapping");
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.OVERLAPPING_SHIFT,
+      "Overlapping"
+    );
   }
 
   static overlappingBlackoutDate(): ApiError {
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.OVERLAPPING_DATE , "dateoverlap");
-    
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.OVERLAPPING_DATE,
+      "dateoverlap"
+    );
+  }
   static roleExist(): ApiError {
-    return new ApiError(HttpStatus.ROLECONFLICT, ErrorMessage.ROLE_CONFLICT, "conflictWithRole");
+    return new ApiError(
+      HttpStatus.ROLECONFLICT,
+      ErrorMessage.ROLE_CONFLICT,
+      "conflictWithRole"
+    );
   }
   static clientExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
@@ -145,7 +160,6 @@ class ApiError extends ErrorClass {
   }
   static guestExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
-
   }
 }
 
