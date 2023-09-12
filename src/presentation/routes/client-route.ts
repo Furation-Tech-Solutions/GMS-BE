@@ -8,6 +8,8 @@ import { GetAllClients } from "@domain/client/usecases/get-all-client"; // Impor
 import { GetClientById } from "@domain/client/usecases/get-clients-by-id"; // Import the GetClientById use case
 import { UpdateClient } from "@domain/client/usecases/update-client"; // Import the UpdateClient use case
 import { DeleteClient } from "@domain/client/usecases/delete-client"; // Import the DeleteClient use case
+import { validateClientInputMiddleware } from "@presentation/middlewares/client/validation-client"; // Import the DeleteClient use case
+
 
 // Create an instance of the ClientDataSourceImpl and pass the mongoose connection
 const clientDataSource = new ClientDataSourceImpl(mongoose.connection);
@@ -37,6 +39,7 @@ export const clientRouter = Router();
 // Route handling for creating a new client
 clientRouter.post(
     "/add",
+    validateClientInputMiddleware(false),
     clientService.createClient.bind(clientService)
 );
 
@@ -58,5 +61,6 @@ clientRouter.get("/", clientService.getAllClients.bind(clientService));
 // Route handling for updating a client by ID
 clientRouter.put(
     "/:clientId",
+    validateClientInputMiddleware(true),
     clientService.updateClient.bind(clientService)
 );
