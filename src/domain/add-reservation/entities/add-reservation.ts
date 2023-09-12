@@ -6,14 +6,13 @@ export class AddReservationModel {
     public seatingArea: string | undefined = undefined,
     public timeSlot: string = "",
     public client: string | undefined = undefined,
-    public source: string | undefined = undefined,
-    public reservationStatus: string[] = [],
+    // public source: string | undefined = undefined,
+    public resevationTags: string[] = [],
     public reservationNote: string = "",
     public table: string | undefined = undefined,
     public bookedBy: string | undefined = undefined,
     public perks: string = "",
-    public confirmationMailSending: boolean = false,
-    public createdAt: Date
+    public confirmationMailSending: boolean = false
   ) {}
 }
 
@@ -26,14 +25,14 @@ export class AddReservationEntity {
     public seatingArea: string | undefined,
     public timeSlot: string,
     public client: string | undefined,
-    public source: string | undefined,
-    public reservationStatus: string[],
+    // public source: string | undefined,
+    public resevationTags: string[],
     public reservationNote: string,
     public table: string | undefined,
     public bookedBy: string | undefined,
     public perks: string,
     public confirmationMailSending: boolean,
-    public createdAt: Date
+    public createdAt: string
   ) {}
 }
 
@@ -70,14 +69,14 @@ export class AddReservationMapper {
           reservationData.client !== undefined
             ? reservationData.client
             : existingReservation.client,
-        source:
-          reservationData.source !== undefined
-            ? reservationData.source
-            : existingReservation.source,
-        reservationStatus:
-          reservationData.reservationStatus !== undefined
-            ? reservationData.reservationStatus
-            : existingReservation.reservationStatus,
+        // source:
+        // reservationData.source !== undefined
+        // ? reservationData.source
+        // : existingReservation.source,
+        resevationTags:
+          reservationData.resevationTags !== undefined
+            ? reservationData.resevationTags
+            : existingReservation.resevationTags,
         reservationNote:
           reservationData.reservationNote !== undefined
             ? reservationData.reservationNote
@@ -116,8 +115,8 @@ export class AddReservationMapper {
         seatingArea: reservationData.seatingArea,
         timeSlot: reservationData.timeSlot,
         client: reservationData.client,
-        source: reservationData.source,
-        reservationStatus: reservationData.reservationStatus,
+        // // source: reservationData.source,
+        resevationTags: reservationData.resevationTags,
         reservationNote: reservationData.reservationNote,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
@@ -137,14 +136,13 @@ export class AddReservationMapper {
       reservation.seatingArea,
       reservation.timeSlot,
       reservation.client,
-      reservation.source,
-      reservation.reservationStatus,
+      // reservation.source,
+      reservation.resevationTags,
       reservation.reservationNote,
       reservation.table,
       reservation.bookedBy,
       reservation.perks,
-      reservation.confirmationMailSending,
-      reservation.createdAt
+      reservation.confirmationMailSending
     );
   }
 }
