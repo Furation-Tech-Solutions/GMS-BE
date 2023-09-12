@@ -3,6 +3,7 @@ export class AccessLevelModel{
     constructor(
         public role:string= "",
         public permissions: any = null,
+        public additional_options:any=null,
         public emailSubscription: any = null,
     ){}
 }
@@ -12,6 +13,7 @@ export class AccessLevelEntity{
         public id: string | undefined = undefined,
         public role:string,
         public permissions: any ,
+        public additional_options:any,
         public emailSubscription: any 
     ){}
 }
@@ -32,6 +34,10 @@ export class AccessLevelMapper {
                     accessLevelData.permissions !== undefined
                     ? accessLevelData.permissions
                     : existingAccessLevel.permissions,
+                additional_options:
+                    accessLevelData.additional_options !== undefined
+                    ? accessLevelData.additional_options
+                    : existingAccessLevel.additional_options,
                 emailSubscription:
                     accessLevelData.emailSubscription !== undefined
                     ? accessLevelData.emailSubscription
@@ -43,9 +49,10 @@ export class AccessLevelMapper {
                       ? accessLevelData._id
                         ? accessLevelData._id.toString()
                         : undefined
-                      : undefined,
+                      : accessLevelData._id.toString(),
                     role: accessLevelData.role,
                     permissions:accessLevelData.permissions,
+                    additional_options:accessLevelData.additional_options,
                     emailSubscription:accessLevelData.emailSubscription
                 };
                 return accessLevelEntity;
@@ -55,6 +62,7 @@ export class AccessLevelMapper {
         return {
               role: accessLevel.role,
               permissions:accessLevel.permissions,
+              additional_options:accessLevel.additional_options,
               emailSubscription:accessLevel.emailSubscription,
         }
     }
