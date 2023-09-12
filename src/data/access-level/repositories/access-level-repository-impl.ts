@@ -24,4 +24,36 @@ export class AccessLevelRepositoryImpl implements AccessLevelRepository {
         return Left<ErrorClass, AccessLevelEntity>(ApiError.badRequest());
       }
     }
+    async getAccessLevel():Promise<Either<ErrorClass,AccessLevelEntity[]>>{
+      try{
+        const response = await this.accesseLevelDataSource.getAll();
+        return Right<ErrorClass, AccessLevelEntity[]>(response);
+      }
+      catch(error){
+        return Left<ErrorClass, AccessLevelEntity[]>(ApiError.badRequest());
+      
+      }
+    }
+    async deleteAccessLevel(id: string): Promise<Either<ErrorClass, void>> {
+      // await this.dataSource.delete(id);
+      try {
+        const i = await this.accesseLevelDataSource.delete(id);
+        return Right<ErrorClass, void>(i);
+      } catch (e) {
+        return Left<ErrorClass, void>(ApiError.badRequest());
+      }
+    }
+    async getAccessLevelById(id: string): Promise<Either<ErrorClass, AccessLevelEntity>> {
+      try {
+          const accessLevel = await this.accesseLevelDataSource.read(id); // Use the client data source
+          return accessLevel
+              ? Right<ErrorClass, AccessLevelEntity>(accessLevel)
+              : Left<ErrorClass, AccessLevelEntity>(ApiError.notFound());
+      } catch (e) {
+          if (e instanceof ApiError && e.name === "notfound") {
+              return Left<ErrorClass, AccessLevelEntity>(ApiError.notFound());
+          }
+          return Left<ErrorClass, AccessLevelEntity>(ApiError.badRequest());
+      }
+  }
 }

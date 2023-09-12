@@ -13,8 +13,8 @@ export class GetBookingRequestById implements GetBookingRequestByIdUsecase {
   constructor(bookingRequestRepository: BookingRequestRepository) {
     this.bookingRequestRepository = bookingRequestRepository;
   }
-
   async execute(BookingRequestID: string): Promise<Either<ErrorClass, BookingRequestEntity>> {
     return await this.bookingRequestRepository.getBookingRequestById(BookingRequestID); // Change to getBookingRequestById
+
   }
 }
