@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Router } from "express";
-import {BookingRequestServices } from "@presentation/services/bookingRequest-services"; // Import the BookingRequestServices
+import { BookingRequestServices } from "@presentation/services/bookingRequest-services"; // Import the BookingRequestServices
 import { BookingRequestDataSourceImpl } from "@data/BookingRequest/datasource/bookingRequest-datasource"; // Import the BookingRequestDataSourceImpl
 import { BookingRequestRepositoryImpl } from "@data/BookingRequest/repository/bookingRequest-repo-impl"; // Import the BookingRequestRepositoryImpl
 import { CreateBookingRequest } from "@domain/bookingRequest/usecases/create-bookingReq"; // Import the CreateBookingRequest use case
@@ -8,6 +8,7 @@ import { GetAllBookingRequests } from "@domain/bookingRequest/usecases/get-all-b
 import { GetBookingRequestById } from "@domain/bookingRequest/usecases/get-bookingRequest-by-id"; // Import the GetBookingRequestById use case
 import { UpdateBookingRequest } from "@domain/bookingRequest/usecases/update-bookingReq"; // Import the UpdateBookingRequest use case
 import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-bookingRequest"; // Import the DeleteBookingRequest use case
+import { validateBookingRequestInputMiddleware } from "@presentation/middlewares/booking req/validation-bookingReq"; // Import the validateBookingRequestInputMiddleware
 
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
 const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
@@ -37,6 +38,7 @@ export const bookingRequestRouter = Router();
 // Route handling for creating a new booking request
 bookingRequestRouter.post(
     "/add",
+    validateBookingRequestInputMiddleware(false),
     bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
 
@@ -58,5 +60,6 @@ bookingRequestRouter.get("/", bookingRequestService.getAllBookingRequests.bind(b
 // Route handling for updating a booking request by ID
 bookingRequestRouter.put(
     "/:bookingRequestId",
+    validateBookingRequestInputMiddleware(true),
     bookingRequestService.updateBookingRequest.bind(bookingRequestService)
 );

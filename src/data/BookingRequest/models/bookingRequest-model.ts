@@ -51,7 +51,7 @@ const bookingRequestSchema = new mongoose.Schema({
         maxLength: [2000, "Special Instructions should have less then 2000 charcters"],
     },
     reservationDate: { type: String },
-    reservationtime: { type: String },
+    reservationTime: { type: String },
     numberOfGuest: { type: Number },
     duration: String,
     status: {
