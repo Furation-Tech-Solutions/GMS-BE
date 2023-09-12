@@ -8,7 +8,7 @@ const addReservationSchema = new mongoose.Schema({
   },
   shift: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Shifts",
+    ref: "Shift",
   },
   duration: {
     type: String,
@@ -22,7 +22,7 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  
+
   // Client
   client: {
     type: mongoose.Schema.Types.ObjectId,
