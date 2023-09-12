@@ -5,37 +5,48 @@ const addReservationSchema = new mongoose.Schema({
   date: {
     type: String,
     trim: true,
+    required: [true, "please Select the Date"],
   },
   shift: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shift",
+    required: [true, "please Select the Shift"],
   },
   duration: {
     type: String,
     trim: true,
+    default: "2 hr",
+    // required: [true, "please Select the Duration"],
   },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SeatingArea",
+    required: [true, "please Select the Seating Area"],
   },
   timeSlot: {
     type: String,
     trim: true,
+    required: [true, "please Select the Time Slot"],
   },
 
   // Client
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
+    required: [true, "please Select the Client"],
   },
 
   // Source
-  source: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-  },
+  // source: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Users",
+  // },
+  
   // Aditional Detail
-  resevationStatus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Users" }],
+  resevationTags: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
+  ],
+
   reservationNote: {
     type: String,
     maxlength: [2000, "lastName should have less than 30 charcters"],
@@ -46,10 +57,11 @@ const addReservationSchema = new mongoose.Schema({
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
+    required: [true, "please Select the Table"],
   },
   bookedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "bookedByName",
   },
   perks: {
     type: String,
