@@ -4,7 +4,7 @@ export class AccessLevelModel{
         public role:string= "",
         public permissions: any = null,
         public additional_options:any=null,
-        public emailSubscription: any = null,
+        public email_subscriptions: any = null,
     ){}
 }
 
@@ -14,7 +14,7 @@ export class AccessLevelEntity{
         public role:string,
         public permissions: any ,
         public additional_options:any,
-        public emailSubscription: any 
+        public email_subscriptions: any 
     ){}
 }
 export class AccessLevelMapper {
@@ -38,10 +38,10 @@ export class AccessLevelMapper {
                     accessLevelData.additional_options !== undefined
                     ? accessLevelData.additional_options
                     : existingAccessLevel.additional_options,
-                emailSubscription:
-                    accessLevelData.emailSubscription !== undefined
-                    ? accessLevelData.emailSubscription
-                    : existingAccessLevel.emailSubscription,
+                    email_subscriptions:
+                    accessLevelData.email_subscriptions !== undefined
+                    ? accessLevelData.email_subscriptions
+                    : existingAccessLevel.email_subscriptions,
               }
             }else{
                 const accessLevelEntity: AccessLevelEntity = {
@@ -53,7 +53,7 @@ export class AccessLevelMapper {
                     role: accessLevelData.role,
                     permissions:accessLevelData.permissions,
                     additional_options:accessLevelData.additional_options,
-                    emailSubscription:accessLevelData.emailSubscription
+                    email_subscriptions:accessLevelData.email_subscriptions
                 };
                 return accessLevelEntity;
             }
@@ -63,7 +63,7 @@ export class AccessLevelMapper {
               role: accessLevel.role,
               permissions:accessLevel.permissions,
               additional_options:accessLevel.additional_options,
-              emailSubscription:accessLevel.emailSubscription,
+              email_subscriptions:accessLevel.email_subscriptions,
         }
     }
     }
