@@ -7,4 +7,8 @@ export interface AccessLevelRepository {
     getAccessLevel():Promise<Either<ErrorClass,AccessLevelEntity[]>>;
     deleteAccessLevel(id: string): Promise<Either<ErrorClass, void>> ;
     getAccessLevelById(id: string): Promise<Either<ErrorClass, AccessLevelEntity>>; 
+    updateAccessLevel(
+        id: string,
+        data: AccessLevelModel
+    ): Promise<Either<ErrorClass, AccessLevelEntity>>; 
 }
