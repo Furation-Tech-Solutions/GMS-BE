@@ -152,6 +152,13 @@ class ApiError extends ErrorClass {
       "conflictWithRole"
     );
   }
+  static taxTypeExist(): ApiError {
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.TAX_TYPE_EXIST,
+      "taxTypeExist"
+    );
+  }
   static clientExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
