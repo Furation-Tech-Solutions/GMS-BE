@@ -48,7 +48,7 @@ const guestSchema = new mongoose.Schema({
         ref: "UserAccount",
         required: [true, "Please enter user_id"],
     },
-    aditionalGuest: {
+    additionalGuest: {
         type: [String],
     },
     reservationTags: {
