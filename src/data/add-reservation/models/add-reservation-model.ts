@@ -46,6 +46,7 @@ const addReservationSchema = new mongoose.Schema({
   resevationTags: [
     { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
   ],
+
   reservationNote: {
     type: String,
     maxlength: [2000, "lastName should have less than 30 charcters"],
