@@ -6,6 +6,7 @@ const accessLevelSchema = new mongoose.Schema({
         required:true,
     },
     permissions:mongoose.Schema.Types.Mixed,
+    additional_options:mongoose.Schema.Types.Mixed,
     emailSubscription:mongoose.Schema.Types.Mixed
 
 })
