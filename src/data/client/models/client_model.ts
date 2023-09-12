@@ -38,7 +38,7 @@ const clientSchema = new mongoose.Schema({
     },
     tags: {
         type: [String],
-        // ref: "ClientTags",
+        // ref: "ClientTags", give the id of tag from clientTagCategory.
     },
     email: {
         type: String,
@@ -57,12 +57,12 @@ const clientSchema = new mongoose.Schema({
     phone: {
         type: String,
         maxLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         minLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         required: [true, "please enter  Phone Number"],
         trim: true,

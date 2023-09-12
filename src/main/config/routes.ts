@@ -18,6 +18,7 @@ import { guestRouter } from "@presentation/routes/guest-route";
 import { clientRouter } from "@presentation/routes/client-route";
 import { clientTagCategoryRouter } from "@presentation/routes/client-tag-category-route";
 import { reservationTagCategoryRouter } from "@presentation/routes/reservation-tag-category-route";
+import { bookingRequestRouter } from "@presentation/routes/bookingRequest-route";
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
 
@@ -53,6 +54,7 @@ export default (app: Express): void => {
   app.use("/api/v1/clients", clientRouter);
   app.use("/api/v1/clients/tag/category", clientTagCategoryRouter);
   app.use("/api/v1/reservation/tag/category", reservationTagCategoryRouter);
+  app.use("/api/v1/booking/request", bookingRequestRouter);
   app.use("/api/v1/add/reservation", addReservationRouter);
   app.use(router);
 };

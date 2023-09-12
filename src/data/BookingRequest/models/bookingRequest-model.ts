@@ -2,7 +2,14 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
-const guestSchema = new mongoose.Schema({
+const logSchema = new mongoose.Schema({
+    note: {
+        type: String,
+        required: true,
+    },
+}, { _id: true });
+
+const bookingRequestSchema = new mongoose.Schema({
     firstName: {
         type: String,
         maxlength: [30, "firstName name should have less than 30 charcters"],
@@ -13,15 +20,15 @@ const guestSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        maxlength: [30, "lastName should have less than 30 charcters"],
-        minLength: [3, "lastName should have more than 3 character"],
+        maxlength: [30, "lastName name should have less than 30 charcters"],
+        minLength: [3, "lastName name should have more than 3 character"],
         required: [true, "please enter last Name"],
         // unique: true,
         trim: true,
     },
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         trim: true,
         required: true,
         lowercase: true,
@@ -39,41 +46,30 @@ const guestSchema = new mongoose.Schema({
         required: [true, "please enter  Phone Number"],
         trim: true,
     },
-    confirmationMailSending: {
-        type: Boolean,
-        default: false,
+    specialInstructions: {
+        type: String,
+        maxLength: [2000, "Special Instructions should have less then 2000 charcters"],
     },
-    bookedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserAccount",
-        required: [true, "Please enter user_id"],
-    },
-    aditionalGuest: {
-        type: [String],
-    },
-    reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
-    },
+    reservationDate: { type: String },
+    reservationtime: { type: String },
+    numberOfGuest: { type: Number },
+    duration: String,
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "-"],
+        enum: ["Pending", "Approved", "Rejected"],
+        default: "Pending",
     },
-    notes: {
-        type: String,
-        maxLength: [
-            500,
-            "notes should have less then 500 charcters ",
-        ],
-        minLength: [
-            10,
-            "notes should have 10 charcters",
-        ],
-    },
+    // logs: [{
+    //     type: logSchema,
+    //     default:"Requested to Book the Ticket"
+    // }],
     createdAt: {
         type: Date,
         default: Date.now(),
-    },
+    }
 });
 
-export const Guest = mongoose.model("Guest", guestSchema);
+export const BookingRequest = mongoose.model("BookingRequest", bookingRequestSchema);
+
+
+
