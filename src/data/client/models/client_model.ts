@@ -19,7 +19,7 @@ const clientSchema = new mongoose.Schema({
         // unique: true,
         trim: true,
     },
-    salution: {
+    salutation: {
         type: String,
         enum: ["Mr.", "Mrs.", "Ms.", "Miss.", "Dr."],
         required: true,
@@ -100,7 +100,7 @@ const clientSchema = new mongoose.Schema({
     country: {
         type: String
     },
-    contactInfoVisibilityOnlytoSuperUser: {
+    contactInfoVisibilityOnlyToSuperUser: {
         type: Boolean,
         default: false,
     },
@@ -114,7 +114,7 @@ const clientSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    spends:{
+    spends: {
         type: Number,
         default: 0
     },
