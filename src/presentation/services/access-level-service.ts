@@ -90,7 +90,7 @@ export class AccessLevelService{
                     return res.json({ message: "Data Not Found" });
                 }
                 const resData = AccessLevelMapper.toEntity(result);
-                return res.json(resData);
+                return res.json(resData)
             }
         );
     }
