@@ -3,10 +3,6 @@ import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
 const logSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
     note: {
         type: String,
         required: true,
@@ -32,7 +28,7 @@ const bookingRequestSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         trim: true,
         required: true,
         lowercase: true,
@@ -40,12 +36,12 @@ const bookingRequestSchema = new mongoose.Schema({
     phone: {
         type: String,
         maxLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         minLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         required: [true, "please enter  Phone Number"],
         trim: true,
@@ -61,8 +57,12 @@ const bookingRequestSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ["Pending", "Approved", "Rejected"],
+        default: "Pending",
     },
-    // logs: [logSchema],
+    // logs: [{
+    //     type: logSchema,
+    //     default:"Requested to Book the Ticket"
+    // }],
     createdAt: {
         type: Date,
         default: Date.now(),

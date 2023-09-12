@@ -16,10 +16,10 @@ export interface BookingRequestDataSource {
 export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
     constructor(private db: mongoose.Connection) { }
     async create(bookingRequest: BookingRequestModel): Promise<any> {
-        const existingRequest = await BookingRequest.findOne({ email: bookingRequest.email, reservationDate: bookingRequest.reservationDate, reservationtime: bookingRequest.reservationtime });
-        if (existingRequest) {
-            throw ApiError.bookingRequestExists();
-        }
+        // const existingRequest = await BookingRequest.findOne({ email: bookingRequest.email && reservationDate: bookingRequest.reservationDate && reservationtime: bookingRequest.reservationtime });
+        // if (existingRequest) {
+        //     throw ApiError.bookingRequestExists();
+        // }
         const bookingRequestData = new BookingRequest(bookingRequest);
         const createdBookingRequest = await bookingRequestData.save();
         return createdBookingRequest.toObject();

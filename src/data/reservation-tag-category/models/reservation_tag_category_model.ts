@@ -3,11 +3,7 @@ import { array, boolean, object, string } from "joi";
 import mongoose from "mongoose";
 
 const resTagSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
-    note: {
+    name: {
         type: String,
         required: true,
     },

@@ -1,139 +1,139 @@
 import { NextFunction, Request, Response } from "express";
 import {
-    ClientEntity,
-    ClientMapper,
-    ClientModel,
-} from "@domain/client/entities/client_entities"; // Import client-related entities and mapper
-import { CreateClientUsecase } from "@domain/client/usecases/create-client"; // Import client-related use cases
-import { DeleteClientUsecase } from "@domain/client/usecases/delete-client";
-import { GetClientByIdUsecase } from "@domain/client/usecases/get-clients-by-id";
-import { GetAllClientsUsecase } from "@domain/client/usecases/get-all-client";
-import { UpdateClientUsecase } from "@domain/client/usecases/update-client";
+    BookingRequestEntity,
+    BookingRequestMapper,
+    BookingRequestModel,
+} from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import bookingRequest-related entities and mapper
+import { CreateBookingRequestUsecase } from "@domain/bookingRequest/usecases/create-bookingReq"; // Import bookingRequest-related use cases
+import { DeleteBookingRequestUsecase } from "@domain/bookingRequest/usecases/delete-bookingRequest";
+import { GetBookingRequestByIdUsecase } from "@domain/bookingRequest/usecases/get-bookingRequest-by-id";
+import { GetAllBookingRequestsUsecase } from "@domain/bookingRequest/usecases/get-all-bookingrequest";
+import { UpdateBookingRequestUsecase } from "@domain/bookingRequest/usecases/update-bookingReq";
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
-export class ClientServices {
-    private readonly createClientUsecases: CreateClientUsecase;
-    private readonly deleteClientUsecases: DeleteClientUsecase;
-    private readonly getClientByIdUsecases: GetClientByIdUsecase;
-    private readonly getAllClientsUsecases: GetAllClientsUsecase;
-    private readonly updateClientUsecases: UpdateClientUsecase;
+export class BookingRequestServices {
+    private readonly createBookingRequestUsecases: CreateBookingRequestUsecase;
+    private readonly deleteBookingRequestUsecases: DeleteBookingRequestUsecase;
+    private readonly getBookingRequestByIdUsecases: GetBookingRequestByIdUsecase;
+    private readonly getAllBookingRequestsUsecases: GetAllBookingRequestsUsecase;
+    private readonly updateBookingRequestUsecases: UpdateBookingRequestUsecase;
 
     constructor(
-        createClientUsecases: CreateClientUsecase,
-        deleteClientUsecases: DeleteClientUsecase,
-        getClientByIdUsecases: GetClientByIdUsecase,
-        getAllClientsUsecases: GetAllClientsUsecase,
-        updateClientUsecases: UpdateClientUsecase,
+        createBookingRequestUsecases: CreateBookingRequestUsecase,
+        deleteBookingRequestUsecases: DeleteBookingRequestUsecase,
+        getBookingRequestByIdUsecases: GetBookingRequestByIdUsecase,
+        getAllBookingRequestsUsecases: GetAllBookingRequestsUsecase,
+        updateBookingRequestUsecases: UpdateBookingRequestUsecase,
     ) {
-        this.createClientUsecases = createClientUsecases;
-        this.deleteClientUsecases = deleteClientUsecases;
-        this.getClientByIdUsecases = getClientByIdUsecases;
-        this.getAllClientsUsecases = getAllClientsUsecases;
-        this.updateClientUsecases = updateClientUsecases;
+        this.createBookingRequestUsecases = createBookingRequestUsecases;
+        this.deleteBookingRequestUsecases = deleteBookingRequestUsecases;
+        this.getBookingRequestByIdUsecases = getBookingRequestByIdUsecases;
+        this.getAllBookingRequestsUsecases = getAllBookingRequestsUsecases;
+        this.updateBookingRequestUsecases = updateBookingRequestUsecases;
     }
 
-    async createClient(req: Request, res: Response): Promise<void> {
-        const clientData: ClientModel = ClientMapper.toModel(req.body);
+    async createBookingRequest(req: Request, res: Response): Promise<void> {
+        const bookingrequestData: BookingRequestModel = BookingRequestMapper.toModel(req.body);
 
-        const newClient: Either<ErrorClass, ClientEntity> =
-            await this.createClientUsecases.execute(clientData);
+        const newBookingRequest: Either<ErrorClass, BookingRequestEntity> =
+            await this.createBookingRequestUsecases.execute(bookingrequestData);
 
-        newClient.cata(
+        newBookingRequest.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
-            (result: ClientEntity) => {
-                const resData = ClientMapper.toEntity(result, true);
+            (result: BookingRequestEntity) => {
+                const resData = BookingRequestMapper.toEntity(result, true);
                 return res.json(resData);
             }
         );
     }
 
-    async deleteClient(req: Request, res: Response): Promise<void> {
-        const clientID: string = req.params.clientId;
+    async deleteBookingRequest(req: Request, res: Response): Promise<void> {
+        const BookingRequestID: string = req.params.bookingRequestId;
 
-        const deletedClient: Either<ErrorClass, void> =
-            await this.deleteClientUsecases.execute(clientID);
+        const deletedBookingRequest: Either<ErrorClass, void> =
+            await this.deleteBookingRequestUsecases.execute(BookingRequestID);
 
-        deletedClient.cata(
+        deletedBookingRequest.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
 
-                return res.json({ message: "Client deleted successfully." });
+                return res.json({ message: "Booking Request deleted successfully." });
             }
         );
     }
 
-    async getClientById(req: Request, res: Response): Promise<void> {
-        const clientId: string = req.params.clientId;
+    async getBookingRequestById(req: Request, res: Response): Promise<void> {
+        const BookingRequestID: string = req.params.bookingRequestID;
 
-        const client: Either<ErrorClass, ClientEntity> =
-            await this.getClientByIdUsecases.execute(clientId);
+        const bookingRequest: Either<ErrorClass, BookingRequestEntity> =
+            await this.getBookingRequestByIdUsecases.execute(BookingRequestID);
 
-        client.cata(
+        bookingRequest.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
-            (result: ClientEntity) => {
+            (result: BookingRequestEntity) => {
                 if (result == undefined) {
                     return res.json({ message: "Data Not Found" });
                 }
-                const resData = ClientMapper.toEntity(result);
+                const resData = BookingRequestMapper.toEntity(result);
                 return res.json(resData);
             }
         );
     }
 
-    async getAllClients(
+    async getAllBookingRequests(
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        const clients: Either<ErrorClass, ClientEntity[]> =
-            await this.getAllClientsUsecases.execute();
+        const bookingRequests: Either<ErrorClass, BookingRequestEntity[]> =
+            await this.getAllBookingRequestsUsecases.execute();
 
-        clients.cata(
+        bookingRequests.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
-            (result: ClientEntity[]) => {
-                const responseData = result.map((client) =>
-                    ClientMapper.toEntity(client)
+            (result: BookingRequestEntity[]) => {
+                const responseData = result.map((bookingRequest) =>
+                    BookingRequestMapper.toEntity(bookingRequest)
                 );
                 return res.json(responseData);
             }
         );
     }
 
-    async updateClient(req: Request, res: Response): Promise<void> {
-        const clientId: string = req.params.clientId;
-        const clientData: ClientModel = req.body;
+    async updateBookingRequest(req: Request, res: Response): Promise<void> {
+        const BookingRequestID: string = req.params.bookingRequestID;
+        const bookingRequestData: BookingRequestModel = req.body;
 
-        const existingClient: Either<ErrorClass, ClientEntity> =
-            await this.getClientByIdUsecases.execute(clientId);
+        const existingBookingRequest: Either<ErrorClass, BookingRequestEntity> =
+            await this.getBookingRequestByIdUsecases.execute(BookingRequestID);
 
-        existingClient.cata(
+        existingBookingRequest.cata(
             (error: ErrorClass) => {
                 res.status(error.status).json({ error: error.message });
             },
-            async (existingClientData: ClientEntity) => {
-                const updatedClientEntity: ClientEntity = ClientMapper.toEntity(
-                    clientData,
+            async (existingBookingRequestData: BookingRequestEntity) => {
+                const updatedBookingRequestEntity: BookingRequestEntity = BookingRequestMapper.toEntity(
+                    bookingRequestData,
                     true,
-                    existingClientData
+                    existingBookingRequestData
                 );
 
-                const updatedClient: Either<ErrorClass, ClientEntity> =
-                    await this.updateClientUsecases.execute(
-                        clientId,
-                        updatedClientEntity
+                const updatedBookingRequest: Either<ErrorClass, BookingRequestEntity> =
+                    await this.updateBookingRequestUsecases.execute(
+                        BookingRequestID,
+                        updatedBookingRequestEntity
                     );
 
-                updatedClient.cata(
+                updatedBookingRequest.cata(
                     (error: ErrorClass) => {
                         res.status(error.status).json({ error: error.message });
                     },
-                    (result: ClientEntity) => {
-                        const resData = ClientMapper.toEntity(result, true);
+                    (result: BookingRequestEntity) => {
+                        const resData = BookingRequestMapper.toEntity(result, true);
                         res.json(resData);
                     }
                 );

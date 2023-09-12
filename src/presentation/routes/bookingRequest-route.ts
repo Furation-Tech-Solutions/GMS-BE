@@ -1,142 +1,62 @@
-import { NextFunction, Request, Response } from "express";
-import {
-    BookingRequestEntity,
-    BookingRequestMapper,
-    BookingRequestModel,
-} from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import booking request-related entities and mapper
-import { CreateBookingRequestUsecase } from "@domain/bookingRequest/usecases/create-bookingReq"; // Import booking request-related use cases
-import { DeleteBookingRequestUsecase } from "@domain/bookingRequest/usecases/delete-bookingRequest";
-import { GetBookingRequestByIdUsecase } from "@domain/bookingRequest/usecases/get-bookingRequest-by-id";
-import { GetAllBookingRequestsUsecase } from "@domain/bookingRequest/usecases/get-all-bookingrequest";
-import { UpdateBookingRequestUsecase } from "@domain/bookingRequest/usecases/update-bookingReq";
-import { Either } from "monet";
-import { ErrorClass } from "@presentation/error-handling/api-error";
+import mongoose from "mongoose";
+import { Router } from "express";
+import {BookingRequestServices } from "@presentation/services/bookingRequest-services"; // Import the BookingRequestServices
+import { BookingRequestDataSourceImpl } from "@data/BookingRequest/datasource/bookingRequest-datasource"; // Import the BookingRequestDataSourceImpl
+import { BookingRequestRepositoryImpl } from "@data/BookingRequest/repository/bookingRequest-repo-impl"; // Import the BookingRequestRepositoryImpl
+import { CreateBookingRequest } from "@domain/bookingRequest/usecases/create-bookingReq"; // Import the CreateBookingRequest use case
+import { GetAllBookingRequests } from "@domain/bookingRequest/usecases/get-all-bookingrequest"; // Import the GetAllBookingRequests use case
+import { GetBookingRequestById } from "@domain/bookingRequest/usecases/get-bookingRequest-by-id"; // Import the GetBookingRequestById use case
+import { UpdateBookingRequest } from "@domain/bookingRequest/usecases/update-bookingReq"; // Import the UpdateBookingRequest use case
+import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-bookingRequest"; // Import the DeleteBookingRequest use case
 
-export class BookingRequestServices {
-    private readonly createBookingRequestUsecase: CreateBookingRequestUsecase;
-    private readonly deleteBookingRequestUsecase: DeleteBookingRequestUsecase;
-    private readonly getBookingRequestByIdUsecase: GetBookingRequestByIdUsecase;
-    private readonly getAllBookingRequestsUsecase: GetAllBookingRequestsUsecase;
-    private readonly updateBookingRequestUsecase: UpdateBookingRequestUsecase;
+// Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
+const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
 
-    constructor(
-        createBookingRequestUsecase: CreateBookingRequestUsecase,
-        deleteBookingRequestUsecase: DeleteBookingRequestUsecase,
-        getBookingRequestByIdUsecase: GetBookingRequestByIdUsecase,
-        getAllBookingRequestsUsecase: GetAllBookingRequestsUsecase,
-        updateBookingRequestUsecase: UpdateBookingRequestUsecase,
-    ) {
-        this.createBookingRequestUsecase = createBookingRequestUsecase;
-        this.deleteBookingRequestUsecase = deleteBookingRequestUsecase;
-        this.getBookingRequestByIdUsecase = getBookingRequestByIdUsecase;
-        this.getAllBookingRequestsUsecase = getAllBookingRequestsUsecase;
-        this.updateBookingRequestUsecase = updateBookingRequestUsecase;
-    }
+// Create an instance of the BookingRequestRepositoryImpl and pass the BookingRequestDataSourceImpl
+const bookingRequestRepository = new BookingRequestRepositoryImpl(bookingRequestDataSource);
 
-    async createBookingRequest(req: Request, res: Response): Promise<void> {
-        const bookingRequestData: BookingRequestModel = BookingRequestMapper.toModel(req.body);
+// Create instances of the required use cases and pass the BookingRequestRepositoryImpl
+const createBookingRequestUsecase = new CreateBookingRequest(bookingRequestRepository);
+const deleteBookingRequestUsecase = new DeleteBookingRequest(bookingRequestRepository);
+const getBookingRequestByIdUsecase = new GetBookingRequestById(bookingRequestRepository);
+const getAllBookingRequestsUsecase = new GetAllBookingRequests(bookingRequestRepository);
+const updateBookingRequestUsecase = new UpdateBookingRequest(bookingRequestRepository);
 
-        const newBookingRequest: Either<ErrorClass, BookingRequestEntity> =
-            await this.createBookingRequestUsecase.execute(bookingRequestData);
+// Initialize BookingRequestServices and inject required dependencies
+const bookingRequestService = new BookingRequestServices(
+    createBookingRequestUsecase,
+    deleteBookingRequestUsecase,
+    getBookingRequestByIdUsecase,
+    getAllBookingRequestsUsecase,
+    updateBookingRequestUsecase
+);
 
-        newBookingRequest.cata(
-            (error: ErrorClass) =>
-                res.status(error.status).json({ error: error.message }),
-            (result: BookingRequestEntity) => {
-                const resData = BookingRequestMapper.toEntity(result, true);
-                return res.json(resData);
-            }
-        );
-    }
+// Create an Express router
+export const bookingRequestRouter = Router();
 
-    async deleteBookingRequest(req: Request, res: Response): Promise<void> {
-        const requestID: string = req.params.requestId;
+// Route handling for creating a new booking request
+bookingRequestRouter.post(
+    "/add",
+    bookingRequestService.createBookingRequest.bind(bookingRequestService)
+);
 
-        const deletedBookingRequest: Either<ErrorClass, void> =
-            await this.deleteBookingRequestUsecase.execute(requestID);
+// Route handling for deleting a booking request by ID
+bookingRequestRouter.delete(
+    "/:bookingRequestId",
+    bookingRequestService.deleteBookingRequest.bind(bookingRequestService)
+);
 
-        deletedBookingRequest.cata(
-            (error: ErrorClass) =>
-                res.status(error.status).json({ error: error.message }),
-            (result: void) => {
-                return res.json({ message: "Booking request deleted successfully." });
-            }
-        );
-    }
+// Route handling for getting a booking request by ID
+bookingRequestRouter.get(
+    "/:bookingRequestId",
+    bookingRequestService.getBookingRequestById.bind(bookingRequestService)
+);
 
-    async getBookingRequestById(req: Request, res: Response): Promise<void> {
-        const requestID: string = req.params.requestId;
+// Route handling for getting all booking requests
+bookingRequestRouter.get("/", bookingRequestService.getAllBookingRequests.bind(bookingRequestService));
 
-        const bookingRequest: Either<ErrorClass, BookingRequestEntity> =
-            await this.getBookingRequestByIdUsecase.execute(requestID);
-
-        bookingRequest.cata(
-            (error: ErrorClass) =>
-                res.status(error.status).json({ error: error.message }),
-            (result: BookingRequestEntity) => {
-                if (result == undefined) {
-                    return res.json({ message: "Data Not Found" });
-                }
-                const resData = BookingRequestMapper.toEntity(result);
-                return res.json(resData);
-            }
-        );
-    }
-
-    async getAllBookingRequests(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<void> {
-        const bookingRequests: Either<ErrorClass, BookingRequestEntity[]> =
-            await this.getAllBookingRequestsUsecase.execute();
-
-        bookingRequests.cata(
-            (error: ErrorClass) =>
-                res.status(error.status).json({ error: error.message }),
-            (result: BookingRequestEntity[]) => {
-                const responseData = result.map((bookingRequest) =>
-                    BookingRequestMapper.toEntity(bookingRequest)
-                );
-                return res.json(responseData);
-            }
-        );
-    }
-
-    async updateBookingRequest(req: Request, res: Response): Promise<void> {
-        const requestID: string = req.params.requestId;
-        const bookingRequestData: BookingRequestModel = req.body;
-
-        const existingBookingRequest: Either<ErrorClass, BookingRequestEntity> =
-            await this.getBookingRequestByIdUsecase.execute(requestID);
-
-        existingBookingRequest.cata(
-            (error: ErrorClass) => {
-                res.status(error.status).json({ error: error.message });
-            },
-            async (existingBookingRequestData: BookingRequestEntity) => {
-                const updatedBookingRequestEntity: BookingRequestEntity = BookingRequestMapper.toEntity(
-                    bookingRequestData,
-                    true,
-                    existingBookingRequestData
-                );
-
-                const updatedBookingRequest: Either<ErrorClass, BookingRequestEntity> =
-                    await this.updateBookingRequestUsecase.execute(
-                        requestID,
-                        updatedBookingRequestEntity
-                    );
-
-                updatedBookingRequest.cata(
-                    (error: ErrorClass) => {
-                        res.status(error.status).json({ error: error.message });
-                    },
-                    (result: BookingRequestEntity) => {
-                        const resData = BookingRequestMapper.toEntity(result, true);
-                        res.json(resData);
-                    }
-                );
-            }
-        );
-    }
-}
+// Route handling for updating a booking request by ID
+bookingRequestRouter.put(
+    "/:bookingRequestId",
+    bookingRequestService.updateBookingRequest.bind(bookingRequestService)
+);
