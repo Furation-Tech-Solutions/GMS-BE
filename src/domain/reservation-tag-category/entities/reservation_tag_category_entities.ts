@@ -9,7 +9,7 @@ export class ReservationTagCategoryModel {
     public followers: string[] = [],
     public tags: string[] = [],
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 // ReservationTagCategoryEntity provided by ReservationTagCategory Repository is converted to Express API Response
@@ -24,7 +24,7 @@ export class ReservationTagCategoryEntity {
     public followers: string[] = [],
     public tags: string[] = [],
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 /* ================================================= */
@@ -37,18 +37,46 @@ export class ReservationTagCategoryMapper {
     if (existingReservationTagCategory != null) {
       return {
         ...existingReservationTagCategory,
-        name: reservationTagCategoryData.name !== undefined ? reservationTagCategoryData.name : existingReservationTagCategory.name,
-        color: reservationTagCategoryData.color !== undefined ? reservationTagCategoryData.color : existingReservationTagCategory.color,
-        classification: reservationTagCategoryData.classification !== undefined ? reservationTagCategoryData.classification : existingReservationTagCategory.classification,
-        vip: reservationTagCategoryData.vip !== undefined ? reservationTagCategoryData.vip : existingReservationTagCategory.vip,
-        display: reservationTagCategoryData.display !== undefined ? reservationTagCategoryData.display : existingReservationTagCategory.display,
-        followers: reservationTagCategoryData.followers !== undefined ? reservationTagCategoryData.followers : existingReservationTagCategory.followers,
-        tags: reservationTagCategoryData.tags !== undefined ? reservationTagCategoryData.tags : existingReservationTagCategory.tags,
-        createdAt: reservationTagCategoryData.createdAt !== undefined ? reservationTagCategoryData.createdAt : existingReservationTagCategory.createdAt,
+        name:
+          reservationTagCategoryData.name !== undefined
+            ? reservationTagCategoryData.name
+            : existingReservationTagCategory.name,
+        color:
+          reservationTagCategoryData.color !== undefined
+            ? reservationTagCategoryData.color
+            : existingReservationTagCategory.color,
+        classification:
+          reservationTagCategoryData.classification !== undefined
+            ? reservationTagCategoryData.classification
+            : existingReservationTagCategory.classification,
+        vip:
+          reservationTagCategoryData.vip !== undefined
+            ? reservationTagCategoryData.vip
+            : existingReservationTagCategory.vip,
+        display:
+          reservationTagCategoryData.display !== undefined
+            ? reservationTagCategoryData.display
+            : existingReservationTagCategory.display,
+        followers:
+          reservationTagCategoryData.followers !== undefined
+            ? reservationTagCategoryData.followers
+            : existingReservationTagCategory.followers,
+        tags:
+          reservationTagCategoryData.tags !== undefined
+            ? reservationTagCategoryData.tags
+            : existingReservationTagCategory.tags,
+        createdAt:
+          reservationTagCategoryData.createdAt !== undefined
+            ? reservationTagCategoryData.createdAt
+            : existingReservationTagCategory.createdAt,
       };
     } else {
       const reservationTagCategoryEntity: ReservationTagCategoryEntity = {
-        id: includeId ? (reservationTagCategoryData._id ? reservationTagCategoryData._id.toString() : undefined) : reservationTagCategoryData._id.toString(),
+        id: includeId
+          ? reservationTagCategoryData._id
+            ? reservationTagCategoryData._id.toString()
+            : undefined
+          : reservationTagCategoryData._id.toString(),
         name: reservationTagCategoryData.name,
         color: reservationTagCategoryData.color,
         classification: reservationTagCategoryData.classification,
