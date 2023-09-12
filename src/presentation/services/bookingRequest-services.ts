@@ -66,8 +66,7 @@ export class BookingRequestServices {
     }
 
     async getBookingRequestById(req: Request, res: Response): Promise<void> {
-        const BookingRequestID: string = req.params.bookingRequestID;
-
+        const BookingRequestID: string = req.params.bookingRequestId;
         const bookingRequest: Either<ErrorClass, BookingRequestEntity> =
             await this.getBookingRequestByIdUsecases.execute(BookingRequestID);
 
@@ -105,7 +104,7 @@ export class BookingRequestServices {
     }
 
     async updateBookingRequest(req: Request, res: Response): Promise<void> {
-        const BookingRequestID: string = req.params.bookingRequestID;
+        const BookingRequestID: string = req.params.bookingRequestId;
         const bookingRequestData: BookingRequestModel = req.body;
 
         const existingBookingRequest: Either<ErrorClass, BookingRequestEntity> =
