@@ -65,8 +65,8 @@ export class ClientMapper {
     if (existingClient != null) {
       return {
         ...existingClient,
-        firstName: clientData.firstName !== undefined ? clientData.name : existingClient.firstName,
-        lastName: clientData.firstName !== undefined ? clientData.name : existingClient.firstName,
+        firstName: clientData.firstName !== undefined ? clientData.firstName : existingClient.firstName,
+        lastName: clientData.lastName !== undefined ? clientData.lastName : existingClient.firstName,
         salution: clientData.salution !== undefined ? clientData.salution : existingClient.salution,
         jobTitle: clientData.jobTitle !== undefined ? clientData.jobTitle : existingClient.jobTitle,
         company: clientData.company !== undefined ? clientData.company : existingClient.company,

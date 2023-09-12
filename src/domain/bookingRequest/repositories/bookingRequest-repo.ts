@@ -14,3 +14,4 @@ export interface BookingRequestRepository {
     ): Promise<Either<ErrorClass, BookingRequestEntity>>;
     getAllBookingRequests(): Promise<Either<ErrorClass, BookingRequestEntity[]>>;
 }
+

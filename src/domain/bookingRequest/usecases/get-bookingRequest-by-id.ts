@@ -4,7 +4,7 @@ import { BookingRequestRepository } from "../repositories/bookingRequest-repo"; 
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
 export interface GetBookingRequestByIdUsecase {
-  execute: (requestID: string) => Promise<Either<ErrorClass, BookingRequestEntity>>;
+  execute: (BookingRequestID: string) => Promise<Either<ErrorClass, BookingRequestEntity>>;
 }
 
 export class GetBookingRequestById implements GetBookingRequestByIdUsecase {
@@ -13,8 +13,8 @@ export class GetBookingRequestById implements GetBookingRequestByIdUsecase {
   constructor(bookingRequestRepository: BookingRequestRepository) {
     this.bookingRequestRepository = bookingRequestRepository;
   }
+  async execute(BookingRequestID: string): Promise<Either<ErrorClass, BookingRequestEntity>> {
+    return await this.bookingRequestRepository.getBookingRequestById(BookingRequestID); // Change to getBookingRequestById
 
-  async execute(requestID: string): Promise<Either<ErrorClass, BookingRequestEntity>> {
-    return await this.bookingRequestRepository.getBookingRequestById(requestID); // Change to getBookingRequestById
   }
 }
