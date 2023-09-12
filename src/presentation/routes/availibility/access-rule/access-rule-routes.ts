@@ -15,41 +15,41 @@ import { AccessRuleService } from "@presentation/services/availibility/access-ru
 
 const mongooseConnection = mongoose.connection;
 
-// Create an instance of the AdminDataSourceImpl and pass the mongoose connection
+// Create an instance of the accessRuleDataSourceImpl and pass the mongoose connection
 const accessRuleDataSource = new AccessRuleDataSourceImpl(mongooseConnection);
-// Create an instance of the AdminRepositoryImpl and pass the AdminDataSourceImpl
+// Create an instance of the accessRuleRepositoryImpl and pass the accessRuleDataSourceImpl
 const accessRuleRepository = new AccessRuleRepositoryImpl(accessRuleDataSource);
 
-// Create instances of the required use cases and pass the AdminRepositoryImpl
-const createShiftUsecase = new CreateAccessRule(accessRuleRepository);
-const updateShiftUsecase = new UpdateAccessRule(accessRuleRepository);
-const getShiftByIdUsecase = new GetAccessRuleById(accessRuleRepository);
-const deleteShiftUsecase = new DeleteAccessRule(accessRuleRepository);
-const getAllShiftsUsecase = new GetAllAccessRule(accessRuleRepository);
+// Create instances of the required use cases and pass the accessRuleRepositoryImpl
+const createaccessRuleUsecase = new CreateAccessRule(accessRuleRepository);
+const updateaccessRuleUsecase = new UpdateAccessRule(accessRuleRepository);
+const getaccessRuleByIdUsecase = new GetAccessRuleById(accessRuleRepository);
+const deleteaccessRuleUsecase = new DeleteAccessRule(accessRuleRepository);
+const getAllaccessRulesUsecase = new GetAllAccessRule(accessRuleRepository);
 
-// Initialize AdminService and inject required dependencies 
+// Initialize accessRuleService and inject required dependencies 
 const accessRuleService = new AccessRuleService(
-    createShiftUsecase,
-    updateShiftUsecase,
-    getShiftByIdUsecase,
-    deleteShiftUsecase,
-    getAllShiftsUsecase
+    createaccessRuleUsecase,
+    updateaccessRuleUsecase,
+    getaccessRuleByIdUsecase,
+    deleteaccessRuleUsecase,
+    getAllaccessRulesUsecase
 );
 
 // Create an Express router
 export const accessRuleRouter = Router();
 
-// Route handling for creating a new admin
+// Route handling for creating a new accessRule
 accessRuleRouter.post("/create",  accessRuleService.createAccessRule.bind(accessRuleService));
 
-// Route handling for updating an shift by ID
+// Route handling for updating an accessRule by ID
 accessRuleRouter.put("/update/:accessId",accessRuleService.updateAccessRule.bind(accessRuleService));
 
-// Route handling for getting an shift by ID
+// Route handling for getting an accessRule by ID
 accessRuleRouter.get("/getbyid/:accessId",accessRuleService.getAccessRuleById.bind(accessRuleService));
 
-// Route handling for deleting an admin by ID
+// Route handling for deleting an accessRule by ID
 accessRuleRouter.delete("/delete/:accessId", accessRuleService.deleteAccessRule.bind(accessRuleService));
 
-// Route handling for getting all shifts
-accessRuleRouter.get("/getAll", accessRuleService.getAllAccessRule.bind(accessRuleService));
+// Route handling for getting all accessRules
+accessRuleRouter.get("/getall", accessRuleService.getAllAccessRule.bind(accessRuleService));

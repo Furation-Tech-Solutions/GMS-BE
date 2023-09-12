@@ -89,4 +89,4 @@ export const validateShiftInputMiddleware = (
   }
 };
 
-export default shiftValidator;
+export default accessRuleValidator;

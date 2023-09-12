@@ -18,8 +18,9 @@ export class AccessRuleDataSourceImpl implements AccessRuleDataSource {
   async create(accessRule: AccessRuleModel): Promise<any> {
 
     const accessRuleData = new AccessRule(accessRule);
-    const savedAccessRule: mongoose.Document = await accessRuleData.save();
+    const savedAccessRule = await accessRuleData.save();
     return savedAccessRule.toObject();
+
   }
 
 
