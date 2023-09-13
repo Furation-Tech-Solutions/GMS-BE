@@ -1,52 +1,116 @@
 import Joi, { ValidationError, ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
-import { IShift } from "types/availibility/schema-type";
 
-const durationAverageTurnTimeSchemaJoi = Joi.object({
-    partySize: Joi.number().required(),
-    duration: Joi.number().required(),
-  });
 
-const accessRuleValidator = function (input: IShift): IShift {
-  // Define the adminSchema for input validation
-  const shiftPropertySchemaJoi = Joi.object<IShift>({
-    shiftName: Joi.string().required().max(30).label('Shift Name'),
-    shiftCategory: Joi.string().valid('breakfast', 'brunch', 'lunch', 'day', 'dinner', 'night').required(),
-    startDate: Joi.date().required(),
-    endDate: Joi.date().allow(null), // Allow null as a default value for indefinite end date
-    daysToRepeatThisShift: Joi.array().items(Joi.string().valid(
-      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    )).default([]),
-    firstSeating: Joi.date().required(),
-    lastSeating: Joi.date().required(),
-    timeInterval: Joi.number().valid(15, 30, 60).required().label('Time Interval'),
-    floorPlanLayout: Joi.string().required().default('default'),
-    seatingAreasAvailable: Joi.array().items(Joi.string().valid(
-      'Restaurant', 'Bar', 'SushiBar', 'Prive', 'PriveBar'
-    )).default([]),
-    howFarInAdvanceCanReservationsBeBookedInternally: Joi.string().valid(
-      'Indefinitely', 'HoursInAdvance', 'DaysInAdvance', 'WeeksInAdvance', 'MonthsInAdvance'
-    ).default('Indefinitely'),
-    partySizeMin: Joi.number().required().default(1),
-    partySizeMax: Joi.number().required().default(30),
-    enforceForUsersWithoutPartySizeOverbookingPermission: Joi.boolean().default(false),
-    durationAverageTurnTimeBasedOnPartySize: Joi.array().items(durationAverageTurnTimeSchemaJoi)
-      .min(1)
-      .required()
-      .label('Duration Average Turn Time Based On Party Size'),
-    pacing: Joi.number().required(),
-    setMaximumTotalCoversForShift: Joi.boolean().default(true),
-    allowDoubleBookingOnSameTables: Joi.boolean().default(false),
-    modifyBookingNotification: Joi.string().valid('At Any Time', 'Never', 'Up Until Cut-off Time')
-      .default('At Any Time'),
-    timeBeforeCutOff: Joi.number().default(60),
-    bookingPolicy: Joi.string().valid('Default Booking Policy', 'Custom Policy'),
-    addSelectableUpgrades: Joi.boolean().default(false),
+
+const guestFacingSchemaJoi = Joi.object({
+  widgetTimeSlotDescription: Joi.string(),
+  timeSlotDescription: Joi.string(),
+  title: Joi.string(),
+  longDescription: Joi.string(),
+  image: Joi.string(),
+  linkToOffer: Joi.string(),
+  allowBookingOnChannelsWithoutDisplayFields: Joi.boolean(),
+});
+
+const paymentPolicySchemaJoi = Joi.object({
+  folllowShift: Joi.boolean(),
+  timeBeforeCutOff: Joi.number().positive(),
+  bookingPolicy: Joi.string().valid('Default Booking Policy', 'Custom Policy'),
+  policyDescription: Joi.string(),
+  allowCreditCard: Joi.boolean(),
+  bundleUpgrade: Joi.boolean(),
+});
+
+const bookingChannelsSchemaJoi = Joi.object({
+  AudienceTier: Joi.array().items(
+    Joi.string().valid("Direct Booking Channels", "Third Party Booking Channels", "Waitlist")
+  ),
+  value: Joi.number(),
+  unit: Joi.string().valid('hours', 'days', 'weeks', 'months', 'reservation_time'),
+  reservationTime: Joi.string(),
+});
+
+const partySizeSchemaJoi = Joi.object({
+  minPartySize: Joi.number(),
+  maxPartySize: Joi.number(),
+});
+
+const seatingAreaSchemaJoi = Joi.object({
+  SeatingAreaName: Joi.array().items(Joi.string().required()),
+  exclusive: Joi.boolean(),
+});
+
+const customPacingPerSeatingIntervalSchemaJoi = Joi.object({
+  startTime: Joi.string(),
+  maxCovers: Joi.number(),
+});
+
+const bookingWindowSchemaJoi = Joi.object({
+  guestBookingStartTime: Joi.object({
+    value: Joi.number(),
+    unit: Joi.string().valid('hours', 'days', 'weeks', 'months', 'reservation_time'),
+    reservationTime: Joi.string(),
+  }),
+  guestBookingCutoffTime: Joi.object({
+    value: Joi.number(),
+    unit: Joi.string().valid('hours', 'days', 'weeks', 'months', 'reservation_time'),
+    reservationTime: Joi.string(),
+  }),
+});
+
+const maxReservationOrCoverLimitSchemaJoi = Joi.object({
+  perDay: Joi.number(),
+  unit: Joi.string().valid('Reservations', 'Covers'),
+});
+
+
+const accessRuleValidator = function (input: any): any {
+  // Define the schema for input validation
+  const accessRuleSchemaJoi = Joi.object({
+    name: Joi.string().required(),
+    startDate: Joi.string().required(),
+    endDate: Joi.string(),
+    isIndefinite: Joi.boolean().default(false),
+    daysOfWeek: Joi.array().items(Joi.string()).min(1).required(),
+    timeSlots: Joi.array().items(
+      Joi.string().valid("All Times During Shift Category", "Custom time range", "Specific time slot")
+    ).required(),
+    shiftCategories: Joi.array().items(
+      Joi.string().valid("All Lunch Shift", "All Dinner Shifts", "Specific time slot")
+    ),
+    firstReservation: Joi.string(),
+    lastReservation: Joi.string(),
+    specificTime: Joi.array().items(Joi.string()),
+    restrictShiftCategory: Joi.boolean(),
+    partySize: partySizeSchemaJoi,
+    seatingAreas: seatingAreaSchemaJoi,
+    guestFacingDisplay: guestFacingSchemaJoi,
+    paymentPolicy: paymentPolicySchemaJoi,
+    bookingChannels: Joi.array().items(bookingChannelsSchemaJoi),
+    selectableUpgrade: Joi.object({
+      doNotInclude: Joi.boolean(),
+      include: Joi.boolean(),
+    }),
+    reservationTags: Joi.array().items(Joi.string()),
+    bookingWindow: bookingWindowSchemaJoi,
+    maxReservationOrCoverLimit: maxReservationOrCoverLimitSchemaJoi,
+    pacing: Joi.object({
+      maxCoversPerSeatingInterval: Joi.number(),
+      customPacingPerSeatingInterval: Joi.array().items(customPacingPerSeatingIntervalSchemaJoi),
+      totalPacingReduction: Joi.boolean(),
+    }),
+    guestDurationPicker: Joi.object({
+      guestMustSpecifyDuration: Joi.boolean().default(false),
+      durationMin: Joi.number().default(0),
+      durationMax: Joi.number().default(60),
+    }),
   }).options({ abortEarly: false });
+  
 
-  // Validate the request body against the adminSchema
-  const { error, value } = shiftPropertySchemaJoi.validate(input, { abortEarly: false });
+  // Validate the request body against the schema
+  const { error, value } = accessRuleSchemaJoi.validate(input, { abortEarly: false });
 
   if (error) {
     // Create an array of validation error messages
@@ -64,7 +128,7 @@ const accessRuleValidator = function (input: IShift): IShift {
   return value;
 };
 
-export const validateShiftInputMiddleware = (
+export const validateAccessRuleInputMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -73,19 +137,24 @@ export const validateShiftInputMiddleware = (
     // Extract the request body
     const { body } = req;
 
-    // Validate the admin input using the adminValidator
-    const validatedInput: IShift = accessRuleValidator(body);
+    // Validate the input using the validator
+    const validatedInput = accessRuleValidator(body);
 
     // Continue to the next middleware or route handler
     next();
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return res.status(error.status).json(error.message);
-    }
+  } catch (error: any) {
+    // if (error instanceof ApiError) {
+    //   return res.status(error.status).json(error.message);
+    // }
 
-    // Respond with the custom error
-    const err = ApiError.badRequest();
-    return res.status(err.status).json(err.message);
+    // // Respond with the custom error
+    // const err = ApiError.badRequest();
+    // return res.status(err.status).json(err.message);
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
   }
 };
 

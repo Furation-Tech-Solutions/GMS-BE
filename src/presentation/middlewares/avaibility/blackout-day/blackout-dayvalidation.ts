@@ -1,14 +1,13 @@
 import Joi, { ValidationError, ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
-import { IShift } from "types/availibility/schema-type";
 
 const blackoutTypeValidation = Joi.object({
     reservation: Joi.boolean().default(false),
     guestList: Joi.boolean().default(false),
   });
 
-const blackoutDayValidator = function (input: IShift): IShift {
+const blackoutDayValidator = function (input: any) {
   // Define the adminSchema for input validation
   const blackoutDayValidationJoi = Joi.object({
     date: Joi.string()
@@ -49,7 +48,7 @@ const blackoutDayValidator = function (input: IShift): IShift {
   return value;
 };
 
-export const validateShiftInputMiddleware = (
+export const validateBlackoutInputMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -59,7 +58,7 @@ export const validateShiftInputMiddleware = (
     const { body } = req;
 
     // Validate the admin input using the adminValidator
-    const validatedInput: IShift = blackoutDayValidator(body);
+    const validatedInput = blackoutDayValidator(body);
 
     // Continue to the next middleware or route handler
     next();

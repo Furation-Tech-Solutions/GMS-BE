@@ -10,6 +10,7 @@ import { GetAccessRuleById } from "@domain/availibility/usecases/access-rule/get
 import { DeleteAccessRule } from "@domain/availibility/usecases/access-rule/delete-usecase";
 import { GetAllAccessRule } from "@domain/availibility/usecases/access-rule/getall-accessrule-usecase";
 import { AccessRuleService } from "@presentation/services/availibility/access-rule/access-rule-services";
+import { validateAccessRuleInputMiddleware } from "@presentation/middlewares/avaibility/access-rule/access-rule-validation";
 
 
 
@@ -40,8 +41,8 @@ const accessRuleService = new AccessRuleService(
 export const accessRuleRouter = Router();
 
 // Route handling for creating a new accessRule
-accessRuleRouter.post("/create",  accessRuleService.createAccessRule.bind(accessRuleService));
-
+accessRuleRouter.post("/create", validateAccessRuleInputMiddleware,  accessRuleService.createAccessRule.bind(accessRuleService));
+ 
 // Route handling for updating an accessRule by ID
 accessRuleRouter.put("/update/:accessId",accessRuleService.updateAccessRule.bind(accessRuleService));
 
@@ -52,4 +53,4 @@ accessRuleRouter.get("/getbyid/:accessId",accessRuleService.getAccessRuleById.bi
 accessRuleRouter.delete("/delete/:accessId", accessRuleService.deleteAccessRule.bind(accessRuleService));
 
 // Route handling for getting all accessRules
-accessRuleRouter.get("/getall", accessRuleService.getAllAccessRule.bind(accessRuleService));
+accessRuleRouter.get("/getAll", accessRuleService.getAllAccessRule.bind(accessRuleService));

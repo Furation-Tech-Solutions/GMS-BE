@@ -5,7 +5,7 @@ import { IShift } from "types/availibility/schema-type";
 
 
 
-const programScheduleValidator = function (input: IShift): IShift {
+const programScheduleValidator = function (input: any) {
   // Define the adminSchema for input validation
   const programScheduleValidation = Joi.object({
     title: Joi.string().required().max(255).trim().messages({
@@ -17,14 +17,12 @@ const programScheduleValidator = function (input: IShift): IShift {
     startDate: Joi.date().required().iso().messages({
       "date.base": "Start date must be a valid date",
       "date.empty": "Start date is required",
-      "date.isoDate": "Start date must be in ISO date format",
       "any.required": "Start date is required",
     }),
     endDate: Joi.date().iso().when("startDate", {
       is: Joi.exist(),
       then: Joi.date().greater(Joi.ref("startDate")).messages({
         "date.base": "End date must be a valid date",
-        "date.isoDate": "End date must be in ISO date format",
         "date.greater": "End date should be greater than the start date",
       }),
     }),
@@ -95,7 +93,7 @@ const programScheduleValidator = function (input: IShift): IShift {
   return value;
 };
 
-export const validateShiftInputMiddleware = (
+export const validateProgramScheduleInputMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -109,14 +107,17 @@ export const validateShiftInputMiddleware = (
 
     // Continue to the next middleware or route handler
     next();
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof ApiError) {
       return res.status(error.status).json(error.message);
     }
 
     // Respond with the custom error
     const err = ApiError.badRequest();
-    return res.status(err.status).json(err.message);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
   }
 };
 
