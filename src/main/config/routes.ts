@@ -22,6 +22,7 @@ import { bookingRequestRouter } from "@presentation/routes/bookingRequest-route"
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
 import { clientTagRouter } from "@presentation/routes/client-tag-route";
+import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 
 export default (app: Express): void => {
   const router = Router();
@@ -44,6 +45,7 @@ export default (app: Express): void => {
   app.use("/api/v1/outlet/media", mediaRoutes);
   app.use("/api/v1/people/user", userRouter);
   app.use("/api/v1/people/accessLevel", accessLevelRouter);
+  app.use("/api/v1/people/taxRate", taxRateRouter);
   app.use("/api/v1/people/bookedByName", bookedByNameRouter);
   app.use("/api/v1/people/serverName", serverNameRouter);
   app.use("/api/v1/room", roomRouter);

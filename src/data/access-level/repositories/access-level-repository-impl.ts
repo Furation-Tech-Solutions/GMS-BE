@@ -56,4 +56,15 @@ export class AccessLevelRepositoryImpl implements AccessLevelRepository {
           return Left<ErrorClass, AccessLevelEntity>(ApiError.badRequest());
       }
   }
+  async updateAccessLevel(id: string, data: AccessLevelModel): Promise<Either<ErrorClass, AccessLevelEntity>> {
+    try {
+        const updatedAccessLevel = await this.accesseLevelDataSource.update(id, data); // Use the client data source
+        return Right<ErrorClass, AccessLevelEntity>(updatedAccessLevel);
+    } catch (e) {
+        if (e instanceof ApiError && e.name === "conflict") {
+            return Left<ErrorClass, AccessLevelEntity>(ApiError.clientExist());
+        }
+        return Left<ErrorClass, AccessLevelEntity>(ApiError.badRequest());
+    }
+}
 }

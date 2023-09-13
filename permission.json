@@ -1,274 +1,960 @@
-
-
 [
     {
-     "role":"Superuser",
-     "permissions":[
-        {
-            "101":"Auto-assign Requests",
-            "default":false
+        "id": "65015fc75b44faa4b91c1b6f",
+        "role": "Superuser",
+        "permissions": {
+            "1101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "1102": "View all public and private client data (includes all Has Restaurants LLP client data)",
+            "1103": "Control venue setup items: blocks, seating chart, availability, cut-off times, blackout dates",
+            "1104": "View all reporting and daily statistics",
+            "1105": "Input, view and export client and reservation data",
+            "1106": "Administrate User Access",
+            "1107": "Administrate Payment Gateway Integrations",
+            "1108": "Manage reservation and client tags lists"
         },
-        {
-            "102":"Automatically make follower on all reservations",
-            "default":false
-        },
-        {
-            "103":"Automatically make follower on reservations user creates",
-            "default":true
-        }
-     ]   
-    }, {
-        "role":"User Manager Only",
-        "permissions":[
-           {
-               "104":"Export User Access Data",
-               "default":false
-           }
-        ]   
-       },
+        "additional_options": [
+            {
+                "permission": [
+                    1201,
+                    "Auto-assign Requests"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    1202,
+                    "Automatically make follower on all reservations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    1203,
+                    "Automatically make follower on reservations user creates"
+                ],
+                "default": true
+            }
+        ],
+        "email_subscriptions": [
+            {
+                "email_permission": [
+                    1301,
+                    "automated reservation summary"
+                ],
+                "detail": "reservation summary sent out automatically at scheduled times",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    1302,
+                    "Manual Reservation Summary"
+                ],
+                "detail": "reservation summary sent out manually from web or on the iOS app",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    1303,
+                    "New Request Alert"
+                ],
+                "detail": "notification when a brand new request comes in",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    1304,
+                    "Internal Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by your team",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    1305,
+                    "External Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by an external third party",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    1306,
+                    "Feedback Alert"
+                ],
+                "detail": "notification when new feedback comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    1307,
+                    "Automated Feedback Summary"
+                ],
+                "detail": "summary of past 24 hours feedback sent out automatically at scheduled times",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    1308,
+                    "Special Occasions Summary"
+                ],
+                "detail": "summary of all upcoming special occasions for your client",
+                "default": true
+            }
+        ]
+    },
     {
-        "role":"Manager",
-        "permissions":[
-           {
-               "105":"Administrate Availability - Shifts and Access Rules",
-               "default":true
-           },
-           {
-            "106":"Administrate Availability - Blackout Dates and Daily Program",
-            "default":true
+        "id": "65015fdf5b44faa4b91c1b72",
+        "role": "User Manager Only",
+        "additional_options": [
+            {
+                "permission": [
+                    2201,
+                    "Export User Access Data"
+                ],
+                "default": false
+            }
+        ]
+    },
+    {
+        "id": "650160335b44faa4b91c1b77",
+        "role": "Manager",
+        "permissions": {
+            "3101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "3102": "View all public client data (includes all Has Restaurants LLP client data)",
+            "3103": "Control venue setup items: blocks, seating chart, availability, cut-off times, blackout dates",
+            "3104": "View all reporting and daily statistics",
+            "3105": "Input and view reservation actuals",
+            "3106": "Access Operations Tab"
         },
-        {
-            "107":"Administrate User Access",
-            "default":false
+        "additional_options": [
+            {
+                "permission": [
+                    3201,
+                    "Administrate Availability - Shifts and Access Rules"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3202,
+                    "Administrate Availability - Blackout Dates and Daily Program"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3203,
+                    "Administrate User Access"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3204,
+                    "Administrate Widget Settings"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3205,
+                    "Administrate Payment Gateway Integrations"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3206,
+                    "Administrate General Settings"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3207,
+                    "Access Client Tab"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3208,
+                    "Access Marketing Tools"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3209,
+                    "Access Private Line"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3210,
+                    "View Client Spend Aggregates Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3211,
+                    "View POS Check Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3212,
+                    "View Reporting (Full)"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3213,
+                    "Export Client Data"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3214,
+                    "Export Actuals Data"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3215,
+                    "View all clients' contact info"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3216,
+                    "Manage reservation and client tags lists"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3217,
+                    "Add/remove client tags from client profiles"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3218,
+                    "Charge credit cards on reservations"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3219,
+                    "Refund credit cards on reservations"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3220,
+                    "Require manual input of Booked By on Mobile App"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3221,
+                    "Book Guestlist"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3222,
+                    "Auto-assign Requests"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3223,
+                    "Automatically make follower on all reservations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    3224,
+                    "Automatically make follower on reservations user creates"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    3225,
+                    "Override Maximum total covers for shift (Mobile only)"
+                ],
+                "default": false
+            }
+        ],
+        "email_subscriptions": [
+            {
+                "email_permission": [
+                    3301,
+                    "automated reservation summary"
+                ],
+                "detail": "reservation summary sent out automatically at scheduled times",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    3302,
+                    "Manual Reservation Summary"
+                ],
+                "detail": "reservation summary sent out manually from web or on the iOS app",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    3303,
+                    "New Request Alert"
+                ],
+                "detail": "notification when a brand new request comes in",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    3304,
+                    "Internal Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by your team",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    3305,
+                    "External Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by an external third party",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    3306,
+                    "Feedback Alert"
+                ],
+                "detail": "notification when new feedback comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    3307,
+                    "Automated Feedback Summary"
+                ],
+                "detail": "summary of past 24 hours feedback sent out automatically at scheduled times",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    3308,
+                    "Special Occasions Summary"
+                ],
+                "detail": "summary of all upcoming special occasions for your client",
+                "default": true
+            }
+        ]
+    },
+    {
+        "id": "650160525b44faa4b91c1b7a",
+        "role": "Sub-Manager",
+        "permissions": {
+            "4101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "4102": "View all client data (includes all Has Restaurants LLP client data)",
+            "4103": "View individual report and daily statistics",
+            "4104": "Input and view reservation Actuals"
         },
-        {
-            "108":"Administrate Widget Settings",
-            "default":true
+        "additional_options": [
+            {
+                "permission": [
+                    4201,
+                    "Administrate Availability - Shifts and Access Rules"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4202,
+                    "Administrate Availability - Blackout Dates and Daily Program"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4203,
+                    "Administrate Widget Settings"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4204,
+                    "Administrate General Settings"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4205,
+                    "Access Client Tab"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4206,
+                    "Access Marketing Tools"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4207,
+                    "Access Private Line"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4208,
+                    "View Client Spend Aggregates Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4209,
+                    "View POS Check Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4210,
+                    "View Reporting (Full)"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4211,
+                    "Export Client Data"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4212,
+                    "Export Actuals Data"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4213,
+                    "View all clients' contact info"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4214,
+                    "Access Operations Tabs"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4215,
+                    "Manage reservation and client tags lists"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4216,
+                    "Add/remove client tags from client profiles"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4217,
+                    "Charge credit cards on reservations"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4218,
+                    "Refund credit cards on reservations"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4219,
+                    "Require manual input of Booked By on Mobile App"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4220,
+                    "Book Guestlist"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4221,
+                    "Auto-assign Requests"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4222,
+                    "Automatically make follower on all reservations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4223,
+                    "Automatically make follower on reservations user creates"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    4224,
+                    "Overbook pacing limits"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4225,
+                    "Overbook 'only larger tables available'"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4226,
+                    "Overbook 'only smaller tables available'"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4227,
+                    "Overbook 'no tables available'"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4228,
+                    "Book on access rule table blocks"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4229,
+                    "Overbook enforced shift party size limitations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4230,
+                    "Override shift-required payment when booking"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4231,
+                    "Add/Edit Blocks"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4232,
+                    "Allow user to edit floorplan settings (Tables, Rooms, Layouts, Etc.)"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    4233,
+                    "Override Maximum total covers for shift (Mobile only)"
+                ],
+                "default": false
+            }
+        ],
+        "email_subscriptions": [
+            {
+                "email_permission": [
+                    4301,
+                    "automated reservation summary"
+                ],
+                "detail": "reservation summary sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4302,
+                    "Manual Reservation Summary"
+                ],
+                "detail": "reservation summary sent out manually from web or on the iOS app",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4303,
+                    "New Request Alert"
+                ],
+                "detail": "notification when a brand new request comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4304,
+                    "Internal Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by your team",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    4305,
+                    "External Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by an external third party",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4306,
+                    "Feedback Alert"
+                ],
+                "detail": "notification when new feedback comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4307,
+                    "Automated Feedback Summary"
+                ],
+                "detail": "summary of past 24 hours feedback sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    4308,
+                    "Special Occasions Summary"
+                ],
+                "detail": "summary of all upcoming special occasions for your client",
+                "default": false
+            }
+        ]
+    },
+    {
+        "id": "6501606d5b44faa4b91c1b7d",
+        "role": "Basic",
+        "permissions": {
+            "5101": "Book reservations and view/edit all reservations booked by their own account",
+            "5102": "View only their own client data"
         },
-        {
-            "109":"Administrate Payment Gateway Integrations",
-            "default":true
+        "additional_options": [
+            {
+                "permission": [
+                    5201,
+                    "Access Client Tab"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    5202,
+                    "Access Private Line"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5203,
+                    "View Client Spend Aggregates Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    5204,
+                    "View POS Check Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    5205,
+                    "Access Operations Tabs"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    5206,
+                    "Require manual input of Booked By on Mobile App"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5207,
+                    "View Floorplan on website and mobile apps (read-only)"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5208,
+                    "View reservations booked by other users (read-only, without contact info)"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5209,
+                    "Book Guestlist"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5210,
+                    "Auto-assign Requests"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5211,
+                    "Require approval for new reservations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5212,
+                    "Automatically make follower on all reservations"
+                ],
+                "default": false
+            },
+            {
+                "permission": [
+                    5213,
+                    "Automatically make follower on all reservations user creates"
+                ],
+                "default": true
+            }
+        ],
+        "email_subscriptions": [
+            {
+                "email_permission": [
+                    5301,
+                    "automated reservation summary"
+                ],
+                "detail": "reservation summary sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5302,
+                    "Manual Reservation Summary"
+                ],
+                "detail": "reservation summary sent out manually from web or on the iOS app",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5303,
+                    "New Request Alert"
+                ],
+                "detail": "notification when a brand new request comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5304,
+                    "Internal Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by your team",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    5305,
+                    "External Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by an external third party",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5306,
+                    "Feedback Alert"
+                ],
+                "detail": "notification when new feedback comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5307,
+                    "Automated Feedback Summary"
+                ],
+                "detail": "summary of past 24 hours feedback sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    5308,
+                    "Special Occasions Summary"
+                ],
+                "detail": "summary of all upcoming special occasions for your client",
+                "default": false
+            }
+        ]
+    },
+    {
+        "id": "650160855b44faa4b91c1b80",
+        "role": "Basic iPad",
+        "permissions": {
+            "6101": "Access iPad App",
+            "6102": "Only access the reservation Actuals page upon website login"
         },
-        {
-            "110":"Administrate General Settings",
-            "default":true
-        },
-        {
-            "111":"Access Client Tab",
-            "default":true
-        },
-        {
-            "112":"Access Marketing Tools",
-            "default":true
-        },
-        {
-            "113":"Access Private Line",
-            "default":false
-        },
-        {
-            "114":"View Client Spend Aggregates Data",
-            "default":true
-        },
-        {
-            "115":"View POS Check Data",
-            "default":true
-        },
-        {
-            "116":"View Reporting (Full)",
-            "default":true
-        },
-        {
-            "117":"Export Client Data",
-            "default":false
-        },
-        {
-            "118":"Export Actuals Data",
-            "default":false
-        },
-        {
-            "119":"View all clients' contact info",
-            "default":true
-        },
-        {
-            "120":"Manage reservation and client tags lists",
-            "default":true
-        },
-        {
-            "121":"Add/remove client tags from client profiles",
-            "default":false
-        },
-        {
-            "122":"Charge credit cards on reservations",
-            "default":true
-        },
-        {
-            "123":"Refund credit cards on reservations",
-            "default":true
-        },
-        {
-            "124":"Require manual input of Booked By on Mobile App",
-            "default":false
-        },
-        {
-            "125":"Book Guestlist",
-            "default":true
-        },
-        {
-            "126":"Auto-assign Requests",
-            "default":false
-        },
-        {
-            "127":"Automatically make follower on all reservations",
-            "default":false
-        },
-        {
-            "128":"Automatically make follower on reservations user creates",
-            "default":true
-        },
-        {
-            "129":"Override Maximum total covers for shift (Mobile only)",
-            "default":false
-        }
-        
-        ]   
-       },
-       {
-        "role":"Sub-Manager",
-        "permissions":[
-           {
-               "130":"Administrate Availability - Shifts and Access Rules",
-               "default":false
-           },
-           {
-               "131":"Administrate Availability - Blackout Dates and Daily Program",
-               "default":false
-           },
-           {
-               "132":"Administrate Widget Settings",
-               "default":false
-           },
-           {
-            "133":"Administrate General Settings",
-            "default":false
-        },
-        {
-            "134":"Access Client Tab",
-            "default":true
-        },
-        {
-            "135":"Access Marketing Tools",
-            "default":false
-        },
-        {
-            "136":"Access Private Line",
-            "default":false
-        },
-        {
-            "137":"View Client Spend Aggregates Data",
-            "default":true
-        },
-        {
-            "138":"View POS Check Data",
-            "default":true
-        },
-        {
-            "139":"View Reporting (Full)",
-            "default":false
-        },
-        {
-            "140":"Export Client Data",
-            "default":false
-        },
-        {
-            "141":"Export Actuals Data",
-            "default":false
-        },
-        {
-            "142":"View all clients' contact info",
-            "default":true
-        },
-        {
-            "143":"Access Operations Tabs",
-            "default":true
-        },
-        {
-            "144":"Manage reservation and client tags lists",
-            "default":false
-        },
-        {
-            "145":"Add/remove client tags from client profiles",
-            "default":false
-        },
-        {
-            "146":"Charge credit cards on reservations",
-            "default":true
-        },
-        {
-            "147":"Refund credit cards on reservations",
-            "default":true
-        },
-        {
-            "148":"Require manual input of Booked By on Mobile App",
-            "default":false
-        },
-        {
-            "149":"Book Guestlist",
-            "default":true
-        },
-        {
-            "150":"Auto-assign Requests",
-            "default":false
-        },
-        {
-            "151":"Automatically make follower on all reservations",
-            "default":false
-        },
-        {
-            "152":"Automatically make follower on reservations user creates",
-            "default":true
-        },
-        {
-            "153":"Overbook pacing limits",
-            "default":false
-        },
-        {
-            "154":"Overbook 'only larger tables available'",
-            "default":false
-        },
-        {
-            "155":"Overbook 'only smaller tables available'",
-            "default":false
-        },
-        {
-            "156":"Overbook 'no tables available'",
-            "default":false
-        },
-        {
-            "157":"Book on access rule table blocks",
-            "default":false
-        },
-        {
-            "158":"Overbook enforced shift party size limitations",
-            "default":false
-        },
-        {
-            "159":"Override shift-required payment when booking",
-            "default":false
-        },
-        {
-            "160":"Add/Edit Blocks",
-            "default":false
-        },
-        {
-            "161":"Allow user to edit floorplan settings (Tables, Rooms, Layouts, Etc.)",
-            "default":false
-        },
-        {
-            "162":"Override Maximum total covers for shift (Mobile only)",
-            "default":false
-        }
-        ]   
-       }
-       
-
+        "additional_options": [
+            {
+                "permission": [
+                    6201,
+                    "Access Client Tab"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    6202,
+                    "View Client Spend Aggregates Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    6203,
+                    "View POS Check Data"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    6204,
+                    "Access Operations Tabs"
+                ],
+                "default": true
+            },
+            {
+                "permission": [
+                    6205,
+                    "Require manual input of Booked By on Mobile App"
+                ],
+                "default": false
+            }
+        ],
+        "email_subscriptions": [
+            {
+                "email_permission": [
+                    6301,
+                    "automated reservation summary"
+                ],
+                "detail": "reservation summary sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6302,
+                    "Manual Reservation Summary"
+                ],
+                "detail": "reservation summary sent out manually from web or on the iOS app",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6303,
+                    "New Request Alert"
+                ],
+                "detail": "notification when a brand new request comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6304,
+                    "Internal Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by your team",
+                "default": true
+            },
+            {
+                "email_permission": [
+                    6305,
+                    "External Reservation Alert"
+                ],
+                "detail": "notifications for reservations booked by an external third party",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6306,
+                    "Feedback Alert"
+                ],
+                "detail": "notification when new feedback comes in",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6307,
+                    "Automated Feedback Summary"
+                ],
+                "detail": "summary of past 24 hours feedback sent out automatically at scheduled times",
+                "default": false
+            },
+            {
+                "email_permission": [
+                    6308,
+                    "Special Occasions Summary"
+                ],
+                "detail": "summary of all upcoming special occasions for your client",
+                "default": false
+            }
+        ]
+    }
 ]

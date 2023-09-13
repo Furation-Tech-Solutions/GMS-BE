@@ -45,7 +45,7 @@ export class SeatingAreaMapper {
           ? seatingAreaData._id
             ? seatingAreaData._id.toString()
             : undefined
-          : undefined,
+          : seatingAreaData._id.toString(),
         abbreviation: seatingAreaData.abbreviation,
         seatingAreaName: seatingAreaData.seatingAreaName,
         listOrder: seatingAreaData.listOrder,

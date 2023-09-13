@@ -8,8 +8,8 @@ export interface AccessLevelDataSource {
     create(accessLevel: AccessLevelModel): Promise<any>;
     getAll():Promise<any[]>;
     delete(id: string): Promise<void>;
-    read(id: string): Promise<any | null>
-
+    read(id: string): Promise<any | null>;
+    update(id: String, accessLevelModel: AccessLevelModel): Promise<any>;
 }
 
 export class AccessLevelSourceImpl implements AccessLevelDataSource {
@@ -57,4 +57,14 @@ export class AccessLevelSourceImpl implements AccessLevelDataSource {
           throw ApiError.badRequest();
       } // Convert to a plain JavaScript object before returning
   }
+  async update(id: string, accessLevel: AccessLevelModel): Promise<any> {
+    try {
+        const updatedAccessLevel = await AccessLevel.findByIdAndUpdate(id, accessLevel, {
+            new: true,
+        }); // No need for conversion here
+        return updatedAccessLevel ? updatedAccessLevel.toObject() : null; // Convert to a plain JavaScript object before returning
+    } catch (error) {
+        throw ApiError.badRequest();
+    }
+}
 }
