@@ -108,7 +108,7 @@ export class AddReservationMapper {
           ? reservationData._id
             ? reservationData._id.toString()
             : undefined
-          : undefined,
+          : reservationData._id.toString(),
         date: reservationData.date,
         shift: reservationData.shift,
         duration: reservationData.duration,
