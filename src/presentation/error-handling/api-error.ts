@@ -152,6 +152,13 @@ class ApiError extends ErrorClass {
       "conflictWithRole"
     );
   }
+  static taxTypeExist(): ApiError {
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.TAX_TYPE_EXIST,
+      "taxTypeExist"
+    );
+  }
   static clientExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
@@ -159,6 +166,9 @@ class ApiError extends ErrorClass {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
   static guestExist(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+  }
+  static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
 }
