@@ -21,6 +21,7 @@ import { reservationTagCategoryRouter } from "@presentation/routes/reservation-t
 import { bookingRequestRouter } from "@presentation/routes/bookingRequest-route";
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
+import { clientTagRouter } from "@presentation/routes/client-tag-route";
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 
 export default (app: Express): void => {
@@ -58,5 +59,6 @@ export default (app: Express): void => {
   app.use("/api/v1/reservation/tag/category", reservationTagCategoryRouter);
   app.use("/api/v1/booking/request", bookingRequestRouter);
   app.use("/api/v1/add/reservation", addReservationRouter);
+  app.use("/api/v1/client/tag", clientTagRouter);
   app.use(router);
 };
