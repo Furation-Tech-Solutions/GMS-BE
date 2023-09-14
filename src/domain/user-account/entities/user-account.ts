@@ -106,7 +106,7 @@ export class UserModel {
           ? userData._id
             ? userData._id.toString()
             : undefined
-          : undefined,
+          : userData._id.toString(),
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
