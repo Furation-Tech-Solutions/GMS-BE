@@ -1,0 +1,98 @@
+import aws from "aws-sdk";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export interface OutletMediaDataSource {
+  getPresignedUrl(objectKey: string): Promise<string>;
+}
+
+export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
+  // private readonly s3: S3;
+
+  // constructor() {
+  //   this.s3 = new S3({
+  //     region: process.env.AWS_REGION,
+  //     credentials:{
+  //       accessKeyId: process.env.AWS_ACCESS_KEY_ID || "AKIAVYM223P6QG4EDW6V",
+  //       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "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",
+  //     }
+  //   });
+  // }
+
+  async getPresignedUrl(objectKey: string): Promise<string> {
+    // Configure the parameters for generating the presigned URL
+    const s3=new aws.S3({
+      region: "ap-south-1",
+  credentials:{
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "AKIAVYM223P6QG4EDW6V",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "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",
+  }
+  })
+
+
+    const params = {
+      Bucket: process.env.bucketName,
+      Key: objectKey+".jpg",
+      ContentType: "image/jpeg",
+      Expires: 3600,
+    };
+    
+    const url  =  await s3.getSignedUrlPromise("getObject", params);
+    return url;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import mongoose from "mongoose";
+// import { S3 } from "aws-sdk";
+// const dotenv = require("dotenv");
+// dotenv.config();
+// const {AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,bucketName,AWS_region}=process.env
+
+
+// export interface OutletMediaDataSource {
+//     getPresignedUrl( objectKey: string): Promise<string>
+// }
+
+// export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
+
+//     private readonly s3: S3; 
+
+//   constructor() {
+//     this.s3 = new S3({
+//       accessKeyId: AWS_ACCESS_KEY_ID,
+//       secretAccessKey: AWS_SECRET_ACCESS_KEY,
+//       region: AWS_region,
+//     });
+//   }
+
+//   async getPresignedUrl( objectKey: string): Promise<string> {
+//     // Configure the parameters for generating the presigned URL
+//     const params = {
+//       Bucket: bucketName,
+//       Key: objectKey,
+//       ContentType: "image/jpeg", 
+//       Expires: 3600,
+//     };
+//     console.log("credential",AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY)
+//      return await this.s3.getSignedUrlPromise('getObject',params)
+// }}
