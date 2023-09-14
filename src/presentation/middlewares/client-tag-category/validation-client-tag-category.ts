@@ -38,7 +38,7 @@ const clientTagCategoryValidator = (
         }),
 
       color: isUpdate
-        ? Joi.string().required().trim().messages({
+        ? Joi.string().optional().trim().messages({
           "any.required": "Color is required",
         })
         : Joi.string().required().trim().messages({
