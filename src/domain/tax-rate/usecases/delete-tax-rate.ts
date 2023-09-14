@@ -10,11 +10,11 @@ export interface DeleteTaxRateUseCase {
 export class DeleteTaxRate implements DeleteTaxRateUseCase {
     private readonly taxRateRepository: TaxRateRepository;
 
-    constructor(accessLevelRepository: TaxRateRepository) {
-        this.taxRateRepository = accessLevelRepository;
+    constructor(taxRateRepository: TaxRateRepository) {
+        this.taxRateRepository = taxRateRepository;
     }
 
-    async execute(accessLevelID: string): Promise<Either<ErrorClass, void>> {
-        return await this.taxRateRepository.deleteTaxRate(accessLevelID);
+    async execute(taxRateID: string): Promise<Either<ErrorClass, void>> {
+        return await this.taxRateRepository.deleteTaxRate(taxRateID);
     }
 }

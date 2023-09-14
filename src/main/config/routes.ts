@@ -25,6 +25,7 @@ import { clientTagRouter } from "@presentation/routes/client-tag-route";
 import { reservationTagRouter } from "@presentation/routes/reservation-tag-route";
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 
+
 export default (app: Express): void => {
   const router = Router();
 
