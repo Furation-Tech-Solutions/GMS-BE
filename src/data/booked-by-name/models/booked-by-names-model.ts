@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const bookedByNameSchema=new mongoose.Schema({
    name:{
     type:String,
-    default :true
+    required :true
    }
 
 })
