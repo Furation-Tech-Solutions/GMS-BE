@@ -18,10 +18,8 @@ import { guestRouter } from "@presentation/routes/guest-route";
 import { clientRouter } from "@presentation/routes/client-route";
 import { clientTagCategoryRouter } from "@presentation/routes/client-tag-category-route";
 import { reservationTagCategoryRouter } from "@presentation/routes/reservation-tag-category-route";
-
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
-
 import { clientTagRouter } from "@presentation/routes/client-tag-route";
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 
