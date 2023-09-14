@@ -87,6 +87,7 @@ const shiftPropertySchema = new Schema<IShiftProperty>({
   },
   seatingAreasAvailable: {
     type: [String],
+    enum: ['Restaurant', 'Bar', 'SushiBar', 'Prive', 'PriveBar'],
     default: [],
   },
   howFarInAdvanceCanReservationsBeBookedInternally: {

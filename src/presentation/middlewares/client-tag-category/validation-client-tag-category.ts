@@ -1,59 +1,132 @@
-import Joi from "joi";
+import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
-const clientTagCategoryValidator = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  color: Joi.string().required(),
-  classification: Joi.object({
-    global: Joi.boolean(),
-    local: Joi.boolean(),
-  }),
-  vip: Joi.boolean(),
-  display: Joi.object({
-    visible_to_superusers_only: Joi.boolean(),
-    show_on_chit: Joi.boolean(),
-    show_on_reservation_summary: Joi.boolean(),
-  }),
-  followers: Joi.array().items(Joi.string()), // Assuming followers are represented by user IDs
-  tags: Joi.array().items(Joi.string()),
-  createdAt: Joi.date(),
-});
+interface ClientTagCategoryInput {
+  name: string;
+  color: string;
+  classification: {
+    global?: boolean;
+    local?: boolean;
+  };
+  vip: boolean;
+  display: {
+    visible_to_superusers_only?: boolean;
+    show_on_chit?: boolean;
+    show_on_reservation_summary?: boolean;
+  };
+  followers?: mongoose.Schema.Types.ObjectId[];
+  tags?: { name: string }[];
+}
+
+const clientTagCategoryValidator = (
+  input: ClientTagCategoryInput,
+  isUpdate: boolean = false
+) => {
+  const clientTagCategorySchema = Joi.object<ClientTagCategoryInput>(
+    {
+      name: isUpdate
+        ? Joi.string().min(3).max(30).optional().trim().messages({
+          "string.min": "Name should have at least 3 characters",
+          "string.max": "Name should have less than 30 characters",
+        })
+        : Joi.string().min(3).max(30).required().trim().messages({
+          "string.min": "Name should have at least 3 characters",
+          "string.max": "Name should have less than 30 characters",
+          "any.required": "Name is required",
+        }),
+
+      color: isUpdate
+        ? Joi.string().required().trim().messages({
+          "any.required": "Color is required",
+        })
+        : Joi.string().required().trim().messages({
+          "any.required": "Color is required",
+        }),
+
+      classification: isUpdate
+        ? Joi.object({
+          global: Joi.boolean().optional(),
+          local: Joi.boolean().optional(),
+        }).optional()
+        : Joi.object({
+          global: Joi.boolean().optional(),
+          local: Joi.boolean().optional(),
+        }).optional(),
+
+      vip: Joi.boolean().optional().messages({
+        "any.required": "VIP status is optional",
+      }),
+
+      display: Joi.object({
+        visible_to_superusers_only: Joi.boolean().optional(),
+        show_on_chit: Joi.boolean().optional(),
+        show_on_reservation_summary: Joi.boolean().optional(),
+      }).optional(),
+
+      followers: Joi.array()
+        .items(Joi.string().trim())
+        .optional()
+        .messages({
+          "array.base": "Followers must be an array of strings",
+        }),
+
+      tags: Joi.array()
+        .items(
+          Joi.object({
+            name: Joi.string().required().trim().messages({
+              "any.required": "Tag name is required",
+            }),
+          })
+        )
+        .optional()
+        .messages({
+          "array.base": "Tags must be an array of objects",
+        }),
+    }
+  );
+
+  const { error, value } = clientTagCategorySchema.validate(input, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    const validationErrors: string[] = error.details.map(
+      (err: ValidationErrorItem) => err.message
+    );
+    throw new ApiError(
+      ApiError.badRequest().status,
+      validationErrors.join(", "),
+      "ValidationError"
+    );
+  }
+
+  return value;
+};
 
 export const validateClientTagCategoryInputMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+  isUpdate: boolean = false
 ) => {
-  try {
-    // Extract the request body
-    const { body } = req;
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // Extract the request body
+      const { body } = req;
 
-    // Validate the client tag category input using the clientTagCategoryValidator
-    const { error, value } = clientTagCategoryValidator.validate(body, {
-      abortEarly: false,
-    });
+      // Validate the client tag category input using the clientTagCategoryValidator
+      const validatedInput: ClientTagCategoryInput =
+        clientTagCategoryValidator(body, isUpdate);
 
-    if (error) {
-      // Create an array of validation error messages
-      const validationErrors = error.details.map((error) => error.message);
+      // Continue to the next middleware or route handler
+      next();
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return res.status(error.status).json(error.message);
+      }
 
-      throw new ApiError(
-        ApiError.badRequest().status,
-        validationErrors.join(", "),
-        "ValidationError"
-      );
+      // Respond with the custom error
+      const err = ApiError.badRequest();
+      return res.status(err.status).json(err.message);
     }
-
-    // Continue to the next middleware or route handler
-    next();
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return res.status(error.status).json(error.message);
-    }
-
-    // Respond with the custom error
-    const err = ApiError.badRequest();
-    return res.status(err.status).json(err.message);
-  }
+  };
 };

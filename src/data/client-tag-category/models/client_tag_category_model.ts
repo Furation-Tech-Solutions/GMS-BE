@@ -2,6 +2,14 @@ import { strict } from "assert";
 import { array, boolean, object, string } from "joi";
 import mongoose from "mongoose";
 
+// const clientTagSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true,
+//         unique: true,
+//     },
+// }, { _id: true });
+
 const clientTagCategorySchema = new mongoose.Schema({
     name: {
         type: String,
@@ -27,7 +35,7 @@ const clientTagCategorySchema = new mongoose.Schema({
     },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
-        // ref: "User",
+        ref: "UserAccount",
     }],
     tags: [{
         type: mongoose.Schema.Types.ObjectId,
