@@ -8,7 +8,6 @@ import { DeleteAccessRuleUsecase } from "@domain/availibility/usecases/access-ru
 import { GetAllAccessRuleUsecase } from "@domain/availibility/usecases/access-rule/getall-accessrule-usecase";
 import { GetAcessRuleByIdUsecase } from "@domain/availibility/usecases/access-rule/get-access-rule-by-id-usecase";
 import { AccessRuleEntity, AccessRuleMapper, AccessRuleModel } from "@domain/availibility/entities/access-rule-entity";
-import { log } from "console";
 
 export class AccessRuleService {
   private readonly createAccessRuleUsecase: CreateAccessRuleUsecase;
@@ -34,19 +33,15 @@ export class AccessRuleService {
   async createAccessRule(req: Request, res: Response): Promise<void> {
   
     const accessRuleData: AccessRuleModel = AccessRuleMapper.toModel(req.body);
-    
-    
 
     const newAccessRule: Either<ErrorClass, AccessRuleEntity> =
       await this.createAccessRuleUsecase.execute(accessRuleData);
-
 
       newAccessRule.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AccessRuleEntity) => {
         const resData = AccessRuleMapper.toEntity(result, true);
-        console.log()
         return res.json(resData);
       }
     );
@@ -54,28 +49,28 @@ export class AccessRuleService {
 
 
   async updateAccessRule(req: Request, res: Response): Promise<void> {
-    const accessId: string = req.params.accessId;
-    const accessRuleData: AccessRuleModel = req.body;
+    const shiftId: string = req.params.shiftId;
+    const shiftData: AccessRuleModel = req.body;
 
     // Get the existing shift by ID
-    const existingAccessRule: Either<ErrorClass, AccessRuleEntity> =
-      await this.getAccessRuleByIdUsecase.execute(accessId);
+    const existingShift: Either<ErrorClass, AccessRuleEntity> =
+      await this.getAccessRuleByIdUsecase.execute(shiftId);
 
      
 
-      existingAccessRule.cata(
+      existingShift.cata(
       (error: ErrorClass) => {
         res.status(error.status).json({ error: error.message });
       },
       async (result: AccessRuleEntity) => {
         const resData = AccessRuleMapper.toEntity(result, true);
-        const updatedAccessRuleEntity: AccessRuleEntity = AccessRuleMapper.toEntity(
-          accessRuleData,
+        const updatedShiftEntity: AccessRuleEntity = AccessRuleMapper.toEntity(
+          shiftData,
           true,
           resData
         );
 
-        res.json(updatedAccessRuleEntity);
+        res.json(updatedShiftEntity);
        
 
         // Call the UpdateAdminUsecase to update the admin
@@ -101,13 +96,13 @@ export class AccessRuleService {
 
     async getAccessRuleById(req: Request, res: Response): Promise<void> {
 
-    const accessId: string = req.params.accessId;
+    const shiftId: string = req.params.shiftId;
 
     // Call the GetAdminByIdUsecase to get the admin by ID
-    const accessRule: Either<ErrorClass, AccessRuleEntity> =
-      await this.getAccessRuleByIdUsecase.execute(accessId);
+    const admin: Either<ErrorClass, AccessRuleEntity> =
+      await this.getAccessRuleByIdUsecase.execute(shiftId);
 
-      accessRule.cata(
+    admin.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AccessRuleEntity) => {
@@ -118,17 +113,17 @@ export class AccessRuleService {
   }
 
     async deleteAccessRule(req: Request, res: Response): Promise<void> {
-    const accessId: string = req.params.accessId;
+    const shiftId: string = req.params.shiftId;
 
     // Call the DeleteAdminUsecase to delete the admin
     const response: Either<ErrorClass, void> =
-      await this.deleteAccessRuleUsecase.execute(accessId);
+      await this.deleteAccessRuleUsecase.execute(shiftId);
 
     (await response).cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Access Rule deleted successfully." });
+        return res.json({ message: "Shift deleted successfully." });
       }
     );
   }
@@ -140,14 +135,14 @@ export class AccessRuleService {
     next: NextFunction
   ): Promise<void> {
     // Call the GetAllAdminsUsecase to get all admins
-    const accessRules: Either<ErrorClass, AccessRuleEntity[]> =
+    const shifts: Either<ErrorClass, AccessRuleEntity[]> =
       await this.getAllAccessRuleUsecase.execute();
 
-      accessRules.cata(
+      shifts.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-      (accessRules: AccessRuleEntity[]) => {
-        const resData = accessRules.map((accessRule) => AccessRuleMapper.toEntity(accessRule));
+      (shifts: AccessRuleEntity[]) => {
+        const resData = shifts.map((shift) => AccessRuleMapper.toEntity(shift));
         return res.json(resData);
       }
     );

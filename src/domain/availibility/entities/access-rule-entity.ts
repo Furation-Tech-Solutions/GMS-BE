@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 export class AccessRuleModel {
   constructor(
     public name: string = "",
-    public startDate: string = '',
-    public endDate: string | undefined = undefined,
+    public startDate: Date = new Date(),
+    public endDate: Date | undefined = undefined,
     public isIndefinite: boolean = false,
     public daysOfWeek: string[] = [],
     public timeSlots: string[] = [],
@@ -27,17 +27,21 @@ export class AccessRuleModel {
     public guestFacingDisplay: {
       widgetTimeSlotDescription: string;
       timeSlotDescription: string;
-      title: string;
-      longDescription: string;
-      image: string;
+      widgetTimeSlotDetail: {
+        title: string;
+        longDescription: string;
+        image: string;
+      };
       linkToOffer: string;
       allowBookingOnChannelsWithoutDisplayFields: boolean;
     } = {
         widgetTimeSlotDescription: "",
         timeSlotDescription: "",
-        title: "",
-        longDescription: "",
-        image: "",
+        widgetTimeSlotDetail: {
+          title: "",
+          longDescription: "",
+          image: "",
+        },
         linkToOffer: "",
         allowBookingOnChannelsWithoutDisplayFields: false,
       },
@@ -58,9 +62,6 @@ export class AccessRuleModel {
       },
     public bookingChannels: {
       AudienceTier: string[];
-      value: number;
-      unit: 'hours' | 'days' | 'weeks' | 'months' | 'reservation_time';
-      reservationTime: string | undefined;
     }[] = [],
     public selectableUpgrade: {
       doNotInclude: boolean | undefined;
@@ -69,7 +70,7 @@ export class AccessRuleModel {
         doNotInclude: undefined,
         include: undefined,
       },
-    public reservationTags: string[] | [] = [],
+    public reservationTags: mongoose.Schema.Types.ObjectId | undefined = undefined,
     public bookingWindow: {
       guestBookingStartTime: {
         value: number;
@@ -128,8 +129,8 @@ export class AccessRuleEntity {
   constructor(
     public id: string | undefined = undefined,
     public name: string,
-    public startDate: string,
-    public endDate: string | undefined,
+    public startDate: Date,
+    public endDate: Date | undefined,
     public isIndefinite: boolean,
     public daysOfWeek: string[],
     public timeSlots: string[],
@@ -149,9 +150,11 @@ export class AccessRuleEntity {
     public guestFacingDisplay: {
       widgetTimeSlotDescription: string;
       timeSlotDescription: string;
-      title: string;
-      longDescription: string;
-      image: string;
+      widgetTimeSlotDetail: {
+        title: string;
+        longDescription: string;
+        image: string;
+      };
       linkToOffer: string;
       allowBookingOnChannelsWithoutDisplayFields: boolean;
     },
@@ -165,15 +168,12 @@ export class AccessRuleEntity {
     },
     public bookingChannels: {
       AudienceTier: string[];
-      value: number;
-      unit: 'hours' | 'days' | 'weeks' | 'months' | 'reservation_time';
-      reservationTime: string | undefined;
     }[],
     public selectableUpgrade: {
       doNotInclude: boolean | undefined;
       include: boolean | undefined;
     },
-    public reservationTags: string[] | [],
+    public reservationTags: mongoose.Schema.Types.ObjectId | undefined,
     public bookingWindow: {
       guestBookingStartTime: {
         value: number;
@@ -205,6 +205,8 @@ export class AccessRuleEntity {
     }
   ) {}
 }
+
+
 
 export class AccessRuleMapper {
   static toEntity(

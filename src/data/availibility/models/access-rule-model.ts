@@ -5,13 +5,17 @@ import { IAccessRuleDocument } from 'types/availibility/access-rule-type';
 // Define interfaces for the document and model
 
 const guestFacingSchema = new mongoose.Schema({
+  guestFacingDisplay: {
     widgetTimeSlotDescription: String,
     timeSlotDescription: String,
-    title: String,
-    longDescription: String,
-    image: String, // You can store the image URL or file path
+    widgetTimeSlotDetail: {
+      title: String,
+      longDescription: String,
+      image: String, // You can store the image URL or file path
+    },
     linkToOffer: String,
     allowBookingOnChannelsWithoutDisplayFields: Boolean,
+  },
 }, { _id: false })
 
 const paymentPolicySchema = new mongoose.Schema({
@@ -43,93 +47,22 @@ const bookingChannels = new Schema({
   AudienceTier: {
     type: [String],
     enum: ["Direct Booking Channels", "Third Party Booking Channels", "Waitlist"]
-  },
-  value: { type: Number, default: 90 },
-      unit: {
-        type: String,
-        enum: ['hours', 'days', 'weeks', 'months', 'reservation_time'],
-        default: 'hours',
-      },
-      reservationTime: String
-},  { _id: false });
-
-const partySizeSchema = new Schema({
-  minPartySize: {
-    type: Number,
-    required: false,
-    default: 2,
-  },
-  maxPartySize: {
-    type: Number,
-    required: false,
-    default: 12,
-  },
-},  { _id: false });
-
-const seatingAreaSchema = new Schema({
-  SeatingAreaName: {
-    type: [String],
-    required: true,
-  },
-  exclusive: {
-    type: Boolean,
-    default: false,
-  },
-},  { _id: false });
-
-const customPacingPerSeatingIntervalSchema = new Schema({
-    startTime:  String ,
-    maxCovers: Number ,
-},  { _id: false });
-
-const bookingWindowSchema = new Schema({
-  guestBookingStartTime: {
-
-      value: { type: Number, default: 90 },
-      unit: {
-        type: String,
-        enum: ['hours', 'days', 'weeks', 'months', 'reservation_time'],
-        default: 'hours',
-      },
-      reservationTime: String
-
-  },
-  guestBookingCutoffTime: {
-      value: { type: Number, default: 24 },
-      unit: {
-        type: String,
-        enum: ['hours', 'days', 'weeks', 'months', 'reservation_time'],
-        default: 'hours',
-      },
-      reservationTime: String
-  },
-
-},  { _id: false });
-
-const maxReservationOrCoverLimitSchema = new Schema({
-  
-  perDay: { type: Number, default: 0 }, // Default to no limit (0 means no limit);
-      unit: {
-        type: String,
-        enum: ['Reservations', 'Covers']
-      }
-
-},  { _id: false });
-
-
+  }
+},  { _id: false })
 
 // Define the schema
 const accessRuleSchema: Schema<IAccessRuleDocument> = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   startDate: {
-    type: String,
+    type: Date,
     required: true,
   },
   endDate: {
-    type: String,
+    type: Date,
   },
   isIndefinite: {
     type: Boolean,
@@ -169,10 +102,30 @@ const accessRuleSchema: Schema<IAccessRuleDocument> = new Schema({
     required: false
   },
   partySize: {
-    type: partySizeSchema,
+    type: {
+      minPartySize: {
+        type: Number,
+        required: false,
+        default: 2,
+      },
+      maxPartySize: {
+        type: Number,
+        required: false,
+        default: 12,
+      },
+    }
   },
   seatingAreas: {
-    type: seatingAreaSchema,
+    type: {
+      SeatingAreaName: {
+        type: [String],
+        required: true,
+      },
+      exclusive: {
+        type: Boolean,
+        default: false,
+      },
+    },
     required: false,
   },
   guestFacingDisplay: guestFacingSchema,
@@ -183,19 +136,51 @@ const accessRuleSchema: Schema<IAccessRuleDocument> = new Schema({
     include: Boolean,
   },
   reservationTags: {
-    type: [String,]
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ReservationTag"
   },
-  bookingWindow: { 
-    type: bookingWindowSchema
+  bookingWindow: {
+    guestBookingStartTime: {
+      type: {
+        value: { type: Number, default: 90 },
+        unit: {
+          type: String,
+          enum: ['hours', 'days', 'weeks', 'months', 'reservation_time'],
+          default: 'hours',
+        },
+        reservationTime: String
+      },
+    },
+    guestBookingCutoffTime: {
+      type: {
+        value: { type: Number, default: 24 },
+        unit: {
+          type: String,
+          enum: ['hours', 'days', 'weeks', 'months', 'reservation_time'],
+          default: 'hours',
+        },
+        reservationTime: String
+      },
+    },
   },
 
   maxReservationOrCoverLimit: {
-    type: maxReservationOrCoverLimitSchema
+    type: {
+      perDay: { type: Number, default: 0 }, // Default to no limit (0 means no limit)
+      unit: {
+        type: String,
+        enum: ['Reservations', 'Covers']
+      }
+    }
   },
-
   pacing: {
     maxCoversPerSeatingInterval: { type: Number, default: 0 },
-    customPacingPerSeatingInterval: [customPacingPerSeatingIntervalSchema],
+    customPacingPerSeatingInterval: [
+      {
+        startTime: { type: String },
+        maxCovers: { type: Number },
+      },
+    ],
     totalPacingReduction: { type: Boolean },
   },
   guestDurationPicker: {
