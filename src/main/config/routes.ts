@@ -18,7 +18,6 @@ import { guestRouter } from "@presentation/routes/guest-route";
 import { clientRouter } from "@presentation/routes/client-route";
 import { clientTagCategoryRouter } from "@presentation/routes/client-tag-category-route";
 import { reservationTagCategoryRouter } from "@presentation/routes/reservation-tag-category-route";
-
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
 import { clientTagRouter } from "@presentation/routes/client-tag-route";
@@ -46,8 +45,11 @@ export default (app: Express): void => {
   app.use("/api/v1/blackoutday", blackoutDayRouter);
   app.use("/api/v1/program", programScheduleRouter);
   app.use("/api/v1/outlet/media", mediaRoutes);
-  app.use("/api/v1/people/user", userRouter)
-  app.use("/api/v1/people/accessLevel", accessLevelRouter)
+
+  app.use("/api/v1/people/user", userRouter);
+  app.use("/api/v1/people/accessLevel", accessLevelRouter);
+  app.use("/api/v1/people/taxRate", taxRateRouter);
+
   app.use("/api/v1/people/bookedByName", bookedByNameRouter);
   app.use("/api/v1/people/serverName", serverNameRouter);
   app.use("/api/v1/room", roomRouter);
