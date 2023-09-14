@@ -29,7 +29,10 @@ const clientTagCategorySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         // ref: "User",
     }],
-    tags: [String],
+    tags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ClientTag",
+    }],
     createdAt: {
         type: Date,
         default: Date.now,
