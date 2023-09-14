@@ -1,80 +1,62 @@
 import mongoose from "mongoose";
 
 const addReservationSchema = new mongoose.Schema({
-  //Availability
-  date: {
+  firstName: {
     type: String,
-    trim: true,
-    required: [true, "please Select the Date"],
-  },
-  shift: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Shift",
-    required: [true, "please Select the Shift"],
-  },
-  duration: {
-    type: String,
-    trim: true,
-    default: "2 hr",
-    // required: [true, "please Select the Duration"],
-  },
-  seatingArea: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SeatingArea",
-    required: [true, "please Select the Seating Area"],
-  },
-  timeSlot: {
-    type: String,
-    trim: true,
-    required: [true, "please Select the Time Slot"],
-  },
-
-  // Client
-  client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
-    required: [true, "please Select the Client"],
-  },
-
-  // Source
-  // source: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Users",
-  // },
-
-  // Aditional Detail
-  resevationTags: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
-  ],
-
-  reservationNote: {
-    type: String,
-    maxlength: [2000, "lastName should have less than 30 charcters"],
-    minLength: [1, "lastName should have more than 3 character"],
+    maxlength: [30, "firstName name should have less than 30 charcters"],
+    minLength: [3, "firstName name should have more than 3 character"],
+    required: [true, "please enter first Name"],
+    // unique: true,
     trim: true,
   },
-
-  table: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Table",
-    required: [true, "please Select the Table"],
-  },
-  bookedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "bookedByName",
-  },
-  perks: {
+  lastName: {
     type: String,
-    maxLength: [2000, "notes should have less then 500 charcters "],
-    minLength: [5, "notes should have 10 charcters"],
+    maxlength: [30, "lastName should have less than 30 charcters"],
+    minLength: [3, "lastName should have more than 3 character"],
+    required: [true, "please enter last Name"],
+    // unique: true,
     trim: true,
   },
-
+  email: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: true,
+    lowercase: true,
+  },
+  phone: {
+    type: String,
+    maxLength: [
+      13,
+      "Phone Number should have 13 charcters included country code",
+    ],
+    minLength: [
+      13,
+      "Phone Number should have 13 charcters included country code",
+    ],
+    required: [true, "please enter  Phone Number"],
+    trim: true,
+  },
   confirmationMailSending: {
     type: Boolean,
     default: false,
   },
-
+  bookedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    // required: [true, "Please enter user_id"],
+  },
+  aditionalGuest: {
+    type: [String],
+  },
+  reservationTags: {
+    type: [String],
+  },
+  notes: {
+    type: String,
+    maxLength: [500, "notes should have less then 500 charcters "],
+    minLength: [10, "notes should have 10 charcters"],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

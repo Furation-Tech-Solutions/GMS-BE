@@ -45,7 +45,7 @@ export class RoomMapper {
           ? roomData._id
             ? roomData._id.toString()
             : undefined
-          : roomData._id.toString(),
+          : undefined,
         abbreviation: roomData.abbreviation,
         roomName: roomData.roomName,
 

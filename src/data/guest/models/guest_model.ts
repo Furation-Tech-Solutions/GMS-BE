@@ -29,12 +29,12 @@ const guestSchema = new mongoose.Schema({
     phone: {
         type: String,
         maxLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
+            13,
+            "Phone Number should have 13 charcters included country code",
         ],
         minLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
+            13,
+            "Phone Number should have 13 charcters included country code",
         ],
         required: [true, "please enter  Phone Number"],
         trim: true,
@@ -48,16 +48,15 @@ const guestSchema = new mongoose.Schema({
         ref: "UserAccount",
         required: [true, "Please enter user_id"],
     },
-    additionalGuest: {
+    aditionalGuest: {
         type: [String],
     },
     reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
+        type: [String],
     },
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "-"],
+        enum: ["checkedIn", "checkedOut"],
     },
     notes: {
         type: String,
