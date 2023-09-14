@@ -58,7 +58,7 @@ export class TableMapper {
           ? tableData._id
             ? tableData._id.toString()
             : undefined
-          : undefined,
+          : tableData._id.toString(),
         tableNo: tableData.tableNo,
         partySizeMini: tableData.partySizeMini,
         partySizeMax: tableData.partySizeMax,

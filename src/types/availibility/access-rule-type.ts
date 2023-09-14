@@ -4,9 +4,11 @@ import mongoose, { Document } from "mongoose";
 export interface IGuestFacingDisplay {
   widgetTimeSlotDescription: string;
   timeSlotDescription: string;
-  title: string;
-  longDescription: string;
-  image: string; 
+  widgetTimeSlotDetail: {
+    title: string;
+    longDescription: string;
+    image: string; 
+  };
   linkToOffer: string;
   allowBookingOnChannelsWithoutDisplayFields: boolean;
 }
@@ -22,9 +24,6 @@ export interface IPaymentPolicy {
 
 export interface IBookingChannels {
   AudienceTier: Array<'Direct Booking Channels' | 'Third Party Booking Channels' | 'Waitlist'>;
-  value: number;
-  unit: 'hours' | 'days' | 'weeks' | 'months' | 'reservation_time';
-  reservationTime: string | undefined;
 }
 
 export interface ISeatingArea {
@@ -45,8 +44,8 @@ export interface IGuestBookingTime {
 
 export interface IAccessRuleDocument extends Document {
   name: string;
-  startDate: string;
-  endDate?: string;
+  startDate: Date;
+  endDate?: Date;
   isIndefinite: boolean;
   daysOfWeek: string[];
   timeSlots: Array<'All Times During Shift Category' | 'Custom time range' | 'Specific time slot'>;
@@ -64,7 +63,7 @@ export interface IAccessRuleDocument extends Document {
     doNotInclude?: boolean;
     include?: boolean;
   };
-  reservationTags:string[];
+  reservationTags: mongoose.Types.ObjectId;
   bookingWindow: {
     guestBookingStartTime: IGuestBookingTime;
     guestBookingCutoffTime: IGuestBookingTime;
