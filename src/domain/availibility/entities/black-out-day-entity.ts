@@ -65,7 +65,7 @@ export class BlackoutDayModel {
             ? blackoutData._id
               ? blackoutData._id.toString()
               : undefined
-            : undefined,
+            :  blackoutData._id.toString(),
           date: blackoutData.date,
           day: blackoutData.day,
           description: blackoutData.description,

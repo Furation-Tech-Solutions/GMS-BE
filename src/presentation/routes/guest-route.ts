@@ -46,7 +46,6 @@ guestRouter.post(
 // Route handling for deleting an guest by ID
 guestRouter.delete(
     "/:guestId",
-    validateGuestInputMiddleware(false),
     guestService.deleteGuest.bind(guestService)
 );
 

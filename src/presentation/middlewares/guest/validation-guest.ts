@@ -7,7 +7,6 @@ interface GuestInput {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
     confirmationMailSending: boolean;
     bookedBy: mongoose.Schema.Types.ObjectId;
     additionalGuest?: string[];
@@ -49,28 +48,6 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
                 "string.email": "Invalid email format",
                 "any.required": "Email is required",
             }),
-
-        phone: isUpdate
-            ? Joi.string()
-                .length(10)
-                .pattern(/^[0-9]+$/)
-                .optional()
-                .trim()
-                .messages({
-                    "string.length": "Phone number should have exactly 10 digits",
-                    "string.pattern.base": "Phone number should contain only digits"
-                })
-            : Joi.string()
-                .length(10)
-                .pattern(/^[0-9]+$/)
-                .required()
-                .trim()
-                .messages({
-                    "string.length": "Phone number should have exactly 10 digits",
-                    "string.pattern.base": "Phone number should contain only digits",
-                    "any.required": "Phone number is required",
-                }),
-
         confirmationMailSending: isUpdate
             ? Joi.boolean().optional().messages({
                 "any.required": "Confirmation mail sending status is required",
