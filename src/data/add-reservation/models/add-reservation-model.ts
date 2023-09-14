@@ -54,6 +54,7 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
   },
 
+  
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
