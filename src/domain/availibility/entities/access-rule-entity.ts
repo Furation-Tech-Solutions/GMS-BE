@@ -314,10 +314,10 @@ export class AccessRuleMapper {
     } else {
       const accessRuleEntity: AccessRuleEntity = {
         id: includeId
-          ? accessRuleData.id !== undefined
-            ? accessRuleData.id
+          ? accessRuleData._id !== undefined
+            ? accessRuleData._id.toString()
             : undefined
-          : undefined,
+          : accessRuleData._id.toString(),
         name: accessRuleData.name,
         startDate: accessRuleData.startDate,
         endDate: accessRuleData.endDate,
