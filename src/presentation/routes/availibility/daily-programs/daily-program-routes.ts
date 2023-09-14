@@ -1,7 +1,6 @@
 // Import necessary classes, interfaces, and dependencies
 import mongoose from "mongoose";
 import { Router } from "express"; // Correctly import Request and Response
-import { validateShiftInputMiddleware } from "@presentation/middlewares/avaibility/shift/shift-validation";
 import { ProgramScheduleRepositoryImpl } from "@data/availibility/repositories/daily-programs-repository-imp";
 import { ProgramScheduleDataSourceImpl } from "@data/availibility/datasource/daily-programs-datasource";
 import { CreateProgramSchedule } from "@domain/availibility/usecases/daily-programs/create-usecase";
@@ -10,6 +9,7 @@ import { GetProgramScheduleById } from "@domain/availibility/usecases/daily-prog
 import { DeleteProgramSchedule } from "@domain/availibility/usecases/daily-programs/delete-usecase";
 import { GetAllProgramSchedule } from "@domain/availibility/usecases/daily-programs/getall-usecase";
 import { ProgramScheduleService } from "@presentation/services/availibility/daily-programs/daily-programs-services";
+import { validateProgramScheduleInputMiddleware } from "@presentation/middlewares/avaibility/program-schedule/program-schedule-validation";
 
 
 
@@ -36,20 +36,21 @@ const programScheduleService = new ProgramScheduleService(
     getAllProgramScheduleUsecase
 );
 
+
 // Create an Express router
 export const programScheduleRouter = Router();
 
-// Route handling for creating a new admin
-programScheduleRouter.post("/create", programScheduleService.createProgramSchedule.bind(programScheduleService));
+// Route handling for creating a new programSchedule
+programScheduleRouter.post("/create", validateProgramScheduleInputMiddleware, programScheduleService.createProgramSchedule.bind(programScheduleService));
 
-// Route handling for updating an shift by ID
+// Route handling for updating an programSchedule by ID
 programScheduleRouter.put("/update/:programId",programScheduleService.updateProgramSchedule.bind(programScheduleService));
 
-// Route handling for getting an shift by ID
+// Route handling for getting an programSchedule by ID
 programScheduleRouter.get("/getbyid/:programId",programScheduleService.getProgramScheduleById.bind(programScheduleService));
 
-// Route handling for deleting an admin by ID
+// Route handling for deleting an programSchedule by ID
 programScheduleRouter.delete("/delete/:programId", programScheduleService.deleteProgramSchedule.bind(programScheduleService));
 
-// Route handling for getting all shifts
+// Route handling for getting all programSchedule
 programScheduleRouter.get("/getAll", programScheduleService.getAllProgramSchedule.bind(programScheduleService));
