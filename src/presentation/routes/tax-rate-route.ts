@@ -5,7 +5,10 @@ import { DeleteTaxRate } from "@domain/tax-rate/usecases/delete-tax-rate";
 import { GetAllTaxRate } from "@domain/tax-rate/usecases/get-all-tax-rate";
 import { GetTaxRateById } from "@domain/tax-rate/usecases/get-tax-rate-by-id";
 import { UpdateTaxRate } from "@domain/tax-rate/usecases/update-tax-rate";
+<<<<<<< HEAD
 import { validateTaxRateInputMiddleware } from "@presentation/middlewares/tax-rate/tax-rate-validation";
+=======
+>>>>>>> 58f1ffddbe7f437f23c17cd9f6275072955b4305
 import { TaxRateService } from "@presentation/services/tax-rate-service";
 import { Router } from "express";
 import mongoose from "mongoose";
@@ -36,7 +39,10 @@ export const taxRateRouter=Router()
 
 taxRateRouter.post(
     "/create",
+<<<<<<< HEAD
     validateTaxRateInputMiddleware(false),
+=======
+>>>>>>> 58f1ffddbe7f437f23c17cd9f6275072955b4305
     taxRateService.createTaxRate.bind(taxRateService)
 )
 taxRateRouter.get(
@@ -53,6 +59,9 @@ taxRateRouter.get(
 );
 taxRateRouter.put(
     "/update/:taxRateId",
+<<<<<<< HEAD
     validateTaxRateInputMiddleware(true),
+=======
+>>>>>>> 58f1ffddbe7f437f23c17cd9f6275072955b4305
     taxRateService.updateTaxRate.bind(taxRateService)
 );

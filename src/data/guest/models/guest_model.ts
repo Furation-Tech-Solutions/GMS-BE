@@ -26,19 +26,6 @@ const guestSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
     },
-    phone: {
-        type: String,
-        maxLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        minLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        required: [true, "please enter  Phone Number"],
-        trim: true,
-    },
     confirmationMailSending: {
         type: Boolean,
         default: false,
@@ -52,8 +39,7 @@ const guestSchema = new mongoose.Schema({
         type: [String],
     },
     reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
+        type: [String],
     },
     status: {
         type: String,

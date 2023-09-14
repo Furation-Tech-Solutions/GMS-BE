@@ -100,7 +100,7 @@ export class ProgramScheduleModel {
             ? programScheduleData._id
               ? programScheduleData._id.toString()
               : undefined
-            : undefined,
+            : programScheduleData._id.toString(),
           title: programScheduleData.title,
           startDate: programScheduleData.startDate,
           endDate: programScheduleData.endDate,
