@@ -1,7 +1,6 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 
 interface ReservationInput {
   date: string;
@@ -15,6 +14,8 @@ interface ReservationInput {
   table: string;
   bookedBy: string;
   perks: string;
+  updatedBy: string;
+  createdBy: string;
   confirmationMailSending: boolean;
   createdAt: Date;
 }
@@ -77,6 +78,20 @@ const reservationValidator = (
       "string.max": "Perks should have less than 2000 characters",
       "string.min": "Perks should have at least 5 characters",
     }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().required().messages({
+          "any.required": "Please select the Created By",
+        }),
     confirmationMailSending: Joi.boolean().default(false),
   };
 

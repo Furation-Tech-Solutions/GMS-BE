@@ -61,6 +61,7 @@ const addReservationSchema = new mongoose.Schema({
   bookedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "bookedByName",
+    default: true,
   },
   perks: {
     type: String,
@@ -72,6 +73,17 @@ const addReservationSchema = new mongoose.Schema({
   confirmationMailSending: {
     type: Boolean,
     default: false,
+  },
+
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
   },
 
   createdAt: {

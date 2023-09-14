@@ -12,6 +12,8 @@ export class AddReservationModel {
     public table: string | undefined = undefined,
     public bookedBy: string | undefined = undefined,
     public perks: string = "",
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public confirmationMailSending: boolean = false
   ) {}
 }
@@ -31,6 +33,8 @@ export class AddReservationEntity {
     public table: string | undefined,
     public bookedBy: string | undefined,
     public perks: string,
+    public updatedBy: string | undefined,
+    public createdBy: string | undefined,
     public confirmationMailSending: boolean,
     public createdAt: string
   ) {}
@@ -97,6 +101,14 @@ export class AddReservationMapper {
           reservationData.confirmationMailSending !== undefined
             ? reservationData.confirmationMailSending
             : existingReservation.confirmationMailSending,
+        updatedBy:
+          reservationData.updatedBy !== undefined
+            ? reservationData.updatedBy
+            : existingReservation.updatedBy,
+        createdBy:
+          reservationData.createdBy !== undefined
+            ? reservationData.createdBy
+            : existingReservation.createdBy,
         createdAt:
           reservationData.createdAt !== undefined
             ? reservationData.createdAt
@@ -120,6 +132,8 @@ export class AddReservationMapper {
         reservationNote: reservationData.reservationNote,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
+        updatedBy: reservationData.updatedBy,
+        createdBy: reservationData.createdBy,
         perks: reservationData.perks,
         confirmationMailSending: reservationData.confirmationMailSending,
         createdAt: reservationData.createdAt, // Make sure to create a new Date instance.
@@ -142,6 +156,8 @@ export class AddReservationMapper {
       reservation.table,
       reservation.bookedBy,
       reservation.perks,
+      reservation.updatedBy,
+      reservation.createdBy,
       reservation.confirmationMailSending
     );
   }
