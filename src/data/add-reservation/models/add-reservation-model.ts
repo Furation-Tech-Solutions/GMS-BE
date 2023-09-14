@@ -1,68 +1,62 @@
 import mongoose from "mongoose";
 
 const addReservationSchema = new mongoose.Schema({
-  //Availability
-  date: {
+  firstName: {
     type: String,
+    maxlength: [30, "firstName name should have less than 30 charcters"],
+    minLength: [3, "firstName name should have more than 3 character"],
+    required: [true, "please enter first Name"],
+    // unique: true,
     trim: true,
   },
-  shift: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Shift",
-  },
-  duration: {
+  lastName: {
     type: String,
+    maxlength: [30, "lastName should have less than 30 charcters"],
+    minLength: [3, "lastName should have more than 3 character"],
+    required: [true, "please enter last Name"],
+    // unique: true,
     trim: true,
   },
-  seatingArea: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SeatingArea",
-  },
-  timeSlot: {
+  email: {
     type: String,
+    unique: true,
+    trim: true,
+    required: true,
+    lowercase: true,
+  },
+  phone: {
+    type: String,
+    maxLength: [
+      13,
+      "Phone Number should have 13 charcters included country code",
+    ],
+    minLength: [
+      13,
+      "Phone Number should have 13 charcters included country code",
+    ],
+    required: [true, "please enter  Phone Number"],
     trim: true,
   },
-
-  // Client
-  client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
-  },
-
-  // Source
-  source: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-  },
-  // Aditional Detail
-  resevationStatus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Users" }],
-  reservationNote: {
-    type: String,
-    maxlength: [2000, "lastName should have less than 30 charcters"],
-    minLength: [1, "lastName should have more than 3 character"],
-    trim: true,
-  },
-
-  table: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Table",
-  },
-  bookedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-  },
-  perks: {
-    type: String,
-    maxLength: [2000, "notes should have less then 500 charcters "],
-    minLength: [5, "notes should have 10 charcters"],
-    trim: true,
-  },
-
   confirmationMailSending: {
     type: Boolean,
     default: false,
   },
-
+  bookedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    // required: [true, "Please enter user_id"],
+  },
+  aditionalGuest: {
+    type: [String],
+  },
+  reservationTags: {
+    type: [String],
+  },
+  notes: {
+    type: String,
+    maxLength: [500, "notes should have less then 500 charcters "],
+    minLength: [10, "notes should have 10 charcters"],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

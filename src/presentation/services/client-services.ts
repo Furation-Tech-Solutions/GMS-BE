@@ -107,8 +107,10 @@ export class ClientServices {
     async updateClient(req: Request, res: Response): Promise<void> {
         const clientId: string = req.params.clientId;
         const clientData: ClientModel = req.body;
+
         const existingClient: Either<ErrorClass, ClientEntity> =
             await this.getClientByIdUsecases.execute(clientId);
+
         existingClient.cata(
             (error: ErrorClass) => {
                 res.status(error.status).json({ error: error.message });
@@ -119,6 +121,7 @@ export class ClientServices {
                     true,
                     existingClientData
                 );
+
                 const updatedClient: Either<ErrorClass, ClientEntity> =
                     await this.updateClientUsecases.execute(
                         clientId,
