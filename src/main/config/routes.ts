@@ -18,41 +18,42 @@ import { guestRouter } from "@presentation/routes/guest-route";
 import { clientRouter } from "@presentation/routes/client-route";
 import { clientTagCategoryRouter } from "@presentation/routes/client-tag-category-route";
 import { reservationTagCategoryRouter } from "@presentation/routes/reservation-tag-category-route";
-import { bookingRequestRouter } from "@presentation/routes/bookingRequest-route";
+
 import { type Express, Router } from "express";
 import { addReservationRouter } from "@presentation/routes/add-reservation-routes.ts/add-reservation-route";
 import { clientTagRouter } from "@presentation/routes/client-tag-route";
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 
+
 export default (app: Express): void => {
   const router = Router();
 
   app.get("/health", (req, res) => {
-    res.status(200).json({ message: "ok" });
+    res.status(200).json({ message: "ok", });
   });
 
+
+
+  app.get("/test", (req, res) => {
+    res.status(200).json({ message: "ok", });
+  });
+
+  app.use("/api/v1/admin", adminRouter);
+  app.use("/api/v1/superadmin", superAdminRouter);
+  app.use("/api/v1/outlet", outletRouter);
   app.use("/api/v1/shift", shiftRouter);
   app.use("/api/v1/accessrule", accessRuleRouter);
   app.use("/api/v1/blackoutday", blackoutDayRouter);
   app.use("/api/v1/program", programScheduleRouter);
-
-  app.get("/test", (req, res) => {
-    res.status(200).json({ message: "ok" });
-  });
-
-  app.use("/api/v1/admin", adminRouter);
-  app.use("/api/v1/outlet", outletRouter);
   app.use("/api/v1/outlet/media", mediaRoutes);
-  app.use("/api/v1/people/user", userRouter);
-  app.use("/api/v1/people/accessLevel", accessLevelRouter);
-  app.use("/api/v1/people/taxRate", taxRateRouter);
+  app.use("/api/v1/people/user", userRouter)
+  app.use("/api/v1/people/accessLevel", accessLevelRouter)
   app.use("/api/v1/people/bookedByName", bookedByNameRouter);
   app.use("/api/v1/people/serverName", serverNameRouter);
   app.use("/api/v1/room", roomRouter);
   app.use("/api/v1/seatingarea", seatingAreaRouter);
   app.use("/api/v1/table", tableRouter);
   app.use("/api/v1/reservation/status", reservationStatusRouter);
-  app.use("/api/v1/superadmin", superAdminRouter);
   app.use("/api/v1/guests", guestRouter);
   app.use("/api/v1/clients", clientRouter);
   app.use("/api/v1/clients/tag/category", clientTagCategoryRouter);
@@ -60,5 +61,6 @@ export default (app: Express): void => {
   app.use("/api/v1/booking/request", bookingRequestRouter);
   app.use("/api/v1/add/reservation", addReservationRouter);
   app.use("/api/v1/client/tag", clientTagRouter);
+
   app.use(router);
 };

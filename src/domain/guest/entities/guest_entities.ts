@@ -6,11 +6,9 @@ export class GuestModel {
     public email: string = "",
     public phone: string = "",
     public confirmationMailSending: boolean,
-    public additionalGuest: string[],
+    public aditionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: string = "",
-    public status: string = "",
     public createdAt: string
   ) { }
 }
@@ -26,11 +24,9 @@ export class GuestEntity {
     public email: string = "",
     public phone: string = "",
     public confirmationMailSending: boolean,
-    public additionalGuest: string[],
+    public aditionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: string = "",
-    public status: string = "",
     public createdAt: string
   ) { }
 }
@@ -69,14 +65,14 @@ export class GuestMapper {
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
             : existingguest.confirmationMailSending,
-        bookedBy:
-          guestData.bookedBy !== undefined
-            ? guestData.bookedBy
-            : existingguest.bookedBy,
-            additionalGuest:
+        // bookedBy:
+        //   guestData.bookedBy !== undefined
+        //     ? guestData.bookedBy
+        //     : existingguest.bookedBy,
+        aditionalGuest:
           guestData.aditionalGuest !== undefined
-            ? guestData.additionalGuest
-            : existingguest.additionalGuest,
+            ? guestData.aditionalGuest
+            : existingguest.aditionalGuest,
         reservationTags:
           guestData.reservationTags !== undefined
             ? guestData.reservationTags
@@ -85,10 +81,6 @@ export class GuestMapper {
           guestData.notes !== undefined
             ? guestData.notes
             : existingguest.notes,
-        status:
-          guestData.status !== undefined
-            ? guestData.status
-            : existingguest.status,
         createdAt:
           guestData.createdAt !== undefined
             ? guestData.createdAt
@@ -108,11 +100,10 @@ export class GuestMapper {
         phone: guestData.phone,
         confirmationMailSending:
           guestData.confirmationMailSending,
-        bookedBy: guestData.bookedBy,
-        additionalGuest: guestData.additionalGuest,
+        // bookedBy: guestData.bookedBy,
+        aditionalGuest: guestData.aditionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
-        status: guestData.status,
         createdAt: guestData.createdAt,
       };
       return guestEntity;
@@ -126,11 +117,10 @@ export class GuestMapper {
       email: guest.email,
       phone: guest.phone,
       confirmationMailSending: guest.confirmationMailSending,
-      bookedBy: guest.bookedBy,
-      additionalGuest: guest.additionalGuest,
+      // bookedBy: guest.bookedBy,
+      aditionalGuest: guest.aditionalGuest,
       reservationTags: guest.reservationTags,
       notes: guest.notes,
-      status: guest.status,
     };
   }
 }

@@ -9,6 +9,7 @@ import { DeleteBlackouDay } from "@domain/availibility/usecases/black-out-day/de
 import { GetBlackouDayById } from "@domain/availibility/usecases/black-out-day/get-by-id-usecase";
 import { UpdateBlackouDay } from "@domain/availibility/usecases/black-out-day/update-usecase";
 import { GetAllBlackouDay } from "@domain/availibility/usecases/black-out-day/getall-usecase";
+import { validateBlackoutInputMiddleware } from "@presentation/middlewares/avaibility/blackout-day/blackout-dayvalidation";
 
 
 
@@ -39,7 +40,7 @@ const blackoutDayService = new BlackoutDayService(
 export const blackoutDayRouter = Router();
 
 // Route handling for creating a new blackoutDay
-blackoutDayRouter.post("/create", blackoutDayService.createBlackouDay.bind(blackoutDayService));
+blackoutDayRouter.post("/create", validateBlackoutInputMiddleware, blackoutDayService.createBlackouDay.bind(blackoutDayService));
 
 // Route handling for updating an blackoutDay by ID
 blackoutDayRouter.put("/update/:blackoutId",blackoutDayService.updateBlackouDay.bind(blackoutDayService));
