@@ -12,3 +12,4 @@ const taxRateSchema=new mongoose.Schema({
    
 })
 export const TaxRate = mongoose.model("taxRate",taxRateSchema)
+
