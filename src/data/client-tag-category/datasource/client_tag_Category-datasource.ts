@@ -58,7 +58,7 @@ export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSou
         try {
             const updatedClientTagCategory = await ClientTagCategory.findByIdAndUpdate(id, clientTagCategory, {
                 new: true,
-            });
+            }).populate('tags');
             return updatedClientTagCategory ? updatedClientTagCategory.toObject() : null;
         } catch (error) {
             throw ApiError.badRequest();
