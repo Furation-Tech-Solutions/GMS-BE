@@ -35,7 +35,7 @@ const addReservationSchema = new mongoose.Schema({
     ref: "Client",
     required: [true, "please Select the Client"],
   },
-  
+
   // Source
   // source: {
   //   type: mongoose.Schema.Types.ObjectId,
@@ -54,7 +54,6 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
   },
 
-  
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
@@ -63,6 +62,7 @@ const addReservationSchema = new mongoose.Schema({
   bookedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "bookedByName",
+    default: true,
   },
   perks: {
     type: String,
@@ -74,6 +74,17 @@ const addReservationSchema = new mongoose.Schema({
   confirmationMailSending: {
     type: Boolean,
     default: false,
+  },
+
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
   },
 
   createdAt: {
