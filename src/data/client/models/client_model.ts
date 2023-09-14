@@ -19,7 +19,7 @@ const clientSchema = new mongoose.Schema({
         // unique: true,
         trim: true,
     },
-    salutation: {
+    salution: {
         type: String,
         enum: ["Mr.", "Mrs.", "Ms.", "Miss.", "Dr."],
         required: true,
@@ -38,7 +38,7 @@ const clientSchema = new mongoose.Schema({
     },
     tags: {
         type: [String],
-        // ref: "ClientTags", give the id of tag from clientTagCategory.
+        // ref: "ClientTags",
     },
     email: {
         type: String,
@@ -57,12 +57,12 @@ const clientSchema = new mongoose.Schema({
     phone: {
         type: String,
         maxLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
+            13,
+            "Phone Number should have 13 charcters included country code",
         ],
         minLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
+            13,
+            "Phone Number should have 13 charcters included country code",
         ],
         required: [true, "please enter  Phone Number"],
         trim: true,
@@ -100,7 +100,7 @@ const clientSchema = new mongoose.Schema({
     country: {
         type: String
     },
-    contactInfoVisibilityOnlyToSuperUser: {
+    contactInfoVisibilityOnlytoSuperUser: {
         type: Boolean,
         default: false,
     },
@@ -114,7 +114,7 @@ const clientSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    spends: {
+    spends:{
         type: Number,
         default: 0
     },
@@ -130,5 +130,6 @@ const clientSchema = new mongoose.Schema({
 });
 
 export const Client = mongoose.model("Client", clientSchema);
+
 
 

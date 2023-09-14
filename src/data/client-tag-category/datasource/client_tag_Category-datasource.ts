@@ -16,7 +16,7 @@ export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSou
 
     async create(clientTagCategory: ClientTagCategoryModel): Promise<any> {
         try {
-            const existingClientTagCategory = await ClientTagCategory.findOne({ name: clientTagCategory.name }).populate('tags');
+            const existingClientTagCategory = await ClientTagCategory.findOne({ name: clientTagCategory.name });
             if (existingClientTagCategory) {
                 throw ApiError.clienttagExist();
             }
@@ -38,7 +38,7 @@ export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSou
 
     async read(id: string): Promise<any | null> {
         try {
-            const clientTagCategory = await ClientTagCategory.findById(id).populate('tags');
+            const clientTagCategory = await ClientTagCategory.findById(id);
             return clientTagCategory ? clientTagCategory.toObject() : null;
         } catch (error) {
             throw ApiError.badRequest();
@@ -47,7 +47,7 @@ export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSou
 
     async getAll(): Promise<any[]> {
         try {
-            const clientTagCategories = await ClientTagCategory.find().populate('tags');
+            const clientTagCategories = await ClientTagCategory.find();
             return clientTagCategories.map((clientTagCategory) => clientTagCategory.toObject());
         } catch (error) {
             throw ApiError.badRequest();
