@@ -26,19 +26,6 @@ const guestSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
     },
-    phone: {
-        type: String,
-        maxLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        minLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        required: [true, "please enter  Phone Number"],
-        trim: true,
-    },
     confirmationMailSending: {
         type: Boolean,
         default: false,
@@ -57,7 +44,8 @@ const guestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "-"],
+        enum: ["checked In", "checked Out", "No Status"],
+        default: "No Status",
     },
     notes: {
         type: String,

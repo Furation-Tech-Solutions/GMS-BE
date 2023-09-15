@@ -58,14 +58,19 @@ const validateEmail = function (email: string) {
       default: ""
     },
     },
+    isLogin:{
+      type:Boolean,
+      default: false,
+    },
     permissions: {
-        type: [Number], 
+        type: [{ key: Number, value: String }], 
         default: [],    
       },
-      emailNotification: {
-        type: [Number], 
+    emailNotification: {
+        type: [{ key: Number, value: String }], 
         default: [],    
       },
+     
   })
 
 export const UserAccount = mongoose.model("UserAccount", userSchema);

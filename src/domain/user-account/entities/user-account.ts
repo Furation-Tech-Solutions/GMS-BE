@@ -21,7 +21,9 @@ export class UserModel {
           lastLogin: "",
           lastPasswordReset: "",
         },
-        public permissions: number[] = [],
+        public isLogin:boolean=false,
+        public permissions: { key: number; value: string }[] = [],
+        public emailNotification:{ key: number; value: string }[] = []
     ) {}
   }
   
@@ -41,7 +43,9 @@ export class UserModel {
         lastLogin: string;
         lastPasswordReset: string;
       },
-      public permissions: number[],
+      public isLogin:boolean,
+      public permissions: { key: number; value: string }[],
+      public  emailNotification: {key:number;value:string}[]
     ) {}
   }
   
@@ -95,10 +99,19 @@ export class UserModel {
               ? userData.managerSettings.lastPasswordReset
               : existingUser.managerSettings.lastPasswordReset,
         },
+        isLogin:
+           userData.isLogin!==undefined
+           ? userData.isLogin
+           : existingUser.isLogin,
         permissions:
           userData.permissions !== undefined
             ? userData.permissions
             : existingUser.permissions,
+        emailNotification:
+         userData.emailNotification !== undefined
+          ? userData.emailNotification
+          : existingUser.emailNotification
+            
       };
     } else {
       const userEntity: UserEntity= {
@@ -106,7 +119,7 @@ export class UserModel {
           ? userData._id
             ? userData._id.toString()
             : undefined
-          : undefined,
+          : userData._id.toString(),
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
@@ -121,7 +134,9 @@ export class UserModel {
           lastLogin: userData.managerSettings?.lastLogin || "",
           lastPasswordReset: userData.managerSettings?.lastPasswordReset || "",
         },
+        isLogin:userData.isLogin,
         permissions: userData.permissions || [],
+        emailNotification:userData.emailNotification||[]
       };
       return userEntity;
     }
@@ -136,7 +151,9 @@ export class UserModel {
             jobTitle: user.jobTitle,
             accessLevel: user.accessLevel,
             managerSettings: user.managerSettings,
+            isLogin: user.isLogin,  
             permissions: user.permissions,
+            emailNotification:user.emailNotification
           };
     }
   }

@@ -6,7 +6,9 @@ export class ReservationStatusModel {
     public color: string,
     public classification: string,
     public active: boolean | undefined,
-    public durationHolds: number | undefined
+    public durationHolds: number | undefined,
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined
   ) {}
 }
 
@@ -18,8 +20,10 @@ export class ReservationStatusEntity {
     public iconInitials: string,
     public color: string,
     public classification: string,
-    public active: boolean ,
-    public durationHolds: number | undefined
+    public active: boolean,
+    public durationHolds: number | undefined,
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined
   ) {}
 }
 
@@ -56,6 +60,14 @@ export class ReservationStatusMapper {
           reservationStatusData.durationHolds !== undefined
             ? reservationStatusData.durationHolds
             : existingReservationStatus.durationHolds,
+        updatedBy:
+          reservationStatusData.updatedBy !== undefined
+            ? reservationStatusData.updatedBy
+            : existingReservationStatus.updatedBy,
+        createdBy:
+          reservationStatusData.createdBy !== undefined
+            ? reservationStatusData.createdBy
+            : existingReservationStatus.createdBy,
       };
     } else {
       const reservationStatusEntity: ReservationStatusEntity = {
@@ -70,6 +82,8 @@ export class ReservationStatusMapper {
         classification: reservationStatusData.classification,
         active: reservationStatusData.active,
         durationHolds: reservationStatusData.durationHolds,
+        updatedBy: reservationStatusData.updatedBy,
+        createdBy: reservationStatusData.createdBy,
       };
       return reservationStatusEntity;
     }
@@ -87,6 +101,8 @@ export class ReservationStatusMapper {
       classification: reservationStatus.classification,
       active: reservationStatus.active,
       durationHolds: reservationStatus.durationHolds,
+      updatedBy: reservationStatus.updatedBy,
+      createdBy: reservationStatus.createdBy,
     };
   }
 }

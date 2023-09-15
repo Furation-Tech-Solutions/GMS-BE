@@ -8,6 +8,7 @@ import { DeleteClientTag } from "@domain/client-tag/usecases/delete-client-tag";
 import { GetClientTagById } from "@domain/client-tag/usecases/get-client-tag-by-id";
 import { GetAllClientTag } from "@domain/client-tag/usecases/get-all-client-tag";
 import { UpdateClientTag } from "@domain/client-tag/usecases/update-client-tag";
+import { validateClientTagInputMiddleware } from "@presentation/middlewares/client-tag/validation-client-tag";
 
 // Create an instance of the TagDataSourceImpl and pass the mongoose connection
 const clientTagDataSource = new ClientTagDataSourceImpl(mongoose.connection);
@@ -37,6 +38,7 @@ export const clientTagRouter = Router();
 // Route handling for creating a new tag
 clientTagRouter.post(
     "/add",
+    validateClientTagInputMiddleware(false),
     clientTagService.createClientTag.bind(clientTagService)
 );
 
@@ -58,5 +60,6 @@ clientTagRouter.get("/", clientTagService.getAllClientTags.bind(clientTagService
 // Route handling for updating a tag by ID
 clientTagRouter.put(
     "/:ClientTagId",
+    validateClientTagInputMiddleware(true),
     clientTagService.updateClientTag.bind(clientTagService)
 );

@@ -35,14 +35,11 @@ export class AccessRuleRepositoryImpl implements AccessRuleRepository{
   ): Promise<Either<ErrorClass, AccessRuleEntity>> {
     try {
       const response = await this.dataSource.update(id, accessRuleData);
-      return Right<ErrorClass, AccessRuleEntity>(response)
+      return Right<ErrorClass, AccessRuleEntity>(response);
     } catch (error) {
       return Left<ErrorClass, AccessRuleEntity>(ApiError.badRequest());
     }
   }
-
-
-
 
 
 
@@ -79,7 +76,3 @@ async deleteAccessRule(id: string): Promise<Either<ErrorClass, void>> {
     }
   }
 }
-
-
-
-

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { ShiftModel } from "@domain/availibility/entities/shift-entity";
 import Shift from "../models/shift-model";
-import moment from "moment";
 
 export interface ShiftDataSource {
   create(shift: ShiftModel): Promise<any>;
@@ -23,20 +22,14 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
       $or: [
         {
           $and: [
-            {
-              // Convert time strings to moment objects and then compare
-              firstSeating: { $lte: moment(shift.firstSeating, 'hh:mm A').format('HH:mm') },
-              lastSeating: { $gte: moment(shift.firstSeating, 'hh:mm A').format('HH:mm') },
-            },
+            { firstSeating: { $lte: shift.firstSeating } }, // New shift starts before or at the same time
+            { lastSeating: { $gte: shift.firstSeating } }, // New shift ends after or at the same time
           ],
         },
         {
           $and: [
-            {
-              // Convert time strings to moment objects and then compare
-              firstSeating: { $lte: moment(shift.lastSeating, 'hh:mm A').format('HH:mm') },
-              lastSeating: { $gte: moment(shift.lastSeating, 'hh:mm A').format('HH:mm') },
-            },
+            { firstSeating: { $lte: shift.lastSeating } }, // New shift starts before or at the same time
+            { lastSeating: { $gte: shift.lastSeating } }, // New shift ends after or at the same time
           ],
         },
       ],

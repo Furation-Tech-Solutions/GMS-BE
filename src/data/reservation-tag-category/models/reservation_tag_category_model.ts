@@ -36,7 +36,10 @@ const reservationTagCategorySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserAccount",
     }],
-    tags: [resTagSchema],
+    tags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ReservationTag",
+    }],
     createdAt: {
         type: Date,
         default: Date.now,
