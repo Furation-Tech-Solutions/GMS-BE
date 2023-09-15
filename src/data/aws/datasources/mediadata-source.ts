@@ -8,6 +8,7 @@ dotenv.config();
 export interface OutletMediaDataSource {
   getPresignedUrl(objectKey: string): Promise<string>;
   deleteBrandLogo(): Promise<string>;
+  deleteBrandLogo(): Promise<
 }
 
 export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
