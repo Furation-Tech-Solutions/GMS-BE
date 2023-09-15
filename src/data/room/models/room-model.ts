@@ -20,6 +20,18 @@ const roomSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+  
 });
 
 export const Room = mongoose.model("Room", roomSchema);
