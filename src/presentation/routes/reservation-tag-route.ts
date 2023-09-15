@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 import { Router } from "express";
 import { ReservationTagServices } from "@presentation/services/reservation-tag-services"; // Import the TagCategoryServices
-import { ReservationTagDataSourceImpl } from "@data/reservation-tag/datasource/reservation_tag-datasource"; // Import the TagDataSourceImpl
-import { ReservationTagRepositoryImpl } from "@data/reservation-tag/repository/reservation_tag-repo-impl"; // Import the TagRepositoryImpl
-import { CreateReservationTag } from "@domain/reservation-tag/usecases/create-reservation_tags"; // Import tag category-related use cases
-import { DeleteReservationTag } from "@domain/reservation-tag/usecases/delete-reservation_tags";
-import { GetReservationTagById } from "@domain/reservation-tag/usecases/get-reservation_tag-by-id";
-import { GetAllReservationTag } from "@domain/reservation-tag/usecases/get-all-reservation_tag";
-import { UpdateReservationTag } from "@domain/reservation-tag/usecases/update-reservation_tag";
+import { ReservationTagDataSourceImpl } from "@data/reservation-tag/datasources/reservation-tag-data-source"; // Import the TagDataSourceImpl
+import { ReservationTagRepositoryImpl } from "@data/reservation-tag/repositories/reservation-tag-repository-impl"; // Import the TagRepositoryImpl
+import { CreateReservationTag } from "@domain/reservation-tag/usecases/create-reservation-tag"; // Import tag category-related use cases
+import { DeleteReservationTag } from "@domain/reservation-tag/usecases/delete-reservation-tag";
+import { GetReservationTagById } from "@domain/reservation-tag/usecases/get-reservation-tag-by-id";
+import { GetAllReservationTag } from "@domain/reservation-tag/usecases/get-all-reservation-tag";
+import { UpdateReservationTag } from "@domain/reservation-tag/usecases/update-reservation-tag";
+import { validateReservationTagInputMiddleware } from "@presentation/middlewares/reservation-tag/validation-reservation-tag";
 
 // Create an instance of the TagDataSourceImpl and pass the mongoose connection
 const reservationTagDataSource = new ReservationTagDataSourceImpl(mongoose.connection);
@@ -37,6 +38,7 @@ export const reservationTagRouter = Router();
 // Route handling for creating a new tag
 reservationTagRouter.post(
     "/add",
+    validateReservationTagInputMiddleware(false),
     reservationTagService.createReservationTag.bind(reservationTagService)
 );
 
@@ -58,6 +60,7 @@ reservationTagRouter.get("/", reservationTagService.getAllReservationTags.bind(r
 // Route handling for updating a tag by ID
 reservationTagRouter.put(
     "/:ReservationTagId",
+    validateReservationTagInputMiddleware(false),
     reservationTagService.updateReservationTag.bind(reservationTagService)
 );
 

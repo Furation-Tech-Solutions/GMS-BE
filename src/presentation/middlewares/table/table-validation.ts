@@ -9,6 +9,8 @@ interface TableInput {
   partySizeMax: number;
   tableCombinations?: mongoose.Schema.Types.ObjectId[];
   seatingArea: mongoose.Schema.Types.ObjectId;
+  updatedBy: string;
+  createdBy: string;
 }
 
 const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
@@ -78,6 +80,20 @@ const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
           "string.base": "Seating area ID must be a string",
           "string.empty": "Seating area ID is required",
           "any.required": "Seating area ID is required",
+        }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().required().messages({
+          "any.required": "Please select the Created By",
         }),
   });
 

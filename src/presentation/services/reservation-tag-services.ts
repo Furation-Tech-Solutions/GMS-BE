@@ -3,30 +3,30 @@ import {
     ReservationTagEntity,
     ReservationTagMapper,
     ReservationTagModel,
-} from "@domain/reservation-tag/entities/reservation_tag_entities"; // Import tag category-related entities and mapper
-import { CreateReservationTagUsecase } from "@domain/reservation-tag/usecases/create-reservation_tags"; // Import tag category-related use cases
-import { DeleteReservationTagUsecase } from "@domain/reservation-tag/usecases/delete-reservation_tags";
-import { GetReservationTagByIdUsecase } from "@domain/reservation-tag/usecases/get-reservation_tag-by-id";
-import { GetAllReservationtagUsecase } from "@domain/reservation-tag/usecases/get-all-reservation_tag";
-import { UpdateReservationTagUsecase } from "@domain/reservation-tag/usecases/update-reservation_tag";
+} from "@domain/reservation-tag/entities/reservation-tag-entities"; // Import tag category-related entities and mapper
+import { CreateReservantionTagUsecase } from "@domain/reservation-tag/usecases/create-reservation-tag"; // Import tag category-related use cases
+import { DeleteReservationTagUsecase } from "@domain/reservation-tag/usecases/delete-reservation-tag";
+import { GetReservationTagByIdUsecase } from "@domain/reservation-tag/usecases/get-reservation-tag-by-id";
+import { GetAllReservationtagUsecase } from "@domain/reservation-tag/usecases/get-all-reservation-tag";
+import { UpdateReservationTagUsecase } from "@domain/reservation-tag/usecases/update-reservation-tag";
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
 export class ReservationTagServices {
-    private readonly createReservationTagUsecase: CreateReservationTagUsecase;
+    private readonly createReservantionTagUsecase: CreateReservantionTagUsecase;
     private readonly deleteReservationTagUsecase: DeleteReservationTagUsecase;
     private readonly getReservationTagByIdUsecase: GetReservationTagByIdUsecase;
     private readonly getAllReservationtagUsecase: GetAllReservationtagUsecase;
     private readonly updateReservationTagUsecase: UpdateReservationTagUsecase;
 
     constructor(
-        createReservationTagUsecase: CreateReservationTagUsecase,
+        createReservantionTagUsecase: CreateReservantionTagUsecase,
         deleteReservationTagUsecase: DeleteReservationTagUsecase,
         getReservationTagByIdUsecase: GetReservationTagByIdUsecase,
         getAllReservationtagUsecase: GetAllReservationtagUsecase,
         updateReservationTagUsecase: UpdateReservationTagUsecase,
     ) {
-        this.createReservationTagUsecase = createReservationTagUsecase;
+        this.createReservantionTagUsecase = createReservantionTagUsecase;
         this.deleteReservationTagUsecase = deleteReservationTagUsecase;
         this.getReservationTagByIdUsecase = getReservationTagByIdUsecase;
         this.getAllReservationtagUsecase = getAllReservationtagUsecase;
@@ -37,7 +37,7 @@ export class ReservationTagServices {
         const reservationTagData: ReservationTagModel = ReservationTagMapper.toModel(req.body);
 
         const newReservationTag: Either<ErrorClass, ReservationTagEntity> =
-            await this.createReservationTagUsecase.execute(reservationTagData);
+            await this.createReservantionTagUsecase.execute(reservationTagData);
 
         newReservationTag.cata(
             (error: ErrorClass) =>
@@ -114,11 +114,11 @@ export class ReservationTagServices {
             (error: ErrorClass) => {
                 res.status(error.status).json({ error: error.message });
             },
-            async (reservationTagData: ReservationTagEntity) => {
+            async (existingReservationTagData: ReservationTagEntity) => {
                 const updatedReservationTagEntity: ReservationTagEntity = ReservationTagMapper.toEntity(
                     reservationTagData,
                     true,
-                    reservationTagData
+                    existingReservationTagData
                 );
 
                 const updatedReservationTag: Either<ErrorClass, ReservationTagEntity> =

@@ -27,7 +27,11 @@ const clientTagCategorySchema = new mongoose.Schema({
     },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
-        // ref: "User",
+        ref: "UserAccount",
+    }],
+    tags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ClientTag",
     }],
     createdAt: {
         type: Date,

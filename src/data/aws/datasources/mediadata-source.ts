@@ -10,6 +10,7 @@ export interface OutletMediaDataSource {
   deleteBrandLogo(): Promise<string>;
 }
 
+
 export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
   async getPresignedUrl(objectKey: string): Promise<string> {
     try {

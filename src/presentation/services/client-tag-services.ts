@@ -3,12 +3,12 @@ import {
     ClientTagEntity,
     ClientTagMapper,
     ClientTagModel,
-} from "@domain/client-tag/entities/client_tag_entities"; // Import tag category-related entities and mapper
-import { CreateClientTagUsecase } from "@domain/client-tag/usecases/create-client_tags"; // Import tag category-related use cases
-import { DeleteClientTagUsecase } from "@domain/client-tag/usecases/delete-client_tags";
-import { GetClientTagByIdUsecase } from "@domain/client-tag/usecases/get-client_tag-by-id";
-import { GetAllClientagUsecase } from "@domain/client-tag/usecases/get-all-client_tag";
-import { UpdateClientTagUsecase } from "@domain/client-tag/usecases/update-client_tag";
+} from "@domain/client-tag/entities/client-tag-entities"; // Import tag category-related entities and mapper
+import { CreateClientTagUsecase } from "@domain/client-tag/usecases/create-client-tag"; // Import tag category-related use cases
+import { DeleteClientTagUsecase } from "@domain/client-tag/usecases/delete-client-tag";
+import { GetClientTagByIdUsecase } from "@domain/client-tag/usecases/get-client-tag-by-id";
+import { GetAllClienttagUsecase } from "@domain/client-tag/usecases/get-all-client-tag";
+import { UpdateClientTagUsecase } from "@domain/client-tag/usecases/update-client-tag";
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
@@ -16,20 +16,20 @@ export class ClientTagServices {
     private readonly createClientTagUsecase: CreateClientTagUsecase;
     private readonly deleteClientTagUsecase: DeleteClientTagUsecase;
     private readonly getClientTagByIdUsecase: GetClientTagByIdUsecase;
-    private readonly getAllClientagUsecase: GetAllClientagUsecase;
+    private readonly getAllClienttagUsecase: GetAllClienttagUsecase;
     private readonly updateClientTagUsecase: UpdateClientTagUsecase;
 
     constructor(
         createClientTagUsecase: CreateClientTagUsecase,
         deleteClientTagUsecase: DeleteClientTagUsecase,
         getClientTagByIdUsecase: GetClientTagByIdUsecase,
-        getAllClientagUsecase: GetAllClientagUsecase,
+        getAllClienttagUsecase: GetAllClienttagUsecase,
         updateClientTagUsecase: UpdateClientTagUsecase,
     ) {
         this.createClientTagUsecase = createClientTagUsecase;
         this.deleteClientTagUsecase = deleteClientTagUsecase;
         this.getClientTagByIdUsecase = getClientTagByIdUsecase;
-        this.getAllClientagUsecase = getAllClientagUsecase;
+        this.getAllClienttagUsecase = getAllClienttagUsecase;
         this.updateClientTagUsecase = updateClientTagUsecase;
     }
 
@@ -89,7 +89,7 @@ export class ClientTagServices {
         next: NextFunction
     ): Promise<void> {
         const clientTags: Either<ErrorClass, ClientTagEntity[]> =
-            await this.getAllClientagUsecase.execute();
+            await this.getAllClienttagUsecase.execute();
 
         clientTags.cata(
             (error: ErrorClass) =>
@@ -114,11 +114,11 @@ export class ClientTagServices {
             (error: ErrorClass) => {
                 res.status(error.status).json({ error: error.message });
             },
-            async (existingClientTagData: ClientTagEntity) => {
+            async (clientTagData: ClientTagEntity) => {
                 const updatedClientTagEntity: ClientTagEntity = ClientTagMapper.toEntity(
                     clientTagData,
                     true,
-                    existingClientTagData
+                    clientTagData
                 );
 
                 const updatedClientTag: Either<ErrorClass, ClientTagEntity> =
@@ -140,3 +140,11 @@ export class ClientTagServices {
         );
     }
 }
+
+
+
+
+
+
+
+

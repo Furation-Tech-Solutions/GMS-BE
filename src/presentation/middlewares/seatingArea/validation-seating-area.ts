@@ -7,6 +7,8 @@ interface SeatingAreaInput {
   abbreviation: string;
   seatingAreaName: string;
   listOrder: number;
+  updatedBy: string;
+  createdBy: string;
 }
 
 const seatingAreaValidator = function (
@@ -64,6 +66,20 @@ const seatingAreaValidator = function (
           "number.base": "List order must be a number",
           "number.empty": "List order is required",
           "any.required": "List order is required",
+        }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().required().messages({
+          "any.required": "Please select the Created By",
         }),
   });
 
