@@ -4,7 +4,9 @@ import { Router } from "express";
 
 
 
+
 export const whatsAppRouter=Router()
+
 
 
 // // const url = 'https://graph.facebook.com/v18.0/FROM_PHONE_NUMBER_ID/messages';
@@ -67,6 +69,7 @@ export const whatsAppRouter=Router()
 
 //     res.send("success")
 // })
+
 
 
 
