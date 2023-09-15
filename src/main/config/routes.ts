@@ -27,6 +27,7 @@ import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 import { whatsAppRouter } from "@presentation/routes/whatsapp-message-route";
 
 
+
 export default (app: Express): void => {
   const router = Router();
 
