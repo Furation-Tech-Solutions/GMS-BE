@@ -27,6 +27,17 @@ const tableSchema = new mongoose.Schema({
     ref: "SeatingArea",
     required: true,
   },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
 });
 
 export const Table = mongoose.model("Table", tableSchema);
