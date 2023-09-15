@@ -69,7 +69,7 @@ export class ClientTagCategoryServices {
 
         const clientTagCategory: Either<ErrorClass, ClientTagCategoryEntity> =
             await this.getClientTagCategoryByIdUsecases.execute(clientTagCategoryId);
-      
+
         clientTagCategory.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),

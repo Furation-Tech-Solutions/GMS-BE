@@ -3,44 +3,65 @@ import { GuestModel } from "@domain/guest/entities/guest_entities";
 import { Guest } from "../models/guest_model";
 import ApiError from "@presentation/error-handling/api-error";
 
-//Create GUestDataSourse Interface
 export interface GuestDataSource {
     create(guest: GuestModel): Promise<any>;
-    update(id: String, guest: GuestModel): Promise<any>;
+    update(id: string, guest: GuestModel): Promise<any>;
     delete(id: string): Promise<void>;
     read(id: string): Promise<any | null>;
-    getAllguest(): Promise<any[]>;
+    getAllGuests(): Promise<any[]>;
 }
 
-//Guest Data Source is comunicate with data base
 export class GuestDataSourceImpl implements GuestDataSource {
     constructor(private db: mongoose.Connection) { }
+
     async create(guest: GuestModel): Promise<any> {
-        const existingGuest = await Guest.findOne({ email: guest.email });
-        if (existingGuest) {
-            throw ApiError.emailExist();
+        try {
+            const existingGuest = await Guest.findOne({ email: guest.email });
+            if (existingGuest) {
+                throw ApiError.guestExist();
+            }
+            const guestData = new Guest(guest);
+            const createdGuest = await guestData.save();
+            return createdGuest.toObject();
+        } catch (error) {
+            throw ApiError.badRequest();
         }
-        const guestData = new Guest(guest);
-        const createdGuest = await guestData.save();
-        // console.log(createdGuest);
-        return createdGuest.toObject();
     }
+
     async delete(id: string): Promise<void> {
-        await Guest.findByIdAndDelete(id);
+        try {
+            await Guest.findByIdAndDelete(id);
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
 
     async read(id: string): Promise<any | null> {
-        const guest = await Guest.findById(id);
-        return guest ? guest.toObject() : null; // Convert to plain JavaScript object before returning
+        try {
+            const guest = await Guest.findById(id);
+            return guest ? guest.toObject() : null;
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
-    async getAllguest(): Promise<any[]> {
-        const guest = await Guest.find();
-        return guest.map((guest) => guest.toObject()); // Convert to plain JavaScript objects before returning
-      }
+
+    async getAllGuests(): Promise<any[]> {
+        try {
+            const guests = await Guest.find();
+            return guests.map((guest) => guest.toObject());
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
+    }
+
     async update(id: string, guest: GuestModel): Promise<any> {
-        const updatedGuest = await Guest.findByIdAndUpdate(id, guest, {
-          new: true,
-        }); // No need for conversion here
-        return updatedGuest ? updatedGuest.toObject() : null; // Convert to plain JavaScript object before returning
-      }
+        try {
+            const updatedGuest = await Guest.findByIdAndUpdate(id, guest, {
+                new: true,
+            });
+            return updatedGuest ? updatedGuest.toObject() : null;
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
+    }
 }

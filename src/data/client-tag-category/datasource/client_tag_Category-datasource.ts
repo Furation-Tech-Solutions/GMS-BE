@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { ClientTagCategoryModel } from "@domain/client-tag-category/entities/client_tag_category_entities"; // Import the TagCategoryModel
+import { ClientTagCategoryModel } from "@domain/client-tag-category/entities/client_tag_category_entities";
 import { ClientTagCategory } from "../models/client_tag_category_model";
 import ApiError from "@presentation/error-handling/api-error";
 
-// Create CLientTagCategoryDataSource Interface
 export interface ClientTagCategoryDataSource {
     create(clientTagCategory: ClientTagCategoryModel): Promise<any>;
     update(id: string, tagCategory: ClientTagCategoryModel): Promise<any>;
@@ -12,38 +11,57 @@ export interface ClientTagCategoryDataSource {
     getAll(): Promise<any[]>;
 }
 
-// TagCategory Data Source communicates with the database
 export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSource {
     constructor(private db: mongoose.Connection) { }
 
     async create(clientTagCategory: ClientTagCategoryModel): Promise<any> {
-        const existingClientTagCategory = await ClientTagCategory.findOne({ name: clientTagCategory.name });
-        if (existingClientTagCategory) {
-            throw ApiError.emailExist();
+        try {
+            const existingClientTagCategory = await ClientTagCategory.findOne({ name: clientTagCategory.name }).populate('tags');
+            if (existingClientTagCategory) {
+                throw ApiError.clienttagExist();
+            }
+            const clientTagCategoryData = new ClientTagCategory(clientTagCategory);
+            const createdClientTagCategory = await clientTagCategoryData.save();
+            return createdClientTagCategory.toObject();
+        } catch (error) {
+            throw ApiError.badRequest();
         }
-        const clientTagCategoryData = new ClientTagCategory(clientTagCategory);
-        const createdClientTagCategory = await clientTagCategoryData.save();
-        return createdClientTagCategory.toObject();
     }
 
     async delete(id: string): Promise<void> {
-        await ClientTagCategory.findByIdAndDelete(id);
+        try {
+            await ClientTagCategory.findByIdAndDelete(id);
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
 
     async read(id: string): Promise<any | null> {
-        const clientTagCategory = await ClientTagCategory.findById(id);
-        return clientTagCategory ? clientTagCategory.toObject() : null; // Convert to a plain JavaScript object before returning
+        try {
+            const clientTagCategory = await ClientTagCategory.findById(id).populate('tags');
+            return clientTagCategory ? clientTagCategory.toObject() : null;
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
 
     async getAll(): Promise<any[]> {
-        const clientTagCategories = await ClientTagCategory.find();
-        return clientTagCategories.map((clientTagCategory) => clientTagCategory.toObject()); // Convert to plain JavaScript objects before returning
+        try {
+            const clientTagCategories = await ClientTagCategory.find().populate('tags');
+            return clientTagCategories.map((clientTagCategory) => clientTagCategory.toObject());
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
 
     async update(id: string, clientTagCategory: ClientTagCategoryModel): Promise<any> {
-        const updatedClientTagCategory = await ClientTagCategory.findByIdAndUpdate(id, clientTagCategory, {
-            new: true,
-        }); // No need for conversion here
-        return updatedClientTagCategory ? updatedClientTagCategory.toObject() : null; // Convert to a plain JavaScript object before returning
+        try {
+            const updatedClientTagCategory = await ClientTagCategory.findByIdAndUpdate(id, clientTagCategory, {
+                new: true,
+            }).populate('tags');
+            return updatedClientTagCategory ? updatedClientTagCategory.toObject() : null;
+        } catch (error) {
+            throw ApiError.badRequest();
+        }
     }
 }

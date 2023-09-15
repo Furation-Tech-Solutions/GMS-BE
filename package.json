@@ -16,8 +16,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@shelf/jest-mongodb": "^4.1.7",
     "@types/cors": "^2.8.13",
     "@types/jest": "^29.5.3",
@@ -45,6 +45,7 @@
     "joi": "^17.9.2",
     "joi-objectid": "^4.0.2",
     "module-alias": "^2.2.3",
+    "moment": "^2.29.4",
     "monet": "^0.9.3",
     "mongodb": "^5.7.0",
     "mongodb-memory-server": "^8.14.0",
