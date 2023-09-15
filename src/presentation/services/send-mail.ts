@@ -1,39 +1,45 @@
 import nodemailer from "nodemailer";
-import env from '@main/config/env'
+import env from '@main/config/env';
 
-// Generate SMTP service account from ethereal.email
-interface data {
+interface EmailOptions {
     email: string;
     subject: string;
     message: string;
-    // html: string;
 }
 
-export async function sendEmail(options: data): Promise<void> {
-    const transporter = nodemailer.createTransport({
-        host: env.mailhost,
-        port: 465, // Change the port to 465 for secure SMTP with Gmail
-        secure: true, // Use SSL/TLS for a secure connection
-        auth: {
-            user: env.user,
-            pass: env.password
+class EmailService {
+    private transporter: nodemailer.Transporter;
+
+    constructor() {
+        this.transporter = nodemailer.createTransport({
+            host: env.mailhost,
+            port: 465,
+            secure: true,
+            auth: {
+                user: env.user,
+                pass: env.password
+            }
+        });
+    }
+
+    async sendEmail(options: EmailOptions): Promise<void> {
+        const mailOptions = {
+            from: env.user,
+            to: options.email,
+            subject: options.subject,
+            text: options.message,
+        };
+
+        try {
+            await this.transporter.sendMail(mailOptions);
+            console.log("Email sent successfully");
+        } catch (error) {
+            console.error("Error sending email:", error);
+            throw error;
         }
-    });
-
-    const mailOptions = {
-        from: env.user,
-        to: options.email,
-        subject: options.subject,
-        text: options.message,
-        // html: options.html,
-    };
-
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log("Email sent successfully");
-    } catch (error) {
-        console.error("Error sending email:", error);
-        throw error;
     }
 }
+
+export default EmailService;
+
 
