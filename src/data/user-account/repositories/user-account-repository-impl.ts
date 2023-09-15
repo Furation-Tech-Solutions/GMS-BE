@@ -64,7 +64,7 @@ export class UserRepositoryImpl implements UserRepository {
           const updatedUser = await this.dataSource.update(id, data); // Use the booking request data source
           return Right<ErrorClass, UserEntity>(updatedUser);
       } catch (e) {
-          if (e instanceof ApiError && e.name === "conflict") {
+          if (e instanceof ApiError && e.name === "conflict" ) {
             console.log(e,"error in data source impl")
               return Left<ErrorClass, UserEntity>(ApiError.bookingRequestExists());
           }

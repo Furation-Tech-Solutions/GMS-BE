@@ -15,6 +15,7 @@ interface UserAccountInput {
     lastLogin?: string;
     lastPasswordReset?: string;
   };
+  isLogin?:boolean;
   permissions?: [{ key: Number, value: String }];
   emailNotification?: [{ key: Number, value: String }];
 }
@@ -59,10 +60,11 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastLogin: Joi.string().trim().allow("").optional(),
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
+    isLogin:Joi.boolean().default(false),
     permissions: Joi.array()
     .items(Joi.object({
-      key: Joi.number(),
-      value: Joi.string(),
+      key: Joi.number().required(),
+      value: Joi.string().required(),
     }))
     .required()
     .min(1) // Ensures the array has at least one element
