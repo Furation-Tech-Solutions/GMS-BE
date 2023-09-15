@@ -1,6 +1,7 @@
 export class AddReservationModel {
   constructor(
     public date: string = "",
+    public noOfGuests: Number = 1,
     public shift: string | undefined = undefined,
     public duration: string = "",
     public seatingArea: string | undefined = undefined,
@@ -22,6 +23,7 @@ export class AddReservationEntity {
   constructor(
     public id: string | undefined = undefined,
     public date: string,
+    public noOfGuests: Number,
     public shift: string | undefined,
     public duration: string,
     public seatingArea: string | undefined,
@@ -53,6 +55,10 @@ export class AddReservationMapper {
           reservationData.date !== undefined
             ? reservationData.date
             : existingReservation.date,
+        noOfGuests:
+          reservationData.noOfGuests !== undefined
+            ? reservationData.noOfGuests
+            : existingReservation.noOfGuests,
         shift:
           reservationData.shift !== undefined
             ? reservationData.shift
@@ -122,6 +128,7 @@ export class AddReservationMapper {
             : undefined
           : reservationData._id.toString(),
         date: reservationData.date,
+        noOfGuests: reservationData.noOfGuests,
         shift: reservationData.shift,
         duration: reservationData.duration,
         seatingArea: reservationData.seatingArea,
@@ -145,6 +152,7 @@ export class AddReservationMapper {
   static toModel(reservation: AddReservationEntity): AddReservationModel {
     return new AddReservationModel(
       reservation.date,
+      reservation.noOfGuests,
       reservation.shift,
       reservation.duration,
       reservation.seatingArea,
