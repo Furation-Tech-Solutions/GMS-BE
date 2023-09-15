@@ -43,7 +43,8 @@ const guestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "-"],
+        enum: ["checked In", "checked Out", "No Status"],
+        default: "No Status",
     },
     notes: {
         type: String,

@@ -66,12 +66,17 @@ export const whatsAppRouter=Router()
 // //   .catch(error => {
 // //     console.error('Error:', error);
 // //   });
+<<<<<<< HEAD
 
 //     res.send("success")
 // })
 
 
+=======
+>>>>>>> 35d37f42d31b7b7e50aaf8bf4f329b254abc29fc
 
+//     res.send("success")
+// })
 
 
 
