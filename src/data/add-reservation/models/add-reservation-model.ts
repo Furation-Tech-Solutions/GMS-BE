@@ -47,7 +47,6 @@ const addReservationSchema = new mongoose.Schema({
     minLength: [1, "Last name should have more than 1 character"],
     trim: true,
   },
-
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",

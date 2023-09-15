@@ -4,7 +4,6 @@ export class GuestModel {
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public phone: string = "",
     public confirmationMailSending: boolean,
     public additionalGuest: string[],
     public reservationTags: string[],
@@ -24,7 +23,6 @@ export class GuestEntity {
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public phone: string = "",
     public confirmationMailSending: boolean,
     public additionalGuest: string[],
     public reservationTags: string[],
@@ -61,10 +59,6 @@ export class GuestMapper {
           guestData.email !== undefined
             ? guestData.email
             : existingguest.email,
-        phone:
-          guestData.phone !== undefined
-            ? guestData.phone
-            : existingguest.phone,
         confirmationMailSending:
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
@@ -105,7 +99,6 @@ export class GuestMapper {
         firstName: guestData.firstName,
         lastName: guestData.lastName,
         email: guestData.email,
-        phone: guestData.phone,
         confirmationMailSending:
           guestData.confirmationMailSending,
         bookedBy: guestData.bookedBy,
@@ -124,7 +117,6 @@ export class GuestMapper {
       firstName: guest.firstName,
       lastName: guest.lastName,
       email: guest.email,
-      phone: guest.phone,
       confirmationMailSending: guest.confirmationMailSending,
       bookedBy: guest.bookedBy,
       additionalGuest: guest.additionalGuest,
