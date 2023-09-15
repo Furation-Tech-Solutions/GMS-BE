@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { BookingRequestModel } from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import the BookingRequestModel
 import { BookingRequest } from "../models/bookingRequest-model";
 import ApiError from "@presentation/error-handling/api-error";
-import { sendEmail } from "@presentation/services/send-mail/send-mail";
+import { sendEmail } from "@presentation/services/send-mail";
 
 
 // Create BookingRequestDataSource Interface
