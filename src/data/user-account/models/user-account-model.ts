@@ -59,7 +59,7 @@ const validateEmail = function (email: string) {
     },
     },
     permissions: {
-        type: [Number], 
+        type: [{ key: Number, value: String }], 
         default: [],    
       },
       emailNotification: {

@@ -55,9 +55,9 @@ const bookingRequestSchema = new mongoose.Schema({
     numberOfGuest: { type: Number },
     duration: String,
     status: {
-        type: String,
-        enum: ["Pending", "Approved", "Rejected"],
-        default: "Pending",
+        type: { name: String, color: String },
+        enum: [{ name: "Pending", color: "yellow" }, { name: "Approved", color: "green" }, { name: "Rejected", color: "red" }],
+        default: { name: "Pending", color: "yellow" },
     },
     // logs: [{
     //     type: logSchema,

@@ -21,7 +21,7 @@ export class UserModel {
           lastLogin: "",
           lastPasswordReset: "",
         },
-        public permissions: number[] = [],
+        public permissions: { key: number; value: string }[] = [],
     ) {}
   }
   
@@ -41,7 +41,7 @@ export class UserModel {
         lastLogin: string;
         lastPasswordReset: string;
       },
-      public permissions: number[],
+      public permissions: { key: number; value: string }[],
     ) {}
   }
   
@@ -106,7 +106,7 @@ export class UserModel {
           ? userData._id
             ? userData._id.toString()
             : undefined
-          : undefined,
+          : userData._id.toString(),
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
