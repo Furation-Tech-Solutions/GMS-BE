@@ -32,16 +32,13 @@ export default (app: Express): void => {
   app.get("/health", (req, res) => {
     res.status(200).json({ message: "ok" });
   });
-
   app.use("/api/v1/shift", shiftRouter);
   app.use("/api/v1/accessrule", accessRuleRouter);
   app.use("/api/v1/blackoutday", blackoutDayRouter);
   app.use("/api/v1/program", programScheduleRouter);
-
   app.get("/test", (req, res) => {
     res.status(200).json({ message: "ok" });
   });
-
   app.use("/api/v1/admin", adminRouter);
   app.use("/api/v1/outlet", outletRouter);
   app.use("/api/v1/outlet/media", mediaRoutes);
