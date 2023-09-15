@@ -68,7 +68,7 @@ export class ServerNameService{
       }
       async updateServerName(req: Request, res: Response): Promise<void> {
         
-        const nameId: string = req.params.nameId;
+        const nameId: string = req.params.serverNameId;
         const nameData: ServersNameModel = req.body;
   
         // Get the existing admin by ID

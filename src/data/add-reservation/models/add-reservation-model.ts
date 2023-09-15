@@ -54,8 +54,8 @@ const addReservationSchema = new mongoose.Schema({
   },
   bookedByUser: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
-    default: null,
+    ref: "bookedByName",
+    default: true,
   },
   perks: {
     type: String,
@@ -72,13 +72,13 @@ const addReservationSchema = new mongoose.Schema({
 
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
+    ref: "UserAccount",
     default: null,
   },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
+    ref: "UserAccount",
     default: null,
   },
 
