@@ -22,8 +22,8 @@ export class UserModel {
           lastPasswordReset: "",
         },
         public isLogin:boolean=false,
-        public permissions: { key: number; value: string }[] = [],
-        public emailNotification:{ key: number; value: string }[] = []
+        public permissions: [] = [],
+        public emailNotification:[] = []
     ) {}
   }
   
@@ -44,8 +44,8 @@ export class UserModel {
         lastPasswordReset: string;
       },
       public isLogin:boolean,
-      public permissions: { key: number; value: string }[],
-      public  emailNotification: {key:number;value:string}[]
+      public permissions: [],
+      public  emailNotification: []
     ) {}
   }
   

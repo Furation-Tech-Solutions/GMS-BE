@@ -2,6 +2,17 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
+const bookedByData = new mongoose.Schema({
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    }
+}, { _id: false });
+
 const guestSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -31,9 +42,8 @@ const guestSchema = new mongoose.Schema({
         default: false,
     },
     bookedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserAccount",
-        required: [true, "Please enter user_id"],
+        type: bookedByData,
+        required: true
     },
     additionalGuest: {
         type: [String],
@@ -44,7 +54,7 @@ const guestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "No Status"],
+        enum: ["Checked In", "Checked Out", "No Status"],
         default: "No Status",
     },
     notes: {
@@ -65,3 +75,4 @@ const guestSchema = new mongoose.Schema({
 });
 
 export const Guest = mongoose.model("Guest", guestSchema);
+
