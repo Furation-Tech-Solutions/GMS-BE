@@ -16,7 +16,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
 
     async create(guest: GuestModel): Promise<any> {
         try {
-            const existingGuest = await Guest.findOne({ email: guest.email });
+            const existingGuest = await Guest.findOne({ email: guest.email }).populate("bookedBy");
             if (existingGuest) {
                 throw ApiError.guestExist();
             }
