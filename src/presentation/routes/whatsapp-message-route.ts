@@ -4,7 +4,6 @@ import { Router } from "express";
 
 
 
-
 export const whatsAppRouter=Router()
 
 
@@ -69,6 +68,7 @@ export const whatsAppRouter=Router()
 
 //     res.send("success")
 // })
+
 
 // whatsAppRouter.get("/",(req:Request,res:Response)=>{
 //     // res.send("hello  chat")}
