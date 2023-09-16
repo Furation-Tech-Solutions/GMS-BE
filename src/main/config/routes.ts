@@ -26,8 +26,6 @@ import { reservationTagRouter } from "@presentation/routes/reservation-tag-route
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 import { whatsAppRouter } from "@presentation/routes/whatsapp-message-route";
 
-
-
 export default (app: Express): void => {
   const router = Router();
 
@@ -44,7 +42,7 @@ export default (app: Express): void => {
   });
   app.use("/api/v1/admin", adminRouter);
   app.use("/api/v1/outlet", outletRouter);
-  app.use("/api/v1/outlet/media", mediaRoutes);
+  app.use("/api/v1/media", mediaRoutes);
   app.use("/api/v1/people/user", userRouter);
   app.use("/api/v1/people/accessLevel", accessLevelRouter);
   app.use("/api/v1/people/taxRate", taxRateRouter);

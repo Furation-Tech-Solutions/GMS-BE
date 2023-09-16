@@ -57,13 +57,13 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
             }),
 
         bookedBy: isUpdate
-            ? Joi.string().trim().optional().messages({
-                "string.base": "Booking user ID must be a string",
-                "string.empty": "Booking user ID is required",
+            ? Joi.object().optional().messages({
+                "object.base": "Booking user ID must be a string",
+                "object.empty": "Booking user ID is required",
             })
-            : Joi.string().trim().required().messages({
-                "string.base": "Booking user ID must be a string",
-                "string.empty": "Booking user ID is required",
+            : Joi.object().required().messages({
+                "object.base": "Booking user ID must be a string",
+                "object.empty": "Booking user ID is required",
                 "any.required": "Booking user ID is required",
             }),
 

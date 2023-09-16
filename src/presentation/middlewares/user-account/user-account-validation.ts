@@ -15,8 +15,9 @@ interface UserAccountInput {
     lastLogin?: string;
     lastPasswordReset?: string;
   };
-  permissions?: number[];
-  emailNotification?: number[];
+  isLogin?:boolean;
+  permissions?: [{ key: Number, value: String }];
+  emailNotification?: [{ key: Number, value: String }];
 }
 
 const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false) => {
@@ -59,16 +60,28 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastLogin: Joi.string().trim().allow("").optional(),
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
-    permissions: Joi.array()
-    .items(Joi.number())
-    .required()
-    .min(1) // Ensures the array has at least one element
-    .messages({
-      "array.base": "Permissions must be an array",
-      "array.min": "At least one permission is required",
-    }),
+    isLogin:Joi.boolean().default(false),
+
+    permissions: Joi.array().optional(),
+    // .items(Joi.object({
+    //   key: Joi.number().required(),
+    //   value: Joi.string().required(),
+    // }))
+    // .required()
+    // .min(1) // Ensures the array has at least one element
+    // .messages({
+    //   "array.base": "Permissions must be an array of objects with 'key' (number) and 'value' (string)",
+    //   "array.min": "At least one permission is required",
+    // }),
+  emailNotification: Joi.array().optional()
+    // .items(Joi.object({
+    //   key: Joi.number(),
+    //   value: Joi.string(),
+    // }))
+    // .optional(),
+
+
     
-    emailNotification: Joi.array().items(Joi.number()).optional(),
   });
 
   const { error, value } = schema.validate(input, {
