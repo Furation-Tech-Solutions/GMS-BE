@@ -29,15 +29,18 @@ export class MediaOutletService {
     res: Response,
     ){
         
-      const outletId: string = req.params.outletId;
-      const presignedurl: Either<ErrorClass, string> =await this.createOutletMediaUsecase.execute(outletId);
+      const fileName: string = req.params.fileName;
+      const dataType: string = req.params.dataType;
+      const presignedurl: Either<ErrorClass, string> =await this.createOutletMediaUsecase.execute(dataType, fileName)
 
       presignedurl.cata(
         (error: ErrorClass) => {
           res.status(error.status).json({ error: error.message });
         },
         async (result: string) => {
-          res.status(200).json({ "presignedurl": result});
+          console.log(result,"result is this")
+          const mediaUrl=result.split('?')[0]
+          res.status(200).json({ "presignedurl": result,"media_url":mediaUrl});
         }
       )  
   }

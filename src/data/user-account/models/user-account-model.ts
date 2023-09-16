@@ -63,11 +63,11 @@ const validateEmail = function (email: string) {
       default: false,
     },
     permissions: {
-        type: [{ key: Number, value: String }], 
+        type: [], 
         default: [],    
       },
     emailNotification: {
-        type: [{ key: Number, value: String }], 
+        type: [], 
         default: [],    
       },
      

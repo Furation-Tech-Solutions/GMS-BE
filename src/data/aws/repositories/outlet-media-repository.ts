@@ -1,3 +1,4 @@
+
 // import { OutletMediaDataSource } from "@data/outlet/datasources/outlet-media-data-source";
 import { Either, Left, Right } from "monet";
 import { GetPresignedUrlEntity, outletMediaEntity} from "@domain/outlet/entities/outlet-media";
@@ -7,7 +8,7 @@ import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 
 // Define the OutletMediaRepository interface
 export interface OutletMediaRepository {
-  getPresignedUrl(objectKey: string): Promise<string>;
+  getPresignedUrl(data_type:string,file_name: string): Promise<string>;
   deleteBrandLogo(objectKey: string): Promise<string>;
 }
 
@@ -15,10 +16,10 @@ export interface OutletMediaRepository {
 export class OutletMediaRepositoryImpl implements MediaOutletRepository {
   constructor(private readonly outletMediaDataSource: OutletMediaDataSource) {}
 
-  async getPreSignedUrl(objectKey: string): Promise<Either<ErrorClass, string>> {
+  async getPreSignedUrl(data_type: string,file_name:string): Promise<Either<ErrorClass, string>> {
     // Call the OutletMediaDataSource to get the signed URL
     try {
-      const signedUrl = await this.outletMediaDataSource.getPresignedUrl(objectKey);
+      const signedUrl = await this.outletMediaDataSource.getPresignedUrl(data_type,file_name);
       return Right<ErrorClass, string>(signedUrl);
     } catch (error) {
       return Left<ErrorClass, string>(ApiError.badRequest());
