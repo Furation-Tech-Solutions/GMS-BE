@@ -10,6 +10,8 @@ interface ReservationStatusInput {
   classification: string;
   active: boolean;
   durationHolds?: number;
+  updatedBy: string;
+  createdBy: string;
 }
 
 // Validator function that can handle both create and update
@@ -78,6 +80,20 @@ const reservationStatusValidator = (
         })
       : Joi.number().optional().messages({
           "number.base": "Duration in holds must be a number",
+        }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().required().messages({
+          "any.required": "Please select the Created By",
         }),
   });
 
