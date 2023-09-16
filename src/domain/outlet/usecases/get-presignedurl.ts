@@ -1,10 +1,9 @@
-
 import { MediaOutletRepository } from "@domain/outlet/repositories/media-outlet-repository";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { Either } from "monet";
 
 export interface GetPreSignedUrlUsecase {
-  execute: (outletId: string) => Promise<Either<ErrorClass, string>>;
+  execute: (dataType:string,fileName:string) => Promise<Either<ErrorClass, string>>;
 }
 
 export class GetPreSignedUrl implements GetPreSignedUrlUsecase {
@@ -14,12 +13,7 @@ export class GetPreSignedUrl implements GetPreSignedUrlUsecase {
     this.mediaOutletRepo = mediaOutletRepo;
   }
 
-  async execute(outletId: string): Promise<Either<ErrorClass, string>> {
-    return await this.mediaOutletRepo.getPreSignedUrl(outletId);
+  async execute(dataType:string,fileName:string): Promise<Either<ErrorClass, string>> {
+    return await this.mediaOutletRepo.getPreSignedUrl(dataType,fileName);
   }
 }
-
-
-
-
-

@@ -28,7 +28,7 @@ export const mediaRoutes = Router();
 
 
 mediaRoutes.get(
-  "/getpresignedurl/:outletId",
+  "/getpresignedurl/:dataType/:fileName",
   outletMediaService.getPreSignedUrl.bind(outletMediaService)
 );
 mediaRoutes.delete(
