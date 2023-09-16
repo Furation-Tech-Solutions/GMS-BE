@@ -171,6 +171,9 @@ class ApiError extends ErrorClass {
   static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
+  static userNotFound():ApiError{
+    return new ApiError(HttpStatus.NOT_FOUND, ErrorMessage.NO_USERS_FOUND,"no user found");
+  }
 }
 
 export default ApiError;
