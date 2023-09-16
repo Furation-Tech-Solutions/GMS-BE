@@ -25,7 +25,7 @@ exports.sendPushNotification = async  (req: Request, res: Response) => {
 
     const registrationToken = req.body.registrationToken;
 
-    const users = await UserAccount.find({})
+    const users = await UserAccount.find({});
 
     console.log(users)
 
