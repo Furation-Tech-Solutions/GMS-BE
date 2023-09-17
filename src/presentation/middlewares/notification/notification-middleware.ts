@@ -5,61 +5,60 @@ import { Either } from 'monet';
 import { UserEntity } from '@domain/user-account/entities/user-account';
 import { UserAccount } from '@data/user-account/models/user-account-model';
 
-const users: {
-  id: number;
-  name: string;
-  deviceToken: string;
-  isLoggedIn: boolean;
-}[] = [
-  { id: 1, name: 'User 1', deviceToken: 'DEVICE_TOKEN_1', isLoggedIn: true },
-  { id: 2, name: 'User 2', deviceToken: 'DEVICE_TOKEN_2', isLoggedIn: false },
-  // Add more user objects here
-];
 
 const notification_options = {
     priority: "high",
     timeToLive: 60 * 60 * 24,
   };
 
-exports.sendPushNotification = async  (req: Request, res: Response) => {
+  export const sendPushNotification = async (req: Request, res: Response) => {
+    try {
+      // Validate the request body
+      const { title } = req.body;
+      if (!title) {
+        return res.status(400).json({ error: 'Missing title or firebaseDeviceToken' });
+      }
+  
+      const users = await UserAccount.find({});
+      const loggedInUsers = users.filter((user) => user.isLogin === true);
+  
+      const sendNotifications = loggedInUsers.map(async (user) => {
+        const { firstName, lastName, firebaseDeviceToken } = user;
+        const payload = {
+          notification: {
+            title: title,
+            body: `Hello, ${firstName} ${lastName}! This is a broadcasted notification.`,
+          },
+        };
 
-    const registrationToken = req.body.registrationToken;
 
-    const users = await UserAccount.find({});
+  
+        try {
+          const response = await admin.messaging().sendToDevice(
+            firebaseDeviceToken,
+            payload,
+            notification_options
+          );
+  
+          if (response.results[0].messageId == null) {
+            console.error(response.results[0].error);
+            return Promise.reject(response.results[0].error);
+          } else {
 
-    console.log(users)
-
-
-  const loggedInUsers = users.filter((user) => user.__v === true);
-
-  loggedInUsers.forEach((user) => {
-    const { firstName, lastName } = user;
-
-    const payload = {
-      notification: {
-        title: 'New Notification',
-        body: `Hello, ${firstName} ${lastName}! This is a broadcasted notification.`,
-      },
-    };
-
-    // Send the notification to the user's device
-    admin.messaging().sendToDevice(registrationToken, payload, notification_options)
-    .then((response: any) => {
-        if (response.results[0].messageId == null) {
-          console.log(response.results[0].error);
-          res.status(400).send(response.results[0].error);
-        } else {
-          console.log(payload);
-          res.status(200).send('Notification sent successfully with messageId: ' + response.results[0].messageId);
+            return `Notification sent successfully with messageId: ${response.results[0].messageId}`;
+          }
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
         }
-      })
-      .catch((error: any) => {
-        console.log(error);
-        res.status(400).send(error);
       });
-  });
-
-  res.status(200).json({ message: 'Notifications sent to logged-in users' });
-};
+  
+      const results = await Promise.all(sendNotifications);
+      res.status(200).json({ message: 'Notifications sent successfully', results });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 

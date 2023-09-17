@@ -25,6 +25,7 @@ import { clientTagRouter } from "@presentation/routes/client-tag-route";
 import { reservationTagRouter } from "@presentation/routes/reservation-tag-route";
 import { taxRateRouter } from "@presentation/routes/tax-rate-route";
 import { whatsAppRouter } from "@presentation/routes/whatsapp-message-route";
+import { notificationRouter } from "@presentation/routes/notification/notification-route";
 
 export default (app: Express): void => {
   const router = Router();
@@ -61,5 +62,6 @@ export default (app: Express): void => {
   app.use("/api/v1/add/reservation", addReservationRouter);
   app.use("/api/v1/client/tag", clientTagRouter);
   app.use("/api/v1/reservation/tag", reservationTagRouter);
+  app.use("/api/v1", notificationRouter);
   app.use(router);
 };
