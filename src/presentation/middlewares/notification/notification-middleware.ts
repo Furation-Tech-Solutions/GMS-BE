@@ -14,7 +14,7 @@ const notification_options = {
   export const sendPushNotification = async (req: Request, res: Response) => {
     try {
       // Validate the request body
-      const { title } = req.body;
+      const { title } = req.body;  
       if (!title) {
         return res.status(400).json({ error: 'Missing title or firebaseDeviceToken' });
       }
