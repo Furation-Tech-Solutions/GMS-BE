@@ -18,6 +18,7 @@ interface UserAccountInput {
   isLogin?:boolean;
   permissions?: [{ key: Number, value: String }];
   emailNotification?: [{ key: Number, value: String }];
+  firebaseDeviceToken?: string;
 }
 
 const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false) => {
@@ -73,7 +74,8 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     //   "array.base": "Permissions must be an array of objects with 'key' (number) and 'value' (string)",
     //   "array.min": "At least one permission is required",
     // }),
-  emailNotification: Joi.array().optional()
+  emailNotification: Joi.array().optional(),
+  firebaseDeviceToken: Joi.string()
     // .items(Joi.object({
     //   key: Joi.number(),
     //   value: Joi.string(),
