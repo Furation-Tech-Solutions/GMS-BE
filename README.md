@@ -93,6 +93,14 @@ Here is what you need to be able to run Cal.com.
 
 Note: Delete package-lock.json and maintain yarn.lock
 
+
+### Contributors
+
+<a href="https://github.com/Furation-Tech-Solutions/GMS-BE/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Furation-Tech-Solutions/GMS-BE" />
+</a>
+
+
 # Commit Lint
 
 Follow [Commit Lint][commint_lint] to follow conventional commits:
