@@ -38,7 +38,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
 
     async read(id: string): Promise<any | null> {
         try {
-            const guest = await Guest.findById(id);
+            const guest = await Guest.findById(id).populate("bookedBy");
             return guest ? guest.toObject() : null;
         } catch (error) {
             throw ApiError.badRequest();
@@ -47,7 +47,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
 
     async getAllGuests(): Promise<any[]> {
         try {
-            const guests = await Guest.find();
+            const guests = await Guest.find().populate("bookedBy");
             return guests.map((guest) => guest.toObject());
         } catch (error) {
             throw ApiError.badRequest();
@@ -58,7 +58,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
         try {
             const updatedGuest = await Guest.findByIdAndUpdate(id, guest, {
                 new: true,
-            });
+            }).populate("bookedBy");
             return updatedGuest ? updatedGuest.toObject() : null;
         } catch (error) {
             throw ApiError.badRequest();

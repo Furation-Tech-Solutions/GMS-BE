@@ -49,8 +49,7 @@ const guestSchema = new mongoose.Schema({
         type: [String],
     },
     reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
+        type: [String],
     },
     status: {
         type: String,
