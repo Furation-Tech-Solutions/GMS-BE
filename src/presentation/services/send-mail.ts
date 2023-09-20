@@ -9,7 +9,7 @@ interface EmailOptions {
 
 class EmailService {
     private transporter: nodemailer.Transporter;
-
+ 
     constructor() {
         this.transporter = nodemailer.createTransport({
             host: env.mailhost,

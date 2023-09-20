@@ -1,10 +1,19 @@
 import mongoose from "mongoose";
 
-
-const serversName=new mongoose.Schema({
-    server_name:{
-        type:String,
-        required:true
-    }
-})
-export const ServersName = mongoose.model("serversName",serversName)
+const serversName = new mongoose.Schema({
+  server_name: {
+    type: String,
+    required: true,
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+});
+export const ServersName = mongoose.model("serversName", serversName);

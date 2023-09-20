@@ -4,7 +4,6 @@ import { Router } from "express";
 
 
 
-
 export const whatsAppRouter=Router()
 
 
@@ -71,6 +70,31 @@ export const whatsAppRouter=Router()
 // })
 
 
+// whatsAppRouter.get("/",(req:Request,res:Response)=>{
+//     // res.send("hello  chat")}
+//     const headers = {
+//         'Authorization': `Bearer ${accessToken}`,
+//         'Content-Type': 'application/json',
+//       };
+
+//       const data = {
+//         messaging_product: 'whatsapp',
+//         recipient_type: 'individual',
+//         to: 'PHONE_NUMBER',
+//         type: 'text',
+//         text: {
+//           preview_url: false,
+//           body: 'MESSAGE_CONTENT'
+//         }
+//       };
+// //
+//     axios.post(url, data, { headers })
+//   .then(response => {
+//     console.log('Response:', response.data);
+//   })
+//   .catch(error => {
+//     console.error('Error:', error);
+//   });
 
 //     res.send("success")
 // })

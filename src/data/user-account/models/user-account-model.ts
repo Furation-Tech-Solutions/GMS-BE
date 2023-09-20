@@ -70,6 +70,8 @@ const validateEmail = function (email: string) {
         type: [], 
         default: [],    
       },
+
+      firebaseDeviceToken: String, 
      
   })
 
