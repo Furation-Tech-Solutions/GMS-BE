@@ -40,9 +40,9 @@ export class BookedByNameRepositoryImpl implements BookedByNameRepository {
       ): Promise<Either<ErrorClass, BookedByNameEntity>> {
         try {
           const response = await this.bookedByNameDataSource.updateName(id, data);
-          return Right<ErrorClass, AdminEntity>(response);
+          return Right<ErrorClass, BookedByNameEntity>(response);
         } catch (error) {
-          return Left<ErrorClass, AdminEntity>(ApiError.badRequest());
+          return Left<ErrorClass, BookedByNameEntity>(ApiError.badRequest());
         }
       }
       async getNameById(id: string): Promise<Either<ErrorClass, BookedByNameEntity>> {
