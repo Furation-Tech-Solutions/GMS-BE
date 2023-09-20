@@ -40,6 +40,7 @@ bookedByNameRouter.post(
   validateBookedByNameInputMiddleware(false),
   bookedByNameService.createBookedByName.bind(bookedByNameService)
 );
+
 bookedByNameRouter.get(
   "/getName",
   bookedByNameService.getAllBookedByName.bind(bookedByNameService)
