@@ -61,6 +61,7 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
     isLogin:Joi.boolean().default(false),
+
     permissions: Joi.array().optional(),
     // .items(Joi.object({
     //   key: Joi.number().required(),
@@ -78,6 +79,7 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     //   value: Joi.string(),
     // }))
     // .optional(),
+
 
     
   });
