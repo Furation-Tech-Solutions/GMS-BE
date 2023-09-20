@@ -39,13 +39,7 @@ export const bookedByNameRouter=Router()
 
 
 bookedByNameRouter.post(
-<<<<<<< HEAD
     "/addName",bookedByNameService.createBookedByName.bind(bookedByNameService)
-=======
-    "/addName",
-    validateBookedByNameInputMiddleware(false),
-    bookedByNameService.createBookedByName.bind(bookedByNameService)
->>>>>>> 8ea38a6024cd7e30c90d4bd5a4e787d9c6e738c1
 )
 bookedByNameRouter.get(
   "/getName",bookedByNameService.getAllBookedByName.bind(bookedByNameService)
