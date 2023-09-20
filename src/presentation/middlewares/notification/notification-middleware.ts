@@ -20,6 +20,7 @@ const notification_options = {
       }
   
       const users = await UserAccount.find({});
+      
       const loggedInUsers = users.filter((user) => user.isLogin === true);
   
       const sendNotifications = loggedInUsers.map(async (user) => {
