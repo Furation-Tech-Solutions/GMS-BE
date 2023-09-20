@@ -42,15 +42,19 @@ const guestSchema = new mongoose.Schema({
         default: false,
     },
     bookedBy: {
-        type: bookedByData,
+        type: String,
         required: true
     },
+    // bookedBy: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "UserAccount",
+    //     required: [true, "Please enter user_id"],
+    // },
     additionalGuest: {
         type: [String],
     },
     reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
+        type: [String],
     },
     status: {
         type: String,

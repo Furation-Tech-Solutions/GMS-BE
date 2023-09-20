@@ -6,7 +6,7 @@ export class AddReservationModel {
     public duration: string = "",
     public seatingArea: string | undefined = undefined,
     public timeSlot: string = "",
-    public client: string | undefined = undefined,
+    public client: string | { id: any } | undefined = undefined,
     // public source: string | undefined = undefined,
     public resevationTags: string[] = [],
     public reservationNote: string = "",
@@ -28,7 +28,8 @@ export class AddReservationEntity {
     public duration: string,
     public seatingArea: string | undefined,
     public timeSlot: string,
-    public client: string | undefined,
+    public client: string | { id: any } | undefined,
+    // public client: string | undefined,
     // public source: string | undefined,
     public resevationTags: string[],
     public reservationNote: string,
@@ -75,9 +76,13 @@ export class AddReservationMapper {
           reservationData.timeSlot !== undefined
             ? reservationData.timeSlot
             : existingReservation.timeSlot,
+        // client:
+        //   reservationData.client !== undefined
+        //     ? reservationData.client
+        //     : existingReservation.client,
         client:
           reservationData.client !== undefined
-            ? reservationData.client
+            ? { id: reservationData.client }
             : existingReservation.client,
         // source:
         // reservationData.source !== undefined
@@ -133,7 +138,11 @@ export class AddReservationMapper {
         duration: reservationData.duration,
         seatingArea: reservationData.seatingArea,
         timeSlot: reservationData.timeSlot,
-        client: reservationData.client,
+        // client: reservationData.client,
+        client:
+          reservationData.client !== undefined
+            ? { id: reservationData.client }
+            : undefined,
         // // source: reservationData.source,
         resevationTags: reservationData.resevationTags,
         reservationNote: reservationData.reservationNote,
@@ -158,6 +167,7 @@ export class AddReservationMapper {
       reservation.seatingArea,
       reservation.timeSlot,
       reservation.client,
+      // reservation.client?.id,
       // reservation.source,
       reservation.resevationTags,
       reservation.reservationNote,

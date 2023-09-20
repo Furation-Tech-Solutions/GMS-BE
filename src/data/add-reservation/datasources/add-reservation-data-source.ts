@@ -43,7 +43,15 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
   async read(id: string): Promise<any | null> {
     try {
-      const addReservation = await AddReservation.findById(id);
+      const addReservation = await AddReservation.findById(id)
+        // .populate("shift")
+        // .populate("seatingArea")
+        // .populate("client")
+        // .populate("table")
+        // .populate("bookedByUser")
+        // .populate("updatedBy")
+        // .populate("createdBy")
+        // .exec();
       return addReservation ? addReservation.toObject() : null;
     } catch (error) {
       throw ApiError.badRequest();
@@ -52,7 +60,15 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
   async getAll(): Promise<any[]> {
     try {
-      const addReservations = await AddReservation.find();
+      const addReservations = await AddReservation.find()
+        // .populate("shift")
+        // .populate("seatingArea")
+        // .populate("client")
+        // .populate("table")
+        // .populate("bookedByUser")
+        // .populate("updatedBy")
+        // .populate("createdBy")
+        // .exec();
       return addReservations.map((addReservation) => addReservation.toObject());
     } catch (error) {
       throw ApiError.badRequest();

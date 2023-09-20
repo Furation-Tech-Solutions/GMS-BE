@@ -20,7 +20,7 @@ const addReservationSchema = new mongoose.Schema({
   duration: {
     type: String,
     trim: true,
-    default: "2 hr",
+    default: "2:00:00",
     // required: [true, "Please select the Duration"],
   },
   seatingArea: {

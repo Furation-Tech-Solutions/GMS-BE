@@ -10,7 +10,6 @@ import { BookedByNameService } from "@presentation/services/booked-by-name-servi
 import { Router } from "express"; // Correctly import Request and Response
 import mongoose from "mongoose";
 
-
 const mongooseConnection = mongoose.connection;
 // Create an instance of the OutletDataSourceImpl and pass the mongoose connection
 const peopleDataSource = new BookedByNameDataSourceImpl(mongooseConnection);
@@ -20,12 +19,11 @@ const peopleRepository = new BookedByNameRepositoryImpl(peopleDataSource);
 
 // Create instances of the required use cases and pass the OutletRepositoryImpl
 
-const createBookedByNameUseCase = new CreateBookedByName(peopleRepository)
+const createBookedByNameUseCase = new CreateBookedByName(peopleRepository);
 const getPeopleBookedByNameUseCase = new GetAllBookedByName(peopleRepository);
-const getNameByIdUseCase=new GetNameById(peopleRepository)
-const updateBookedByNameUseCase=new UpdateBookedByName(peopleRepository)
-const deleteBookedByNameUseCase=new DeleteBookedByName(peopleRepository)
-
+const getNameByIdUseCase = new GetNameById(peopleRepository);
+const updateBookedByNameUseCase = new UpdateBookedByName(peopleRepository);
+const deleteBookedByNameUseCase = new DeleteBookedByName(peopleRepository);
 
 const bookedByNameService = new BookedByNameService(
   createBookedByNameUseCase,
@@ -35,27 +33,26 @@ const bookedByNameService = new BookedByNameService(
   deleteBookedByNameUseCase
 );
 
-export const bookedByNameRouter=Router()
-
+export const bookedByNameRouter = Router();
 
 bookedByNameRouter.post(
-    "/addName",
-    validateBookedByNameInputMiddleware(false),
-    bookedByNameService.createBookedByName.bind(bookedByNameService)
-)
+  "/addName",
+  validateBookedByNameInputMiddleware(false),
+  bookedByNameService.createBookedByName.bind(bookedByNameService)
+);
+
 bookedByNameRouter.get(
-  "/getName",bookedByNameService.getAllBookedByName.bind(bookedByNameService)
-)
+  "/getName",
+  bookedByNameService.getAllBookedByName.bind(bookedByNameService)
+);
 
- bookedByNameRouter.patch(
-     "/update/:nameId",
-    validateBookedByNameInputMiddleware(true),
-     bookedByNameService.updateName.bind(bookedByNameService)
-      )
+bookedByNameRouter.patch(
+  "/update/:nameId",
+  validateBookedByNameInputMiddleware(true),
+  bookedByNameService.updateName.bind(bookedByNameService)
+);
 
- bookedByNameRouter.delete(
-       "/delete/:nameId",
-       bookedByNameService.deleteBookedByName.bind(bookedByNameService)
-     );
-
-
+bookedByNameRouter.delete(
+  "/delete/:nameId",
+  bookedByNameService.deleteBookedByName.bind(bookedByNameService)
+);
