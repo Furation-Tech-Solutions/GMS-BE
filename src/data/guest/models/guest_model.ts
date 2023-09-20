@@ -30,11 +30,15 @@ const guestSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    bookedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserAccount",
-        required: [true, "Please enter user_id"],
+    bookedBy:{
+        type:String,
+        required:true
     },
+    // bookedBy: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "UserAccount",
+    //     required: [true, "Please enter user_id"],
+    // },
     additionalGuest: {
         type: [String],
     },
