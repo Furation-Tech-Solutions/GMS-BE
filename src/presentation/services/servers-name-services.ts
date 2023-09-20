@@ -52,10 +52,10 @@ export class ServerNameService{
         next: NextFunction
       ): Promise<void> {
         // Call the GetAllAdminsUsecase to get all admins
-        console.log("inside service")
+        // console.log("inside service")
         const serverName: Either<ErrorClass, ServersNameEntity[]> =
           await this.getAllServerNameUseCase.execute();
-          console.log(serverName,"serverName","service")
+          // console.log(serverName,"serverName","service")
     
           serverName.cata(
           (error: ErrorClass) =>
@@ -68,7 +68,7 @@ export class ServerNameService{
       }
       async updateServerName(req: Request, res: Response): Promise<void> {
         
-        const nameId: string = req.params.nameId;
+        const nameId: string = req.params.serverNameId;
         const nameData: ServersNameModel = req.body;
   
         // Get the existing admin by ID
@@ -110,7 +110,7 @@ export class ServerNameService{
       
       async deleteServerName(req:Request,res:Response):Promise<void>{
         const serverNameId:string=req.params.serverNameId
-        console.log(serverNameId,'serverNameId')
+        // console.log(serverNameId,'serverNameId')
 
         const deleteServerName = await this.deleteServerNameUseCase.execute(serverNameId);
 
@@ -120,7 +120,7 @@ export class ServerNameService{
 
           (result: void) => {
             const resData = "Deleted successfully";
-            console.log(resData)
+            // console.log(resData)
             return res.json(resData);
           }
         );

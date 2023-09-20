@@ -16,7 +16,7 @@ export class ClientRepositoryImpl implements ClientRepository {
             return Right<ErrorClass, ClientEntity>(createdClient);
         } catch (error) {
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ClientEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
             }
             return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
         }
@@ -40,7 +40,7 @@ export class ClientRepositoryImpl implements ClientRepository {
             return Right<ErrorClass, ClientEntity>(updatedClient);
         } catch (e) {
             if (e instanceof ApiError && e.name === "conflict") {
-                return Left<ErrorClass, ClientEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
             }
             return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
         }

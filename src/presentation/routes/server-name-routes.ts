@@ -5,6 +5,7 @@ import { DeleteServerName } from "@domain/servers-name/usecase/delete-server-nam
 import { GetAllServersName } from "@domain/servers-name/usecase/get-all-server-name";
 import { GetServerNameById } from "@domain/servers-name/usecase/get-server-name-by-id";
 import { UpdateServerName } from "@domain/servers-name/usecase/update-server-name";
+import { validateServersNameInputMiddleware } from "@presentation/middlewares/servers-name/servers-name-validation";
 import { ServerNameService } from "@presentation/services/servers-name-services"
 import { Router } from "express"
 import mongoose from "mongoose";
@@ -32,13 +33,17 @@ export const serverNameRouter=Router()
 
 
 serverNameRouter.post(
-    "/addServerName",serverNameService.createServerName.bind(serverNameService)
+    "/addServerName",
+    validateServersNameInputMiddleware(false),
+    serverNameService.createServerName.bind(serverNameService)
 )
 serverNameRouter.get(
     "/getAllServerNames",serverNameService.getAllServersName.bind(serverNameService)
 )
 serverNameRouter.patch(
-    "/update/:serverNameId",serverNameService.updateServerName.bind(serverNameService)
+    "/update/:serverNameId",
+    validateServersNameInputMiddleware(true),
+    serverNameService.updateServerName.bind(serverNameService)
     )
 serverNameRouter.delete(
     "/delete/:serverNameId",

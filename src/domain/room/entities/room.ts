@@ -3,7 +3,9 @@ export class RoomModel {
   constructor(
     public abbreviation: string = "",
     public roomName: string = "",
-    public listOrder: number = 0
+    public listOrder: number = 0,
+    public updatedBy?: string | undefined,
+    public createdBy?: string | undefined
   ) {}
 }
 
@@ -13,7 +15,9 @@ export class RoomEntity {
     public id: string | undefined = undefined,
     public abbreviation: string,
     public roomName: string,
-    public listOrder: number
+    public listOrder: number,
+    public updatedBy?: string | undefined,
+    public createdBy?: string | undefined
   ) {}
 }
 
@@ -38,6 +42,14 @@ export class RoomMapper {
           roomData.listOrder !== undefined
             ? roomData.listOrder
             : existingRoom.listOrder,
+        updatedBy:
+          roomData.updatedBy !== undefined
+            ? roomData.updatedBy
+            : existingRoom.updatedBy,
+        createdBy:
+          roomData.createdBy !== undefined
+            ? roomData.createdBy
+            : existingRoom.createdBy,
       };
     } else {
       const roomEntity: RoomEntity = {
@@ -45,11 +57,12 @@ export class RoomMapper {
           ? roomData._id
             ? roomData._id.toString()
             : undefined
-          : undefined,
+          : roomData._id.toString(),
         abbreviation: roomData.abbreviation,
         roomName: roomData.roomName,
-
         listOrder: roomData.listOrder,
+        updatedBy: roomData.updatedBy,
+        createdBy: roomData.createdBy,
       };
       return roomEntity;
     }
@@ -60,6 +73,8 @@ export class RoomMapper {
       abbreviation: room.abbreviation,
       roomName: room.roomName,
       listOrder: room.listOrder,
+      updatedBy: room.updatedBy,
+      createdBy: room.createdBy,
     };
   }
 }

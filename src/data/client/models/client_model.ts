@@ -19,7 +19,7 @@ const clientSchema = new mongoose.Schema({
         // unique: true,
         trim: true,
     },
-    salution: {
+    salutation: {
         type: String,
         enum: ["Mr.", "Mrs.", "Ms.", "Miss.", "Dr."],
         required: true,
@@ -38,7 +38,7 @@ const clientSchema = new mongoose.Schema({
     },
     tags: {
         type: [String],
-        // ref: "ClientTags",
+        // ref: "ClientTags", give the id of tag from clientTagCategory.
     },
     email: {
         type: String,
@@ -57,12 +57,12 @@ const clientSchema = new mongoose.Schema({
     phone: {
         type: String,
         maxLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         minLength: [
-            13,
-            "Phone Number should have 13 charcters included country code",
+            10,
+            "Phone Number should have 10 charcters included country code",
         ],
         required: [true, "please enter  Phone Number"],
         trim: true,
@@ -74,7 +74,7 @@ const clientSchema = new mongoose.Schema({
             "Phone Number should have 13 charcters included country code",
         ],
         minLength: [
-            13,
+            10,
             "Phone Number should have 13 charcters included country code",
         ],
         // required: [true, "please enter  Phone Number"],
@@ -100,12 +100,23 @@ const clientSchema = new mongoose.Schema({
     country: {
         type: String
     },
-    contactInfoVisibilityOnlytoSuperUser: {
+    contactInfoVisibilityOnlyToSuperUser: {
         type: Boolean,
         default: false,
     },
     birthDate: {
         type: Date,
+    },
+    anniversaryDate: {
+        type: Date,
+    },
+    visits: {
+        type: Number,
+        default: 0,
+    },
+    spends: {
+        type: Number,
+        default: 0
     },
     gender: {
         type: String,
@@ -119,6 +130,5 @@ const clientSchema = new mongoose.Schema({
 });
 
 export const Client = mongoose.model("Client", clientSchema);
-
 
 

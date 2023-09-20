@@ -3,7 +3,7 @@ export class ClientModel {
   constructor(
     public firstName: string = "",
     public lastName: string = "",
-    public salution: string = "",
+    public salutation: string = "",
     public jobTitle: string = "",
     public company: string = "",
     public profileNotes: string = "",
@@ -18,8 +18,9 @@ export class ClientModel {
     public state: string = "",
     public country: string = "",
     public pincode: number = 0,
-    public contactInfoVisibilityOnlytoSuperUser: boolean,
+    public contactInfoVisibilityOnlyToSuperUser: boolean,
     public birthDate: Date,
+    public anniversaryDate: Date,
     public gender: string,
     public createdAt: Date
   ) { }
@@ -31,7 +32,7 @@ export class ClientEntity {
     public id: string | undefined = undefined, // Set a default value for id
     public firstName: string = "",
     public lastName: string = "",
-    public salution: string = "",
+    public salutation: string = "",
     public jobTitle: string = "",
     public company: string = "",
     public profileNotes: string = "",
@@ -46,8 +47,9 @@ export class ClientEntity {
     public state: string = "",
     public country: string = "",
     public pincode: number = 0,
-    public contactInfoVisibilityOnlytoSuperUser: boolean,
+    public contactInfoVisibilityOnlyToSuperUser: boolean,
     public birthDate: Date,
+    public anniversaryDate: Date,
     public gender: string,
     public createdAt: Date
   ) { }
@@ -63,9 +65,9 @@ export class ClientMapper {
     if (existingClient != null) {
       return {
         ...existingClient,
-        firstName: clientData.firstName !== undefined ? clientData.name : existingClient.firstName,
-        lastName: clientData.firstName !== undefined ? clientData.name : existingClient.firstName,
-        salution: clientData.salution !== undefined ? clientData.salution : existingClient.salution,
+        firstName: clientData.firstName !== undefined ? clientData.firstName : existingClient.firstName,
+        lastName: clientData.lastName !== undefined ? clientData.lastName : existingClient.firstName,
+        salutation: clientData.salutation !== undefined ? clientData.salutation : existingClient.salutation,
         jobTitle: clientData.jobTitle !== undefined ? clientData.jobTitle : existingClient.jobTitle,
         company: clientData.company !== undefined ? clientData.company : existingClient.company,
         profileNotes: clientData.profileNotes !== undefined ? clientData.profileNotes : existingClient.profileNotes,
@@ -80,10 +82,11 @@ export class ClientMapper {
         state: clientData.state !== undefined ? clientData.state : existingClient.state,
         country: clientData.country !== undefined ? clientData.country : existingClient.country,
         pincode: clientData.pincode !== undefined ? clientData.pincode : existingClient.pincode,
-        contactInfoVisibilityOnlytoSuperUser: clientData.contactInfoVisibilityOnlytoSuperUser !== undefined
-          ? clientData.contactInfoVisibilityOnlytoSuperUser
-          : existingClient.contactInfoVisibilityOnlytoSuperUser,
+        contactInfoVisibilityOnlyToSuperUser: clientData.contactInfoVisibilityOnlyToSuperUser !== undefined
+          ? clientData.contactInfoVisibilityOnlyToSuperUser
+          : existingClient.contactInfoVisibilityOnlyToSuperUser,
         birthDate: clientData.birthDate !== undefined ? clientData.birthDate : existingClient.birthDate,
+        anniversaryDate: clientData.anniversaryDate !== undefined ? clientData.anniversaryDate : existingClient.anniversaryDate,
         gender: clientData.gender !== undefined ? clientData.gender : existingClient.gender,
         createdAt: clientData.createdAt !== undefined ? clientData.createdAt : existingClient.createdAt,
       };
@@ -92,7 +95,7 @@ export class ClientMapper {
         id: includeId ? (clientData._id ? clientData._id.toString() : undefined) : clientData._id.toString(),
         firstName: clientData.firstName,
         lastName: clientData.lastName,
-        salution: clientData.salution,
+        salutation: clientData.salutation,
         jobTitle: clientData.jobTitle,
         company: clientData.company,
         profileNotes: clientData.profileNotes,
@@ -107,8 +110,9 @@ export class ClientMapper {
         state: clientData.state,
         country: clientData.country,
         pincode: clientData.pincode,
-        contactInfoVisibilityOnlytoSuperUser: clientData.contactInfoVisibilityOnlytoSuperUser,
+        contactInfoVisibilityOnlyToSuperUser: clientData.contactInfoVisibilityOnlyToSuperUser,
         birthDate: clientData.birthDate,
+        anniversaryDate: clientData.anniversaryDate,
         gender: clientData.gender,
         createdAt: clientData.createdAt,
       };
@@ -120,7 +124,7 @@ export class ClientMapper {
     return {
       firstName: client.firstName,
       lastName: client.lastName,
-      salution: client.salution,
+      salutation: client.salutation,
       jobTitle: client.jobTitle,
       company: client.company,
       profileNotes: client.profileNotes,
@@ -135,8 +139,9 @@ export class ClientMapper {
       state: client.state,
       country: client.country,
       pincode: client.pincode,
-      contactInfoVisibilityOnlytoSuperUser: client.contactInfoVisibilityOnlytoSuperUser,
+      contactInfoVisibilityOnlyToSuperUser: client.contactInfoVisibilityOnlyToSuperUser,
       birthDate: client.birthDate,
+      anniversaryDate: client.anniversaryDate,
       gender: client.gender,
       createdAt: client.createdAt,
     };

@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 import { Router } from "express";
 import { ClientTagServices } from "@presentation/services/client-tag-services"; // Import the TagCategoryServices
-import { ClientTagDataSourceImpl } from "@data/client-tag/datasource/client_tag-datasource"; // Import the TagDataSourceImpl
-import { ClientTagRepositoryImpl } from "@data/client-tag/repository/client_tag-repo-impl"; // Import the TagRepositoryImpl
-import { CreateClientTag } from "@domain/client-tag/usecases/create-client_tags"; // Import tag category-related use cases
-import { DeleteClientTag } from "@domain/client-tag/usecases/delete-client_tags";
-import { GetClientTagById } from "@domain/client-tag/usecases/get-client_tag-by-id";
-import { GetAllClientTag } from "@domain/client-tag/usecases/get-all-client_tag";
-import { UpdateClientTag } from "@domain/client-tag/usecases/update-client_tag";
+import { ClientTagDataSourceImpl } from "@data/client-tag/datasources/client-tag-data-source"; // Import the TagDataSourceImpl
+import { ClientTagRepositoryImpl } from "@data/client-tag/repositories/client-tag-repository-impl"; // Import the TagRepositoryImpl
+import { CreateClientTag } from "@domain/client-tag/usecases/create-client-tag"; // Import tag category-related use cases
+import { DeleteClientTag } from "@domain/client-tag/usecases/delete-client-tag";
+import { GetClientTagById } from "@domain/client-tag/usecases/get-client-tag-by-id";
+import { GetAllClientTag } from "@domain/client-tag/usecases/get-all-client-tag";
+import { UpdateClientTag } from "@domain/client-tag/usecases/update-client-tag";
+import { validateClientTagInputMiddleware } from "@presentation/middlewares/client-tag/validation-client-tag";
 
 // Create an instance of the TagDataSourceImpl and pass the mongoose connection
 const clientTagDataSource = new ClientTagDataSourceImpl(mongoose.connection);
@@ -37,6 +38,7 @@ export const clientTagRouter = Router();
 // Route handling for creating a new tag
 clientTagRouter.post(
     "/add",
+    validateClientTagInputMiddleware(false),
     clientTagService.createClientTag.bind(clientTagService)
 );
 
@@ -58,6 +60,6 @@ clientTagRouter.get("/", clientTagService.getAllClientTags.bind(clientTagService
 // Route handling for updating a tag by ID
 clientTagRouter.put(
     "/:ClientTagId",
+    validateClientTagInputMiddleware(true),
     clientTagService.updateClientTag.bind(clientTagService)
 );
-
