@@ -1,4 +1,4 @@
-import { UserModel } from "@domain/user-account/entities/user-account";
+import { UserEmailModel, UserModel } from "@domain/user-account/entities/user-account";
 import mongoose from "mongoose";
 import { UserAccount } from "../models/user-account-model";
 import ApiError from "@presentation/error-handling/api-error";
@@ -10,7 +10,8 @@ export interface UserDataSource{
   getAllUsers(): Promise<any[]>;
   delete(id:string):Promise<void>;
   read(id: string): Promise<any | null>;
-  update(id:string,user_account:UserModel):Promise<any>
+  update(id:string,user_account:UserModel):Promise<any>;
+  getByEmail(user:UserEmailModel):Promise<any| null>
 
 }
 
@@ -54,12 +55,12 @@ async create(user: UserModel): Promise<any> {
 }
 async read(id: string): Promise<any | null> {
   try {
-      const admin=await Admin.findById(id)
-      //  console.log(admin,"admin data")
-       if (admin) {
-        // console.log(admin, "admin data");
-        return admin.toObject();
-      }
+      // const admin=await UserAccount.findById(id)
+      // //  console.log(admin,"admin data")
+      //  if (admin) {
+      //   // console.log(admin, "admin data");
+      //   return admin.toObject();
+      // }
       const user = await UserAccount.findById(id);
       if(user){
         return user.toObject();
@@ -84,6 +85,18 @@ async update(id: string, user_account: UserModel): Promise<any> {
       return updatedUserAccount ? updatedUserAccount.toObject() : null; // Convert to a plain JavaScript object before returning
   } catch (error) {
       throw ApiError.badRequest();
+  }
+}
+async getByEmail(user:UserEmailModel):Promise<any| null>{
+  try{
+    const userData = await UserAccount.findOne({ email: user.email });
+    if(userData){
+      return userData.toObject();
+    }
+    return null;
+  } 
+  catch(err){
+    throw ApiError.badRequest();
   }
 }
 }
