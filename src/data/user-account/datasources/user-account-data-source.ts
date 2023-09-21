@@ -55,12 +55,14 @@ async create(user: UserModel): Promise<any> {
 }
 async read(id: string): Promise<any | null> {
   try {
+
       const admin=await UserAccount.findById(id)
       //  console.log(admin,"admin data")
        if (admin) {
         // console.log(admin, "admin data");
         return admin.toObject();
       }
+
       const user = await UserAccount.findById(id);
       if(user){
         return user.toObject();
