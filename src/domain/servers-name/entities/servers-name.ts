@@ -10,7 +10,7 @@ export class ServersNameModel {
 // BookedByName Entity provided by BookedByName Repository is converted to Express API Response
 export class ServersNameEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public id:  { id: string } | string | undefined,
     public server_name: string,
     public updatedBy: string | undefined,
     public createdBy: string | undefined
@@ -41,11 +41,7 @@ export class ServersNameMapper {
       };
     } else {
       const serversNameEntity: ServersNameEntity = {
-        id: includeId
-          ? serverNameData._id
-            ? serverNameData._id.toString()
-            : undefined
-          : serverNameData._id.toString(),
+        id:{ id: includeId ? (serverNameData._id ? serverNameData._id.toString() : undefined) : serverNameData._id.toString() },
         server_name: serverNameData.server_name,
         updatedBy: serverNameData.updatedBy,
         createdBy: serverNameData.createdBy,

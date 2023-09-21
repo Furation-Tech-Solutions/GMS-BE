@@ -119,7 +119,7 @@
         "id": "650160335b44faa4b91c1b77",
         "role": "Manager",
         "permissions": {
-            "3101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "1101": "Book reservations and view/edit all reservations booked by all staff accounts",
             "3102": "View all public client data (includes all Has Restaurants LLP client data)",
             "3103": "Control venue setup items: blocks, seating chart, availability, cut-off times, blackout dates",
             "3104": "View all reporting and daily statistics",
