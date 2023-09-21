@@ -70,7 +70,7 @@ export class ClientTagCategoryServices {
         const clientTagCategory: Either<ErrorClass, ClientTagCategoryEntity> =
             await this.getClientTagCategoryByIdUsecases.execute(clientTagCategoryId);
 
-            clientTagCategory.cata(
+        clientTagCategory.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagCategoryEntity) => {
@@ -91,12 +91,12 @@ export class ClientTagCategoryServices {
         const clientTagCategories: Either<ErrorClass, ClientTagCategoryEntity[]> =
             await this.getAllClientTagCategoriesUsecases.execute();
 
-            clientTagCategories.cata(
+        clientTagCategories.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagCategoryEntity[]) => {
                 const responseData = result.map((tagCategory) =>
-                ClientTagCategoryMapper.toEntity(tagCategory)
+                    ClientTagCategoryMapper.toEntity(tagCategory)
                 );
                 return res.json(responseData);
             }
@@ -127,7 +127,7 @@ export class ClientTagCategoryServices {
                         updatedClientTagCategoryEntity
                     );
 
-                    updatedClientTagCategory.cata(
+                updatedClientTagCategory.cata(
                     (error: ErrorClass) => {
                         res.status(error.status).json({ error: error.message });
                     },

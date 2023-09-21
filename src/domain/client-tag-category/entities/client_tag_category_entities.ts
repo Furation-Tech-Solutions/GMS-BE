@@ -7,6 +7,7 @@ export class ClientTagCategoryModel {
     public vip: boolean = false,
     public display: object = {},
     public followers: string[] = [],
+    public tags: string[] = [],
     public createdAt: Date
   ) { }
 }
@@ -21,6 +22,7 @@ export class ClientTagCategoryEntity {
     public vip: boolean = false,
     public display: object = {},
     public followers: string[] = [],
+    public tags: string[] = [],
     public createdAt: Date
   ) { }
 }
@@ -41,6 +43,7 @@ export class ClientTagCategoryMapper {
         vip: clientTagCategoryData.vip !== undefined ? clientTagCategoryData.vip : existingClientTagCategory.vip,
         display: clientTagCategoryData.display !== undefined ? clientTagCategoryData.display : existingClientTagCategory.display,
         followers: clientTagCategoryData.followers !== undefined ? clientTagCategoryData.followers : existingClientTagCategory.followers,
+        tags: clientTagCategoryData.tags !== undefined ? clientTagCategoryData.tags : existingClientTagCategory.tags,
         createdAt: clientTagCategoryData.createdAt !== undefined ? clientTagCategoryData.createdAt : existingClientTagCategory.createdAt,
       };
     } else {
@@ -52,6 +55,7 @@ export class ClientTagCategoryMapper {
         vip: clientTagCategoryData.vip,
         display: clientTagCategoryData.display,
         followers: clientTagCategoryData.followers,
+        tags: clientTagCategoryData.tags,
         createdAt: clientTagCategoryData.createdAt,
       };
       return clientTagCategoryData;
@@ -66,6 +70,7 @@ export class ClientTagCategoryMapper {
       vip: clientTagCategory.vip,
       display: clientTagCategory.display,
       followers: clientTagCategory.followers,
+      tags: clientTagCategory.tags,
       createdAt: clientTagCategory.createdAt,
     };
   }

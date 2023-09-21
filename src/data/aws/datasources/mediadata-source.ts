@@ -6,13 +6,15 @@ import env from "../../../main/config/env";
 dotenv.config();
 
 export interface OutletMediaDataSource {
-  getPresignedUrl(objectKey: string): Promise<string>;
+  getPresignedUrl(data_type:string,file_name: string ): Promise<string>;
   deleteBrandLogo(): Promise<string>;
 }
 
+
 export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
-  async getPresignedUrl(objectKey: string): Promise<string> {
+  async getPresignedUrl(data_type:string,file_Name: string): Promise<string> {
     try {
+      const uniqueIdentifier = Date.now()
       const s3 = new AWS.S3({
         region: "ap-south-1",
         credentials: {
@@ -20,12 +22,16 @@ export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
           secretAccessKey: env.secretAccessKey,
         },
       });
+      const fileName = file_Name.slice(0, file_Name.lastIndexOf('.'));
+      const fileExtension = file_Name.slice(file_Name.lastIndexOf('.') + 1);
+      // console.log(uniqueIdentifier,fileName,fileExtension);
 
       const params = {
         Bucket: "gms-imageupload",
-        Key: `outlets/${objectKey}/brand-image/image-path` + ".jpg",
+        Key: `${data_type}/${uniqueIdentifier}_${fileName}` + `.${fileExtension}`,
         Expires: 3600,
       };
+      // return "presignedurl"
       return await s3.getSignedUrlPromise("putObject", params);
     } catch (error) {
       throw ApiError.awsPresigningError();

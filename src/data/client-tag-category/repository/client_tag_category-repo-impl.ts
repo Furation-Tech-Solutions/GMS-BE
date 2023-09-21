@@ -16,7 +16,7 @@ export class ClientTagCategoryRepositoryImpl implements ClientTagCategoryReposit
             return Right<ErrorClass, ClientTagCategoryEntity>(createdTagCategory);
         } catch (error) {
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.clienttagExist());
             }
             return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.badRequest());
         }
@@ -40,7 +40,7 @@ export class ClientTagCategoryRepositoryImpl implements ClientTagCategoryReposit
             return Right<ErrorClass, ClientTagCategoryEntity>(updatedTagCategory);
         } catch (e) {
             if (e instanceof ApiError && e.name === "conflict") {
-                return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.clienttagExist());
             }
             return Left<ErrorClass, ClientTagCategoryEntity>(ApiError.badRequest());
         }

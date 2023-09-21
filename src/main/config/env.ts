@@ -12,4 +12,8 @@ export default {
   secretAccessKey:
     process.env.AWS_SECRET_ACCESS_KEY ??
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  mailhost: process.env.HOST,
+  sendmailport: process.env.MAILPORT,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
 };
