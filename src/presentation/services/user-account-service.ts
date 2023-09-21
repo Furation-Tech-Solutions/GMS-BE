@@ -1,6 +1,7 @@
-import { UserEntity, UserMapper, UserModel } from "@domain/user-account/entities/user-account";
+import { UserEmailModel, UserEntity, UserMapper, UserModel } from "@domain/user-account/entities/user-account";
 import { CreateUserUsecase } from "@domain/user-account/usecases/create-user";
 import { DeleteUserUseCase } from "@domain/user-account/usecases/delete-user";
+import { GetUserByEmailUseCase } from "@domain/user-account/usecases/get-user-by-email";
 import { GetUserByIdUseCase } from "@domain/user-account/usecases/get-user-by-id";
 import { GetAllUserUseCase } from "@domain/user-account/usecases/get-users";
 import { UpdateUserUseCase } from "@domain/user-account/usecases/update-user";
@@ -17,19 +18,22 @@ export class UserService{
     private readonly deleteUserUseCase:DeleteUserUseCase;
     private readonly getUserByIdUseCase:GetUserByIdUseCase;
     private readonly updateUserUseCase:UpdateUserUseCase;
+    private readonly getUserByEmailUseCase:GetUserByEmailUseCase;
 
     constructor(
         createUserUseCase:CreateUserUsecase,
         getAllUserUseCase:GetAllUserUseCase,
         deleteUserUseCase:DeleteUserUseCase,
         getUserByIdUseCase:GetUserByIdUseCase,
-        updateUserUseCase:UpdateUserUseCase
+        updateUserUseCase:UpdateUserUseCase,
+        getUserByEmailUseCase:GetUserByEmailUseCase,
     ){
         this.createUserUseCase = createUserUseCase;
         this.getAllUserUseCase = getAllUserUseCase;
         this.deleteUserUseCase=deleteUserUseCase;
         this.getUserByIdUseCase=getUserByIdUseCase;
-        this.updateUserUseCase=updateUserUseCase
+        this.updateUserUseCase=updateUserUseCase;
+        this.getUserByEmailUseCase=getUserByEmailUseCase;
     }
 
 
@@ -142,5 +146,27 @@ async updateUser(req: Request, res: Response): Promise<void> {
           );
       }
   );
+}
+async getUserByEmail(req: Request, res: Response): Promise<void> {
+  const userEmail: UserEmailModel = req.body;
+
+  const user: Either<ErrorClass, UserEntity> =
+      await this.getUserByEmailUseCase.execute(userEmail);
+
+      user.cata(
+        (error: ErrorClass) =>{
+        console.log("error in get by email",error);
+        
+            res.status(error.status).json({ error: error.message })
+        },
+        (result: UserEntity) => {
+            if (result == undefined) {
+                return res.json({ message: "Data Not Found" });
+            }
+            const resData = UserMapper.toEntity(result);
+            return res.json(resData);
+        }
+    );
+
 }
 }
