@@ -1,4 +1,4 @@
-# Backend Starter Project (Node.js, Express.js 🚝 & Typescript 📝)
+# Guest Management System (Backend)
 
 Developed with 💙 by [Furation Tech Solutions][furation_tech_link] 🚀
 
@@ -6,24 +6,100 @@ A Furation Backend Starter Project created by the [Furation Tech Solutions Team]
 
 ---
 
+<p align="center">
+  <a href="https://www.furation.tech/">
+   <img src="https://lh3.googleusercontent.com/p/AF1QipPV1Mbi1rrai_q7YYFbVYI5vSEK_xz4MDr6JgIJ=s1360-w1360-h1020" alt="Logo">
+  </a>
+
+  <h3 align="center">GMS (Furation Tech Solutions)</h3>
+
+  <p align="center">
+    We love to find solutions.
+    <br />
+    <a href="https://www.furation.tech/"><strong>Learn more »</strong></a>
+    <br />
+    <br />
+    <a href="https://in.linkedin.com/company/furation-tech-solutions">Linkedin</a>
+  </p>
+</p>
+
+
+## About the Project
+
+# The Versatile Role of a Guest Management System
+
+A guest management system is a sophisticated software application that plays a pivotal role in ensuring the smooth and organized handling of guests or visitors across different industries and institutions. 
+
+It is a versatile tool that can be customized to meet the specific needs and requirements of the establishment it serves.
+
+### Built With
+
+- [NodeJs](https://nodejs.org/en/docs)
+- [ExpressJs](https://expressjs.com/)
+- [Typescript](https://www.typescriptlang.org/)
+- [MongoDB](https://www.mongodb.com/)
+
+
 ## Getting Started 🚀
 
+To get a local copy up and running, please follow these simple steps.
+
+### Prerequisites
+
+Here is what you need to be able to run Cal.com.
+
+- Node.js (Version: >=18.x)
+- MongoDB
+- Yarn _(recommended)_
 # Install Node.js , npm and yarn
 
 [Install Node.js & npm][install_node]
 [Install Yarn][install_yarn]
 
-To get the Node server running locally:
 
-- Clone this repo
-- `yarn install` to install all required dependencies
-- Note: For MacOS/Linux: `npm install --save-dev @commitlint/{cli,config-conventional}`
-- Note: For Windows only: `npm install --save-dev @commitlint/config-conventional @commitlint/cli` 
-- Install MongoDB Community Edition ([instructions](https://docs.mongodb.com/manual/installation/#tutorials)) and run it by executing `mongod`
-- `yarn run dev` to start the local server
-- In jest-mongodb-config.js, update the MongoDB version i.e same as the prod db version
+## Development
+
+### Setup
+
+1. Clone the repo into a public GitHub repository (or fork https://github.com/Furation-Tech-Solutions/GMS-BE.git).
+
+   ```sh
+   git clone https://github.com/Furation-Tech-Solutions/GMS-BE.git
+   ```
+
+1. Go to the project folder
+
+   ```sh
+   cd GMS-BE
+   ```
+
+1. Install packages with yarn
+
+   ```sh
+   yarn
+   ```
+
+1. Set up your `.env` file
+   - Duplicate `.env.example` to `.env`
+
+
+1. Run (in development mode)
+
+   ```sh
+   yarn run dev
+   ```
+
+
 
 Note: Delete package-lock.json and maintain yarn.lock
+
+
+### Contributors
+
+<a href="https://github.com/Furation-Tech-Solutions/GMS-BE/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Furation-Tech-Solutions/GMS-BE" />
+</a>
+
 
 # Commit Lint
 

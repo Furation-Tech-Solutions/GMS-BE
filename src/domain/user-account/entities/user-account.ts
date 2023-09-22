@@ -23,8 +23,12 @@ export class UserModel {
         },
         public isLogin:boolean=false,
         public permissions: [] = [],
-        public emailNotification:[] = []
+        public emailNotification:[] = [],
+        public firebaseDeviceToken:string = ''
     ) {}
+  }
+  export class UserEmailModel {
+    constructor(public email:string=""){}
   }
   
   // Admin Entity provided by Admin Repository is converted to Express API Response
@@ -45,7 +49,8 @@ export class UserModel {
       },
       public isLogin:boolean,
       public permissions: [],
-      public  emailNotification: []
+      public  emailNotification: [],
+      public firebaseDeviceToken:string
     ) {}
   }
   
@@ -110,7 +115,11 @@ export class UserModel {
         emailNotification:
          userData.emailNotification !== undefined
           ? userData.emailNotification
-          : existingUser.emailNotification
+          : existingUser.emailNotification,
+          firebaseDeviceToken:
+         userData.firebaseDeviceToken !== undefined
+          ? userData.firebaseDeviceToken
+          : existingUser.firebaseDeviceToken
             
       };
     } else {
@@ -136,7 +145,8 @@ export class UserModel {
         },
         isLogin:userData.isLogin,
         permissions: userData.permissions || [],
-        emailNotification:userData.emailNotification||[]
+        emailNotification:userData.emailNotification||[],
+        firebaseDeviceToken:userData.firebaseDeviceToken||''
       };
       return userEntity;
     }
@@ -153,7 +163,8 @@ export class UserModel {
             managerSettings: user.managerSettings,
             isLogin: user.isLogin,  
             permissions: user.permissions,
-            emailNotification:user.emailNotification
+            emailNotification:user.emailNotification,
+            firebaseDeviceToken:user.firebaseDeviceToken,
           };
     }
   }
