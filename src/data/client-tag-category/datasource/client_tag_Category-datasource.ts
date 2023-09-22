@@ -31,19 +31,19 @@ export class ClientTagCategoryDataSourceImpl implements ClientTagCategoryDataSou
     }
 
     async read(id: string): Promise<any | null> {
-        const clientTagCategory = await ClientTagCategory.findById(id);
+        const clientTagCategory = await ClientTagCategory.findById(id).populate('tags');
         return clientTagCategory ? clientTagCategory.toObject() : null; // Convert to a plain JavaScript object before returning
     }
 
     async getAll(): Promise<any[]> {
-        const clientTagCategories = await ClientTagCategory.find();
+        const clientTagCategories = await ClientTagCategory.find().populate('tags');
         return clientTagCategories.map((clientTagCategory) => clientTagCategory.toObject()); // Convert to plain JavaScript objects before returning
     }
 
     async update(id: string, clientTagCategory: ClientTagCategoryModel): Promise<any> {
         const updatedClientTagCategory = await ClientTagCategory.findByIdAndUpdate(id, clientTagCategory, {
             new: true,
-        }); // No need for conversion here
+        }).populate('tags'); // No need for conversion here
         return updatedClientTagCategory ? updatedClientTagCategory.toObject() : null; // Convert to a plain JavaScript object before returning
     }
 }
