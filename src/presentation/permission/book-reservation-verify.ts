@@ -20,12 +20,7 @@ const verifyGranttedPermissions = async (
       if(permittedUser?.accessLevel === 'Superuser'){
        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
             if(
-                permissionNumber === 1101  || 
-                permissionNumber === 1102  ||
-                permissionNumber === 1103  ||
-                permissionNumber === 1104  ||
-                permissionNumber === 1105  ||
-                permissionNumber === 1106  
+                permissionNumber === 1101  
                 ) return true
         })
 
