@@ -8,7 +8,7 @@ export class AddReservationModel {
     public timeSlot: string = "",
     public client: string | { id: any } | undefined = undefined,
     // public source: string | undefined = undefined,
-    public resevationTags: string[] = [],
+    public reservationTags: string[] = [],
     public reservationNote: string = "",
     public table: string | undefined = undefined,
     public bookedBy: string | undefined = undefined,
@@ -31,7 +31,7 @@ export class AddReservationEntity {
     public client: string | { id: any } | undefined,
     // public client: string | undefined,
     // public source: string | undefined,
-    public resevationTags: string[],
+    public reservationTags: string[],
     public reservationNote: string,
     public table: string | undefined,
     public bookedBy: string | undefined,
@@ -88,10 +88,10 @@ export class AddReservationMapper {
         // reservationData.source !== undefined
         // ? reservationData.source
         // : existingReservation.source,
-        resevationTags:
-          reservationData.resevationTags !== undefined
-            ? reservationData.resevationTags
-            : existingReservation.resevationTags,
+        reservationTags:
+          reservationData.reservationTags !== undefined
+            ? reservationData.reservationTags
+            : existingReservation.reservationTags,
         reservationNote:
           reservationData.reservationNote !== undefined
             ? reservationData.reservationNote
@@ -144,7 +144,7 @@ export class AddReservationMapper {
             ? { id: reservationData.client }
             : undefined,
         // // source: reservationData.source,
-        resevationTags: reservationData.resevationTags,
+        reservationTags: reservationData.reservationTags,
         reservationNote: reservationData.reservationNote,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
@@ -169,7 +169,7 @@ export class AddReservationMapper {
       reservation.client,
       // reservation.client?.id,
       // reservation.source,
-      reservation.resevationTags,
+      reservation.reservationTags,
       reservation.reservationNote,
       reservation.table,
       reservation.bookedBy,
