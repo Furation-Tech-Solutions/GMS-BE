@@ -16,11 +16,9 @@ return  async (
       const unAuthorized = ApiError.unAuthorized();
         
       const email = req.cookies.email;
-
       // console.log(email,"email in validation",req.cookies)
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: email });
       // console.log(permittedUser,"permitted")
-
       if (!permittedUser) {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
         return;
@@ -28,12 +26,12 @@ return  async (
 
       const isSuperuser = permittedUser.accessLevel === 'Superuser';
       let hasRequiredPermission=false
-      permittedUser.permissions.map((permission:any)=>{
-          //  console.log(permission,"permission in map");
-           for(let i in permission){
-            if(i==requiredPermission){
+      permittedUser.permissions.map((permissionObj:any)=>{
+           const permissionCode = Object.keys(permissionObj)[0];
+          //  for(let i in permission){
+            if(permissionCode==requiredPermission){
               hasRequiredPermission=true
-            }
+            // }
             // console.log(permission[i],i,"inside for map loop");
            }
       })
@@ -49,39 +47,56 @@ return  async (
 
 
        if (permittedUser?.accessLevel === 'Manager'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+        
 
-      if(isPermitted) next()
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
       }
 
        if (permittedUser?.accessLevel === 'Sub-Manager'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+        
 
-      if(isPermitted) next()
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
       }
 
       else if (permittedUser?.accessLevel === 'Basic'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
-
-      if(isPermitted) next()
+       
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
@@ -89,7 +104,7 @@ return  async (
      
     } catch (error) { 
       const internalError = ApiError.internalError();
-
+      // console.log(error,"error")
       res.status(internalError.status).json({ message: internalError.message });
     }
   }
