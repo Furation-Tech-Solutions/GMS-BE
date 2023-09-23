@@ -5,8 +5,7 @@ import { UserRepository } from "../repositories/user-repository";
 import EmailService from "@presentation/services/send-mail";
 
 export interface CreateUserUsecase {
-    execute: (
-      userData: UserModel) => Promise<Either<ErrorClass, UserEntity>>;
+    execute: ( userData: UserModel,password:string) => Promise<Either<ErrorClass, UserEntity>>;
   }
   
   export class CreateUser implements CreateUserUsecase {
@@ -18,7 +17,7 @@ export interface CreateUserUsecase {
       this.emailService = emailService;
     }
   
-    async execute(userData: UserModel): Promise<Either<ErrorClass, UserEntity>> {
+    async execute(userData: UserModel,password:string): Promise<Either<ErrorClass, UserEntity>> {
       const newUserResult=await this.userRepository.createUser(userData);
 
       if (newUserResult.isRight()) {
@@ -36,7 +35,7 @@ export interface CreateUserUsecase {
           Below are your registration details:
       
           Username/Email: ${newUser.email}
-          Password: "your_password
+          Password: ${password}
       
           Please keep this email in a safe place and do not share your password with anyone. For security reasons, we recommend changing your password as soon as you log in for the first time. You can do this by following these steps:
       
