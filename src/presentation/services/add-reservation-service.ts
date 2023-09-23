@@ -11,6 +11,7 @@ import {
   AddReservationMapper,
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
+import { ClientServices } from "./client-services";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -34,8 +35,20 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    
     const addReservationData: AddReservationModel =
       AddReservationMapper.toModel(req.body);
+
+      // // step1:- find client  by id first
+      // ClientServices.
+      
+      // //find booking request for matching feild like :
+      // // client detail:{
+      // //  firstName,lastName,email,phone
+      // // } 
+      // // data from reservation {
+      // //   duration,numberOfGuest,reservationDate,reservationTime
+      // // }
 
     const newAddReservation: Either<ErrorClass, AddReservationEntity> =
       await this.createAddReservationUsecase.execute(addReservationData);

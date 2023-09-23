@@ -47,39 +47,56 @@ return  async (
 
 
        if (permittedUser?.accessLevel === 'Manager'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+        
 
-      if(isPermitted) next()
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
       }
 
        if (permittedUser?.accessLevel === 'Sub-Manager'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+        
 
-      if(isPermitted) next()
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
       }
 
       else if (permittedUser?.accessLevel === 'Basic'){
-        const isPermitted =  permittedUser.permissions.map((permissionNumber) => {
-          if(
-              permissionNumber === requiredPermission  
-              ) return true
-      })
-
-      if(isPermitted) next()
+       
+        let hasRequiredPermission=false
+        permittedUser.permissions.map((permission:any)=>{
+            //  console.log(permission,"permission in map");
+             for(let i in permission){
+              if(i==requiredPermission){
+                hasRequiredPermission=true
+              }
+              // console.log(permission[i],i,"inside for map loop");
+             }
+        })
+      if(hasRequiredPermission) next()
       else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
       }
