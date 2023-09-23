@@ -10,7 +10,7 @@ interface ReservationInput {
   seatingArea: string;
   timeSlot: string;
   client: string;
-  resevationTags: string[];
+  reservationTags: string[];
   reservationNote: string;
   table: string;
   bookedBy: string;
@@ -69,7 +69,7 @@ const reservationValidator = (
       : Joi.string().trim().required().messages({
           "any.required": "Please select the Client",
         }),
-    resevationTags: Joi.array().items(Joi.string().trim()),
+    reservationTags: Joi.array().items(Joi.string().trim()),
     reservationNote: Joi.string().max(2000).min(1).trim().messages({
       "string.max": "Reservation note should have less than 2000 characters",
       "string.min": "Reservation note should have more than 1 character",
