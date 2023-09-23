@@ -9,6 +9,7 @@ import { GetAllAddReservation } from "@domain/add-reservation/usecases/get-all-a
 import { UpdateAddReservation } from "@domain/add-reservation/usecases/update-add-reservation";
 import { AddReservationServices } from "@presentation/services/add-reservation-service";
 import { validateReservationInputMiddleware } from "@presentation/middlewares/add-reservation/add-reservation-validator";
+import { checkPermission } from "@presentation/permission/book-reservation-verify";
 
 
 // Create an instance of the AddReservationDataSourceImpl and pass the mongoose connection
@@ -53,6 +54,7 @@ export const addReservationRouter = Router();
 // Route handling for creating a new Add Reservation
 addReservationRouter.post(
   "/create",
+  checkPermission(1101),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );

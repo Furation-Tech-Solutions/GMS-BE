@@ -33,7 +33,6 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Time Slot"],
   },
-
   // Client
   client: {
     type: mongoose.Schema.Types.ObjectId,

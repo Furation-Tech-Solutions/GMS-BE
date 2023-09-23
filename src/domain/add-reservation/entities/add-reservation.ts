@@ -13,8 +13,8 @@ export class AddReservationModel {
     public table: string | undefined = undefined,
     public bookedBy: string | undefined = undefined,
     public perks: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
   ) {}
 }
@@ -36,8 +36,8 @@ export class AddReservationEntity {
     public table: string | undefined,
     public bookedBy: string | undefined,
     public perks: string,
-    public updatedBy: string | undefined,
-    public createdBy: string | undefined,
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
     public createdAt: string
   ) {}
@@ -114,11 +114,11 @@ export class AddReservationMapper {
             : existingReservation.confirmationMailSending,
         updatedBy:
           reservationData.updatedBy !== undefined
-            ? reservationData.updatedBy
+            ? { _id: reservationData.updatedBy }
             : existingReservation.updatedBy,
         createdBy:
           reservationData.createdBy !== undefined
-            ? reservationData.createdBy
+            ? { _id: reservationData.createdBy }
             : existingReservation.createdBy,
         createdAt:
           reservationData.createdAt !== undefined
@@ -148,8 +148,8 @@ export class AddReservationMapper {
         reservationNote: reservationData.reservationNote,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
-        updatedBy: reservationData.updatedBy,
-        createdBy: reservationData.createdBy,
+        updatedBy: { _id: reservationData.updatedBy },
+        createdBy: { _id: reservationData.createdBy },
         perks: reservationData.perks,
         confirmationMailSending: reservationData.confirmationMailSending,
         createdAt: reservationData.createdAt, // Make sure to create a new Date instance.
