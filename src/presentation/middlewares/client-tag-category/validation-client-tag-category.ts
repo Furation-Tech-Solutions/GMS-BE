@@ -29,32 +29,32 @@ const clientTagCategoryValidator = (
   const clientTagCategorySchema = Joi.object<ClientTagCategoryInput>({
     name: isUpdate
       ? Joi.string().min(3).max(30).optional().trim().messages({
-          "string.min": "Name should have at least 3 characters",
-          "string.max": "Name should have less than 30 characters",
-        })
+        "string.min": "Name should have at least 3 characters",
+        "string.max": "Name should have less than 30 characters",
+      })
       : Joi.string().min(3).max(30).required().trim().messages({
-          "string.min": "Name should have at least 3 characters",
-          "string.max": "Name should have less than 30 characters",
-          "any.required": "Name is required",
-        }),
+        "string.min": "Name should have at least 3 characters",
+        "string.max": "Name should have less than 30 characters",
+        "any.required": "Name is required",
+      }),
 
     color: isUpdate
       ? Joi.string().optional().trim().messages({
-          "any.required": "Color is required",
-        })
+        "any.required": "Color is required",
+      })
       : Joi.string().required().trim().messages({
-          "any.required": "Color is required",
-        }),
+        "any.required": "Color is required",
+      }),
 
     classification: isUpdate
       ? Joi.object({
-          global: Joi.boolean().optional(),
-          local: Joi.boolean().optional(),
-        }).optional()
+        global: Joi.boolean().optional(),
+        local: Joi.boolean().optional(),
+      }).optional()
       : Joi.object({
-          global: Joi.boolean().optional(),
-          local: Joi.boolean().optional(),
-        }).optional(),
+        global: Joi.boolean().optional(),
+        local: Joi.boolean().optional(),
+      }).optional(),
 
     vip: Joi.boolean().optional().messages({
       "any.required": "VIP status is optional",
@@ -84,18 +84,18 @@ const clientTagCategoryValidator = (
       }),
     updatedBy: isUpdate
       ? Joi.string().trim().required().messages({
-          "any.required": "Please select the Updated By",
-        })
+        "any.required": "Please select the Updated By",
+      })
       : Joi.string().trim().optional().messages({
-          "any.required": "Please select the Update By",
-        }),
+        "any.required": "Please select the Update By",
+      }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Created By",
-        })
+        "any.required": "Please select the Created By",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Created By",
-        }),
+        "any.required": "Please select the Created By",
+      }),
   });
 
   const { error, value } = clientTagCategorySchema.validate(input, {
@@ -132,14 +132,17 @@ export const validateClientTagCategoryInputMiddleware = (
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(error.status).json(error.message);
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      res.status(500).json({
+        success: false,
+        message: error.message
+      })
     }
   };
 };
