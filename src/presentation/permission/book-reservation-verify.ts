@@ -26,12 +26,12 @@ return  async (
 
       const isSuperuser = permittedUser.accessLevel === 'Superuser';
       let hasRequiredPermission=false
-      permittedUser.permissions.map((permission:any)=>{
-          //  console.log(permission,"permission in map");
-           for(let i in permission){
-            if(i==requiredPermission){
+      permittedUser.permissions.map((permissionObj:any)=>{
+           const permissionCode = Object.keys(permissionObj)[0];
+          //  for(let i in permission){
+            if(permissionCode==requiredPermission){
               hasRequiredPermission=true
-            }
+            // }
             // console.log(permission[i],i,"inside for map loop");
            }
       })
