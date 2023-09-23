@@ -54,7 +54,7 @@ export const addReservationRouter = Router();
 // Route handling for creating a new Add Reservation
 addReservationRouter.post(
   "/create",
-  checkPermission("1203"),
+  // checkPermission(1101),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );
