@@ -2,19 +2,19 @@ export class AddReservationModel {
   constructor(
     public date: string = "",
     public noOfGuests: Number = 1,
-    public shift: string | { id: string }  | undefined = undefined,
+    public shift: string | undefined = undefined,
     public duration: string = "",
-    public seatingArea: string | { id: string }  |  undefined = undefined,
+    public seatingArea: string | undefined = undefined,
     public timeSlot: string = "",
     public client: string | undefined = undefined,
     // public source: string | undefined = undefined,
     public reservationTags: string[] = [],
     public reservationNote: string = "",
-    public table: string | { id: string }  | undefined = undefined,
+    public table: string | undefined = undefined,
     public bookedBy: string | undefined = undefined,
     public perks: string = "",
-    public updatedBy: string | { id: string }  | undefined = undefined,
-    public createdBy: string | { id: string }  | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
   ) {}
 }
@@ -24,20 +24,20 @@ export class AddReservationEntity {
     public id: string | undefined = undefined,
     public date: string,
     public noOfGuests: Number,
-    public shift: string | { id: string }  | undefined,
+    public shift: string | undefined,
     public duration: string,
-    public seatingArea: string | { id: string }  | undefined,
+    public seatingArea: string | undefined,
     public timeSlot: string,
     public client: string | undefined,
     // public client: string | undefined,
     // public source: string | undefined,
     public reservationTags: string[],
     public reservationNote: string,
-    public table: string | { id: string }  | undefined,
+    public table: string | undefined,
     public bookedBy: string | undefined,
     public perks: string,
-    public updatedBy: string | { id: string }  | undefined,
-    public createdBy: string | { id: string }  | undefined,
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
     public createdAt: string
   ) {}
@@ -62,7 +62,7 @@ export class AddReservationMapper {
             : existingReservation.noOfGuests,
         shift:
           reservationData.shift !== undefined
-            ?{id: reservationData.shift}
+            ? reservationData.shift
             : existingReservation.shift,
         duration:
           reservationData.duration !== undefined
@@ -98,7 +98,7 @@ export class AddReservationMapper {
             : existingReservation.reservationNote,
         table:
           reservationData.table !== undefined
-            ? {id: reservationData.table}
+            ? reservationData.table
             : existingReservation.table,
         bookedBy:
           reservationData.bookedBy !== undefined
@@ -114,11 +114,11 @@ export class AddReservationMapper {
             : existingReservation.confirmationMailSending,
         updatedBy:
           reservationData.updatedBy !== undefined
-            ? {id: reservationData.updatedBy}
+            ? { _id: reservationData.updatedBy }
             : existingReservation.updatedBy,
         createdBy:
           reservationData.createdBy !== undefined
-            ? {id: reservationData.createdBy}
+            ? { _id: reservationData.createdBy }
             : existingReservation.createdBy,
         createdAt:
           reservationData.createdAt !== undefined
@@ -134,9 +134,9 @@ export class AddReservationMapper {
           : reservationData._id.toString(),
         date: reservationData.date,
         noOfGuests: reservationData.noOfGuests,
-        shift: {id: reservationData.shift},
+        shift: reservationData.shift,
         duration: reservationData.duration,
-        seatingArea: {id: reservationData.seatingArea},
+        seatingArea: reservationData.seatingArea,
         timeSlot: reservationData.timeSlot,
         // client: reservationData.client,
         client:
@@ -146,10 +146,10 @@ export class AddReservationMapper {
         // // source: reservationData.source,
         reservationTags: reservationData.reservationTags,
         reservationNote: reservationData.reservationNote,
-        table: {id: reservationData.table},
+        table: reservationData.table,
         bookedBy: reservationData.bookedBy,
-        updatedBy: {id: reservationData.updatedBy},
-        createdBy: {id: reservationData.createdBy},
+        updatedBy: { _id: reservationData.updatedBy },
+        createdBy: { _id: reservationData.createdBy },
         perks: reservationData.perks,
         confirmationMailSending: reservationData.confirmationMailSending,
         createdAt: reservationData.createdAt, // Make sure to create a new Date instance.
