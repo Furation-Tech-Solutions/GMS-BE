@@ -174,6 +174,9 @@ class ApiError extends ErrorClass {
   static userNotFound():ApiError{
     return new ApiError(HttpStatus.NOT_FOUND, ErrorMessage.NO_USERS_FOUND,"no user found");
   }
+  static reservationExits():ApiError{
+    return new ApiError(HttpStatus.BAD_REQUEST, ErrorMessage.RESERVATION_EXIST,"reservation exits");
+  }
 }
 
 export default ApiError;

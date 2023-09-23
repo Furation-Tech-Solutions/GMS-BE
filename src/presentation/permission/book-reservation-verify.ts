@@ -6,16 +6,16 @@ import { IncomingHttpHeaders } from "http";
 import { UserEntity } from "@domain/user-account/entities/user-account";
 
 
-export const checkPermission = (requiredPermission: number) => {
+export const checkPermission = (requiredPermission: string) => {
 return  async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const unAuthorized = ApiError.unAuthorized();
     try {
-
-      const { email }: any = req.cookies;
+      const unAuthorized = ApiError.unAuthorized();
+        
+      const email = req.cookies.email;
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: email });
 
       if (!permittedUser) {
@@ -24,7 +24,16 @@ return  async (
       }
 
       const isSuperuser = permittedUser.accessLevel === 'Superuser';
-      const hasRequiredPermission = (permittedUser.permissions as number[]).includes(requiredPermission);
+
+      let hasRequiredPermission = false;
+      
+      for (const permissionObj of permittedUser.permissions) {
+        const permissionCode = Object.keys(permissionObj)[0]; 
+        if (permissionCode == requiredPermission) {
+          hasRequiredPermission = true;
+          break;
+        }
+      }
 
       if (isSuperuser && hasRequiredPermission) {
         next();
@@ -75,6 +84,7 @@ return  async (
      
     } catch (error) { 
       const internalError = ApiError.internalError();
+      console.log(error,"error")
       res.status(internalError.status).json({ message: internalError.message });
     }
   }

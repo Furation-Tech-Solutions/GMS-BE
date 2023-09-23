@@ -6,7 +6,7 @@ export class AddReservationModel {
     public duration: string = "",
     public seatingArea: string | { id: string }  |  undefined = undefined,
     public timeSlot: string = "",
-    public client: string | { id: string } | undefined = undefined,
+    public client: string | undefined = undefined,
     // public source: string | undefined = undefined,
     public reservationTags: string[] = [],
     public reservationNote: string = "",
@@ -28,7 +28,7 @@ export class AddReservationEntity {
     public duration: string,
     public seatingArea: string | { id: string }  | undefined,
     public timeSlot: string,
-    public client: string | { id: any } | undefined,
+    public client: string | undefined,
     // public client: string | undefined,
     // public source: string | undefined,
     public reservationTags: string[],
@@ -82,7 +82,7 @@ export class AddReservationMapper {
         //     : existingReservation.client,
         client:
           reservationData.client !== undefined
-            ? { id: reservationData.client }
+            ? reservationData.client
             : existingReservation.client,
         // source:
         // reservationData.source !== undefined
@@ -141,7 +141,7 @@ export class AddReservationMapper {
         // client: reservationData.client,
         client:
           reservationData.client !== undefined
-            ? { id: reservationData.client }
+            ? reservationData.client
             : undefined,
         // // source: reservationData.source,
         reservationTags: reservationData.reservationTags,

@@ -23,8 +23,8 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       );
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
     } catch (error) {
-      if (error instanceof ApiError && error.name === "conflict") {
-        return Left<ErrorClass, AddReservationEntity>(ApiError.emailExist());
+      if (error instanceof ApiError ) {
+        return Left<ErrorClass, AddReservationEntity>(ApiError.reservationExits());
       }
       return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
     }
