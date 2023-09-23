@@ -3,9 +3,9 @@ import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
 
 const blackoutTypeValidation = Joi.object({
-    reservation: Joi.boolean().default(false),
-    guestList: Joi.boolean().default(false),
-  });
+  reservation: Joi.boolean().default(false),
+  guestList: Joi.boolean().default(false),
+});
 
 const blackoutDayValidator = function (input: any) {
   // Define the adminSchema for input validation
@@ -52,7 +52,7 @@ export const validateBlackoutInputMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
-) => { 
+) => {
   try {
     // Extract the request body
     const { body } = req;
@@ -62,14 +62,17 @@ export const validateBlackoutInputMiddleware = (
 
     // Continue to the next middleware or route handler
     next();
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return res.status(error.status).json(error.message);
-    }
+  } catch (error: any) {
+    // if (error instanceof ApiError) {
+    //   return res.status(error.status).json(error.message);
+    // }
 
     // Respond with the custom error
-    const err = ApiError.badRequest();
-    return res.status(err.status).json(err.message);
+    // const err = ApiError.badRequest();
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
   }
 };
 

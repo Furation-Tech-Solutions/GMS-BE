@@ -15,7 +15,7 @@ interface UserAccountInput {
     lastLogin?: string;
     lastPasswordReset?: string;
   };
-  isLogin?:boolean;
+  isLogin?: boolean;
   permissions?: [{ key: Number, value: String }];
   emailNotification?: [{ key: Number, value: String }];
   firebaseDeviceToken?: string;
@@ -61,7 +61,7 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastLogin: Joi.string().trim().allow("").optional(),
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
-    isLogin:Joi.boolean().default(false),
+    isLogin: Joi.boolean().default(false),
 
     permissions: Joi.array().optional(),
     // .items(Joi.object({
@@ -74,8 +74,8 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     //   "array.base": "Permissions must be an array of objects with 'key' (number) and 'value' (string)",
     //   "array.min": "At least one permission is required",
     // }),
-  emailNotification: Joi.array().optional(),
-  firebaseDeviceToken: Joi.string()
+    emailNotification: Joi.array().optional(),
+    firebaseDeviceToken: Joi.string()
     // .items(Joi.object({
     //   key: Joi.number(),
     //   value: Joi.string(),
@@ -83,7 +83,7 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     // .optional(),
 
 
-    
+
   });
 
   const { error, value } = schema.validate(input, {
@@ -113,14 +113,14 @@ export const validateUserAccountInputMiddleware = (isUpdate: boolean = false) =>
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(error.status).json(error.message);
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      return res.status(500).json({ error: error.message });
     }
   };
 };

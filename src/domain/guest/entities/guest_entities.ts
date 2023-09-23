@@ -8,7 +8,7 @@ export class GuestModel {
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: object = {},
+    public bookedBy: string | {id: string} = "",
     public status: string = "",
     public createdAt: string
   ) { }
@@ -27,7 +27,7 @@ export class GuestEntity {
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: object = {},
+    public bookedBy: | {id: string},
     public status: string = "",
     public createdAt: string
   ) { }
@@ -65,7 +65,7 @@ export class GuestMapper {
             : existingguest.confirmationMailSending,
         bookedBy:
           guestData.bookedBy !== undefined
-            ? guestData.bookedBy
+            ? {id: guestData.bookedBy}
             : existingguest.bookedBy,
         additionalGuest:
           guestData.aditionalGuest !== undefined
@@ -101,7 +101,7 @@ export class GuestMapper {
         email: guestData.email,
         confirmationMailSending:
           guestData.confirmationMailSending,
-        bookedBy: guestData.bookedBy,
+        bookedBy: {id: guestData.bookedBy},
         additionalGuest: guestData.additionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,

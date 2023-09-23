@@ -17,84 +17,84 @@ const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
   const tableSchema = Joi.object<TableInput>({
     tableNo: isUpdate
       ? Joi.number().min(1).integer().optional().messages({
-          "number.min": "Table number should be a positive integer",
-          "number.integer": "Table number should be a positive integer",
-        })
+        "number.min": "Table number should be a positive integer",
+        "number.integer": "Table number should be a positive integer",
+      })
       : Joi.number().min(1).integer().required().messages({
-          "number.base": "Table number must be a number",
-          "number.min": "Table number should be a positive integer",
-          "number.integer": "Table number should be a positive integer",
-          "any.required": "Table number is required",
-        }),
+        "number.base": "Table number must be a number",
+        "number.min": "Table number should be a positive integer",
+        "number.integer": "Table number should be a positive integer",
+        "any.required": "Table number is required",
+      }),
     partySizeMini: isUpdate
       ? Joi.number().min(1).integer().optional().messages({
-          "number.min": "Party size minimum should be a positive integer",
-          "number.integer": "Party size minimum should be a positive integer",
-        })
+        "number.min": "Party size minimum should be a positive integer",
+        "number.integer": "Party size minimum should be a positive integer",
+      })
       : Joi.number().min(1).integer().required().messages({
-          "number.base": "Party size minimum must be a number",
-          "number.min": "Party size minimum should be a positive integer",
-          "number.integer": "Party size minimum should be a positive integer",
-          "any.required": "Party size minimum is required",
-        }),
+        "number.base": "Party size minimum must be a number",
+        "number.min": "Party size minimum should be a positive integer",
+        "number.integer": "Party size minimum should be a positive integer",
+        "any.required": "Party size minimum is required",
+      }),
     partySizeMax: isUpdate
       ? Joi.number()
-          .min(Joi.ref("partySizeMini"))
-          .integer()
-          .optional()
-          .messages({
-            "number.min":
-              "Party size maximum should be greater than or equal to the minimum party size",
-            "number.integer": "Party size maximum should be a positive integer",
-          })
+        .min(Joi.ref("partySizeMini"))
+        .integer()
+        .optional()
+        .messages({
+          "number.min":
+            "Party size maximum should be greater than or equal to the minimum party size",
+          "number.integer": "Party size maximum should be a positive integer",
+        })
       : Joi.number()
-          .min(Joi.ref("partySizeMini"))
-          .integer()
-          .required()
-          .messages({
-            "number.base": "Party size maximum must be a number",
-            "number.min":
-              "Party size maximum should be greater than or equal to the minimum party size",
-            "number.integer": "Party size maximum should be a positive integer",
-            "any.required": "Party size maximum is required",
-          }),
+        .min(Joi.ref("partySizeMini"))
+        .integer()
+        .required()
+        .messages({
+          "number.base": "Party size maximum must be a number",
+          "number.min":
+            "Party size maximum should be greater than or equal to the minimum party size",
+          "number.integer": "Party size maximum should be a positive integer",
+          "any.required": "Party size maximum is required",
+        }),
     tableCombinations: isUpdate
       ? Joi.array()
-          .items(Joi.object({ mergeable_with: Joi.string().trim() }))
-          .optional()
-          .messages({
-            "array.base": "Table combinations must be an array of objects",
-          })
+        .items(Joi.object({ mergeable_with: Joi.string().trim() }))
+        .optional()
+        .messages({
+          "array.base": "Table combinations must be an array of objects",
+        })
       : Joi.array()
-          .items(Joi.object({ mergeable_with: Joi.string().trim() }))
-          .optional()
-          .messages({
-            "array.base": "Table combinations must be an array of objects",
-            "any.required": "Table combinations must be an array of objects",
-          }),
+        .items(Joi.object({ mergeable_with: Joi.string().trim() }))
+        .optional()
+        .messages({
+          "array.base": "Table combinations must be an array of objects",
+          "any.required": "Table combinations must be an array of objects",
+        }),
     seatingArea: isUpdate
       ? Joi.string().trim().optional().messages({
-          "string.empty": "Seating area ID is required",
-        })
+        "string.empty": "Seating area ID is required",
+      })
       : Joi.string().trim().required().messages({
-          "string.base": "Seating area ID must be a string",
-          "string.empty": "Seating area ID is required",
-          "any.required": "Seating area ID is required",
-        }),
+        "string.base": "Seating area ID must be a string",
+        "string.empty": "Seating area ID is required",
+        "any.required": "Seating area ID is required",
+      }),
     updatedBy: isUpdate
       ? Joi.string().trim().required().messages({
-          "any.required": "Please select the Updated By",
-        })
+        "any.required": "Please select the Updated By",
+      })
       : Joi.string().trim().optional().messages({
-          "any.required": "Please select the Update By",
-        }),
+        "any.required": "Please select the Update By",
+      }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Created By",
-        })
+        "any.required": "Please select the Created By",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Created By",
-        }),
+        "any.required": "Please select the Created By",
+      }),
   });
 
   const { error, value } = tableSchema.validate(input, {
@@ -126,14 +126,14 @@ export const validateTableInputMiddleware = (isUpdate: boolean = false) => {
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(error.status).json(error.message);
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      return res.status(500).json({ error: error.message });
     }
   };
 };
