@@ -12,12 +12,13 @@ return  async (
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const unAuthorized = ApiError.unAuthorized();
     try {
-
-      const { email }: any = req.cookies;
+      const unAuthorized = ApiError.unAuthorized();
+        
+      const email = req.cookies.email;
+      console.log(email,"email in validation",req.cookies)
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: email });
-
+      console.log(permittedUser,"permitted")
       if (!permittedUser) {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
         return;
@@ -75,6 +76,7 @@ return  async (
      
     } catch (error) { 
       const internalError = ApiError.internalError();
+      console.log(error,"error")
       res.status(internalError.status).json({ message: internalError.message });
     }
   }
