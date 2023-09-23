@@ -6,17 +6,20 @@ import { IncomingHttpHeaders } from "http";
 import { UserEntity } from "@domain/user-account/entities/user-account";
 
 
-export const checkPermission = (requiredPermission: number) => {
+export const checkPermission = (requiredPermission: string) => {
 return  async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const unAuthorized = ApiError.unAuthorized();
     try {
+      const unAuthorized = ApiError.unAuthorized();
+        
+      const email = req.cookies.email;
 
-      const { email }: any = req.cookies;
+      // console.log(email,"email in validation",req.cookies)
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: email });
+      // console.log(permittedUser,"permitted")
 
       if (!permittedUser) {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
@@ -24,9 +27,20 @@ return  async (
       }
 
       const isSuperuser = permittedUser.accessLevel === 'Superuser';
-      const hasRequiredPermission = (permittedUser.permissions as number[]).includes(requiredPermission);
-
+      let hasRequiredPermission=false
+      permittedUser.permissions.map((permission:any)=>{
+          //  console.log(permission,"permission in map");
+           for(let i in permission){
+            if(i==requiredPermission){
+              hasRequiredPermission=true
+            }
+            // console.log(permission[i],i,"inside for map loop");
+           }
+      })
+      
+     
       if (isSuperuser && hasRequiredPermission) {
+        // console.log("in if condtion ")
         next();
       } else {
         res.status(unAuthorized.status).json({ message: unAuthorized.message });
@@ -75,6 +89,7 @@ return  async (
      
     } catch (error) { 
       const internalError = ApiError.internalError();
+
       res.status(internalError.status).json({ message: internalError.message });
     }
   }
