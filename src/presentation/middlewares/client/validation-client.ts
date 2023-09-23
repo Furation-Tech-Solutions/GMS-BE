@@ -250,14 +250,17 @@ export const validateClientInputMiddleware = (isUpdate: boolean = false) => {
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(error.status).json(error.message);
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      res.status(500).json({
+        success: false,
+        message: error.message
+      })
     }
   };
 };

@@ -50,6 +50,7 @@ export class AdminService {
     );
   }
 
+
   async deleteAdmin(req: Request, res: Response): Promise<void> {
     const adminId: string = req.params.adminId;
 
@@ -65,6 +66,7 @@ export class AdminService {
       }
     );
   }
+
 
   async getAdminById(req: Request, res: Response): Promise<void> {
     console.log(req.user);
@@ -83,6 +85,8 @@ export class AdminService {
       }
     );
   }
+
+
   async updateAdmin(req: Request, res: Response): Promise<void> {
     const adminId: string = req.params.adminId;
     const adminData: AdminModel = req.body;

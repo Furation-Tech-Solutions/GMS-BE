@@ -9,7 +9,6 @@ export class PermissionManager {
   };
 
   static allPermissionCodes: number[] = [];
-
   // Flatten the permission codes during initialization
   static initializePermissionCodes() {
     this.allPermissionCodes = Object.values(this.permissions)
@@ -23,3 +22,4 @@ export class PermissionManager {
     return userPermissions.includes(permissionCode);
   }
 }
+

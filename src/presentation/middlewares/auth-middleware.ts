@@ -2,6 +2,7 @@ import admin from "@main/config/firebase-sdk/firebase-config";
 import { Admin } from "@data/admin/models/admin-model";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
+import { UserAccount } from "@data/user-account/models/user-account-model";
 
 /*
   Middleware to verify Firebase token and set user in the request object
@@ -38,7 +39,7 @@ const verifyFirebaseToken = async (
       // Find the user in the database using the decoded email
 
       const user = await Admin.findOne({ email: email });
-
+ 
       req.user = user; // Set the user in the request objec
     } else {
       const unAuthorized = ApiError.unAuthorized();
@@ -60,13 +61,22 @@ const authorziedUser: RequestHandler = async (
   const id = req.params.adminId;
   if (id) {
     const user = await Admin.findById(id);
-    req.user = user;
+    const superUser = await UserAccount.findById(id);
+    
+    if (user || superUser) {
+      const mergedUser = {
+        admin: user,
+        userAccount: superUser
+      };
+
+      req.user = mergedUser;
     next();
   } else {
     const err = ApiError.notFound();
     return res.status(err.status).json(err.message);
   }
 };
+}
 
 /*
   Middleware to verify token and authorization for superadmin

@@ -2,9 +2,11 @@
 export class ClientTagModel {
   constructor(
     public name: string = "",
-    public categoryNameId: string = "",
+    public categoryNameId: string | {id: string}  = "",
+    public updatedBy: string | {id: string} | undefined = undefined,
+    public createdBy: string | {id: string} | undefined = undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 // client TagEntity provided by client Tag Repository is converted to Express API Response
@@ -12,13 +14,15 @@ export class ClientTagEntity {
   constructor(
     public id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
-    public categoryNameId: string = "",
+    public categoryNameId: string | {id: string}  = "",
+    public updatedBy: string | {id: string} | undefined,
+    public createdBy: string | {id: string} | undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 /* ================================================= */
-export class ClientTagMapper {
+export class  ClientTagMapper {
   static toEntity(
     clientTagData: any,
     includeId?: boolean,
@@ -27,15 +31,38 @@ export class ClientTagMapper {
     if (existingClientTag != null) {
       return {
         ...existingClientTag,
-        name: clientTagData.name !== undefined ? clientTagData.name : existingClientTag.name,
-        categoryNameId: clientTagData.categoryNameId !== undefined ? clientTagData.categoryNameId : existingClientTag.categoryNameId,
-        createdAt: clientTagData.createdAt !== undefined ? clientTagData.createdAt : existingClientTag.createdAt,
+        name:
+          clientTagData.name !== undefined
+            ? clientTagData.name
+            : existingClientTag.name,
+        categoryNameId:
+          clientTagData.categoryNameId !== undefined
+            ? {id: clientTagData.categoryNameId}
+            : existingClientTag.categoryNameId,
+        updatedBy:
+          clientTagData.updatedBy !== undefined
+            ? {id:clientTagData.updatedBy}
+            : existingClientTag.updatedBy,
+        createdBy:
+          clientTagData.createdBy !== undefined
+            ? {id: clientTagData.createdBy}
+            : existingClientTag.createdBy,
+        createdAt:
+          clientTagData.createdAt !== undefined
+            ? clientTagData.createdAt
+            : existingClientTag.createdAt,
       };
     } else {
       const ClientTagEntity: ClientTagEntity = {
-        id: includeId ? (clientTagData._id ? clientTagData._id.toString() : undefined) : clientTagData._id.toString(),
+        id: includeId
+          ? clientTagData._id
+            ? clientTagData._id.toString()
+            : undefined
+          : clientTagData._id.toString(),
         name: clientTagData.name,
-        categoryNameId: clientTagData.categoryNameId,
+        categoryNameId: {id: clientTagData.categoryNameId},
+        updatedBy: {id: clientTagData.updatedBy},
+        createdBy: {id: clientTagData.createdBy},
         createdAt: clientTagData.createdAt,
       };
       return clientTagData;
@@ -46,6 +73,8 @@ export class ClientTagMapper {
     return {
       name: clientTag.name,
       categoryNameId: clientTag.categoryNameId,
+      updatedBy: clientTag.updatedBy,
+      createdBy: clientTag.createdBy,
       createdAt: clientTag.createdAt,
     };
   }
