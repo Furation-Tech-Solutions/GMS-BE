@@ -164,7 +164,7 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
                 return res.json({ message: "Data Not Found" });
             }
             const resData = UserMapper.toEntity(result);
-            return res.json(resData);
+            return res.cookie('email', resData.email).json(resData);
         }
     );
 
