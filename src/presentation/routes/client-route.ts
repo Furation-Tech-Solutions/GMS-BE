@@ -9,6 +9,7 @@ import { GetClientById } from "@domain/client/usecases/get-clients-by-id"; // Im
 import { UpdateClient } from "@domain/client/usecases/update-client"; // Import the UpdateClient use case
 import { DeleteClient } from "@domain/client/usecases/delete-client"; // Import the DeleteClient use case
 import { validateClientInputMiddleware } from "@presentation/middlewares/client/validation-client"; // Import the DeleteClient use case
+// import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
 // Create an instance of the ClientDataSourceImpl and pass the mongoose connection
@@ -52,11 +53,14 @@ clientRouter.delete(
 // Route handling for getting a client by ID
 clientRouter.get(
     "/:clientId",
+    // checkPermission("1102"),
     clientService.getClientById.bind(clientService)
 );
 
 // Route handling for getting all clients
-clientRouter.get("/", clientService.getAllClients.bind(clientService));
+clientRouter.get("/", 
+// checkPermission("1102"),
+clientService.getAllClients.bind(clientService));
 
 // Route handling for updating a client by ID
 clientRouter.put(

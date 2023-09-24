@@ -9,6 +9,7 @@ import { DeleteBlackouDay } from "@domain/availibility/usecases/black-out-day/de
 import { GetBlackouDayById } from "@domain/availibility/usecases/black-out-day/get-by-id-usecase";
 import { UpdateBlackouDay } from "@domain/availibility/usecases/black-out-day/update-usecase";
 import { GetAllBlackouDay } from "@domain/availibility/usecases/black-out-day/getall-usecase";
+// import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
 
@@ -39,16 +40,22 @@ const blackoutDayService = new BlackoutDayService(
 export const blackoutDayRouter = Router();
 
 // Route handling for creating a new blackoutDay
-blackoutDayRouter.post("/create", blackoutDayService.createBlackouDay.bind(blackoutDayService));
+blackoutDayRouter.post("/create", 
+// checkPermission("1103"),
+blackoutDayService.createBlackouDay.bind(blackoutDayService));
 
 // Route handling for updating an blackoutDay by ID
-blackoutDayRouter.put("/update/:blackoutId",blackoutDayService.updateBlackouDay.bind(blackoutDayService));
+blackoutDayRouter.put("/update/:blackoutId",
+// checkPermission("1103"),
+blackoutDayService.updateBlackouDay.bind(blackoutDayService));
 
 // Route handling for getting an blackoutDay by ID
 blackoutDayRouter.get("/getbyid/:blackoutId",blackoutDayService.getBlackouDayById.bind(blackoutDayService));
 
 // Route handling for deleting an blackoutDay by ID
-blackoutDayRouter.delete("/delete/:blackoutId", blackoutDayService.deleteBlackouDay.bind(blackoutDayService));
+blackoutDayRouter.delete("/delete/:blackoutId",
+// checkPermission("1103"),
+blackoutDayService.deleteBlackouDay.bind(blackoutDayService));
 
 // Route handling for getting all blackoutDays
 blackoutDayRouter.get("/getAll", blackoutDayService.getAllBlackouDay.bind(blackoutDayService));
