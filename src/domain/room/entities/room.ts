@@ -10,7 +10,7 @@ export class RoomModel {
 // Room Entity provided by Outlet Repository is converted to Express API Response
 export class RoomEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public abbreviation: string,
     public roomName: string,
     public listOrder: number
@@ -41,7 +41,7 @@ export class RoomMapper {
       };
     } else {
       const roomEntity: RoomEntity = {
-        id: includeId
+        _id: includeId
           ? roomData._id
             ? roomData._id.toString()
             : undefined

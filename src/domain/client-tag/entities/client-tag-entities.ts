@@ -10,7 +10,7 @@ export class ClientTagModel {
 // client TagEntity provided by client Tag Repository is converted to Express API Response
 export class ClientTagEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public categoryNameId: string = "",
     public createdAt: Date
@@ -33,7 +33,7 @@ export class ClientTagMapper {
       };
     } else {
       const ClientTagEntity: ClientTagEntity = {
-        id: includeId ? (clientTagData._id ? clientTagData._id.toString() : undefined) : clientTagData._id.toString(),
+        _id: includeId ? (clientTagData._id ? clientTagData._id.toString() : undefined) : clientTagData._id.toString(),
         name: clientTagData.name,
         categoryNameId: clientTagData.categoryNameId,
         createdAt: clientTagData.createdAt,

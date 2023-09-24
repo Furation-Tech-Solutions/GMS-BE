@@ -29,7 +29,7 @@ export class ClientModel {
 // Client Entity provided by Client Repository is converted to Express API Response
 export class ClientEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public firstName: string = "",
     public lastName: string = "",
     public salutation: string = "",
@@ -92,7 +92,7 @@ export class ClientMapper {
       };
     } else {
       const clientEntity: ClientEntity = {
-        id: includeId ? (clientData._id ? clientData._id.toString() : undefined) : clientData._id.toString(),
+        _id: includeId ? (clientData._id ? clientData._id.toString() : undefined) : clientData._id.toString(),
         firstName: clientData.firstName,
         lastName: clientData.lastName,
         salutation: clientData.salutation,

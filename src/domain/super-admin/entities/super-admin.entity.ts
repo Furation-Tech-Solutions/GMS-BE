@@ -13,7 +13,7 @@ export class SuperAdminModel {
 
 export class SuperAdminEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public name: string,
     public email: string,
     public phone: number,
@@ -50,7 +50,7 @@ export class SuperAdminMapper {
       };
     } else {
       const superAdminEntity: SuperAdminEntity = {
-        id: includeId
+        _id: includeId
           ? superAdminData._id
             ? superAdminData._id.toString()
             : undefined

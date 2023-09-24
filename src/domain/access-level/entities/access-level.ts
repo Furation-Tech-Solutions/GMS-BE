@@ -10,7 +10,7 @@ export class AccessLevelModel{
 
 export class AccessLevelEntity{
     constructor(
-        public id: string | undefined = undefined,
+        public _id: string | undefined = undefined,
         public role:string,
         public permissions: any ,
         public additional_options:any,
@@ -45,7 +45,7 @@ export class AccessLevelMapper {
               }
             }else{
                 const accessLevelEntity: AccessLevelEntity = {
-                    id: includeId
+                    _id: includeId
                       ? accessLevelData._id
                         ? accessLevelData._id.toString()
                         : undefined

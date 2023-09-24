@@ -12,7 +12,7 @@ export class TableModel {
 // Table Entity
 export class TableEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public tableNo: number,
     public partySizeMini: number,
     public partySizeMax: number,
@@ -54,7 +54,7 @@ export class TableMapper {
       };
     } else {
       const tableEntity: TableEntity = {
-        id: includeId
+        _id: includeId
           ? tableData._id
             ? tableData._id.toString()
             : undefined

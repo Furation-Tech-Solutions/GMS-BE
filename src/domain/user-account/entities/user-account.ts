@@ -28,7 +28,7 @@ export class UserModel {
   // Admin Entity provided by Admin Repository is converted to Express API Response
   export class UserEntity {
     constructor(
-      public id: string | undefined = undefined,
+      public _id: string | undefined = undefined,
       public firstName: string,
       public lastName: string,
       public email: string ,
@@ -102,7 +102,7 @@ export class UserModel {
       };
     } else {
       const userEntity: UserEntity= {
-        id: includeId
+        _id: includeId
           ? userData._id
             ? userData._id.toString()
             : undefined

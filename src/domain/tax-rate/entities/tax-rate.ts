@@ -8,7 +8,7 @@ export class TaxRateModel{
 
 export class TaxRateEntity{
     constructor(
-        public id: string | undefined = undefined,
+        public _id: string | undefined = undefined,
         public type:string ,
         public percentage: number 
     ){}
@@ -32,7 +32,7 @@ export class TaxRateMapper{
             }
             else {
                 const taxRateEntity:TaxRateEntity ={
-                    id:includeId
+                    _id:includeId
                     ?taxRate._id
                      ?taxRate._id.toString()
                      :undefined

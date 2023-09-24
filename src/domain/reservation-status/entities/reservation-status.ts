@@ -13,7 +13,7 @@ export class ReservationStatusModel {
 // ReservationStatus Entity provided by ReservationStatus Repository is converted to Express API Response
 export class ReservationStatusEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public statusName: string,
     public iconInitials: string,
     public color: string,
@@ -59,7 +59,7 @@ export class ReservationStatusMapper {
       };
     } else {
       const reservationStatusEntity: ReservationStatusEntity = {
-        id: includeId
+        _id: includeId
           ? reservationStatusData._id
             ? reservationStatusData._id.toString()
             : undefined
