@@ -3,7 +3,9 @@ export class SeatingAreaModel {
   constructor(
     public abbreviation: string = "",
     public seatingAreaName: string = "",
-    public listOrder: number = 0
+    public listOrder: number = 0,
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined
   ) {}
 }
 
@@ -13,7 +15,9 @@ export class SeatingAreaEntity {
     public _id: string | undefined = undefined,
     public abbreviation: string,
     public seatingAreaName: string,
-    public listOrder: number
+    public listOrder: number,
+    public updatedBy: string | undefined ,
+    public createdBy: string | undefined 
   ) {}
 }
 
@@ -38,6 +42,14 @@ export class SeatingAreaMapper {
           seatingAreaData.listOrder !== undefined
             ? seatingAreaData.listOrder
             : existingSeatingArea.listOrder,
+        createdBy:
+          seatingAreaData.createdBy !== undefined
+            ? seatingAreaData.createdBy
+            : existingSeatingArea.createdBy,
+        updatedBy:
+          seatingAreaData.updatedBy !== undefined
+            ? seatingAreaData.updatedBy
+            : existingSeatingArea.updatedBy,
       };
     } else {
       const seatingAreaEntity: SeatingAreaEntity = {
@@ -49,6 +61,8 @@ export class SeatingAreaMapper {
         abbreviation: seatingAreaData.abbreviation,
         seatingAreaName: seatingAreaData.seatingAreaName,
         listOrder: seatingAreaData.listOrder,
+        updatedBy: seatingAreaData.updatedBy,
+        createdBy: seatingAreaData.createdBy,
       };
       return seatingAreaEntity;
     }
@@ -59,6 +73,8 @@ export class SeatingAreaMapper {
       abbreviation: seatingArea.abbreviation,
       seatingAreaName: seatingArea.seatingAreaName,
       listOrder: seatingArea.listOrder,
+      createdBy: seatingArea.updatedBy,
+      updatedBy: seatingArea.createdBy,
     };
   }
 }

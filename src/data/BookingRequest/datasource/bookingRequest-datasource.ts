@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { BookingRequestModel } from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import the BookingRequestModel
 import { BookingRequest } from "../models/bookingRequest-model";
 import ApiError from "@presentation/error-handling/api-error";
+import EmailService from "@presentation/services/send-mail";
 
 // Create BookingRequestDataSource Interface
 export interface BookingRequestDataSource {
@@ -18,6 +19,17 @@ export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
     async create(bookingRequest: BookingRequestModel): Promise<any> {
         const bookingRequestData = new BookingRequest(bookingRequest);
         const createdBookingRequest = await bookingRequestData.save();
+        // const emailService = new EmailService();
+
+        // try {
+        //     await emailService.sendEmail({
+        //         email: bookingRequest.email,
+        //         subject: "Thank you For your Booking Request!",
+        //         message: "Thank you For your Booking Request",
+        //     });
+        // } catch (error) {
+        //     throw ApiError.badRequest();
+        // }
         return createdBookingRequest.toObject();
     }
     async delete(id: string): Promise<void> {
@@ -55,3 +67,5 @@ export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
         }
     }
 }
+
+

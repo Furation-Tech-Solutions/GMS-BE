@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const taxRateSchema=new mongoose.Schema({
    type:{
     type:String,
-    default:true
+    required:true
    },
    percentage:{
     type:Number,
-    default:true
+    required:true
    }
    
 })

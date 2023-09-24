@@ -1,20 +1,22 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 
 interface ReservationInput {
   date: string;
+  noOfGuests: string;
   shift: string;
   duration: string;
   seatingArea: string;
   timeSlot: string;
   client: string;
-  resevationTags: string[];
+  reservationTags: string[];
   reservationNote: string;
   table: string;
   bookedBy: string;
   perks: string;
+  updatedBy: string;
+  createdBy: string;
   confirmationMailSending: boolean;
   createdAt: Date;
 }
@@ -26,57 +28,78 @@ const reservationValidator = (
   const baseSchema = {
     date: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Date",
-        })
+        "any.required": "Please select the Date",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Date",
-        }),
+        "any.required": "Please select the Date",
+      }),
+    noOfGuests: isUpdate
+      ? Joi.number().optional().messages({
+        "any.required": "Please select the Number of Guests",
+      })
+      : Joi.number().required().default(1).messages({
+        "any.required": "Please select the Number of Guests",
+      }),
     shift: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Shift",
-        })
+        "any.required": "Please select the Shift",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Shift",
-        }),
+        "any.required": "Please select the Shift",
+      }),
     duration: Joi.string().trim().default("2 hr"),
     seatingArea: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Seating Area",
-        })
+        "any.required": "Please select the Seating Area",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Seating Area",
-        }),
+        "any.required": "Please select the Seating Area",
+      }),
     timeSlot: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Time Slot",
-        })
+        "any.required": "Please select the Time Slot",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Time Slot",
-        }),
+        "any.required": "Please select the Time Slot",
+      }),
     client: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Client",
-        })
+        "any.required": "Please select the Client",
+      })
       : Joi.string().trim().required().messages({
           "any.required": "Please select the Client",
         }),
-    resevationTags: Joi.array().items(Joi.string().trim()),
+    reservationTags: Joi.array().items(Joi.string().trim()),
     reservationNote: Joi.string().max(2000).min(1).trim().messages({
       "string.max": "Reservation note should have less than 2000 characters",
       "string.min": "Reservation note should have more than 1 character",
     }),
     table: isUpdate
       ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Table",
-        })
+        "any.required": "Please select the Table",
+      })
       : Joi.string().trim().required().messages({
-          "any.required": "Please select the Table",
-        }),
+        "any.required": "Please select the Table",
+      }),
     bookedBy: Joi.string().trim(),
     perks: Joi.string().max(2000).min(5).trim().messages({
       "string.max": "Perks should have less than 2000 characters",
       "string.min": "Perks should have at least 5 characters",
     }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+        "any.required": "Please select the Updated By",
+      })
+      : Joi.string().trim().optional().messages({
+        "any.required": "Please select the Update By",
+      }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+        "any.required": "Please select the Created By",
+      })
+      : Joi.string().trim().required().messages({
+        "any.required": "Please select the Created By",
+      }),
     confirmationMailSending: Joi.boolean().default(false),
   };
 
@@ -114,14 +137,14 @@ export const validateReservationInputMiddleware = (
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(500).json({ error: error.message });
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      return res.status(500).json({ error: error.message });
     }
   };
 };

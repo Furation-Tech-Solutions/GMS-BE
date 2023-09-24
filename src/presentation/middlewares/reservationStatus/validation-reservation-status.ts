@@ -10,6 +10,8 @@ interface ReservationStatusInput {
   classification: string;
   active: boolean;
   durationHolds?: number;
+  updatedBy: string;
+  createdBy: string;
 }
 
 // Validator function that can handle both create and update
@@ -79,6 +81,20 @@ const reservationStatusValidator = (
       : Joi.number().optional().messages({
           "number.base": "Duration in holds must be a number",
         }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().required().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().required().messages({
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = reservationStatusSchema.validate(input, {
@@ -116,14 +132,14 @@ export const validateReservationStatusInputMiddleware = (
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error: any) {
+      // if (error instanceof ApiError) {
+      //   return res.status(error.status).json(error.message);
+      // }
 
       // Respond with the custom error
-      const err = ApiError.badRequest();
-      return res.status(err.status).json(err.message);
+      // const err = ApiError.badRequest();
+      return res.status(500).json({ error: error.message });
     }
   };
 };

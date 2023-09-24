@@ -2,6 +2,17 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
+const bookedByData = new mongoose.Schema({
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    }
+}, { _id: false });
+
 const guestSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -26,38 +37,29 @@ const guestSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
     },
-    phone: {
-        type: String,
-        maxLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        minLength: [
-            10,
-            "Phone Number should have 10 charcters included country code",
-        ],
-        required: [true, "please enter  Phone Number"],
-        trim: true,
-    },
     confirmationMailSending: {
         type: Boolean,
         default: false,
     },
     bookedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserAccount",
-        required: [true, "Please enter user_id"],
+        type: String,
+        required: true
     },
+    // bookedBy: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "UserAccount",
+    //     required: [true, "Please enter user_id"],
+    // },
     additionalGuest: {
         type: [String],
     },
     reservationTags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "ReservationTagCategory"
+        type: [String],
     },
     status: {
         type: String,
-        enum: ["checked In", "checked Out", "-"],
+        enum: ["Checked In", "Checked Out", "No Status"],
+        default: "No Status",
     },
     notes: {
         type: String,
@@ -77,3 +79,4 @@ const guestSchema = new mongoose.Schema({
 });
 
 export const Guest = mongoose.model("Guest", guestSchema);
+

@@ -4,12 +4,11 @@ export class GuestModel {
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public phone: string = "",
     public confirmationMailSending: boolean,
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: string = "",
+    public bookedBy: string | { _id: string } = "",
     public status: string = "",
     public createdAt: string
   ) { }
@@ -24,12 +23,11 @@ export class GuestEntity {
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public phone: string = "",
     public confirmationMailSending: boolean,
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: string = "",
+    public bookedBy: string | { _id: string },
     public status: string = "",
     public createdAt: string
   ) { }
@@ -61,19 +59,15 @@ export class GuestMapper {
           guestData.email !== undefined
             ? guestData.email
             : existingguest.email,
-        phone:
-          guestData.phone !== undefined
-            ? guestData.phone
-            : existingguest.phone,
         confirmationMailSending:
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
             : existingguest.confirmationMailSending,
         bookedBy:
           guestData.bookedBy !== undefined
-            ? guestData.bookedBy
+            ? { _id: guestData.bookedBy }
             : existingguest.bookedBy,
-            additionalGuest:
+        additionalGuest:
           guestData.aditionalGuest !== undefined
             ? guestData.additionalGuest
             : existingguest.additionalGuest,
@@ -105,10 +99,9 @@ export class GuestMapper {
         firstName: guestData.firstName,
         lastName: guestData.lastName,
         email: guestData.email,
-        phone: guestData.phone,
         confirmationMailSending:
           guestData.confirmationMailSending,
-        bookedBy: guestData.bookedBy,
+        bookedBy: { _id: guestData.bookedBy },
         additionalGuest: guestData.additionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
@@ -124,7 +117,6 @@ export class GuestMapper {
       firstName: guest.firstName,
       lastName: guest.lastName,
       email: guest.email,
-      phone: guest.phone,
       confirmationMailSending: guest.confirmationMailSending,
       bookedBy: guest.bookedBy,
       additionalGuest: guest.additionalGuest,

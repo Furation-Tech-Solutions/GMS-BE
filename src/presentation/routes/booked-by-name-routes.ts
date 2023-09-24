@@ -5,10 +5,10 @@ import { DeleteBookedByName } from "@domain/booked-by-name/usecase/delete-booked
 import { GetAllBookedByName } from "@domain/booked-by-name/usecase/get-all-booked-by-name";
 import { GetNameById } from "@domain/booked-by-name/usecase/get-booked-by-name-by-id";
 import { UpdateBookedByName } from "@domain/booked-by-name/usecase/update-booked-by-name";
+import { validateBookedByNameInputMiddleware } from "@presentation/middlewares/book-by-name/book-by-name-validation";
 import { BookedByNameService } from "@presentation/services/booked-by-name-services";
 import { Router } from "express"; // Correctly import Request and Response
 import mongoose from "mongoose";
-
 
 const mongooseConnection = mongoose.connection;
 // Create an instance of the OutletDataSourceImpl and pass the mongoose connection
@@ -19,12 +19,11 @@ const peopleRepository = new BookedByNameRepositoryImpl(peopleDataSource);
 
 // Create instances of the required use cases and pass the OutletRepositoryImpl
 
-const createBookedByNameUseCase = new CreateBookedByName(peopleRepository)
+const createBookedByNameUseCase = new CreateBookedByName(peopleRepository);
 const getPeopleBookedByNameUseCase = new GetAllBookedByName(peopleRepository);
-const getNameByIdUseCase=new GetNameById(peopleRepository)
-const updateBookedByNameUseCase=new UpdateBookedByName(peopleRepository)
-const deleteBookedByNameUseCase=new DeleteBookedByName(peopleRepository)
-
+const getNameByIdUseCase = new GetNameById(peopleRepository);
+const updateBookedByNameUseCase = new UpdateBookedByName(peopleRepository);
+const deleteBookedByNameUseCase = new DeleteBookedByName(peopleRepository);
 
 const bookedByNameService = new BookedByNameService(
   createBookedByNameUseCase,
@@ -34,23 +33,26 @@ const bookedByNameService = new BookedByNameService(
   deleteBookedByNameUseCase
 );
 
-export const bookedByNameRouter=Router()
-
+export const bookedByNameRouter = Router();
 
 bookedByNameRouter.post(
-    "/addName",bookedByNameService.createBookedByName.bind(bookedByNameService)
-)
+  "/addName",
+  validateBookedByNameInputMiddleware(false),
+  bookedByNameService.createBookedByName.bind(bookedByNameService)
+);
+
 bookedByNameRouter.get(
-  "/getName",bookedByNameService.getAllBookedByName.bind(bookedByNameService)
-)
+  "/getName",
+  bookedByNameService.getAllBookedByName.bind(bookedByNameService)
+);
 
- bookedByNameRouter.patch(
-     "/update/:nameId",bookedByNameService.updateName.bind(bookedByNameService)
-      )
+bookedByNameRouter.patch(
+  "/update/:nameId",
+  validateBookedByNameInputMiddleware(true),
+  bookedByNameService.updateName.bind(bookedByNameService)
+);
 
- bookedByNameRouter.delete(
-       "/delete/:nameId",
-       bookedByNameService.deleteBookedByName.bind(bookedByNameService)
-     );
-
-
+bookedByNameRouter.delete(
+  "/delete/:nameId",
+  bookedByNameService.deleteBookedByName.bind(bookedByNameService)
+);

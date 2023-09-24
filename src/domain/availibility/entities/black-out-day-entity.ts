@@ -17,7 +17,7 @@ export class BlackoutDayModel {
 
   export class BlackoutDayEntity {
     constructor(
-      public id: string | undefined = undefined,
+      public _id: string | undefined = undefined,
       public date: string,
       public day: string,
       public description: string,
@@ -61,11 +61,11 @@ export class BlackoutDayModel {
         };
       } else {
         const blackoutDayEntity: BlackoutDayEntity = {
-          id: includeId
+          _id: includeId
             ? blackoutData._id
               ? blackoutData._id.toString()
               : undefined
-            : undefined,
+            :  blackoutData._id.toString(),
           date: blackoutData.date,
           day: blackoutData.day,
           description: blackoutData.description,

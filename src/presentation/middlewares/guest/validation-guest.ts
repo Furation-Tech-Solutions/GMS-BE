@@ -7,7 +7,6 @@ interface GuestInput {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
     confirmationMailSending: boolean;
     bookedBy: mongoose.Schema.Types.ObjectId;
     additionalGuest?: string[];
@@ -49,28 +48,6 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
                 "string.email": "Invalid email format",
                 "any.required": "Email is required",
             }),
-
-        phone: isUpdate
-            ? Joi.string()
-                .length(10)
-                .pattern(/^[0-9]+$/)
-                .optional()
-                .trim()
-                .messages({
-                    "string.length": "Phone number should have exactly 10 digits",
-                    "string.pattern.base": "Phone number should contain only digits"
-                })
-            : Joi.string()
-                .length(10)
-                .pattern(/^[0-9]+$/)
-                .required()
-                .trim()
-                .messages({
-                    "string.length": "Phone number should have exactly 10 digits",
-                    "string.pattern.base": "Phone number should contain only digits",
-                    "any.required": "Phone number is required",
-                }),
-
         confirmationMailSending: isUpdate
             ? Joi.boolean().optional().messages({
                 "any.required": "Confirmation mail sending status is required",
@@ -80,13 +57,13 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
             }),
 
         bookedBy: isUpdate
-            ? Joi.string().trim().optional().messages({
-                "string.base": "Booking user ID must be a string",
-                "string.empty": "Booking user ID is required",
+            ? Joi.object().optional().messages({
+                "object.base": "Booking user ID must be a string",
+                "object.empty": "Booking user ID is required",
             })
-            : Joi.string().trim().required().messages({
-                "string.base": "Booking user ID must be a string",
-                "string.empty": "Booking user ID is required",
+            : Joi.object().required().messages({
+                "object.base": "Booking user ID must be a string",
+                "object.empty": "Booking user ID is required",
                 "any.required": "Booking user ID is required",
             }),
 
@@ -184,14 +161,17 @@ export const validateGuestInputMiddleware = (isUpdate: boolean = false) => {
 
             // Continue to the next middleware or route handler
             next();
-        } catch (error) {
-            if (error instanceof ApiError) {
-                return res.status(error.status).json(error.message);
-            }
+        } catch (error: any) {
+            // if (error instanceof ApiError) {
+            //     return res.status(error.status).json(error.message);
+            // }
 
             // Respond with the custom error
-            const err = ApiError.badRequest();
-            return res.status(err.status).json(err.message);
+            // const err = ApiError.badRequest();
+            res.status(500).json({
+                success: false,
+                message: error.message
+            })
         }
     };
 };

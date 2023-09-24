@@ -40,7 +40,7 @@ export class ShiftModel implements IShift {
 
   export class ShiftEntity {
     constructor(
-      public id: string | undefined = undefined,
+      public _id: string | undefined = undefined,
       public shiftName: string,
       public shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night',
       public startDate: string,
@@ -184,11 +184,11 @@ export class ShiftMapper {
       };
     } else {
       const shiftEntity: ShiftEntity = {
-        id: includeId
+        _id: includeId
           ? shiftData._id
             ? shiftData._id.toString()
             : undefined
-          : undefined,
+          : shiftData._id.toString(),
         shiftName: shiftData.shiftName,
         shiftCategory: shiftData.shiftCategory,
         startDate: shiftData.startDate,

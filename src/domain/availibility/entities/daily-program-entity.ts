@@ -19,7 +19,7 @@ export class ProgramScheduleModel {
 
   export class ProgramScheduleEntity {
     constructor(
-      public id: string | undefined = undefined,
+      public _id: string | undefined = undefined,
       public title: string,
       public startDate: Date,
       public endDate: Date | null,
@@ -96,11 +96,11 @@ export class ProgramScheduleModel {
         };
       } else {
         const programScheduleEntity: ProgramScheduleEntity = {
-          id: includeId
+          _id: includeId
             ? programScheduleData._id
               ? programScheduleData._id.toString()
               : undefined
-            : undefined,
+            : programScheduleData._id.toString(),
           title: programScheduleData.title,
           startDate: programScheduleData.startDate,
           endDate: programScheduleData.endDate,

@@ -8,6 +8,8 @@ export class ClientTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
   ) { }
 }
@@ -23,6 +25,8 @@ export class ClientTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
   ) { }
 }
@@ -37,18 +41,54 @@ export class ClientTagCategoryMapper {
     if (existingClientTagCategory != null) {
       return {
         ...existingClientTagCategory,
-        name: clientTagCategoryData.name !== undefined ? clientTagCategoryData.name : existingClientTagCategory.name,
-        color: clientTagCategoryData.color !== undefined ? clientTagCategoryData.color : existingClientTagCategory.color,
-        classification: clientTagCategoryData.classification !== undefined ? clientTagCategoryData.classification : existingClientTagCategory.classification,
-        vip: clientTagCategoryData.vip !== undefined ? clientTagCategoryData.vip : existingClientTagCategory.vip,
-        display: clientTagCategoryData.display !== undefined ? clientTagCategoryData.display : existingClientTagCategory.display,
-        followers: clientTagCategoryData.followers !== undefined ? clientTagCategoryData.followers : existingClientTagCategory.followers,
-        tags: clientTagCategoryData.tags !== undefined ? clientTagCategoryData.tags : existingClientTagCategory.tags,
-        createdAt: clientTagCategoryData.createdAt !== undefined ? clientTagCategoryData.createdAt : existingClientTagCategory.createdAt,
+        name:
+          clientTagCategoryData.name !== undefined
+            ? clientTagCategoryData.name
+            : existingClientTagCategory.name,
+        color:
+          clientTagCategoryData.color !== undefined
+            ? clientTagCategoryData.color
+            : existingClientTagCategory.color,
+        classification:
+          clientTagCategoryData.classification !== undefined
+            ? clientTagCategoryData.classification
+            : existingClientTagCategory.classification,
+        vip:
+          clientTagCategoryData.vip !== undefined
+            ? clientTagCategoryData.vip
+            : existingClientTagCategory.vip,
+        display:
+          clientTagCategoryData.display !== undefined
+            ? clientTagCategoryData.display
+            : existingClientTagCategory.display,
+        followers:
+          clientTagCategoryData.followers !== undefined
+            ? clientTagCategoryData.followers
+            : existingClientTagCategory.followers,
+        tags:
+          clientTagCategoryData.tags !== undefined
+            ? clientTagCategoryData.tags
+            : existingClientTagCategory.tags,
+        updatedBy:
+          clientTagCategoryData.updatedBy !== undefined
+            ? clientTagCategoryData.updatedBy
+            : existingClientTagCategory.updatedBy,
+        createdBy:
+          clientTagCategoryData.createdBy !== undefined
+            ? clientTagCategoryData.createdBy
+            : existingClientTagCategory.createdBy,
+        createdAt:
+          clientTagCategoryData.createdAt !== undefined
+            ? clientTagCategoryData.createdAt
+            : existingClientTagCategory.createdAt,
       };
     } else {
       const clientTagCategoryEntity: ClientTagCategoryEntity = {
-        _id: includeId ? (clientTagCategoryData._id ? clientTagCategoryData._id.toString() : undefined) : clientTagCategoryData._id.toString(),
+        _id: includeId
+          ? clientTagCategoryData._id
+            ? clientTagCategoryData._id.toString()
+            : undefined
+          : clientTagCategoryData._id.toString(),
         name: clientTagCategoryData.name,
         color: clientTagCategoryData.color,
         classification: clientTagCategoryData.classification,
@@ -56,6 +96,8 @@ export class ClientTagCategoryMapper {
         display: clientTagCategoryData.display,
         followers: clientTagCategoryData.followers,
         tags: clientTagCategoryData.tags,
+        updatedBy: clientTagCategoryData.updatedBy,
+        createdBy: clientTagCategoryData.createdBy,
         createdAt: clientTagCategoryData.createdAt,
       };
       return clientTagCategoryData;
@@ -71,6 +113,8 @@ export class ClientTagCategoryMapper {
       display: clientTagCategory.display,
       followers: clientTagCategory.followers,
       tags: clientTagCategory.tags,
+      updatedBy: clientTagCategory.updatedBy,
+      createdBy: clientTagCategory.createdBy,
       createdAt: clientTagCategory.createdAt,
     };
   }

@@ -218,8 +218,8 @@ export class AccessRuleMapper {
       return {
         ...existingAccessRule,
         _id: includeId
-          ? accessRuleData.id !== undefined
-            ? accessRuleData.id
+          ? accessRuleData._id !== undefined
+            ? accessRuleData._id
             : existingAccessRule._id
           : existingAccessRule._id,
         name:

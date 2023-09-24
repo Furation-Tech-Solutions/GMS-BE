@@ -10,6 +10,7 @@ import { UpdateSeatingArea } from "@domain/seating-area/usecases/update-room";
 import { DeleteSeatingArea } from "@domain/seating-area/usecases/delete-seating-area";
 import { SeatingAreaService } from "@presentation/services/seatng-area-services";
 import validateSeatingAreaInputMiddleware from "@presentation/middlewares/seatingArea/validation-seating-area";
+// import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
 // Create an instance of the SeatingDataSourceImpl and pass the mongoose connection
@@ -42,6 +43,7 @@ export const seatingAreaRouter = Router();
 // Route handling for creating a new Room
 seatingAreaRouter.post(
   "/create",
+  // checkPermission("1103"),
   validateSeatingAreaInputMiddleware(false),
   seatingAreaService.createSeatingArea.bind(seatingAreaService)
 );
@@ -60,11 +62,13 @@ seatingAreaRouter.get(
 
 seatingAreaRouter.put(
   "/updateSeatingArea/:seatingAreaId",
+  // checkPermission("1103"),
   validateSeatingAreaInputMiddleware(true),
   seatingAreaService.updateSeatingArea.bind(seatingAreaService)
 );
 
 seatingAreaRouter.delete(
   "/deleteSeatingArea/:seatingAreaId",
+  // checkPermission("1103"),
   seatingAreaService.deleteSeatingArea.bind(seatingAreaService)
 );

@@ -1,78 +1,89 @@
 import mongoose from "mongoose";
 
 const addReservationSchema = new mongoose.Schema({
-  //Availability
+  // Availability
   date: {
     type: String,
     trim: true,
-    required: [true, "please Select the Date"],
+    required: [true, "Please select the Date"],
+  },
+  noOfGuests: {
+    type: Number,
+    require: [true, "Please select the Date"],
+    default: 1,
   },
   shift: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shift",
-    required: [true, "please Select the Shift"],
+    required: [true, "Please select the Shift"],
   },
   duration: {
     type: String,
     trim: true,
-    default: "2 hr",
-    // required: [true, "please Select the Duration"],
+    default: "2:00:00",
+    // required: [true, "Please select the Duration"],
   },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SeatingArea",
-    required: [true, "please Select the Seating Area"],
+    required: [true, "Please select the Seating Area"],
   },
   timeSlot: {
     type: String,
     trim: true,
-    required: [true, "please Select the Time Slot"],
+    required: [true, "Please select the Time Slot"],
   },
-
   // Client
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
-    required: [true, "please Select the Client"],
+    required: [true, "Please select the Client"],
   },
 
-  // Source
-  // source: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Users",
-  // },
-
-  // Aditional Detail
-  resevationTags: [
+  // Additional Detail
+  reservationTags: [
     { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
   ],
 
   reservationNote: {
     type: String,
-    maxlength: [2000, "lastName should have less than 30 charcters"],
-    minLength: [1, "lastName should have more than 3 character"],
+    maxlength: [2000, "Last name should have less than 2000 characters"],
+    minLength: [1, "Last name should have more than 1 character"],
     trim: true,
   },
-
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
-    required: [true, "please Select the Table"],
+    required: [true, "Please select the Table"],
   },
-  bookedBy: {
+  bookedByUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "bookedByName",
+    default: null,
   },
   perks: {
     type: String,
-    maxLength: [2000, "notes should have less then 500 charcters "],
-    minLength: [5, "notes should have 10 charcters"],
+    maxlength: [500, "Perks should have less than 500 characters"],
+    minLength: [10, "Perks should have at least 10 characters"],
     trim: true,
+    default: null,
   },
 
   confirmationMailSending: {
     type: Boolean,
     default: false,
+  },
+
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
   },
 
   createdAt: {
@@ -85,3 +96,5 @@ export const AddReservation = mongoose.model(
   "AddReservation",
   addReservationSchema
 );
+
+
