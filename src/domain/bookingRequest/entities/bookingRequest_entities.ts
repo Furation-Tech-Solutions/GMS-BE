@@ -58,17 +58,17 @@ export class BookingRequestMapper {
     } else {
       const bookingRequestEntity: BookingRequestEntity = {
         id: includeId ? (bookingreqData._id ? bookingreqData._id.toString() : undefined) : bookingreqData._id.toString(),
-        firstName: bookingreqData.firstName,
-        lastName: bookingreqData.lastName,
-        email: bookingreqData.email,
-        phone: bookingreqData.phone,
-        specialInstructions: bookingreqData.specialInstructions,
-        reservationDate: bookingreqData.reservationDate,
-        reservationTime: bookingreqData.reservationTime,
-        numberOfGuest: bookingreqData.numberOfGuest,
-        duration: bookingreqData.duration,
-        status: bookingreqData.status,
-        createdAt: bookingreqData.createdAt,
+        firstName: bookingreqData.firstName || null,
+        lastName: bookingreqData.lastName || null,
+        email: bookingreqData.email || null,
+        phone: bookingreqData.phone || null,
+        specialInstructions: bookingreqData.specialInstructions || null,
+        reservationDate: bookingreqData.reservationDate || null,
+        reservationTime: bookingreqData.reservationTime || null,
+        numberOfGuest: bookingreqData.numberOfGuest || null,
+        duration: bookingreqData.duration || null,
+        status: bookingreqData.status || null,
+        createdAt: bookingreqData.createdAt || null,
       };
       return bookingRequestEntity;
     }

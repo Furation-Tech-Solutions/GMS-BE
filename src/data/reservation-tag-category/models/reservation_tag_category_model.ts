@@ -16,14 +16,14 @@ const reservationTagCategorySchema = new mongoose.Schema({
         required: true,
     },
     classification: {
-        global: Boolean,
-        local: Boolean,
+        global:  { type: Boolean, default: false },
+        local:  { type: Boolean, default: false },
     },
-    vip: Boolean,
+    vip:  { type: Boolean, default: false },
     display: {
-        visible_to_superusers_only: Boolean,
-        show_on_chit: Boolean,
-        show_on_reservation_summary: Boolean,
+        visible_to_superusers_only:  { type: Boolean, default: false },
+        show_on_chit:  { type: Boolean, default: false },
+        show_on_reservation_summary:  { type: Boolean, default: false },
     },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,

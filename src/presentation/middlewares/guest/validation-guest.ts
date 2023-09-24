@@ -52,16 +52,16 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
             ? Joi.boolean().optional().messages({
                 "any.required": "Confirmation mail sending status is required",
             })
-            : Joi.boolean().required().messages({
+            : Joi.boolean().optional().messages({
                 "any.required": "Confirmation mail sending status is required",
             }),
 
         bookedBy: isUpdate
-            ? Joi.object().optional().messages({
+            ? Joi.string().optional().messages({
                 "object.base": "Booking user ID must be a string",
                 "object.empty": "Booking user ID is required",
             })
-            : Joi.object().required().messages({
+            : Joi.string().required().messages({
                 "object.base": "Booking user ID must be a string",
                 "object.empty": "Booking user ID is required",
                 "any.required": "Booking user ID is required",

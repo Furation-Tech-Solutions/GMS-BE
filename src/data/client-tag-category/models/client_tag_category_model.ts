@@ -16,10 +16,10 @@ const clientTagCategorySchema = new mongoose.Schema({
     required: true,
   },
   classification: {
-    global: Boolean,
-    local: Boolean,
+    global: { type: Boolean, default: false },
+    local: { type: Boolean, default: false },
   },
-  vip: Boolean,
+  vip: { type: Boolean, default: false },
   display: {
     visible_to_superusers_only: Boolean,
     show_on_chit: Boolean,

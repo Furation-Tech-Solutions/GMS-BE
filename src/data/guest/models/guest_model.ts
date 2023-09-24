@@ -2,17 +2,6 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
-const bookedByData = new mongoose.Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    }
-}, { _id: false });
-
 const guestSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -43,7 +32,7 @@ const guestSchema = new mongoose.Schema({
     },
     bookedBy: {
         type: String,
-        required: true
+        required: true,
     },
     // bookedBy: {
     //     type: mongoose.Schema.Types.ObjectId,
@@ -71,6 +60,7 @@ const guestSchema = new mongoose.Schema({
             10,
             "notes should have 10 charcters",
         ],
+        default: null,
     },
     createdAt: {
         type: Date,

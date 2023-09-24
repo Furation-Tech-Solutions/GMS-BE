@@ -79,7 +79,7 @@ const bookingRequestValidator = (
       ? Joi.string().max(2000).optional().trim().messages({
         "string.max": "Special instructions should have less than 2000 characters",
       })
-      : Joi.string().max(2000).required().trim().messages({
+      : Joi.string().max(2000).optional().trim().messages({
         "string.max": "Special instructions should have less than 2000 characters",
       }),
 
@@ -132,7 +132,7 @@ export const validateBookingRequestInputMiddleware = (
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error:any) {
+    } catch (error: any) {
       // if (error instanceof ApiError) {
       //   return res.status(error.status).json(error.message);
       // }
