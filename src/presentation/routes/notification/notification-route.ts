@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Router } from "express"
-import  {sendPushNotification}  from "@presentation/middlewares/notification/notification-middleware"
+import  {sendPushNotification} from "@presentation/middlewares/notification/notification-middleware"
 
 
 

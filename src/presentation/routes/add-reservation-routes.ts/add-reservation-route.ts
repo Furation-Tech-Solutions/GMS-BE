@@ -12,6 +12,7 @@ import { validateReservationInputMiddleware } from "@presentation/middlewares/ad
 import { checkPermission } from "@presentation/permission/book-reservation-verify";
 
 
+
 // Create an instance of the AddReservationDataSourceImpl and pass the mongoose connection
 const addReservationDataSource = new AddReservationDataSourceImpl(
   mongoose.connection
@@ -51,10 +52,12 @@ const addReservationService = new AddReservationServices(
 // Create an Express router
 export const addReservationRouter = Router();
 
+;
+
 // Route handling for creating a new Add Reservation
 addReservationRouter.post(
   "/create",
-  checkPermission("1203"),
+ checkPermission("1101"),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );

@@ -15,6 +15,7 @@ interface UserAccountInput {
     lastLogin?: string;
     lastPasswordReset?: string;
   };
+  randomPassword?:string;
   isLogin?: boolean;
   permissions?: [{ key: Number, value: String }];
   emailNotification?: [{ key: Number, value: String }];
@@ -61,6 +62,9 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastLogin: Joi.string().trim().allow("").optional(),
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
+    randomPassword: Joi.string().trim().optional().messages({
+      "string.base": "random Password must be a string",
+    }),
     isLogin: Joi.boolean().default(false),
 
     permissions: Joi.array().optional(),
@@ -106,10 +110,11 @@ export const validateUserAccountInputMiddleware = (isUpdate: boolean = false) =>
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Extract the request body
-      const { body } = req;
+      // const { body } = req;
+    const { password, ...userDataWithoutPassword } = req.body;
 
       // Validate the input using the userAccountValidator
-      const validatedInput: UserAccountInput = userAccountValidator(body, isUpdate);
+      const validatedInput: UserAccountInput = userAccountValidator(userDataWithoutPassword, isUpdate);
 
       // Continue to the next middleware or route handler
       next();

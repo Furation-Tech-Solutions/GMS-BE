@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { AddReservationModel } from "@domain/add-reservation/entities/add-reservation";
 import { AddReservation } from "../models/add-reservation-model";
+import { Client } from "@data/client/models/client_model";
+import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
@@ -16,19 +18,44 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
   async create(addReservation: AddReservationModel): Promise<any> {
     try {
+      const clientExists = await Client.findById(addReservation.client);
+
+      const bookingCheckCredetial = {
+        firstName: clientExists?.firstName,
+        lastName: clientExists?.lastName,
+        email: clientExists?.email,
+        reservationDate: addReservation.date,
+        numberOfGuest: addReservation.noOfGuests,
+        // duration: addReservation.duration,
+      };
+      const bookingRequiestExists = await BookingRequest.findOne(
+        bookingCheckCredetial
+      );
+
       const existingAddReservation = await AddReservation.findOne({
         date: addReservation.date,
         shift: addReservation.shift,
         client: addReservation.client,
       });
 
-
       if (existingAddReservation) {
         throw ApiError.reservationExits();
       }
-      const addReservationData = new AddReservation(addReservation);
 
+      const addReservationData = new AddReservation(addReservation);
       const createdAddReservation = await addReservationData.save();
+
+      if (bookingRequiestExists !== null) {
+        // console.log("===>s3", "Data Source of booking request change");
+        bookingRequiestExists.status = { name: "Booked", color: "Green" };
+        const updatedBookingRequest = await bookingRequiestExists.save();
+        // console.log(
+        //   "===>s4",
+        //   "Data Source of booking request change",
+        //   updatedBookingRequest
+        // );
+      }
+
       return createdAddReservation.toObject();
     } catch (error) {
       throw ApiError.badRequest();

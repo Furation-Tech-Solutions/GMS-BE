@@ -39,10 +39,13 @@ export class UserService{
 
 
 async createUser(req: Request, res: Response): Promise<void> {
-    const userData: UserModel = UserMapper.toModel(req.body);
+
+    console.log(req.body)
+    const { randomPassword, ...userDataWithoutPassword } = req.body;
+    const userData: UserModel = UserMapper.toModel(userDataWithoutPassword);
 
     const newUser: Either<ErrorClass, UserEntity> =
-      await this.createUserUseCase.execute(userData);
+      await this.createUserUseCase.execute(userData,randomPassword);
 
     newUser.cata(
       (error: ErrorClass) =>
