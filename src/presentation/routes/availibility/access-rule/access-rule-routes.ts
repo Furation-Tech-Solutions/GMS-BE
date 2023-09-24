@@ -10,6 +10,7 @@ import { GetAccessRuleById } from "@domain/availibility/usecases/access-rule/get
 import { DeleteAccessRule } from "@domain/availibility/usecases/access-rule/delete-usecase";
 import { GetAllAccessRule } from "@domain/availibility/usecases/access-rule/getall-accessrule-usecase";
 import { AccessRuleService } from "@presentation/services/availibility/access-rule/access-rule-services";
+// import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
 
@@ -40,16 +41,22 @@ const accessRuleService = new AccessRuleService(
 export const accessRuleRouter = Router();
 
 // Route handling for creating a new admin
-accessRuleRouter.post("/create",  accessRuleService.createAccessRule.bind(accessRuleService));
+accessRuleRouter.post("/create", 
+// checkPermission("1103"),
+accessRuleService.createAccessRule.bind(accessRuleService));
 
 // Route handling for updating an shift by ID
-accessRuleRouter.put("/update/:accessId",accessRuleService.updateAccessRule.bind(accessRuleService));
+accessRuleRouter.put("/update/:accessId",
+// checkPermission("1103"),
+accessRuleService.updateAccessRule.bind(accessRuleService));
 
 // Route handling for getting an shift by ID
 accessRuleRouter.get("/getbyid/:accessId",accessRuleService.getAccessRuleById.bind(accessRuleService));
 
 // Route handling for deleting an admin by ID
-accessRuleRouter.delete("/delete/:accessId", accessRuleService.deleteAccessRule.bind(accessRuleService));
+accessRuleRouter.delete("/delete/:accessId",
+// checkPermission("1103"),
+ accessRuleService.deleteAccessRule.bind(accessRuleService));
 
 // Route handling for getting all shifts
 accessRuleRouter.get("/getAll", accessRuleService.getAllAccessRule.bind(accessRuleService));
