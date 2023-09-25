@@ -9,10 +9,12 @@ enum AccessLevel {
   SubManager = "Sub-Manager",
   Basic = "Basic",
 }
+
 const unauthorizedResponse = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
   res.status(unAuthorized.status).json({ message: unAuthorized.message });
 };
+
 export const checkPermission = (requiredPermission: string) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -34,6 +36,7 @@ export const checkPermission = (requiredPermission: string) => {
         next();
         return;
       }
+      
       // Handle other access levels
       switch (permittedUser.accessLevel) {
         case AccessLevel.Manager:

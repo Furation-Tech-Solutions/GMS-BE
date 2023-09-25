@@ -7,40 +7,20 @@ import { UserAccount } from "@data/user-account/models/user-account-model";
 /*
   Middleware to verify Firebase token and set user in the request object
 */
-const verifyFirebaseToken = async (
+const verifyLoggedInUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    //TODO: for amul : update this code in clean code
-
-    // const { authorization } = req.headers;
-
-    // if (authorization) {
-    //   const idToken: string = authorization.split("Bearer ")[1];
-
-    //   // Verify the Firebase token
-    //   const decodedToken = await admin.auth().verifyIdToken(idToken);
-
-    //   // Find the user in the database using the decoded email
-
-    //   const user = await Admin.findOne({ email: decodedToken.email });
-
-    //   req.user = user; // Set the user in the request objec
-    // } else {
-    //   const unAuthorized = ApiError.unAuthorized();
-    //   res.status(unAuthorized.status).json({ message: unAuthorized.message });
-    // }
-
-    const { email } = req.body;
+    const { email } = req.cookies;
 
     if (email) {
-      // Find the user in the database using the decoded email
-
-      const user = await Admin.findOne({ email: email });
+ 
+      const user = await UserAccount.findOne({ email: email });
  
       req.user = user; // Set the user in the request objec
+
     } else {
       const unAuthorized = ApiError.unAuthorized();
       res.status(unAuthorized.status).json({ message: unAuthorized.message });
@@ -86,7 +66,7 @@ const verifyTokenAndAuthorizationToSuperAdmin = (
   res: Response,
   next: NextFunction
 ) => {
-  verifyFirebaseToken(req, res, () => {
+  verifyLoggedInUser(req, res, () => {
     if (req.user && req.user.superAdmin) {
       next();
     } else {
@@ -104,7 +84,7 @@ const verifyTokenAndAuthorizationToAdmin = (
   res: Response,
   next: NextFunction
 ) => {
-  verifyFirebaseToken(req, res, () => {
+  verifyLoggedInUser(req, res, () => {
     if (req.user && req.user.admin) {
       next();
     } else {

@@ -1,5 +1,4 @@
 
-
 // Express API request populate the Admin Model
 export class UserModel {
   constructor(
