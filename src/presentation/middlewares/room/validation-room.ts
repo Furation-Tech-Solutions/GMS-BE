@@ -7,8 +7,8 @@ interface RoomInput {
   abbreviation: string;
   roomName: string;
   listOrder: number;
-  updatedBy: string;
-  createdBy: string;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const roomValidator = (
@@ -18,67 +18,67 @@ const roomValidator = (
   const roomSchema = Joi.object<RoomInput>({
     abbreviation: isUpdate
       ? Joi.string()
-        .regex(/^[A-Z]+$/)
-        .max(30)
-        .trim()
-        .uppercase()
-        .optional()
-        .messages({
-          "string.max": "Abbreviation should be under 30 characters",
-          "string.trim":
-            "Abbreviation should not contain leading or trailing spaces",
-        })
+          .regex(/^[A-Z]+$/)
+          .max(30)
+          .trim()
+          .uppercase()
+          .optional()
+          .messages({
+            "string.max": "Abbreviation should be under 30 characters",
+            "string.trim":
+              "Abbreviation should not contain leading or trailing spaces",
+          })
       : Joi.string()
-        .regex(/^[A-Z]+$/)
-        .required()
-        .max(30)
-        .trim()
-        .uppercase()
-        .messages({
-          "string.base": "Abbreviation must be a string",
-          "string.empty": "Abbreviation is required",
-          "string.max": "Abbreviation should be under 30 characters",
-          "string.trim":
-            "Abbreviation should not contain leading or trailing spaces",
-          "any.required": "Abbreviation is required",
-        }),
+          .regex(/^[A-Z]+$/)
+          .required()
+          .max(30)
+          .trim()
+          .uppercase()
+          .messages({
+            "string.base": "Abbreviation must be a string",
+            "string.empty": "Abbreviation is required",
+            "string.max": "Abbreviation should be under 30 characters",
+            "string.trim":
+              "Abbreviation should not contain leading or trailing spaces",
+            "any.required": "Abbreviation is required",
+          }),
     roomName: isUpdate
       ? Joi.string().max(30).trim().optional().messages({
-        "string.max": "Room name should be under 30 characters",
-        "string.trim":
-          "Room name should not contain leading or trailing spaces",
-      })
+          "string.max": "Room name should be under 30 characters",
+          "string.trim":
+            "Room name should not contain leading or trailing spaces",
+        })
       : Joi.string().required().max(30).trim().messages({
-        "string.base": "Room name must be a string",
-        "string.empty": "Room name is required",
-        "string.max": "Room name should be under 30 characters",
-        "string.trim":
-          "Room name should not contain leading or trailing spaces",
-        "any.required": "Room name is required",
-      }),
+          "string.base": "Room name must be a string",
+          "string.empty": "Room name is required",
+          "string.max": "Room name should be under 30 characters",
+          "string.trim":
+            "Room name should not contain leading or trailing spaces",
+          "any.required": "Room name is required",
+        }),
     listOrder: isUpdate
       ? Joi.number().messages({
-        "number.base": "List order must be a number",
-      })
+          "number.base": "List order must be a number",
+        })
       : Joi.number().required().messages({
-        "number.base": "List order must be a number",
-        "number.empty": "List order is required",
-        "any.required": "List order is required",
-      }),
+          "number.base": "List order must be a number",
+          "number.empty": "List order is required",
+          "any.required": "List order is required",
+        }),
     updatedBy: isUpdate
-      ? Joi.string().trim().required().messages({
-        "any.required": "Please select the Updated By",
-      })
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
-      : Joi.string().trim().required().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = roomSchema.validate(input, {

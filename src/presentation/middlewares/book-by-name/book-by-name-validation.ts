@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 
 interface BookedByNameInput {
   name: string;
-  updatedBy: string;
-  createdBy: string;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const bookedByNameValidator = (
@@ -20,7 +20,7 @@ const bookedByNameValidator = (
       "any.required": "Name is required",
     }),
     updatedBy: isUpdate
-      ? Joi.string().trim().required().messages({
+      ? Joi.string().trim().optional().messages({
         "any.required": "Please select the Updated By",
       })
       : Joi.string().trim().optional().messages({
@@ -30,7 +30,7 @@ const bookedByNameValidator = (
       ? Joi.string().trim().optional().messages({
         "any.required": "Please select the Created By",
       })
-      : Joi.string().trim().required().messages({
+      : Joi.string().trim().optional().messages({
         "any.required": "Please select the Created By",
       }),
   });

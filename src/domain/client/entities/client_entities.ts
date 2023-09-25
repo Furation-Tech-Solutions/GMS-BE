@@ -22,8 +22,10 @@ export class ClientModel {
     public birthDate: Date,
     public anniversaryDate: Date,
     public gender: string,
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 // Client Entity provided by Client Repository is converted to Express API Response
@@ -51,8 +53,10 @@ export class ClientEntity {
     public birthDate: Date,
     public anniversaryDate: Date,
     public gender: string,
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 /* ================================================= */
@@ -65,34 +69,106 @@ export class ClientMapper {
     if (existingClient != null) {
       return {
         ...existingClient,
-        firstName: clientData.firstName !== undefined ? clientData.firstName : existingClient.firstName,
-        lastName: clientData.lastName !== undefined ? clientData.lastName : existingClient.firstName,
-        salutation: clientData.salutation !== undefined ? clientData.salutation : existingClient.salutation,
-        jobTitle: clientData.jobTitle !== undefined ? clientData.jobTitle : existingClient.jobTitle,
-        company: clientData.company !== undefined ? clientData.company : existingClient.company,
-        profileNotes: clientData.profileNotes !== undefined ? clientData.profileNotes : existingClient.profileNotes,
-        privateNotes: clientData.privateNotes !== undefined ? clientData.privateNotes : existingClient.privateNotes,
-        tags: clientData.tags !== undefined ? clientData.tags : existingClient.tags,
-        email: clientData.email !== undefined ? clientData.email : existingClient.email,
-        altEmail: clientData.altEmail !== undefined ? clientData.altEmail : existingClient.altEmail,
-        phone: clientData.phone !== undefined ? clientData.phone : existingClient.phone,
-        workPhone: clientData.workPhone !== undefined ? clientData.workPhone : existingClient.workPhone,
-        address: clientData.address !== undefined ? clientData.address : existingClient.address,
-        city: clientData.city !== undefined ? clientData.city : existingClient.city,
-        state: clientData.state !== undefined ? clientData.state : existingClient.state,
-        country: clientData.country !== undefined ? clientData.country : existingClient.country,
-        pincode: clientData.pincode !== undefined ? clientData.pincode : existingClient.pincode,
-        contactInfoVisibilityOnlyToSuperUser: clientData.contactInfoVisibilityOnlyToSuperUser !== undefined
-          ? clientData.contactInfoVisibilityOnlyToSuperUser
-          : existingClient.contactInfoVisibilityOnlyToSuperUser,
-        birthDate: clientData.birthDate !== undefined ? clientData.birthDate : existingClient.birthDate,
-        anniversaryDate: clientData.anniversaryDate !== undefined ? clientData.anniversaryDate : existingClient.anniversaryDate,
-        gender: clientData.gender !== undefined ? clientData.gender : existingClient.gender,
-        createdAt: clientData.createdAt !== undefined ? clientData.createdAt : existingClient.createdAt,
+        firstName:
+          clientData.firstName !== undefined
+            ? clientData.firstName
+            : existingClient.firstName,
+        lastName:
+          clientData.lastName !== undefined
+            ? clientData.lastName
+            : existingClient.firstName,
+        salutation:
+          clientData.salutation !== undefined
+            ? clientData.salutation
+            : existingClient.salutation,
+        jobTitle:
+          clientData.jobTitle !== undefined
+            ? clientData.jobTitle
+            : existingClient.jobTitle,
+        company:
+          clientData.company !== undefined
+            ? clientData.company
+            : existingClient.company,
+        profileNotes:
+          clientData.profileNotes !== undefined
+            ? clientData.profileNotes
+            : existingClient.profileNotes,
+        privateNotes:
+          clientData.privateNotes !== undefined
+            ? clientData.privateNotes
+            : existingClient.privateNotes,
+        tags:
+          clientData.tags !== undefined ? clientData.tags : existingClient.tags,
+        email:
+          clientData.email !== undefined
+            ? clientData.email
+            : existingClient.email,
+        altEmail:
+          clientData.altEmail !== undefined
+            ? clientData.altEmail
+            : existingClient.altEmail,
+        phone:
+          clientData.phone !== undefined
+            ? clientData.phone
+            : existingClient.phone,
+        workPhone:
+          clientData.workPhone !== undefined
+            ? clientData.workPhone
+            : existingClient.workPhone,
+        address:
+          clientData.address !== undefined
+            ? clientData.address
+            : existingClient.address,
+        city:
+          clientData.city !== undefined ? clientData.city : existingClient.city,
+        state:
+          clientData.state !== undefined
+            ? clientData.state
+            : existingClient.state,
+        country:
+          clientData.country !== undefined
+            ? clientData.country
+            : existingClient.country,
+        pincode:
+          clientData.pincode !== undefined
+            ? clientData.pincode
+            : existingClient.pincode,
+        contactInfoVisibilityOnlyToSuperUser:
+          clientData.contactInfoVisibilityOnlyToSuperUser !== undefined
+            ? clientData.contactInfoVisibilityOnlyToSuperUser
+            : existingClient.contactInfoVisibilityOnlyToSuperUser,
+        birthDate:
+          clientData.birthDate !== undefined
+            ? clientData.birthDate
+            : existingClient.birthDate,
+        anniversaryDate:
+          clientData.anniversaryDate !== undefined
+            ? clientData.anniversaryDate
+            : existingClient.anniversaryDate,
+        gender:
+          clientData.gender !== undefined
+            ? clientData.gender
+            : existingClient.gender,
+        updatedBy:
+          clientData.updatedBy !== undefined
+            ? { _id: clientData.updatedBy }
+            : existingClient.updatedBy,
+        createdBy:
+          clientData.createdBy !== undefined
+            ? { _id: clientData.createdBy }
+            : existingClient.createdBy,
+        createdAt:
+          clientData.createdAt !== undefined
+            ? clientData.createdAt
+            : existingClient.createdAt,
       };
     } else {
       const clientEntity: ClientEntity = {
-        _id: includeId ? (clientData._id ? clientData._id.toString() : undefined) : clientData._id.toString(),
+        _id: includeId
+          ? clientData._id
+            ? clientData._id.toString()
+            : undefined
+          : clientData._id.toString(),
         firstName: clientData.firstName,
         lastName: clientData.lastName,
         salutation: clientData.salutation,
@@ -110,10 +186,13 @@ export class ClientMapper {
         state: clientData.state,
         country: clientData.country,
         pincode: clientData.pincode,
-        contactInfoVisibilityOnlyToSuperUser: clientData.contactInfoVisibilityOnlyToSuperUser,
+        contactInfoVisibilityOnlyToSuperUser:
+          clientData.contactInfoVisibilityOnlyToSuperUser,
         birthDate: clientData.birthDate,
         anniversaryDate: clientData.anniversaryDate,
         gender: clientData.gender,
+        updatedBy: { _id: clientData.updatedBy },
+        createdBy: { _id: clientData.createdBy },
         createdAt: clientData.createdAt,
       };
       return clientEntity;
@@ -139,10 +218,13 @@ export class ClientMapper {
       state: client.state,
       country: client.country,
       pincode: client.pincode,
-      contactInfoVisibilityOnlyToSuperUser: client.contactInfoVisibilityOnlyToSuperUser,
+      contactInfoVisibilityOnlyToSuperUser:
+        client.contactInfoVisibilityOnlyToSuperUser,
       birthDate: client.birthDate,
       anniversaryDate: client.anniversaryDate,
       gender: client.gender,
+      updatedBy: client.updatedBy,
+      createBy: client.createdBy,
       createdAt: client.createdAt,
     };
   }

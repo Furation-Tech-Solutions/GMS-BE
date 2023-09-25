@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 
 interface ServersNameInput {
   server_name: string;
-  updatedBy: string;
-  createdBy: string;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const serversNameValidator = (
@@ -20,7 +20,7 @@ const serversNameValidator = (
       "any.required": "server_name is required",
     }),
     updatedBy: isUpdate
-      ? Joi.string().trim().required().messages({
+      ? Joi.string().trim().optional().messages({
         "any.required": "Please select the Updated By",
       })
       : Joi.string().trim().optional().messages({
@@ -30,7 +30,7 @@ const serversNameValidator = (
       ? Joi.string().trim().optional().messages({
         "any.required": "Please select the Created By",
       })
-      : Joi.string().trim().required().messages({
+      : Joi.string().trim().optional().messages({
         "any.required": "Please select the Created By",
       }),
   });

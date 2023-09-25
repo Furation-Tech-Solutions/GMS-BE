@@ -8,6 +8,8 @@ export class ReservationTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -23,6 +25,8 @@ export class ReservationTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -65,6 +69,14 @@ export class ReservationTagCategoryMapper {
           reservationTagCategoryData.tags !== undefined
             ? reservationTagCategoryData.tags
             : existingReservationTagCategory.tags,
+        updatedBy:
+          reservationTagCategoryData.updatedBy !== undefined
+            ? reservationTagCategoryData.updatedBy
+            : existingReservationTagCategory.updatedBy,
+        createdBy:
+          reservationTagCategoryData.createdBy !== undefined
+            ? reservationTagCategoryData.createdBy
+            : existingReservationTagCategory.createdBy,
         createdAt:
           reservationTagCategoryData.createdAt !== undefined
             ? reservationTagCategoryData.createdAt
@@ -84,9 +96,11 @@ export class ReservationTagCategoryMapper {
         display: reservationTagCategoryData.display,
         followers: reservationTagCategoryData.followers,
         tags: reservationTagCategoryData.tags,
+        updatedBy: reservationTagCategoryData.updatedBy,
+        createdBy: reservationTagCategoryData.createdBy,
         createdAt: reservationTagCategoryData.createdAt,
       };
-      return reservationTagCategoryData;
+      return reservationTagCategoryEntity;
     }
   }
 
@@ -99,6 +113,8 @@ export class ReservationTagCategoryMapper {
       display: reservationTagCategory.display,
       followers: reservationTagCategory.followers,
       tags: reservationTagCategory.tags,
+      updatedBy: reservationTagCategory.updatedBy,
+      createdBy: reservationTagCategory.createdBy,
       createdAt: reservationTagCategory.createdAt,
     };
   }

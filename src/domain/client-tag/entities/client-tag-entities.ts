@@ -2,9 +2,9 @@
 export class ClientTagModel {
   constructor(
     public name: string = "",
-    public categoryNameId: string | {id: string}  = "",
-    public updatedBy: string | {_id: string} | undefined = undefined,
-    public createdBy: string | {_id: string} | undefined = undefined,
+    public categoryNameId: string | { _id: string } = "",
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -14,15 +14,15 @@ export class ClientTagEntity {
   constructor(
     public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
-    public categoryNameId: string | {id: string}  = "",
-    public updatedBy: string | {_id: string} | undefined,
-    public createdBy: string | {_id: string} | undefined,
+    public categoryNameId: string | { _id: string } = "",
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined,
     public createdAt: Date
   ) {}
 }
 
 /* ================================================= */
-export class  ClientTagMapper {
+export class ClientTagMapper {
   static toEntity(
     clientTagData: any,
     includeId?: boolean,
@@ -37,15 +37,15 @@ export class  ClientTagMapper {
             : existingClientTag.name,
         categoryNameId:
           clientTagData.categoryNameId !== undefined
-            ? {id: clientTagData.categoryNameId}
+            ? { _id: clientTagData.categoryNameId }
             : existingClientTag.categoryNameId,
         updatedBy:
           clientTagData.updatedBy !== undefined
-            ? {_id:clientTagData.updatedBy}
+            ? { _id: clientTagData.updatedBy }
             : existingClientTag.updatedBy,
         createdBy:
           clientTagData.createdBy !== undefined
-            ? {_id: clientTagData.createdBy}
+            ? { _id: clientTagData.createdBy }
             : existingClientTag.createdBy,
         createdAt:
           clientTagData.createdAt !== undefined
@@ -60,12 +60,12 @@ export class  ClientTagMapper {
             : undefined
           : clientTagData._id.toString(),
         name: clientTagData.name,
-        categoryNameId: {id: clientTagData.categoryNameId},
-        updatedBy: {_id: clientTagData.updatedBy},
-        createdBy: {_id: clientTagData.createdBy},
+        categoryNameId: { _id: clientTagData.categoryNameId },
+        updatedBy: { _id: clientTagData.updatedBy },
+        createdBy: { _id: clientTagData.createdBy },
         createdAt: clientTagData.createdAt,
       };
-      return clientTagData;
+      return ClientTagEntity;
     }
   }
 

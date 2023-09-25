@@ -1,8 +1,10 @@
 // Express API request to populate the BookedByName Model
 export class BookedByNameModel {
   constructor(
-    public name: string = ""
-  ) { }
+    public name: string = "",
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined
+  ) {}
 }
 
 // BookedByName Entity provided by BookedByName Repository is converted to Express API Response
@@ -12,7 +14,7 @@ export class BookedByNameEntity {
     public name: string,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined
-  ) { }
+  ) {}
 }
 
 export class BookedByNameMapper {
@@ -55,6 +57,8 @@ export class BookedByNameMapper {
   static toModel(bookedByName: BookedByNameEntity): BookedByNameModel {
     return {
       name: bookedByName.name,
+      updatedBy: bookedByName.updatedBy,
+      createdBy: bookedByName.createdBy,
     };
   }
 }
