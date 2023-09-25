@@ -4,9 +4,9 @@ export class SeatingAreaModel {
     public abbreviation: string = "",
     public seatingAreaName: string = "",
     public listOrder: number = 0,
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
+  ) { }
 }
 
 // Room Entity provided by Seating Repository is converted to Express API Response
@@ -16,9 +16,9 @@ export class SeatingAreaEntity {
     public abbreviation: string,
     public seatingAreaName: string,
     public listOrder: number,
-    public updatedBy: string | undefined ,
-    public createdBy: string | undefined 
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
+  ) { }
 }
 
 export class SeatingAreaMapper {
@@ -42,14 +42,14 @@ export class SeatingAreaMapper {
           seatingAreaData.listOrder !== undefined
             ? seatingAreaData.listOrder
             : existingSeatingArea.listOrder,
-        createdBy:
-          seatingAreaData.createdBy !== undefined
-            ? seatingAreaData.createdBy
-            : existingSeatingArea.createdBy,
         updatedBy:
           seatingAreaData.updatedBy !== undefined
-            ? seatingAreaData.updatedBy
+            ? { _id: seatingAreaData.updatedBy }
             : existingSeatingArea.updatedBy,
+        createdBy:
+          seatingAreaData.createdBy !== undefined
+            ? { _id: seatingAreaData.createdBy }
+            : existingSeatingArea.createdBy,
       };
     } else {
       const seatingAreaEntity: SeatingAreaEntity = {
@@ -61,8 +61,8 @@ export class SeatingAreaMapper {
         abbreviation: seatingAreaData.abbreviation,
         seatingAreaName: seatingAreaData.seatingAreaName,
         listOrder: seatingAreaData.listOrder,
-        updatedBy: seatingAreaData.updatedBy,
-        createdBy: seatingAreaData.createdBy,
+        updatedBy: { _id: seatingAreaData.updatedBy },
+        createdBy: { _id: seatingAreaData.createdBy },
       };
       return seatingAreaEntity;
     }

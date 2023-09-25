@@ -2,8 +2,8 @@
 export class ServersNameModel {
   constructor(
     public server_name: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
   ) { }
 }
 
@@ -12,8 +12,8 @@ export class ServersNameEntity {
   constructor(
     public _id: string | undefined = undefined,
     public server_name: string,
-    public updatedBy: string | undefined,
-    public createdBy: string | undefined
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
   ) { }
 }
 
@@ -32,11 +32,11 @@ export class ServersNameMapper {
             : existingServerName.server_name,
         updatedBy:
           serverNameData.updatedBy !== undefined
-            ? serverNameData.updatedBy
+            ? { _id: serverNameData.updatedBy }
             : existingServerName.updatedBy,
         createdBy:
           serverNameData.createdBy !== undefined
-            ? serverNameData.createdBy
+            ? { _id: serverNameData.createdBy }
             : existingServerName.createdBy,
       };
     } else {
@@ -47,8 +47,8 @@ export class ServersNameMapper {
             : undefined
           : serverNameData._id.toString(),
         server_name: serverNameData.server_name,
-        updatedBy: serverNameData.updatedBy,
-        createdBy: serverNameData.createdBy,
+        updatedBy: { _id: serverNameData.updatedBy },
+        createdBy: { _id: serverNameData.createdBy },
       };
       return serversNameEntity;
     }
