@@ -50,6 +50,7 @@ const addReservationSchema = new mongoose.Schema({
     maxlength: [2000, "Last name should have less than 2000 characters"],
     minLength: [1, "Last name should have more than 1 character"],
     trim: true,
+    default: null,
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
@@ -96,5 +97,3 @@ export const AddReservation = mongoose.model(
   "AddReservation",
   addReservationSchema
 );
-
-

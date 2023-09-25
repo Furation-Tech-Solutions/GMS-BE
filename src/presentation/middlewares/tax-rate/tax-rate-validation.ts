@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 interface TaxRateInput {
   type: string;
   percentage: number;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const taxRateValidator = (input: TaxRateInput, isUpdate: boolean = false) => {
@@ -31,6 +33,20 @@ const taxRateValidator = (input: TaxRateInput, isUpdate: boolean = false) => {
           "number.max": "Percentage should be at most 100",
           "any.required": "Percentage is required",
         }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = schema.validate(input, {
@@ -38,7 +54,9 @@ const taxRateValidator = (input: TaxRateInput, isUpdate: boolean = false) => {
   });
 
   if (error) {
-    const validationErrors: string[] = error.details.map((err: ValidationErrorItem) => err.message);
+    const validationErrors: string[] = error.details.map(
+      (err: ValidationErrorItem) => err.message
+    );
     throw new ApiError(
       ApiError.badRequest().status,
       validationErrors.join(", "),
@@ -60,7 +78,7 @@ export const validateTaxRateInputMiddleware = (isUpdate: boolean = false) => {
 
       // Continue to the next middleware or route handler
       next();
-    } catch (error:any) {
+    } catch (error: any) {
       // if (error instanceof ApiError) {
       //   return res.status(error.status).json(error.message);
       // }

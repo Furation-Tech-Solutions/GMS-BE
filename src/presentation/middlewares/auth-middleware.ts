@@ -102,7 +102,7 @@ const verifyTokenAndAuthorizationToAdminAndSuperAdmin = (
   res: Response,
   next: NextFunction
 ) => {
-  verifyFirebaseToken(req, res, () => {
+  verifyLoggedInUser(req, res, () => {
     if (req.user && (req.user.admin || req.user.superAdmin)) {
       next();
     } else {
@@ -116,7 +116,7 @@ const verifyTokenAndAuthorizationToAdminAndSuperAdmin = (
   Middleware to check admin's active status
 */
 const adminActiveStatus = (req: Request, res: Response, next: NextFunction) => {
-  verifyFirebaseToken(req, res, () => {
+  verifyLoggedInUser(req, res, () => {
     if (req.user && req.user.admin) {
       if (req.user.active) {
         next();

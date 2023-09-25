@@ -14,20 +14,22 @@ export class UserModel {
       lastLogin: string;
       lastPasswordReset: string;
     } = {
-        emailAlertsEnabled: false,
-        multifactorAuthenticationEnabled: false,
-        suspended: false,
-        lastLogin: "",
-        lastPasswordReset: "",
-      },
+      emailAlertsEnabled: false,
+      multifactorAuthenticationEnabled: false,
+      suspended: false,
+      lastLogin: "",
+      lastPasswordReset: "",
+    },
     public isLogin: boolean = false,
     public permissions: [] = [],
     public emailNotification: [] = [],
-    public firebaseDeviceToken: string = ''
-  ) { }
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
+    public firebaseDeviceToken: string = ""
+  ) {}
 }
 export class UserEmailModel {
-  constructor(public email: string = "") { }
+  constructor(public email: string = "") {}
 }
 
 // Admin Entity provided by Admin Repository is converted to Express API Response
@@ -49,8 +51,10 @@ export class UserEntity {
     public isLogin: boolean,
     public permissions: [],
     public emailNotification: [],
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public firebaseDeviceToken: string
-  ) { }
+  ) {}
 }
 
 export class UserMapper {
@@ -87,7 +91,7 @@ export class UserMapper {
               : existingUser.managerSettings.emailAlertsEnabled,
           multifactorAuthenticationEnabled:
             userData.managerSettings?.multifactorAuthenticationEnabled !==
-              undefined
+            undefined
               ? userData.managerSettings.multifactorAuthenticationEnabled
               : existingUser.managerSettings.multifactorAuthenticationEnabled,
           suspended:
@@ -115,11 +119,18 @@ export class UserMapper {
           userData.emailNotification !== undefined
             ? userData.emailNotification
             : existingUser.emailNotification,
+        createdBy:
+          userData.createdBy !== undefined
+            ? userData.createdBy
+            : existingUser.createdBy,
+        updatedBy:
+          userData.updatedBy !== undefined
+            ? userData.updatedBy
+            : existingUser.updatedBy,
         firebaseDeviceToken:
           userData.firebaseDeviceToken !== undefined
             ? userData.firebaseDeviceToken
-            : existingUser.firebaseDeviceToken
-
+            : existingUser.firebaseDeviceToken,
       };
     } else {
       const userEntity: UserEntity = {
@@ -145,11 +156,12 @@ export class UserMapper {
         isLogin: userData.isLogin,
         permissions: userData.permissions || [],
         emailNotification: userData.emailNotification || [],
-        firebaseDeviceToken: userData.firebaseDeviceToken || ''
+        updatedBy: userData.updatedBy,
+        createdBy: userData.createdBy,
+        firebaseDeviceToken: userData.firebaseDeviceToken || "",
       };
       return userEntity;
     }
-
   }
 
   static toModel(user: UserEntity): UserModel {
@@ -163,33 +175,9 @@ export class UserMapper {
       isLogin: user.isLogin,
       permissions: user.permissions,
       emailNotification: user.emailNotification,
+      updatedBy: user.updatedBy,
+      createdBy: user.createdBy,
       firebaseDeviceToken: user.firebaseDeviceToken,
     };
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

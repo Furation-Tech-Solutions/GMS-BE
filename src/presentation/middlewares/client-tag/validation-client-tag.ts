@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 interface ClientTagInput {
   name: string;
   categoryNameId: mongoose.Schema.Types.ObjectId;
-  updatedBy: string;
-  createdBy: string;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const clientTagValidator = (
@@ -17,32 +17,32 @@ const clientTagValidator = (
   const clientTagSchema = Joi.object<ClientTagInput>({
     name: isUpdate
       ? Joi.string().min(3).max(30).optional().trim().messages({
-        "string.min": "Name should have at least 3 characters",
-        "string.max": "Name should have less than 30 characters",
-      })
+          "string.min": "Name should have at least 3 characters",
+          "string.max": "Name should have less than 30 characters",
+        })
       : Joi.string().min(3).max(30).required().trim().messages({
-        "string.min": "Name should have at least 3 characters",
-        "string.max": "Name should have less than 30 characters",
-        "any.required": "Name is required",
-      }),
+          "string.min": "Name should have at least 3 characters",
+          "string.max": "Name should have less than 30 characters",
+          "any.required": "Name is required",
+        }),
 
     categoryNameId: Joi.string().trim().required().messages({
       "any.required": "Category name ID is required",
     }),
     updatedBy: isUpdate
-      ? Joi.string().trim().required().messages({
-        "any.required": "Please select the Updated By",
-      })
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
-      : Joi.string().trim().required().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = clientTagSchema.validate(input, {
@@ -83,8 +83,8 @@ export const validateClientTagInputMiddleware = (isUpdate: boolean = false) => {
       // const err = ApiError.badRequest();
       res.status(500).json({
         success: false,
-        message: error.message
-      })
+        message: error.message,
+      });
     }
   };
 };

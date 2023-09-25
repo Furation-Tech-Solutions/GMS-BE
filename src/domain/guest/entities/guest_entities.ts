@@ -10,10 +10,12 @@ export class GuestModel {
     public notes: string = "",
     public bookedBy: string | { _id: string } = "",
     public status: string = "",
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: string
-  ) { }
+  ) {}
 }
-// add to the guestModel 
+// add to the guestModel
 // public bookedBy: string = "",
 
 // Guest Entity provided by Guest Repository is converted to Express API Response
@@ -29,11 +31,13 @@ export class GuestEntity {
     public notes: string = "",
     public bookedBy: string | { _id: string },
     public status: string = "",
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: string
-  ) { }
+  ) {}
 }
 
-// add to the GuestEntity 
+// add to the GuestEntity
 // public bookedBy: string = "",
 
 /* ================================================= */
@@ -56,9 +60,7 @@ export class GuestMapper {
             ? guestData.lastName
             : existingguest.lastName,
         email:
-          guestData.email !== undefined
-            ? guestData.email
-            : existingguest.email,
+          guestData.email !== undefined ? guestData.email : existingguest.email,
         confirmationMailSending:
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
@@ -76,13 +78,19 @@ export class GuestMapper {
             ? guestData.reservationTags
             : existingguest.reservationTags,
         notes:
-          guestData.notes !== undefined
-            ? guestData.notes
-            : existingguest.notes,
+          guestData.notes !== undefined ? guestData.notes : existingguest.notes,
         status:
           guestData.status !== undefined
             ? guestData.status
             : existingguest.status,
+        updatedBy:
+          guestData.updatedBy !== undefined
+            ? guestData.updatedBy
+            : existingguest.updatedBy,
+        createdBy:
+          guestData.createdBy !== undefined
+            ? guestData.createdBy
+            : existingguest.createdBy,
         createdAt:
           guestData.createdAt !== undefined
             ? guestData.createdAt
@@ -99,13 +107,14 @@ export class GuestMapper {
         firstName: guestData.firstName,
         lastName: guestData.lastName,
         email: guestData.email,
-        confirmationMailSending:
-          guestData.confirmationMailSending,
+        confirmationMailSending: guestData.confirmationMailSending,
         bookedBy: { _id: guestData.bookedBy },
         additionalGuest: guestData.additionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
         status: guestData.status,
+        updatedBy: guestData.updatedBy,
+        createdBy: guestData.createdBy,
         createdAt: guestData.createdAt,
       };
       return guestEntity;
@@ -123,6 +132,8 @@ export class GuestMapper {
       reservationTags: guest.reservationTags,
       notes: guest.notes,
       status: guest.status,
+      updatedBy: guest.updatedBy,
+      createdBy: guest.createdBy,
     };
   }
 }

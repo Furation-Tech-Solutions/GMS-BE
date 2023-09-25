@@ -170,6 +170,27 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
             return res.cookie('email', resData.email).json(resData);
         }
     );
-
 }
+
+async logOutUser(req: Request, res: Response): Promise<void> {
+
+
+  const user: Either<ErrorClass, UserEntity> =
+      await this.getUserByEmailUseCase.execute(userEmail);
+
+      user.cata(
+        (error: ErrorClass) =>{
+        console.log("error in get by email",error);
+        
+            res.status(error.status).json({ error: error.message })
+        },
+        (result: UserEntity) => {
+            if (result == undefined) {
+                return res.json({ message: "Data Not Found" });
+            }
+            const resData = UserMapper.toEntity(result);
+            return res.cookie('email', resData.email).json(resData);
+        }
+    );
+
 }
