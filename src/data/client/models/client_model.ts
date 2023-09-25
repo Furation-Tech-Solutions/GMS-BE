@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 //   { _id: false }
 // );
 
+
 const clientSchema = new mongoose.Schema({
   firstName: {
     type: String,
