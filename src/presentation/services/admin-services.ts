@@ -69,7 +69,7 @@ export class AdminService {
 
 
   async getAdminById(req: Request, res: Response): Promise<void> {
-    console.log(req.user);
+    // console.log(req.user);
 
     const adminId: string = req.params.adminId;
     // Call the GetAdminByIdUsecase to get the admin by ID

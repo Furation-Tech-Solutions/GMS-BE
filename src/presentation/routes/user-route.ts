@@ -2,7 +2,7 @@ import { UserDataSourceImpl } from "@data/user-account/datasources/user-account-
 import { UserRepositoryImpl } from "@data/user-account/repositories/user-account-repository-impl";
 import { CreateUser } from "@domain/user-account/usecases/create-user";
 import { DeleteUser } from "@domain/user-account/usecases/delete-user";
-import { GetUserByEmail } from "@domain/user-account/usecases/get-user-by-email";
+import { GetUserByEmail } from "@domain/user-account/usecases/login-user";
 import { GetUserById } from "@domain/user-account/usecases/get-user-by-id";
 import { GetAllUsers } from "@domain/user-account/usecases/get-users";
 import { UpdateUser } from "@domain/user-account/usecases/update-user";
@@ -26,13 +26,14 @@ const getUserByIdUseCase=new GetUserById(userRepository)
 const updateUserUseCase=new UpdateUser(userRepository)
 const getUserByEmailUseCase=new GetUserByEmail(userRepository)
 
+
 const userService=new UserService(
     createUserUseCase,
     getAllUserUseCase,
     deleteUserUseCase,
     getUserByIdUseCase,
     updateUserUseCase,
-    getUserByEmailUseCase
+    getUserByEmailUseCase,
 )
 
 export const userRouter=Router()
@@ -62,4 +63,8 @@ userRouter.delete(
 userRouter.post(
     "/login",
 userService.getUserByEmail.bind(userService)
+)
+userRouter.post(
+    "/logout",
+    userService.logoutUser.bind(userService)
 )

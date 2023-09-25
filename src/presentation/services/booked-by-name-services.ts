@@ -119,7 +119,7 @@ export class BookedByNameService {
          
      async deleteBookedByName(req:Request,res:Response):Promise<void>{
           const nameId:string=req.params.nameId
-          console.log(nameId)
+          // console.log(nameId)
 
           const deleteName = await this.deleteBookedByNameUseCase.execute(nameId);
 
@@ -129,7 +129,7 @@ export class BookedByNameService {
 
             (result: void) => {
               const resData = "Deleted successfully";
-              console.log(resData)
+              // console.log(resData)
               return res.json(resData);
             }
           );

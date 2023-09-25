@@ -1,5 +1,5 @@
 import { Either } from "monet";
-import { UserEmailModel, UserEntity, UserModel } from "../entities/user-account";
+import {  UserEntity, UserLoginModel, UserModel } from "../entities/user-account";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
 export interface UserRepository {
@@ -11,5 +11,5 @@ export interface UserRepository {
         id: string,
         data: UserModel
     ): Promise<Either<ErrorClass, UserEntity>>;
-    getUserByEmail(email: UserEmailModel): Promise<Either<ErrorClass, UserEntity>>
+    getUserByEmail(email: UserLoginModel): Promise<Either<ErrorClass, UserEntity>>
 }   
