@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 //   { _id: false }
 // );
 
+
 const clientSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -48,6 +49,7 @@ const clientSchema = new mongoose.Schema({
   },
   tags: {
     type: [string],
+
     // ref: "ClientTags", give the id of tag from clientTagCategory.
   },
   email: {
