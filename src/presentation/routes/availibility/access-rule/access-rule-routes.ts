@@ -42,12 +42,12 @@ export const accessRuleRouter = Router();
 
 // Route handling for creating a new admin
 accessRuleRouter.post("/create", 
-// checkPermission("1103"),
+// checkPermission(["1103"]),
 accessRuleService.createAccessRule.bind(accessRuleService));
 
 // Route handling for updating an shift by ID
 accessRuleRouter.put("/update/:accessId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
 accessRuleService.updateAccessRule.bind(accessRuleService));
 
 // Route handling for getting an shift by ID
@@ -55,7 +55,7 @@ accessRuleRouter.get("/getbyid/:accessId",accessRuleService.getAccessRuleById.bi
 
 // Route handling for deleting an admin by ID
 accessRuleRouter.delete("/delete/:accessId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
  accessRuleService.deleteAccessRule.bind(accessRuleService));
 
 // Route handling for getting all shifts

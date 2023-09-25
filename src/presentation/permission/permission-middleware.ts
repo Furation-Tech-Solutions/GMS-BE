@@ -13,7 +13,7 @@ const unauthorizedResponse = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
   res.status(unAuthorized.status).json({ message: unAuthorized.message });
 };
-export const checkPermission = (requiredPermission: string) => {
+export const checkPermission = (requiredPermission: string[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const email = req.cookies.email;
@@ -22,11 +22,12 @@ export const checkPermission = (requiredPermission: string) => {
         unauthorizedResponse(res);
         return;
       }
+    
       const isSuperuser = permittedUser.accessLevel === AccessLevel.Superuser;
       let hasRequiredPermission = false;
       permittedUser.permissions.forEach((permission: any) => {
         const permissionCode = Object.keys(permission)[0];
-        if (permissionCode === requiredPermission) {
+        if (requiredPermission.includes(permissionCode)) {
           hasRequiredPermission = true;
         }
       });
@@ -41,7 +42,7 @@ export const checkPermission = (requiredPermission: string) => {
         case AccessLevel.Basic:
           permittedUser.permissions.forEach((permission: any) => {
             const permissionCode = Object.keys(permission)[0];
-            if (permissionCode === requiredPermission) {
+            if (requiredPermission.includes(permissionCode)) {
               hasRequiredPermission = true;
             }
           });
@@ -54,11 +55,13 @@ export const checkPermission = (requiredPermission: string) => {
       } else {
         unauthorizedResponse(res);
       }
+    
     } catch (error) {
       const internalError = ApiError.internalError();
       res.status(internalError.status).json({ message: internalError.message });
     }
   };
+
 };
 
 
