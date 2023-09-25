@@ -6,33 +6,44 @@ import mongoose from "mongoose";
 interface ReservationTagInput {
   name: string;
   categoryNameId: mongoose.Schema.Types.ObjectId;
+  updatedBy?: string;
+  createdBy?: string;
 }
 
 const reservationTagValidator = (
   input: ReservationTagInput,
   isUpdate: boolean = false
 ) => {
-  const reservationTagSchema = Joi.object<ReservationTagInput>(
-    {
-      name: isUpdate
-        ? Joi.string().min(3).max(30).optional().trim().messages({
+  const reservationTagSchema = Joi.object<ReservationTagInput>({
+    name: isUpdate
+      ? Joi.string().min(3).max(30).optional().trim().messages({
           "string.min": "Name should have at least 3 characters",
           "string.max": "Name should have less than 30 characters",
         })
-        : Joi.string().min(3).max(30).required().trim().messages({
+      : Joi.string().min(3).max(30).required().trim().messages({
           "string.min": "Name should have at least 3 characters",
           "string.max": "Name should have less than 30 characters",
           "any.required": "Name is required",
         }),
 
-      categoryNameId: Joi.string()
-        .trim()
-        .required()
-        .messages({
-          "any.required": "Category name ID is required",
+    categoryNameId: Joi.string().trim().required().messages({
+      "any.required": "Category name ID is required",
+    }),
+    updatedBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
         }),
-    }
-  );
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        }),
+  });
 
   const { error, value } = reservationTagSchema.validate(input, {
     abortEarly: false,
@@ -61,8 +72,10 @@ export const validateReservationTagInputMiddleware = (
       const { body } = req;
 
       // Validate the reservation tag input using the reservationTagValidator
-      const validatedInput: ReservationTagInput =
-        reservationTagValidator(body, isUpdate);
+      const validatedInput: ReservationTagInput = reservationTagValidator(
+        body,
+        isUpdate
+      );
 
       // Continue to the next middleware or route handler
       next();

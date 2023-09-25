@@ -11,7 +11,7 @@ export class ClientTagCategoryModel {
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 // ClientTagCategoryEntity provided by ClientTagCategory Repository is converted to Express API Response
@@ -28,7 +28,7 @@ export class ClientTagCategoryEntity {
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 /* ================================================= */
@@ -100,7 +100,7 @@ export class ClientTagCategoryMapper {
         createdBy: clientTagCategoryData.createdBy,
         createdAt: clientTagCategoryData.createdAt,
       };
-      return clientTagCategoryData;
+      return clientTagCategoryEntity;
     }
   }
 
