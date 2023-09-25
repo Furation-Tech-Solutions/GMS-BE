@@ -18,7 +18,7 @@ export class BookingRequestModel {
 // BookingRequest Entity provided by BookingRequest Repository is converted to Express API Response
 export class BookingRequestEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
@@ -57,7 +57,7 @@ export class BookingRequestMapper {
       };
     } else {
       const bookingRequestEntity: BookingRequestEntity = {
-        id: includeId ? (bookingreqData._id ? bookingreqData._id.toString() : undefined) : bookingreqData._id.toString(),
+        _id: includeId ? (bookingreqData._id ? bookingreqData._id.toString() : undefined) : bookingreqData._id.toString(),
         firstName: bookingreqData.firstName || null,
         lastName: bookingreqData.lastName || null,
         email: bookingreqData.email || null,

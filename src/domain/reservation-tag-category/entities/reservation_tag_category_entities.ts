@@ -15,7 +15,7 @@ export class ReservationTagCategoryModel {
 // ReservationTagCategoryEntity provided by ReservationTagCategory Repository is converted to Express API Response
 export class ReservationTagCategoryEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public color: string = "",
     public classification: object = {},
@@ -72,7 +72,7 @@ export class ReservationTagCategoryMapper {
       };
     } else {
       const reservationTagCategoryEntity: ReservationTagCategoryEntity = {
-        id: includeId
+        _id: includeId
           ? reservationTagCategoryData._id
             ? reservationTagCategoryData._id.toString()
             : undefined

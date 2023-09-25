@@ -12,7 +12,7 @@ export class SeatingAreaModel {
 // Room Entity provided by Seating Repository is converted to Express API Response
 export class SeatingAreaEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public abbreviation: string,
     public seatingAreaName: string,
     public listOrder: number,
@@ -53,7 +53,7 @@ export class SeatingAreaMapper {
       };
     } else {
       const seatingAreaEntity: SeatingAreaEntity = {
-        id: includeId
+        _id: includeId
           ? seatingAreaData._id
             ? seatingAreaData._id.toString()
             : undefined

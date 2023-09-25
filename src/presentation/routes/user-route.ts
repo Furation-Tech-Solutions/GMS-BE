@@ -60,6 +60,6 @@ userRouter.delete(
     userService.updateUser.bind(userService)
 );
 userRouter.post(
-    "/get/getByEmail",
+    "/login",
 userService.getUserByEmail.bind(userService)
 )

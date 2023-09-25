@@ -3,7 +3,7 @@
 import mongoose from "mongoose";
 
 const validateEmail = function (email: string) {
-    var result = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var result = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return result.test(email);
   };
 
@@ -24,7 +24,7 @@ const validateEmail = function (email: string) {
     lowercase: true,
     validate: [validateEmail, "Please fill a valid email address"],
     match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Please fill a valid email address",
     ],
   },
@@ -70,7 +70,6 @@ const validateEmail = function (email: string) {
         type: [], 
         default: [],    
       },
-
       firebaseDeviceToken: String, 
      
   })

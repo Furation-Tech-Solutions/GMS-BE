@@ -127,7 +127,7 @@ export class AccessRuleModel {
 
 export class AccessRuleEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public name: string,
     public startDate: Date,
     public endDate: Date | undefined,
@@ -217,11 +217,11 @@ export class AccessRuleMapper {
     if (existingAccessRule != null) {
       return {
         ...existingAccessRule,
-        id: includeId
-          ? accessRuleData.id !== undefined
-            ? accessRuleData.id
-            : existingAccessRule.id
-          : existingAccessRule.id,
+        _id: includeId
+          ? accessRuleData._id !== undefined
+            ? accessRuleData._id
+            : existingAccessRule._id
+          : existingAccessRule._id,
         name:
           accessRuleData.name !== undefined
             ? accessRuleData.name
@@ -313,11 +313,11 @@ export class AccessRuleMapper {
       };
     } else {
       const accessRuleEntity: AccessRuleEntity = {
-        id: includeId
-          ? accessRuleData._id !== undefined
-            ? accessRuleData._id.toString()
+        _id: includeId
+          ? accessRuleData.id !== undefined
+            ? accessRuleData.id
             : undefined
-          : accessRuleData._id.toString(),
+          : undefined,
         name: accessRuleData.name,
         startDate: accessRuleData.startDate,
         endDate: accessRuleData.endDate,
