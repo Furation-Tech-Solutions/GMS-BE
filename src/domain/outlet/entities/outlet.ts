@@ -21,7 +21,7 @@ export class OutletModel {
 // Outlet Entity provided by Outlet Repository is converted to Express API Response
 export class OutletEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public brandLogo: string,
     public outletName: string,
     public email: string,
@@ -96,7 +96,7 @@ export class OutletMapper {
     } else {
   
       const outletEntity: OutletEntity = {
-        id: includeId
+        _id: includeId
           ? outletData._id
             ? outletData._id.toString()
             : undefined

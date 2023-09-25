@@ -1,5 +1,5 @@
 export class GetPresignedUrlEntity {
-  constructor(public id: string = "") {}
+  constructor(public _id: string = "") {}
 }
 
 export class outletMediaEntity {

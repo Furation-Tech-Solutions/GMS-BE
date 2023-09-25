@@ -2,19 +2,23 @@
 export class ReservationTagModel {
   constructor(
     public name: string = "",
-    public categoryNameId: string | { id: string } = "",
+    public categoryNameId: string | { _id: string } = "",
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 // client TagEntity provided by client Tag Repository is converted to Express API Response
 export class ReservationTagEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
-    public categoryNameId: string | { id: string } = "",
+    public categoryNameId: string | { _id: string } = "",
+    public updatedBy: string | undefined = undefined,
+    public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) { }
+  ) {}
 }
 
 /* ================================================= */
@@ -27,15 +31,38 @@ export class ReservationTagMapper {
     if (existingReservationTag != null) {
       return {
         ...existingReservationTag,
-        name: reservationTagData.name !== undefined ? reservationTagData.name : existingReservationTag.name,
-        categoryNameId: reservationTagData.categoryNameId !== undefined ? { id: reservationTagData.categoryNameId } : existingReservationTag.categoryNameId,
-        createdAt: reservationTagData.createdAt !== undefined ? reservationTagData.createdAt : existingReservationTag.createdAt,
+        name:
+          reservationTagData.name !== undefined
+            ? reservationTagData.name
+            : existingReservationTag.name,
+        categoryNameId:
+          reservationTagData.categoryNameId !== undefined
+            ? { _id: reservationTagData.categoryNameId }
+            : existingReservationTag.categoryNameId,
+        updatedBy:
+          reservationTagData.updatedBy !== undefined
+            ? reservationTagData.updatedBy
+            : existingReservationTag.updatedBy,
+        createdBy:
+          reservationTagData.createdBy !== undefined
+            ? reservationTagData.createdBy
+            : existingReservationTag.createdBy,
+        createdAt:
+          reservationTagData.createdAt !== undefined
+            ? reservationTagData.createdAt
+            : existingReservationTag.createdAt,
       };
     } else {
       const ReservationTagEntity: ReservationTagEntity = {
-        id: includeId ? (reservationTagData._id ? reservationTagData._id.toString() : undefined) : reservationTagData._id.toString(),
+        _id: includeId
+          ? reservationTagData._id
+            ? reservationTagData._id.toString()
+            : undefined
+          : reservationTagData._id.toString(),
         name: reservationTagData.name,
-        categoryNameId: { id: reservationTagData.categoryNameId },
+        categoryNameId: { _id: reservationTagData.categoryNameId },
+        updatedBy: reservationTagData.updatedBy,
+        createdBy: reservationTagData.createdBy,
         createdAt: reservationTagData.createdAt,
       };
       return ReservationTagEntity;
@@ -46,6 +73,8 @@ export class ReservationTagMapper {
     return {
       name: reservationTag.name,
       categoryNameId: reservationTag.categoryNameId,
+      updatedBy: reservationTag.updatedBy,
+      createdBy: reservationTag.createdBy,
       createdAt: reservationTag.createdAt,
     };
   }

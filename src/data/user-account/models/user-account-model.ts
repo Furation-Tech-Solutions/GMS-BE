@@ -1,20 +1,18 @@
-
-
 import mongoose from "mongoose";
 
 const validateEmail = function (email: string) {
-    var result = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return result.test(email);
-  };
+  var result = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return result.test(email);
+};
 
-  const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
@@ -24,55 +22,70 @@ const validateEmail = function (email: string) {
     lowercase: true,
     validate: [validateEmail, "Please fill a valid email address"],
     match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Please fill a valid email address",
     ],
   },
   jobTitle: {
     type: String,
-    required: false
+    required: false,
   },
   accessLevel: {
     type: String,
-    enum: ["Superuser", "User Manager Only", "Manager","Sub-Manager", "Basic","Basic iPad"]
+    enum: [
+      "Superuser",
+      "User Manager Only",
+      "Manager",
+      "Sub-Manager",
+      "Basic",
+      "Basic iPad",
+    ],
   },
   managerSettings: {
     emailAlertsEnabled: {
       type: Boolean,
-      default: true
+      default: true,
     },
     multifactorAuthenticationEnabled: {
       type: Boolean,
-      default: true
+      default: true,
     },
     suspended: {
       type: Boolean,
-      default: false
+      default: false,
     },
     lastLogin: {
       type: String,
-      default: ""
+      default: "",
     },
     lastPasswordReset: {
       type: String,
-      default: ""
+      default: "",
     },
-    },
-    isLogin:{
-      type:Boolean,
-      default: false,
-    },
-    permissions: {
-        type: [], 
-        default: [],    
-      },
-    emailNotification: {
-        type: [], 
-        default: [],    
-      },
-
-      firebaseDeviceToken: String, 
-     
-  })
+  },
+  isLogin: {
+    type: Boolean,
+    default: false,
+  },
+  permissions: {
+    type: [],
+    default: [],
+  },
+  emailNotification: {
+    type: [],
+    default: [],
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: null,
+  },
+  firebaseDeviceToken: String,
+});
 
 export const UserAccount = mongoose.model("UserAccount", userSchema);

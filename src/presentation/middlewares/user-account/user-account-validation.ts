@@ -7,7 +7,13 @@ interface UserAccountInput {
   lastName: string;
   email: string;
   jobTitle?: string;
-  accessLevel: "Superuser" | "User Manager Only" | "Manager" | "Sub-Manager" | "Basic" | "Basic iPad";
+  accessLevel:
+    | "Superuser"
+    | "User Manager Only"
+    | "Manager"
+    | "Sub-Manager"
+    | "Basic"
+    | "Basic iPad";
   managerSettings: {
     emailAlertsEnabled?: boolean;
     multifactorAuthenticationEnabled?: boolean;
@@ -15,13 +21,19 @@ interface UserAccountInput {
     lastLogin?: string;
     lastPasswordReset?: string;
   };
+  randomPassword?: string;
   isLogin?: boolean;
-  permissions?: [{ key: Number, value: String }];
-  emailNotification?: [{ key: Number, value: String }];
+  permissions?: [{ key: Number; value: String }];
+  emailNotification?: [{ key: Number; value: String }];
+  updatedBy?: string;
+  createdBy?: string;
   firebaseDeviceToken?: string;
 }
 
-const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false) => {
+const userAccountValidator = (
+  input: UserAccountInput,
+  isUpdate: boolean = false
+) => {
   const schema = Joi.object<UserAccountInput>({
     firstName: Joi.string().trim().required().messages({
       "string.base": "First Name must be a string",
@@ -42,18 +54,21 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     jobTitle: Joi.string().trim().optional().messages({
       "string.base": "Job Title must be a string",
     }),
-    accessLevel: Joi.string().valid(
-      "Superuser",
-      "User Manager Only",
-      "Manager",
-      "Sub-Manager",
-      "Basic",
-      "Basic iPad"
-    ).required().messages({
-      "string.base": "Access Level must be a valid string",
-      "any.only": "Access Level must be one of the allowed values",
-      "any.required": "Access Level is required",
-    }),
+    accessLevel: Joi.string()
+      .valid(
+        "Superuser",
+        "User Manager Only",
+        "Manager",
+        "Sub-Manager",
+        "Basic",
+        "Basic iPad"
+      )
+      .required()
+      .messages({
+        "string.base": "Access Level must be a valid string",
+        "any.only": "Access Level must be one of the allowed values",
+        "any.required": "Access Level is required",
+      }),
     managerSettings: Joi.object({
       emailAlertsEnabled: Joi.boolean().optional(),
       multifactorAuthenticationEnabled: Joi.boolean().optional(),
@@ -61,6 +76,9 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
       lastLogin: Joi.string().trim().allow("").optional(),
       lastPasswordReset: Joi.string().allow("").trim().optional(),
     }).optional(),
+    randomPassword: Joi.string().trim().optional().messages({
+      "string.base": "random Password must be a string",
+    }),
     isLogin: Joi.boolean().default(false),
 
     permissions: Joi.array().optional(),
@@ -75,15 +93,26 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
     //   "array.min": "At least one permission is required",
     // }),
     emailNotification: Joi.array().optional(),
-    firebaseDeviceToken: Joi.string()
+    updatedBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Updated By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Update By",
+        }),
+    createdBy: isUpdate
+      ? Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        })
+      : Joi.string().trim().optional().messages({
+          "any.required": "Please select the Created By",
+        }),
+    firebaseDeviceToken: Joi.string(),
     // .items(Joi.object({
     //   key: Joi.number(),
     //   value: Joi.string(),
     // }))
     // .optional(),
-
-
-
   });
 
   const { error, value } = schema.validate(input, {
@@ -91,7 +120,9 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
   });
 
   if (error) {
-    const validationErrors: string[] = error.details.map((err: ValidationErrorItem) => err.message);
+    const validationErrors: string[] = error.details.map(
+      (err: ValidationErrorItem) => err.message
+    );
     throw new ApiError(
       ApiError.badRequest().status,
       validationErrors.join(", "),
@@ -102,14 +133,20 @@ const userAccountValidator = (input: UserAccountInput, isUpdate: boolean = false
   return value;
 };
 
-export const validateUserAccountInputMiddleware = (isUpdate: boolean = false) => {
+export const validateUserAccountInputMiddleware = (
+  isUpdate: boolean = false
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Extract the request body
-      const { body } = req;
+      // const { body } = req;
+      const { password, ...userDataWithoutPassword } = req.body;
 
       // Validate the input using the userAccountValidator
-      const validatedInput: UserAccountInput = userAccountValidator(body, isUpdate);
+      const validatedInput: UserAccountInput = userAccountValidator(
+        userDataWithoutPassword,
+        isUpdate
+      );
 
       // Continue to the next middleware or route handler
       next();

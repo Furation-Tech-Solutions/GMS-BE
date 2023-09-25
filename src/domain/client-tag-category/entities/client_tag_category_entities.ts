@@ -17,7 +17,7 @@ export class ClientTagCategoryModel {
 // ClientTagCategoryEntity provided by ClientTagCategory Repository is converted to Express API Response
 export class ClientTagCategoryEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public color: string = "",
     public classification: object = {},
@@ -84,7 +84,7 @@ export class ClientTagCategoryMapper {
       };
     } else {
       const clientTagCategoryEntity: ClientTagCategoryEntity = {
-        id: includeId
+        _id: includeId
           ? clientTagCategoryData._id
             ? clientTagCategoryData._id.toString()
             : undefined
@@ -100,7 +100,7 @@ export class ClientTagCategoryMapper {
         createdBy: clientTagCategoryData.createdBy,
         createdAt: clientTagCategoryData.createdAt,
       };
-      return clientTagCategoryData;
+      return clientTagCategoryEntity;
     }
   }
 

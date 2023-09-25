@@ -10,14 +10,16 @@ import { validateUserAccountInputMiddleware } from "@presentation/middlewares/us
 import { UserService } from "@presentation/services/user-account-service";
 import { Router } from "express";
 import mongoose from "mongoose";
-
+import EmailService from "@presentation/services/send-mail";
 
 const mongooseConnection = mongoose.connection;
 
 const userDataSource=new UserDataSourceImpl(mongooseConnection)
 const userRepository=new UserRepositoryImpl(userDataSource)
+const emailService = new EmailService();
 
-const createUserUseCase=new CreateUser(userRepository)
+
+const createUserUseCase=new CreateUser(userRepository,emailService)
 const getAllUserUseCase=new GetAllUsers(userRepository)
 const deleteUserUseCase=new DeleteUser(userRepository)
 const getUserByIdUseCase=new GetUserById(userRepository)
@@ -52,12 +54,12 @@ userRouter.delete(
     "/get/:userId",
     userService.getUserById.bind(userService)
  )
- userRouter.put(
+ userRouter.patch(
     "/update/:userId",
     validateUserAccountInputMiddleware(true),
     userService.updateUser.bind(userService)
 );
 userRouter.post(
-    "/get/getByEmail",
+    "/login",
 userService.getUserByEmail.bind(userService)
 )
