@@ -85,7 +85,10 @@ const userSchema = new mongoose.Schema({
     ref: "UserAccount",
     default: null,
   },
-  firebaseDeviceToken: String,
+  firebaseDeviceToken: {
+   type:[],
+   default:[]
+  }
 });
 
 export const UserAccount = mongoose.model("UserAccount", userSchema);

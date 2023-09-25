@@ -1,4 +1,4 @@
-import { UserEmailModel, UserEntity, UserModel } from "@domain/user-account/entities/user-account";
+import {  UserEntity, UserLoginModel, UserModel } from "@domain/user-account/entities/user-account";
 import { UserDataSource } from "../datasources/user-account-data-source";
 import { Either, Left, Right } from "monet";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
@@ -71,9 +71,9 @@ export class UserRepositoryImpl implements UserRepository {
           return Left<ErrorClass, UserEntity>(ApiError.badRequest());
       }
   }
-  async getUserByEmail(user:UserEmailModel): Promise<Either<ErrorClass, UserEntity>>{
+  async getUserByEmail(user:UserLoginModel): Promise<Either<ErrorClass, UserEntity>>{
     try{
-      const request = await this.dataSource.getByEmail(user); // Use the booking request data source
+      const request = await this.dataSource.userLogin(user); // Use the booking request data source
       return request
           ? Right<ErrorClass, UserEntity>(request)
           : Left<ErrorClass, UserEntity>(ApiError.notFound());
