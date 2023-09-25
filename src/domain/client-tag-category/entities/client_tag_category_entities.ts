@@ -11,13 +11,13 @@ export class ClientTagCategoryModel {
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) {}
+  ) { }
 }
 
 // ClientTagCategoryEntity provided by ClientTagCategory Repository is converted to Express API Response
 export class ClientTagCategoryEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public color: string = "",
     public classification: object = {},
@@ -28,7 +28,7 @@ export class ClientTagCategoryEntity {
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
     public createdAt: Date
-  ) {}
+  ) { }
 }
 
 /* ================================================= */
@@ -84,7 +84,7 @@ export class ClientTagCategoryMapper {
       };
     } else {
       const clientTagCategoryEntity: ClientTagCategoryEntity = {
-        id: includeId
+        _id: includeId
           ? clientTagCategoryData._id
             ? clientTagCategoryData._id.toString()
             : undefined

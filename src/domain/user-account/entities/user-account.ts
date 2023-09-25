@@ -2,68 +2,68 @@
 
 // Express API request populate the Admin Model
 export class UserModel {
-    constructor(
-        public firstName: string = "",
-        public lastName: string = "",
-        public email: string = "",
-        public jobTitle: string = "",
-        public accessLevel:string="Manager",
-        public managerSettings: {
-          emailAlertsEnabled: boolean;
-          multifactorAuthenticationEnabled: boolean;
-          suspended: boolean;
-          lastLogin: string;
-          lastPasswordReset: string;
-        } = {
-          emailAlertsEnabled: false,
-          multifactorAuthenticationEnabled: false,
-          suspended: false,
-          lastLogin: "",
-          lastPasswordReset: "",
-        },
-        public isLogin:boolean=false,
-        public permissions: [] = [],
-        public emailNotification:[] = [],
-        public firebaseDeviceToken:string = ''
-    ) {}
-  }
-  export class UserEmailModel {
-    constructor(public email:string=""){}
-  }
-  
-  // Admin Entity provided by Admin Repository is converted to Express API Response
-  export class UserEntity {
-    constructor(
-      public id: string | undefined = undefined,
-      public firstName: string,
-      public lastName: string,
-      public email: string ,
-      public jobTitle: string ,
-      public accessLevel: string,
-      public managerSettings: {
-        emailAlertsEnabled: boolean;
-        multifactorAuthenticationEnabled: boolean;
-        suspended: boolean;
-        lastLogin: string;
-        lastPasswordReset: string;
+  constructor(
+    public firstName: string = "",
+    public lastName: string = "",
+    public email: string = "",
+    public jobTitle: string = "",
+    public accessLevel: string = "Manager",
+    public managerSettings: {
+      emailAlertsEnabled: boolean;
+      multifactorAuthenticationEnabled: boolean;
+      suspended: boolean;
+      lastLogin: string;
+      lastPasswordReset: string;
+    } = {
+        emailAlertsEnabled: false,
+        multifactorAuthenticationEnabled: false,
+        suspended: false,
+        lastLogin: "",
+        lastPasswordReset: "",
       },
-      public isLogin:boolean,
-      public permissions: [],
-      public  emailNotification: [],
-      public firebaseDeviceToken:string
-    ) {}
-  }
-  
-  export class UserMapper {
-    static toEntity(
-      userData: any,
-      includeId?: boolean,
-      existingUser?: UserEntity | null
-    ): UserEntity {
-      if (existingUser != null) {
-        return {
-          ...existingUser,
-          firstName:
+    public isLogin: boolean = false,
+    public permissions: [] = [],
+    public emailNotification: [] = [],
+    public firebaseDeviceToken: string = ''
+  ) { }
+}
+export class UserEmailModel {
+  constructor(public email: string = "") { }
+}
+
+// Admin Entity provided by Admin Repository is converted to Express API Response
+export class UserEntity {
+  constructor(
+    public _id: string | undefined = undefined,
+    public firstName: string,
+    public lastName: string,
+    public email: string,
+    public jobTitle: string,
+    public accessLevel: string,
+    public managerSettings: {
+      emailAlertsEnabled: boolean;
+      multifactorAuthenticationEnabled: boolean;
+      suspended: boolean;
+      lastLogin: string;
+      lastPasswordReset: string;
+    },
+    public isLogin: boolean,
+    public permissions: [],
+    public emailNotification: [],
+    public firebaseDeviceToken: string
+  ) { }
+}
+
+export class UserMapper {
+  static toEntity(
+    userData: any,
+    includeId?: boolean,
+    existingUser?: UserEntity | null
+  ): UserEntity {
+    if (existingUser != null) {
+      return {
+        ...existingUser,
+        firstName:
           userData.firstName !== undefined
             ? userData.firstName
             : existingUser.firstName,
@@ -88,7 +88,7 @@ export class UserModel {
               : existingUser.managerSettings.emailAlertsEnabled,
           multifactorAuthenticationEnabled:
             userData.managerSettings?.multifactorAuthenticationEnabled !==
-            undefined
+              undefined
               ? userData.managerSettings.multifactorAuthenticationEnabled
               : existingUser.managerSettings.multifactorAuthenticationEnabled,
           suspended:
@@ -105,26 +105,26 @@ export class UserModel {
               : existingUser.managerSettings.lastPasswordReset,
         },
         isLogin:
-           userData.isLogin!==undefined
-           ? userData.isLogin
-           : existingUser.isLogin,
+          userData.isLogin !== undefined
+            ? userData.isLogin
+            : existingUser.isLogin,
         permissions:
           userData.permissions !== undefined
             ? userData.permissions
             : existingUser.permissions,
         emailNotification:
-         userData.emailNotification !== undefined
-          ? userData.emailNotification
-          : existingUser.emailNotification,
-          firebaseDeviceToken:
-         userData.firebaseDeviceToken !== undefined
-          ? userData.firebaseDeviceToken
-          : existingUser.firebaseDeviceToken
-            
+          userData.emailNotification !== undefined
+            ? userData.emailNotification
+            : existingUser.emailNotification,
+        firebaseDeviceToken:
+          userData.firebaseDeviceToken !== undefined
+            ? userData.firebaseDeviceToken
+            : existingUser.firebaseDeviceToken
+
       };
     } else {
-      const userEntity: UserEntity= {
-        id: includeId
+      const userEntity: UserEntity = {
+        _id: includeId
           ? userData._id
             ? userData._id.toString()
             : undefined
@@ -143,32 +143,32 @@ export class UserModel {
           lastLogin: userData.managerSettings?.lastLogin || "",
           lastPasswordReset: userData.managerSettings?.lastPasswordReset || "",
         },
-        isLogin:userData.isLogin,
+        isLogin: userData.isLogin,
         permissions: userData.permissions || [],
-        emailNotification:userData.emailNotification||[],
-        firebaseDeviceToken:userData.firebaseDeviceToken||''
+        emailNotification: userData.emailNotification || [],
+        firebaseDeviceToken: userData.firebaseDeviceToken || ''
       };
       return userEntity;
     }
-      
-    }
-  
-    static toModel(user: UserEntity): UserModel {
-        return {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            jobTitle: user.jobTitle,
-            accessLevel: user.accessLevel,
-            managerSettings: user.managerSettings,
-            isLogin: user.isLogin,  
-            permissions: user.permissions,
-            emailNotification:user.emailNotification,
-            firebaseDeviceToken:user.firebaseDeviceToken,
-          };
-    }
+
   }
-  
+
+  static toModel(user: UserEntity): UserModel {
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      jobTitle: user.jobTitle,
+      accessLevel: user.accessLevel,
+      managerSettings: user.managerSettings,
+      isLogin: user.isLogin,
+      permissions: user.permissions,
+      emailNotification: user.emailNotification,
+      firebaseDeviceToken: user.firebaseDeviceToken,
+    };
+  }
+}
+
 
 
 

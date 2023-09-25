@@ -21,7 +21,7 @@ export class AddReservationModel {
 
 export class AddReservationEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public date: string,
     public noOfGuests: Number,
     public shift: string | undefined,
@@ -127,7 +127,7 @@ export class AddReservationMapper {
       };
     } else {
       const reservationEntity: AddReservationEntity = {
-        id: includeId
+        _id: includeId
           ? reservationData._id
             ? reservationData._id.toString()
             : undefined

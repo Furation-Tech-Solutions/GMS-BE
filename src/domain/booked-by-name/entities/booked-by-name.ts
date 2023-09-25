@@ -1,20 +1,18 @@
 // Express API request to populate the BookedByName Model
 export class BookedByNameModel {
   constructor(
-    public name: string = "",
-    public updatedBy: string | {id: string} | undefined = undefined,
-    public createdBy: string | {id: string} | undefined = undefined
-  ) {}
+    public name: string = ""
+  ) { }
 }
 
 // BookedByName Entity provided by BookedByName Repository is converted to Express API Response
 export class BookedByNameEntity {
   constructor(
-    public id: string | undefined = undefined,
+    public _id: string | undefined = undefined,
     public name: string,
-    public updatedBy: string | {id: string} | undefined,
-    public createdBy: string | {id: string} | undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined,
+    public createdBy: string | { _id: string } | undefined
+  ) { }
 }
 
 export class BookedByNameMapper {
@@ -32,23 +30,23 @@ export class BookedByNameMapper {
             : existingBookedByName.name,
         updatedBy:
           bookedByNameData.updatedBy !== undefined
-            ? {id:bookedByNameData.updatedBy}
+            ? { _id: bookedByNameData.updatedBy }
             : existingBookedByName.updatedBy,
         createdBy:
           bookedByNameData.createdBy !== undefined
-            ? {id: bookedByNameData.createdBy}
+            ? { _id: bookedByNameData.createdBy }
             : existingBookedByName.createdBy,
       };
     } else {
       const bookedByNameEntity: BookedByNameEntity = {
-        id: includeId
+        _id: includeId
           ? bookedByNameData._id
             ? bookedByNameData._id.toString()
             : undefined
           : bookedByNameData._id.toString(),
         name: bookedByNameData.name,
-        updatedBy:{ id: bookedByNameData.updatedBy},
-        createdBy:{ id: bookedByNameData.createdBy},
+        updatedBy: { _id: bookedByNameData.updatedBy },
+        createdBy: { _id: bookedByNameData.createdBy },
       };
       return bookedByNameEntity;
     }
@@ -57,8 +55,6 @@ export class BookedByNameMapper {
   static toModel(bookedByName: BookedByNameEntity): BookedByNameModel {
     return {
       name: bookedByName.name,
-      updatedBy: bookedByName.updatedBy,
-      createdBy: bookedByName.createdBy,
     };
   }
 }

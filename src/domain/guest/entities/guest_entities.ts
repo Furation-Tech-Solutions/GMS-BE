@@ -8,7 +8,7 @@ export class GuestModel {
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: string | {id: string} = "",
+    public bookedBy: string | { _id: string } = "",
     public status: string = "",
     public createdAt: string
   ) { }
@@ -19,7 +19,7 @@ export class GuestModel {
 // Guest Entity provided by Guest Repository is converted to Express API Response
 export class GuestEntity {
   constructor(
-    public id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined, // Set a default value for id
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
@@ -27,7 +27,7 @@ export class GuestEntity {
     public additionalGuest: string[],
     public reservationTags: string[],
     public notes: string = "",
-    public bookedBy: | {id: string},
+    public bookedBy: string | { _id: string },
     public status: string = "",
     public createdAt: string
   ) { }
@@ -65,7 +65,7 @@ export class GuestMapper {
             : existingguest.confirmationMailSending,
         bookedBy:
           guestData.bookedBy !== undefined
-            ? {id: guestData.bookedBy}
+            ? { _id: guestData.bookedBy }
             : existingguest.bookedBy,
         additionalGuest:
           guestData.aditionalGuest !== undefined
@@ -91,7 +91,7 @@ export class GuestMapper {
     } else {
       // If existingGuest is not provided, create a new GuestEntity using guestData
       const guestEntity: GuestEntity = {
-        id: includeId
+        _id: includeId
           ? guestData._id
             ? guestData._id.toString()
             : undefined
@@ -101,7 +101,7 @@ export class GuestMapper {
         email: guestData.email,
         confirmationMailSending:
           guestData.confirmationMailSending,
-        bookedBy: {id: guestData.bookedBy},
+        bookedBy: { _id: guestData.bookedBy },
         additionalGuest: guestData.additionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
