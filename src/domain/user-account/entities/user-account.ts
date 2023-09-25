@@ -24,7 +24,7 @@ export class UserModel {
     public emailNotification: [] = [],
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
-    public firebaseDeviceToken: string = ""
+    public firebaseDeviceToken: string[] = []
   ) {}
 }
 export class UserLoginModel {
@@ -52,7 +52,7 @@ export class UserEntity {
     public emailNotification: [],
     public updatedBy: string | undefined = undefined,
     public createdBy: string | undefined = undefined,
-    public firebaseDeviceToken: string
+    public firebaseDeviceToken: []
   ) {}
 }
 
