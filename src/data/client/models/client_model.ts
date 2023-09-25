@@ -2,15 +2,16 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
-const tagRef = new mongoose.Schema(
-  {
-    tag: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ClientTag",
-    },
-  },
-  { _id: false }
-);
+// const tagRef = new mongoose.Schema(
+//   {
+//     tag: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "ClientTag",
+//     },
+//   },
+//   { _id: false }
+// );
+
 
 const clientSchema = new mongoose.Schema({
   firstName: {
@@ -47,7 +48,8 @@ const clientSchema = new mongoose.Schema({
     type: String,
   },
   tags: {
-    type: [tagRef],
+    type: [string],
+
     // ref: "ClientTags", give the id of tag from clientTagCategory.
   },
   email: {
