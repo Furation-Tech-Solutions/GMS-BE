@@ -81,7 +81,7 @@ export class AccessLevelService{
 
       async getAccessLevelById(req: Request, res: Response): Promise<void> {
         const accessLevelID: string = req.params.accessLevelId;
-        console.log(accessLevelID,"acccessLevel id")
+        // console.log(accessLevelID,"acccessLevel id")
 
 
         const accessLevel: Either<ErrorClass, AccessLevelEntity> =
@@ -104,7 +104,7 @@ export class AccessLevelService{
         const accessLevelId: string = req.params.accessLevelId;
         const accessLevelData: AccessLevelModel = req.body;
 
-        console.log(accessLevelData,"data of access level",req.body)
+        // console.log(accessLevelData,"data of access level",req.body)
 
         // Get the existing guest by ID
         const existingAccessLevel: Either<ErrorClass, AccessLevelEntity> =

@@ -43,7 +43,7 @@ export const seatingAreaRouter = Router();
 // Route handling for creating a new Room
 seatingAreaRouter.post(
   "/create",
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   validateSeatingAreaInputMiddleware(false),
   seatingAreaService.createSeatingArea.bind(seatingAreaService)
 );
@@ -62,13 +62,13 @@ seatingAreaRouter.get(
 
 seatingAreaRouter.put(
   "/updateSeatingArea/:seatingAreaId",
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   validateSeatingAreaInputMiddleware(true),
   seatingAreaService.updateSeatingArea.bind(seatingAreaService)
 );
 
 seatingAreaRouter.delete(
   "/deleteSeatingArea/:seatingAreaId",
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   seatingAreaService.deleteSeatingArea.bind(seatingAreaService)
 );

@@ -15,21 +15,21 @@
         "additional_options": [
             {
                 "permission": [
-                    1201,
+                    3222,
                     "Auto-assign Requests"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    1202,
+                    3223,
                     "Automatically make follower on all reservations"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    1203,
+                    3224,
                     "Automatically make follower on reservations user creates"
                 ],
                 "default": true
@@ -119,12 +119,12 @@
         "id": "650160335b44faa4b91c1b77",
         "role": "Manager",
         "permissions": {
-            "3101": "Book reservations and view/edit all reservations booked by all staff accounts",
-            "3102": "View all public client data (includes all Has Restaurants LLP client data)",
-            "3103": "Control venue setup items: blocks, seating chart, availability, cut-off times, blackout dates",
-            "3104": "View all reporting and daily statistics",
-            "3105": "Input and view reservation actuals",
-            "3106": "Access Operations Tab"
+            "1101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "1102": "View all public client data (includes all Has Restaurants LLP client data)",
+            "1103": "Control venue setup items: blocks, seating chart, availability, cut-off times, blackout dates",
+            "1104": "View all reporting and daily statistics",
+            "1105": "Input and view reservation actuals",
+            "2106": "Access Operations Tab"
         },
         "additional_options": [
             {
@@ -143,7 +143,7 @@
             },
             {
                 "permission": [
-                    3203,
+                    1106,
                     "Administrate User Access"
                 ],
                 "default": false
@@ -157,7 +157,7 @@
             },
             {
                 "permission": [
-                    3205,
+                    1107,
                     "Administrate Payment Gateway Integrations"
                 ],
                 "default": true
@@ -234,7 +234,7 @@
             },
             {
                 "permission": [
-                    3216,
+                    1108,
                     "Manage reservation and client tags lists"
                 ],
                 "default": true
@@ -374,169 +374,169 @@
         "id": "650160525b44faa4b91c1b7a",
         "role": "Sub-Manager",
         "permissions": {
-            "4101": "Book reservations and view/edit all reservations booked by all staff accounts",
-            "4102": "View all client data (includes all Has Restaurants LLP client data)",
+            "1101": "Book reservations and view/edit all reservations booked by all staff accounts",
+            "1102": "View all client data (includes all Has Restaurants LLP client data)",
             "4103": "View individual report and daily statistics",
-            "4104": "Input and view reservation Actuals"
+            "1105": "Input and view reservation Actuals"
         },
         "additional_options": [
             {
                 "permission": [
-                    4201,
+                    3201,
                     "Administrate Availability - Shifts and Access Rules"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4202,
+                    3202,
                     "Administrate Availability - Blackout Dates and Daily Program"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4203,
+                    3204,
                     "Administrate Widget Settings"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4204,
+                    3206,
                     "Administrate General Settings"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4205,
+                    3207,
                     "Access Client Tab"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4206,
+                    3208,
                     "Access Marketing Tools"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4207,
+                    3209,
                     "Access Private Line"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4208,
+                    3210,
                     "View Client Spend Aggregates Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4209,
+                    3211,
                     "View POS Check Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4210,
+                    3212,
                     "View Reporting (Full)"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4211,
+                    3213,
                     "Export Client Data"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4212,
+                    3214,
                     "Export Actuals Data"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4213,
+                    3215,
                     "View all clients' contact info"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4214,
+                    2106,
                     "Access Operations Tabs"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4215,
+                    1108,
                     "Manage reservation and client tags lists"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4216,
+                    3217,
                     "Add/remove client tags from client profiles"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4217,
+                    3218,
                     "Charge credit cards on reservations"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4218,
+                    3219,
                     "Refund credit cards on reservations"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4219,
+                    3220,
                     "Require manual input of Booked By on Mobile App"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4220,
+                    3221,
                     "Book Guestlist"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    4221,
+                    3222,
                     "Auto-assign Requests"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4222,
+                    3223,
                     "Automatically make follower on all reservations"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    4223,
+                    3224,
                     "Automatically make follower on reservations user creates"
                 ],
                 "default": true
@@ -606,7 +606,7 @@
             },
             {
                 "permission": [
-                    4233,
+                    3225,
                     "Override Maximum total covers for shift (Mobile only)"
                 ],
                 "default": false
@@ -689,42 +689,42 @@
         "additional_options": [
             {
                 "permission": [
-                    5201,
+                    3207,
                     "Access Client Tab"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    5202,
+                    3209,
                     "Access Private Line"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    5203,
+                    3210,
                     "View Client Spend Aggregates Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    5204,
+                    3211,
                     "View POS Check Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    5205,
+                    2106,
                     "Access Operations Tabs"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    5206,
+                    3220,
                     "Require manual input of Booked By on Mobile App"
                 ],
                 "default": false
@@ -745,14 +745,14 @@
             },
             {
                 "permission": [
-                    5209,
+                    3221,
                     "Book Guestlist"
                 ],
                 "default": false
             },
             {
                 "permission": [
-                    5210,
+                    3222,
                     "Auto-assign Requests"
                 ],
                 "default": false
@@ -766,7 +766,7 @@
             },
             {
                 "permission": [
-                    5212,
+                    3223,
                     "Automatically make follower on all reservations"
                 ],
                 "default": false
@@ -856,35 +856,35 @@
         "additional_options": [
             {
                 "permission": [
-                    6201,
+                    3207,
                     "Access Client Tab"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    6202,
+                    3210,
                     "View Client Spend Aggregates Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    6203,
+                    3211,
                     "View POS Check Data"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    6204,
+                    2106,
                     "Access Operations Tabs"
                 ],
                 "default": true
             },
             {
                 "permission": [
-                    6205,
+                    3220,
                     "Require manual input of Booked By on Mobile App"
                 ],
                 "default": false

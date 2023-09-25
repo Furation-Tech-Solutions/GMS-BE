@@ -9,6 +9,7 @@ import { GetAllAddReservation } from "@domain/add-reservation/usecases/get-all-a
 import { UpdateAddReservation } from "@domain/add-reservation/usecases/update-add-reservation";
 import { AddReservationServices } from "@presentation/services/add-reservation-service";
 import { validateReservationInputMiddleware } from "@presentation/middlewares/add-reservation/add-reservation-validator";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
@@ -54,7 +55,7 @@ export const addReservationRouter = Router();
 // Route handling for creating a new Add Reservation
 addReservationRouter.post(
   "/create",
-  // checkPermission("1101"),
+  // checkPermission(["1101","5101"]),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );
@@ -68,19 +69,21 @@ addReservationRouter.delete(
 // Route handling for getting a Add Reservation by ID
 addReservationRouter.get(
   "/:addReservationId",
+  // checkPermission(["1101","5101"]),
   addReservationService.getAddReservationById.bind(addReservationService)
 );
 
 // Route handling for getting all Add Reservation
 addReservationRouter.get(
   "/",
+  // checkPermission(["1101"]),
   addReservationService.getAllAddReservation.bind(addReservationService)
 );
 
 // Route handling for updating a Add Reservation by ID
 addReservationRouter.put(
   "/:addReservationId",
-  // checkPermission("1101"),
+  // checkPermission(["1101","5101"]),
   validateReservationInputMiddleware(true),
   addReservationService.updateAddReservation.bind(addReservationService)
 );

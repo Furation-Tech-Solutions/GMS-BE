@@ -82,7 +82,7 @@ export class OutletService {
     // Call the GetAllOutletsUsecase to get all outlets
     const outlets: Either<ErrorClass, OutletEntity[]> =
       await this.getAllOutletsUsecase.execute();
-    console.log(outlets);
+    // console.log(outlets);
     outlets.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),

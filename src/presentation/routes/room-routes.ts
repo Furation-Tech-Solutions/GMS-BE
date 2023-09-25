@@ -41,7 +41,7 @@ export const roomRouter = Router();
 // Route handling for creating a new Room
 roomRouter.post(
   "/create",
-//  checkPermission("1103"),
+//  checkPermission(["1103"]),
   validateRoomInputMiddleware(false),
   roomService.createRoom.bind(roomService)
 );
@@ -57,13 +57,13 @@ roomRouter.get("/getAllRooms",
 
 roomRouter.put(
   "/updateRoom/:roomId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
   validateRoomInputMiddleware(true),
   roomService.updateRoom.bind(roomService)
 );
 
 roomRouter.delete(
   "/deleteRoom/:roomId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
   roomService.deleteRoom.bind(roomService)
 );

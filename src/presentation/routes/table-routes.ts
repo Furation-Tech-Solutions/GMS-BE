@@ -42,7 +42,7 @@ export const tableRouter = Router();
 tableRouter.post(
   "/create",
   validateTableInputMiddleware(false),
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   tableService.createTable.bind(tableService)
 );
 
@@ -57,13 +57,13 @@ tableRouter.get("/getAllTables", tableService.getAllTables.bind(tableService));
 
 tableRouter.put(
   "/updateTable/:tableId",
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   validateTableInputMiddleware(true),
   tableService.updateTable.bind(tableService)
 );
 
 tableRouter.delete(
   "/deleteTable/:tableId",
-  // checkPermission("1103"),
+  // checkPermission(["1103"]),
   tableService.deleteTable.bind(tableService)
 );
