@@ -2,9 +2,9 @@ export class TaxRateModel {
   constructor(
     public type: string = "",
     public percentage: number = 0,
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
+  ) { }
 }
 
 export class TaxRateEntity {
@@ -12,9 +12,9 @@ export class TaxRateEntity {
     public _id: string | undefined = undefined,
     public type: string,
     public percentage: number,
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
+  ) { }
 }
 export class TaxRateMapper {
   static toEntity(
@@ -30,14 +30,14 @@ export class TaxRateMapper {
           taxRate.percentage !== undefined
             ? taxRate.percentage
             : existingTaxRate.percentage,
-        createdBy:
-          taxRate.createdBy !== undefined
-            ? taxRate.createdBy
-            : existingTaxRate.createdBy,
         updatedBy:
           taxRate.updatedBy !== undefined
-            ? taxRate.updatedBy
+            ? { _id: taxRate.updatedBy }
             : existingTaxRate.updatedBy,
+        createdBy:
+          taxRate.createdBy !== undefined
+            ? { _id: taxRate.createdBy }
+            : existingTaxRate.createdBy,
       };
     } else {
       const taxRateEntity: TaxRateEntity = {
@@ -48,8 +48,8 @@ export class TaxRateMapper {
           : taxRate._id.toString(),
         type: taxRate.type,
         percentage: taxRate.percentage,
-        updatedBy: taxRate.updatedBy,
-        createdBy: taxRate.createdBy,
+        updatedBy: { _id: taxRate.updatedBy },
+        createdBy: { _id: taxRate.createdBy },
       };
       return taxRateEntity;
     }

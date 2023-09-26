@@ -13,19 +13,19 @@ export class UserModel {
       lastLogin: string;
       lastPasswordReset: string;
     } = {
-      emailAlertsEnabled: false,
-      multifactorAuthenticationEnabled: false,
-      suspended: false,
-      lastLogin: "",
-      lastPasswordReset: "",
-    },
+        emailAlertsEnabled: false,
+        multifactorAuthenticationEnabled: false,
+        suspended: false,
+        lastLogin: "",
+        lastPasswordReset: "",
+      },
     public isLogin: boolean = false,
     public permissions: [] = [],
     public emailNotification: [] = [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public firebaseDeviceToken: string = ""
-  ) {}
+  ) { }
 }
 export class UserLoginModel {
   constructor(public email: string = "",public firebaseToken:string="") {}
@@ -50,10 +50,10 @@ export class UserEntity {
     public isLogin: boolean,
     public permissions: [],
     public emailNotification: [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public firebaseDeviceToken: string
-  ) {}
+  ) { }
 }
 
 export class UserMapper {
@@ -90,7 +90,7 @@ export class UserMapper {
               : existingUser.managerSettings.emailAlertsEnabled,
           multifactorAuthenticationEnabled:
             userData.managerSettings?.multifactorAuthenticationEnabled !==
-            undefined
+              undefined
               ? userData.managerSettings.multifactorAuthenticationEnabled
               : existingUser.managerSettings.multifactorAuthenticationEnabled,
           suspended:
@@ -118,14 +118,14 @@ export class UserMapper {
           userData.emailNotification !== undefined
             ? userData.emailNotification
             : existingUser.emailNotification,
-        createdBy:
-          userData.createdBy !== undefined
-            ? userData.createdBy
-            : existingUser.createdBy,
         updatedBy:
           userData.updatedBy !== undefined
-            ? userData.updatedBy
+            ? { _id: userData.updatedBy }
             : existingUser.updatedBy,
+        createdBy:
+          userData.createdBy !== undefined
+            ? { _id: userData.createdBy }
+            : existingUser.createdBy,
         firebaseDeviceToken:
           userData.firebaseDeviceToken !== undefined
             ? userData.firebaseDeviceToken
@@ -155,8 +155,8 @@ export class UserMapper {
         isLogin: userData.isLogin,
         permissions: userData.permissions || [],
         emailNotification: userData.emailNotification || [],
-        updatedBy: userData.updatedBy,
-        createdBy: userData.createdBy,
+        updatedBy: { _id: userData.updatedBy },
+        createdBy: { _id: userData.createdBy },
         firebaseDeviceToken: userData.firebaseDeviceToken || "",
       };
       return userEntity;

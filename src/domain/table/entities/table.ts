@@ -6,9 +6,9 @@ export class TableModel {
     public partySizeMax: number = 0,
     public tableCombinations: string[] | undefined = [],
     public seatingArea: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
+  ) { }
 }
 
 // Table Entity
@@ -20,9 +20,9 @@ export class TableEntity {
     public partySizeMax: number,
     public tableCombinations: string[] | undefined = [], // Optional field
     public seatingArea: string, // Assuming seatingArea is an ObjectId string
-    public updatedBy: string | undefined,
-    public createdBy: string | undefined
-  ) {}
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
+  ) { }
 }
 
 // Table Mapper
@@ -55,14 +55,14 @@ export class TableMapper {
           tableData.seatingArea !== undefined
             ? tableData.seatingArea
             : existingTable.seatingArea,
-        createdBy:
-          tableData.createdBy !== undefined
-            ? tableData.createdBy
-            : existingTable.createdBy,
         updatedBy:
           tableData.updatedBy !== undefined
-            ? tableData.updatedBy
+            ? { _id: tableData.updatedBy }
             : existingTable.updatedBy,
+        createdBy:
+          tableData.createdBy !== undefined
+            ? { _id: tableData.createdBy }
+            : existingTable.createdBy,
       };
     } else {
       const tableEntity: TableEntity = {
@@ -76,8 +76,8 @@ export class TableMapper {
         partySizeMax: tableData.partySizeMax,
         tableCombinations: tableData.tableCombinations,
         seatingArea: tableData.seatingArea.toString(), // Convert ObjectId to string
-        updatedBy: tableData.updatedBy,
-        createdBy: tableData.createdBy,
+        updatedBy: { _id: tableData.updatedBy },
+        createdBy: { _id: tableData.createdBy },
       };
       return tableEntity;
     }
