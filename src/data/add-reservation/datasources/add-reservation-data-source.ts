@@ -39,7 +39,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       });
 
       if (existingAddReservation) {
-        throw ApiError.emailExist();
+        throw ApiError.reservationExits();
       }
 
       const addReservationData = new AddReservation(addReservation);
