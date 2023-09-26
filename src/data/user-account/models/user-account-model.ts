@@ -86,7 +86,7 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   firebaseDeviceToken: {
-   type:[],
+   type:[String],
    default:[]
   }
 });

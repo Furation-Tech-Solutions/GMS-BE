@@ -171,7 +171,6 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
             return res.cookie('email', resData.email).json(resData);
         }
     );
-
 }
 
 async logoutUser(req:Request,res:Response):Promise<void>{
