@@ -40,7 +40,6 @@ export const NAME_EXIST="name already exists";
 
 export const TAX_TYPE_EXIST="tax type already exists";
 
-// export const FIRST_NAME_EXIST="User already exists"
 
 
 

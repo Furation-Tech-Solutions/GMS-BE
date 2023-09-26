@@ -20,9 +20,11 @@ export class UserDataSourceImpl implements UserDataSource {
   constructor(private db: mongoose.Connection) {}
 
 async create(user: UserModel): Promise<any> {
+ 
     const existingUser = await UserAccount.findOne({ email: user.email });
-    console.log(existingUser);
+
     if (existingUser) {
+
       throw ApiError.emailExist();
     }
 
@@ -33,6 +35,7 @@ async create(user: UserModel): Promise<any> {
     return createdUser.toObject();
     
   }
+
   async getAllUsers(): Promise<any[]> {
     //change by jatin
     try{

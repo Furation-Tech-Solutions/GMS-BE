@@ -62,7 +62,7 @@ const clientSchema = new mongoose.Schema({
     type: String,
     unique: true,
     trim: true,
-    required: true,
+    // required: true,
     lowercase: true,
   },
   phone: {

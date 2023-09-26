@@ -94,20 +94,20 @@ const userAccountValidator = (
     // }),
     emailNotification: Joi.array().optional(),
     updatedBy: isUpdate
-      ? Joi.string().trim().optional().messages({
+      ? Joi.string().trim().optional().default(null).messages({
           "any.required": "Please select the Updated By",
         })
-      : Joi.string().trim().optional().messages({
+      : Joi.string().trim().optional().default(null).messages({
           "any.required": "Please select the Update By",
         }),
     createdBy: isUpdate
-      ? Joi.string().trim().optional().messages({
+      ? Joi.string().trim().optional().default(null).messages({
           "any.required": "Please select the Created By",
         })
-      : Joi.string().trim().optional().messages({
+      : Joi.string().trim().optional().default(null).messages({
           "any.required": "Please select the Created By",
         }),
-    firebaseDeviceToken: Joi.array(),
+    firebaseDeviceToken: Joi.array().optional(),
     // .items(Joi.object({
     //   key: Joi.number(),
     //   value: Joi.string(),

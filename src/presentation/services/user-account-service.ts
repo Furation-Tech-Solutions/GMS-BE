@@ -136,6 +136,7 @@ async updateUser(req: Request, res: Response): Promise<void> {
                   UserID,
                   updatedUserEntity
               );
+              
 
               updatedUser.cata(
               (error: ErrorClass) => {
