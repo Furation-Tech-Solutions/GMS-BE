@@ -16,8 +16,8 @@ export class UserRepositoryImpl implements UserRepository {
       user: UserModel
     ): Promise<Either<ErrorClass, UserEntity>> {
       try {
-        let i = await this.dataSource.create(user);
-        return Right<ErrorClass, UserEntity>(i);
+        let u = await this.dataSource.create(user);
+        return Right<ErrorClass, UserEntity>(u);
       } catch (e) {
         if (typeof ApiError.emailExist) {
           return Left<ErrorClass, UserEntity>(ApiError.emailExist());
@@ -25,6 +25,7 @@ export class UserRepositoryImpl implements UserRepository {
         return Left<ErrorClass, UserEntity>(ApiError.badRequest());
       }
      }
+
      async getAllUser(): Promise<Either<ErrorClass, UserEntity[]>> {
         try {
           const response = await this.dataSource.getAllUsers();
