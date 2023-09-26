@@ -89,6 +89,15 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
           path: "seatingArea",
           select: "id abbreviation seatingAreaName",
         })
+        .populate({
+          path: "reservationTags", // Populate the reservationTags field
+          select: "id name categoryNameId", // Adjust the fields you want to select
+          populate: {
+            path: "categoryNameId", // Populate the categoryNameId field in reservationTags
+            select: "id name color",
+            model: "ReservationTagCategory", // Reference to the Category model
+          },
+        })
         .exec();
       // .populate("shift")
       // .populate("seatingArea")
@@ -97,7 +106,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       // .populate("bookedByUser")
       // .populate("updatedBy")
       // .populate("createdBy")
-      // .exec();
+      // .exec()
+
       return addReservation ? addReservation.toObject() : null;
     } catch (error) {
       throw ApiError.badRequest();
@@ -123,6 +133,16 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
           path: "seatingArea",
           select: "id abbreviation seatingAreaName",
         })
+        .populate({
+          path: "reservationTags", // Populate the reservationTags field
+          select: "id name categoryNameId", // Adjust the fields you want to select
+          populate: {
+            path: "categoryNameId", // Populate the categoryNameId field in reservationTags
+            select: "id name color",
+            model: "ReservationTagCategory", // Reference to the Category model
+          },
+        })
+        // .populate("reservationTags")
         .exec();
       // .populate("shift")
       // .populate("seatingArea")
