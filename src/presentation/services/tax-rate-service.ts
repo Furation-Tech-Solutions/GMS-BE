@@ -38,7 +38,7 @@ export class TaxRateService{
 
 async createTaxRate(req: Request, res: Response): Promise<void> {
     const taxRateData: TaxRateModel = TaxRateMapper.toModel(req.body);
-    console.log(req.body)
+    // console.log(req.body)
 
     const newRate: Either<ErrorClass, TaxRateEntity> =
       await this.createTaxRateUseCase.execute(taxRateData);
@@ -48,7 +48,7 @@ async createTaxRate(req: Request, res: Response): Promise<void> {
         res.status(error.status).json({ error: error.message }),
       (result: TaxRateEntity) => {
         const resData = TaxRateMapper.toEntity(result, true);
-        console.log(resData,"resData")
+        // console.log(resData,"resData")
         return res.json(resData);
       }
     );

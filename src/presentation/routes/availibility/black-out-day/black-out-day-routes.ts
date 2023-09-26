@@ -41,12 +41,12 @@ export const blackoutDayRouter = Router();
 
 // Route handling for creating a new blackoutDay
 blackoutDayRouter.post("/create", 
-// checkPermission("1103"),
+// checkPermission(["1103"]),
 blackoutDayService.createBlackouDay.bind(blackoutDayService));
 
 // Route handling for updating an blackoutDay by ID
 blackoutDayRouter.put("/update/:blackoutId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
 blackoutDayService.updateBlackouDay.bind(blackoutDayService));
 
 // Route handling for getting an blackoutDay by ID
@@ -54,7 +54,7 @@ blackoutDayRouter.get("/getbyid/:blackoutId",blackoutDayService.getBlackouDayByI
 
 // Route handling for deleting an blackoutDay by ID
 blackoutDayRouter.delete("/delete/:blackoutId",
-// checkPermission("1103"),
+// checkPermission(["1103"]),
 blackoutDayService.deleteBlackouDay.bind(blackoutDayService));
 
 // Route handling for getting all blackoutDays

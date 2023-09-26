@@ -1,10 +1,10 @@
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { UserRepository } from "../repositories/user-repository";
-import { UserEmailModel, UserEntity } from "../entities/user-account";
+import {  UserEntity, UserLoginModel } from "../entities/user-account";
 
 export interface GetUserByEmailUseCase {
-  execute: (user: UserEmailModel) => Promise<Either<ErrorClass, UserEntity>>;
+  execute: (user: UserLoginModel) => Promise<Either<ErrorClass, UserEntity>>;
 }
 
 export class GetUserByEmail implements GetUserByEmailUseCase {
@@ -13,7 +13,7 @@ export class GetUserByEmail implements GetUserByEmailUseCase {
   constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
-  async execute(user: UserEmailModel): Promise<Either<ErrorClass, UserEntity>> {
+  async execute(user: UserLoginModel): Promise<Either<ErrorClass, UserEntity>> {
     return await this.userRepository.getUserByEmail(user); // Change to getBookingRequestById
 
   }

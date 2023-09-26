@@ -38,6 +38,7 @@ export const clientTagRouter = Router();
 // Route handling for creating a new tag
 clientTagRouter.post(
     "/add",
+// checkPermission(["1108"]),
     validateClientTagInputMiddleware(false),
     clientTagService.createClientTag.bind(clientTagService)
 );
@@ -45,6 +46,8 @@ clientTagRouter.post(
 // Route handling for deleting a tag by ID
 clientTagRouter.delete(
     "/:ClientTagId",
+// checkPermission(["1108"]),
+
     clientTagService.deleteClientTag.bind(clientTagService)
 );
 
@@ -60,6 +63,8 @@ clientTagRouter.get("/", clientTagService.getAllClientTags.bind(clientTagService
 // Route handling for updating a tag by ID
 clientTagRouter.put(
     "/:ClientTagId",
+// checkPermission(["1108"]),
+
     validateClientTagInputMiddleware(true),
     clientTagService.updateClientTag.bind(clientTagService)
 );

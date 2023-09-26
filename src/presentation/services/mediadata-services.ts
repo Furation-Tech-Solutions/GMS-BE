@@ -38,7 +38,7 @@ export class MediaOutletService {
           res.status(error.status).json({ error: error.message });
         },
         async (result: string) => {
-          console.log(result,"result is this")
+          // console.log(result,"result is this")
           const mediaUrl=result.split('?')[0]
           res.status(200).json({ "presignedurl": result,"media_url":mediaUrl});
         }

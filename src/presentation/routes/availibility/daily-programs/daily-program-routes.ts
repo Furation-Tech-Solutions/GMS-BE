@@ -40,16 +40,23 @@ const programScheduleService = new ProgramScheduleService(
 export const programScheduleRouter = Router();
 
 // Route handling for creating a new admin
-programScheduleRouter.post("/create", programScheduleService.createProgramSchedule.bind(programScheduleService));
+programScheduleRouter.post("/create", 
+// checkPermission(["1103"]),
+programScheduleService.createProgramSchedule.bind(programScheduleService));
 
 // Route handling for updating an shift by ID
-programScheduleRouter.put("/update/:programId",programScheduleService.updateProgramSchedule.bind(programScheduleService));
+programScheduleRouter.put("/update/:programId",
+
+// checkPermission(["1103"]),
+programScheduleService.updateProgramSchedule.bind(programScheduleService));
 
 // Route handling for getting an shift by ID
 programScheduleRouter.get("/getbyid/:programId",programScheduleService.getProgramScheduleById.bind(programScheduleService));
 
 // Route handling for deleting an admin by ID
-programScheduleRouter.delete("/delete/:programId", programScheduleService.deleteProgramSchedule.bind(programScheduleService));
+programScheduleRouter.delete("/delete/:programId",
+// checkPermission(["1103"]),
+programScheduleService.deleteProgramSchedule.bind(programScheduleService));
 
 // Route handling for getting all shifts
 programScheduleRouter.get("/getAll", programScheduleService.getAllProgramSchedule.bind(programScheduleService));

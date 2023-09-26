@@ -53,13 +53,13 @@ clientRouter.delete(
 // Route handling for getting a client by ID
 clientRouter.get(
     "/:clientId",
-    // checkPermission("1102"),
+    // checkPermission(["1102","5102"]),
     clientService.getClientById.bind(clientService)
 );
 
 // Route handling for getting all clients
 clientRouter.get("/", 
-// checkPermission("1102"),
+// checkPermission(["1102"]),
 clientService.getAllClients.bind(clientService));
 
 // Route handling for updating a client by ID

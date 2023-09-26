@@ -47,9 +47,8 @@ const clientSchema = new mongoose.Schema({
   privateNotes: {
     type: String,
   },
-  tags: { 
+  tags: {
     type: [String],
-
     // ref: "ClientTags", give the id of tag from clientTagCategory.
   },
   email: {
