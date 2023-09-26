@@ -42,7 +42,7 @@ const addReservationSchema = new mongoose.Schema({
 
   // Additional Detail
   reservationTags: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
+    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTag" },
   ],
 
   reservationNote: {
