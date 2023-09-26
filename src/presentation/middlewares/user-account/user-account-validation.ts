@@ -107,7 +107,7 @@ const userAccountValidator = (
       : Joi.string().trim().optional().messages({
           "any.required": "Please select the Created By",
         }),
-    firebaseDeviceToken: Joi.string(),
+    firebaseDeviceToken: Joi.array().optional(),
     // .items(Joi.object({
     //   key: Joi.number(),
     //   value: Joi.string(),
