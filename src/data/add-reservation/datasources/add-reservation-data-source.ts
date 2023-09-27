@@ -37,7 +37,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         shift: addReservation.shift,
         client: addReservation.client,
       });
-
+      // console.log("===> S1  Data Source", existingAddReservation);
       if (existingAddReservation) {
         throw ApiError.reservationExits();
       }
@@ -58,6 +58,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
       return createdAddReservation.toObject();
     } catch (error) {
+      // console.log("===> S2  Data Source", error);
       throw ApiError.badRequest();
     }
   }

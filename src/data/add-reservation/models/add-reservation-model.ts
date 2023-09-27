@@ -48,7 +48,6 @@ const addReservationSchema = new mongoose.Schema({
   reservationNote: {
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
-    minLength: [1, "Last name should have more than 1 character"],
     trim: true,
     default: null,
   },
@@ -73,7 +72,6 @@ const addReservationSchema = new mongoose.Schema({
   perks: {
     type: String,
     maxlength: [500, "Perks should have less than 500 characters"],
-    minLength: [10, "Perks should have at least 10 characters"],
     trim: true,
     default: null,
   },
