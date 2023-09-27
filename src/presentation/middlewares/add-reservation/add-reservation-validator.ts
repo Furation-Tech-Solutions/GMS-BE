@@ -1,6 +1,7 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 interface ReservationInput {
   date: string;
@@ -13,7 +14,8 @@ interface ReservationInput {
   reservationTags: string[];
   reservationNote: string;
   table: string;
-  bookedBy: string;
+  // bookedBy: string;
+  bookedBy?: { _id: mongoose.Schema.Types.ObjectId; name: string };
   perks: string;
   updatedBy: string;
   createdBy: string;
@@ -81,25 +83,46 @@ const reservationValidator = (
       : Joi.string().trim().required().messages({
           "any.required": "Please select the Table",
         }),
-    bookedBy: Joi.string().trim(),
+    // bookedBy: Joi.string().trim(),
+    bookedBy: isUpdate
+      ? Joi.object({
+          _id: Joi.string().trim().optional().messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().optional().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
+        })
+      : Joi.object({
+          _id: Joi.string().trim().required().default(null).messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().required().default(null).messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
+        })
+          .optional()
+          .messages({
+            "object.base": "Booked by must be an object with _id and name",
+          }),
     perks: Joi.string().max(2000).min(5).trim().messages({
       "string.max": "Perks should have less than 2000 characters",
       "string.min": "Perks should have at least 5 characters",
     }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Updated By",
-      })
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
+          "any.required": "Please select the Created By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        }),
     confirmationMailSending: Joi.boolean().default(false),
   };
 
