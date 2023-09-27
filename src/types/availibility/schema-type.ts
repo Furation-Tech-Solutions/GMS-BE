@@ -12,7 +12,7 @@ export interface IShiftProperty extends Document {
   lastSeating: string;
   timeInterval: 15 | 30 | 60;
   floorPlanLayout: string;
-  seatingAreasAvailable: ('Restaurant' | 'Bar' | 'SushiBar' | 'Prive' | 'PriveBar')[];
+  seatingAreasAvailable: string[];
   howFarInAdvanceCanReservationsBeBookedInternally:
     | { value?: number; unit: 'Indefinitely'; reservationTime?: string }
     | { value?: number; unit: 'HoursInAdvance'; reservationTime?: string }
@@ -49,7 +49,7 @@ export interface IShift {
   lastSeating: string;
   timeInterval: 15 | 30 | 60;
   floorPlanLayout: string;
-  seatingAreasAvailable: ('Restaurant' | 'Bar' | 'SushiBar' | 'Prive' | 'PriveBar')[];
+  seatingAreasAvailable: string[];
   howFarInAdvanceCanReservationsBeBookedInternally:
     | { value?: number; unit: 'Indefinitely'; reservationTime?: string }
     | { value?: number; unit: 'HoursInAdvance'; reservationTime?: string }

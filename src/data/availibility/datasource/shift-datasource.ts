@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { ShiftModel } from "@domain/availibility/entities/shift-entity";
 import Shift from "../models/shift-model";
+import moment from "moment";
 
 export interface ShiftDataSource {
   create(shift: ShiftModel): Promise<any>;
@@ -15,6 +16,7 @@ export interface ShiftDataSource {
 export class ShiftDataSourceImpl implements ShiftDataSource {
   constructor(private db: mongoose.Connection) {}
 
+
   async create(shift: ShiftModel): Promise<any> {
 
     const overlappingShift = await Shift.findOne({
@@ -22,14 +24,20 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
       $or: [
         {
           $and: [
-            { firstSeating: { $lte: shift.firstSeating } }, // New shift starts before or at the same time
-            { lastSeating: { $gte: shift.firstSeating } }, // New shift ends after or at the same time
+            {
+              // Convert time strings to moment objects and then compare
+              firstSeating: { $lte:shift.firstSeating},
+              lastSeating: { $gte:shift.firstSeating},
+            },
           ],
         },
         {
           $and: [
-            { firstSeating: { $lte: shift.lastSeating } }, // New shift starts before or at the same time
-            { lastSeating: { $gte: shift.lastSeating } }, // New shift ends after or at the same time
+            {
+              // Convert time strings to moment objects and then compare
+              firstSeating: { $lte: shift.lastSeating},
+              lastSeating: { $gte:shift.lastSeating },
+            },
           ],
         },
       ],
