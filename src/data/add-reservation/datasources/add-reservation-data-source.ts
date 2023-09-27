@@ -37,7 +37,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         shift: addReservation.shift,
         client: addReservation.client,
       });
-      // console.log("===> S1  Data Source", existingAddReservation);
+      console.log("===> S1  Data Source", existingAddReservation);
       if (existingAddReservation) {
         throw ApiError.reservationExits();
       }
@@ -46,7 +46,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       const createdAddReservation = await addReservationData.save();
 
       if (bookingRequiestExists !== null) {
-        // console.log("===>s3", "Data Source of booking request change");
+        console.log("===>s3", "Data Source of booking request change");
         bookingRequiestExists.status = { name: "Booked", color: "Green" };
         const updatedBookingRequest = await bookingRequiestExists.save();
         // console.log(
