@@ -11,7 +11,7 @@ export class AddReservationModel {
     public reservationTags: string[] = [],
     public reservationNote: string = "",
     public table: string | undefined = undefined,
-    public bookedBy: string | undefined = undefined,
+    public bookedBy: { _id: string; name: string } | undefined ,
     public perks: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
@@ -29,12 +29,11 @@ export class AddReservationEntity {
     public seatingArea: string | undefined,
     public timeSlot: string,
     public client: string | undefined,
-    // public client: string | undefined,
     // public source: string | undefined,
     public reservationTags: string[],
     public reservationNote: string,
     public table: string | undefined,
-    public bookedBy: string | undefined,
+    public bookedBy: { _id: string; name: string } | undefined ,
     public perks: string,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
@@ -76,10 +75,6 @@ export class AddReservationMapper {
           reservationData.timeSlot !== undefined
             ? reservationData.timeSlot
             : existingReservation.timeSlot,
-        // client:
-        //   reservationData.client !== undefined
-        //     ? reservationData.client
-        //     : existingReservation.client,
         client:
           reservationData.client !== undefined
             ? reservationData.client
@@ -100,6 +95,7 @@ export class AddReservationMapper {
           reservationData.table !== undefined
             ? reservationData.table
             : existingReservation.table,
+        // bookedBy: reservationData.perks ?? existingReservation.perks,
         bookedBy:
           reservationData.bookedBy !== undefined
             ? reservationData.bookedBy
@@ -138,7 +134,6 @@ export class AddReservationMapper {
         duration: reservationData.duration,
         seatingArea: reservationData.seatingArea,
         timeSlot: reservationData.timeSlot,
-        // client: reservationData.client,
         client:
           reservationData.client !== undefined
             ? reservationData.client
@@ -167,7 +162,6 @@ export class AddReservationMapper {
       reservation.seatingArea,
       reservation.timeSlot,
       reservation.client,
-      // reservation.client?.id,
       // reservation.source,
       reservation.reservationTags,
       reservation.reservationNote,
