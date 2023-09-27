@@ -16,9 +16,9 @@ export class ShiftRepositoryImpl implements ShiftRepository {
     shift: ShiftModel
   ): Promise<Either<ErrorClass, ShiftEntity>> {
     try {
-      let i = await this.dataSource.create(shift);
+      let newShift = await this.dataSource.create(shift);
       
-      return Right<ErrorClass, ShiftEntity>(i);
+      return Right<ErrorClass, ShiftEntity>(newShift);
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {
         return Left<ErrorClass, ShiftEntity>(ApiError.overlappingShift());

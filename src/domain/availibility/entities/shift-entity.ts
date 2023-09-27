@@ -11,7 +11,7 @@ export class ShiftModel implements IShift {
     public lastSeating: string = '',
     public timeInterval: 15 | 30 | 60 = 15,
     public floorPlanLayout: string = "default",
-    public seatingAreasAvailable: ('Restaurant' | 'Bar' | 'SushiBar' | 'Prive' | 'PriveBar')[] = [],
+    public seatingAreasAvailable: string[] = [],
     public howFarInAdvanceCanReservationsBeBookedInternally:
       | { value?: number; unit: 'Indefinitely'; reservationTime?: string }
       | { value?: number; unit: 'HoursInAdvance'; reservationTime?: string }
@@ -50,10 +50,10 @@ export class ShiftModel implements IShift {
       public lastSeating: string,
       public timeInterval: 15 | 30 | 60,
       public floorPlanLayout: string,
-      public seatingAreasAvailable: ('Restaurant' | 'Bar' | 'SushiBar' | 'Prive' | 'PriveBar')[],
+      public seatingAreasAvailable: string[],
       public howFarInAdvanceCanReservationsBeBookedInternally:
       | { value?: number; unit: 'Indefinitely'; reservationTime?: string }
-      | { value?: number; unit: 'HoursInAdvance'; reservationTime?: string }
+      | { value?: number; unit: 'HoursInAdvance'; reservationTime?: string } 
       | { value?: number; unit: 'DaysInAdvance'; reservationTime?: string }
       | { value?: number; unit: 'WeeksInAdvance'; reservationTime?: string }
       | { value?: number; unit: 'MonthsInAdvance'; reservationTime?: string } =  { unit: 'Indefinitely' },
@@ -188,7 +188,7 @@ export class ShiftMapper {
           ? shiftData._id
             ? shiftData._id.toString()
             : undefined
-          : shiftData._id.toString(),
+          : undefined,
         shiftName: shiftData.shiftName,
         shiftCategory: shiftData.shiftCategory,
         startDate: shiftData.startDate,

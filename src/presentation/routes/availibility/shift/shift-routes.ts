@@ -42,10 +42,11 @@ export const shiftRouter = Router();
 // Route handling for creating a new admin
 shiftRouter.post("/create", 
 // checkPermission(["1103"]),
+validateShiftInputMiddleware,
 shiftService.createShift.bind(shiftService));
 
 // Route handling for updating an shift by ID
-shiftRouter.put("/update/:shiftId/:action", 
+shiftRouter.put("/update/:shiftId", 
 // checkPermission(["1103"]),
 shiftService.updateShift.bind(shiftService));
 

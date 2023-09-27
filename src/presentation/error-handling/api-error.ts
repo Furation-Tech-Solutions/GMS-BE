@@ -178,6 +178,9 @@ class ApiError extends ErrorClass {
   static reservationExits():ApiError{
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.RESERVATION_EXITS,"no user found");
   }
+  static blackoutDayExits():ApiError{
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.BLACKOUTDAY_EXITS,"invalid");
+  }
 }
 
 export default ApiError;

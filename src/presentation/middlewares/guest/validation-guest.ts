@@ -8,7 +8,7 @@ interface GuestInput {
   lastName: string;
   email: string;
   confirmationMailSending: boolean;
-  bookedBy: mongoose.Schema.Types.ObjectId;
+  bookedBy: string;
   additionalGuest?: string[];
   reservationTags?: mongoose.Schema.Types.ObjectId[];
   status?: string;

@@ -7,9 +7,9 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: {
+  noOfGuests: { 
     type: Number,
-    require: [true, "Please select the Date"],
+    required: [true, "Please select the Date"],
     default: 1,
   },
   shift: {
@@ -57,7 +57,7 @@ const addReservationSchema = new mongoose.Schema({
     ref: "Table",
     required: [true, "Please select the Table"],
   },
-  bookedByUser: {
+  bookedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "bookedByName",
     default: null,
