@@ -42,6 +42,8 @@ export const TAX_TYPE_EXIST="tax type already exists";
 
 export const RESERVATION_EXITS ="reservation with specific date,shifta & client";
 
+export const BLACKOUTDAY_EXITS =" Black out day already exits ";
+
 
 
 
