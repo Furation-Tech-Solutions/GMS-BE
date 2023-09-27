@@ -47,12 +47,14 @@ const guestSchema = new mongoose.Schema({
   bookedBy: {
     // type: bookedByData,
     _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      type: String,
+      // required: true,
+      default: null,
     },
     name: {
       type: String,
-      required: true,
+      // required: true,
+      default: null,
     },
   },
   // bookedBy: {

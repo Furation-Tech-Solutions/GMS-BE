@@ -8,7 +8,7 @@ interface GuestInput {
   lastName: string;
   email: string;
   confirmationMailSending: boolean;
-  bookedBy: mongoose.Schema.Types.ObjectId;
+  bookedBy: { _id: mongoose.Schema.Types.ObjectId; name: string };
   additionalGuest?: string[];
   reservationTags?: mongoose.Schema.Types.ObjectId[];
   status?: string;
@@ -58,16 +58,37 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
           "any.required": "Confirmation mail sending status is required",
         }),
 
+    // bookedBy: isUpdate
+    //   ? Joi.object().optional().messages({
+    //       "object.base": "Booking user ID must be a string",
+    //       "object.empty": "Booking user ID is required",
+    //     })
+    //   : Joi.object().required().messages({
+    //       "object.base": "Booking user ID must be a string",
+    //       "object.empty": "Booking user ID is required",
+    //       "any.required": "Booking user ID is required",
+    //     }),
     bookedBy: isUpdate
-      ? Joi.object().optional().messages({
-          "object.base": "Booking user ID must be a string",
-          "object.empty": "Booking user ID is required",
+      ? Joi.object({
+          _id: Joi.string().trim().optional().messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().optional().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
         })
-      : Joi.object().required().messages({
-          "object.base": "Booking user ID must be a string",
-          "object.empty": "Booking user ID is required",
-          "any.required": "Booking user ID is required",
-        }),
+      : Joi.object({
+          _id: Joi.string().trim().required().messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().required().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
+        })
+          .required()
+          .messages({
+            "object.base": "Booked by must be an object with _id and name",
+          }),
 
     additionalGuest: isUpdate
       ? Joi.array().items(Joi.string().max(30).trim()).optional().messages({
