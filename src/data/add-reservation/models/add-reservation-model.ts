@@ -7,7 +7,7 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: { 
+  noOfGuests: {
     type: Number,
     required: [true, "Please select the Date"],
     default: 1,
@@ -21,7 +21,7 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: "2:00:00",
-    // required: [true, "Please select the Duration"],
+    required: [true, "Please select the Duration"],
   },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
@@ -60,12 +60,10 @@ const addReservationSchema = new mongoose.Schema({
     // type: bookedByData,
     _id: {
       type: String,
-      // required: true,
       default: null,
     },
     name: {
       type: String,
-      // required: true,
       default: null,
     },
   },
