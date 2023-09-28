@@ -48,6 +48,14 @@ class ApiError extends ErrorClass {
       "NoContent"
     );
   }
+  
+  static castError(): ApiError {
+    return new ApiError(
+      HttpStatus.BAD_REQUEST,
+      ErrorMessage.INVAILD_ID,
+      "CastError"
+    );
+  }
 
   static notFound(): ApiError {
     return new ApiError(
@@ -171,18 +179,29 @@ class ApiError extends ErrorClass {
   static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
-  static userNotFound():ApiError{
-    return new ApiError(HttpStatus.NOT_FOUND, ErrorMessage.NO_USERS_FOUND,"no user found");
+  static userNotFound(): ApiError {
+    return new ApiError(
+      HttpStatus.NOT_FOUND,
+      ErrorMessage.NO_USERS_FOUND,
+      "no user found"
+    );
   }
 
-  static reservationExits():ApiError{
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.RESERVATION_EXITS,"no user found");
-  }
-  
-  static blackoutDayExits():ApiError{
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.BLACKOUTDAY_EXITS,"invalid");
+  static reservationExits(): ApiError {
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.RESERVATION_EXITS,
+      "no user found"
+    );
   }
 
+  static blackoutDayExits(): ApiError {
+    return new ApiError(
+      HttpStatus.CONFLICT,
+      ErrorMessage.BLACKOUTDAY_EXITS,
+      "invalid"
+    );
+  }
 }
 
 export default ApiError;

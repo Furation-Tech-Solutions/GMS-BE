@@ -7,6 +7,9 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 
+import * as HttpStatus from "@presentation/error-handling/http-status";
+import mongoose from "mongoose";
+
 export class AddReservationRepositoryImpl implements AddReservationRepository {
   private readonly addReservationDataSource: AddReservationDataSource;
 
@@ -22,11 +25,15 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
         addReservation
       );
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
-    } catch (error) {
-      if (error instanceof ApiError ) {
-        return Left<ErrorClass, AddReservationEntity>(ApiError.reservationExits());
+    } catch (error: any) {
+      if (error instanceof ApiError) {
+        return Left<ErrorClass, AddReservationEntity>(
+          ApiError.reservationExits()
+        );
       }
-      return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
+      return Left<ErrorClass, AddReservationEntity>(
+        ApiError.customError(HttpStatus.BAD_REQUEST, error.message)
+      );
     }
   }
 
@@ -34,9 +41,14 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
     try {
       const result = await this.addReservationDataSource.delete(id);
       return Right<ErrorClass, void>(result);
-    } catch (error) {
-      if (error instanceof ApiError && error.name === "notfound") {
-        return Left<ErrorClass, void>(ApiError.notFound());
+    } catch (error: any) {
+      if (
+        error instanceof mongoose.Error.CastError ||
+        error.name == "notfound"
+      ) {
+        return Left<ErrorClass, void>(
+          error.name == "notfound" ? ApiError.notFound() : ApiError.castError()
+        );
       }
       return Left<ErrorClass, void>(ApiError.badRequest());
     }
@@ -53,8 +65,8 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       );
       return Right<ErrorClass, AddReservationEntity>(updatedAddReservation);
     } catch (error) {
-      if (error instanceof ApiError && error.name === "conflict") {
-        return Left<ErrorClass, AddReservationEntity>(ApiError.emailExist());
+      if (error instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }
       return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
     }
@@ -79,12 +91,10 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
   ): Promise<Either<ErrorClass, AddReservationEntity>> {
     try {
       const addReservation = await this.addReservationDataSource.read(id);
-      return addReservation
-        ? Right<ErrorClass, AddReservationEntity>(addReservation)
-        : Left<ErrorClass, AddReservationEntity>(ApiError.notFound());
+      return Right<ErrorClass, AddReservationEntity>(addReservation);
     } catch (error) {
-      if (error instanceof ApiError && error.name === "notfound") {
-        return Left<ErrorClass, AddReservationEntity>(ApiError.notFound());
+      if (error instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }
       return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
     }
