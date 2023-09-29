@@ -35,20 +35,8 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-    
     const addReservationData: AddReservationModel =
       AddReservationMapper.toModel(req.body);
-
-      // // step1:- find client  by id first
-      // ClientServices.
-      
-      // //find booking request for matching feild like :
-      // // client detail:{
-      // //  firstName,lastName,email,phone
-      // // } 
-      // // data from reservation {
-      // //   duration,numberOfGuest,reservationDate,reservationTime
-      // // }
 
     const newAddReservation: Either<ErrorClass, AddReservationEntity> =
       await this.createAddReservationUsecase.execute(addReservationData);
@@ -74,7 +62,7 @@ export class AddReservationServices {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         return res.json({
-          message: "Reservation Tag category deleted successfully.",
+          message: "Reservation deleted successfully.",
         });
       }
     );
@@ -91,7 +79,7 @@ export class AddReservationServices {
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity) => {
         if (!result) {
-          return res.json({ message: "Client Tag category not found." });
+          return res.json({ message: "Reservation not found." });
         }
         const resData = AddReservationMapper.toEntity(result);
         return res.json(resData);
@@ -125,26 +113,25 @@ export class AddReservationServices {
 
     const existingAddReservation: Either<ErrorClass, AddReservationEntity> =
       await this.getAddReservationByIdUsecase.execute(addReservationId);
-
     existingAddReservation.cata(
       (error: ErrorClass) => {
         res.status(error.status).json({ error: error.message });
       },
-
       async (existingAddReservationData: AddReservationEntity) => {
+        if (existingAddReservationData === null) {
+          return res.json({ message: "Reservation not found." });
+        }
         const updatedAddReservationEntity: AddReservationEntity =
           AddReservationMapper.toEntity(
             addReservationData,
             true,
             existingAddReservationData
           );
-
         const updatedAddReservation: Either<ErrorClass, AddReservationEntity> =
           await this.updateAddReservationUsecase.execute(
             addReservationId,
             updatedAddReservationEntity
           );
-
         updatedAddReservation.cata(
           (error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });

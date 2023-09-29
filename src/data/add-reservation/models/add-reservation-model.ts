@@ -21,7 +21,7 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: "2:00:00",
-    // required: [true, "Please select the Duration"],
+    required: [true, "Please select the Duration"],
   },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
@@ -48,7 +48,6 @@ const addReservationSchema = new mongoose.Schema({
   reservationNote: {
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
-    minLength: [1, "Last name should have more than 1 character"],
     trim: true,
     default: null,
   },
@@ -61,19 +60,16 @@ const addReservationSchema = new mongoose.Schema({
     // type: bookedByData,
     _id: {
       type: String,
-      // required: true,
       default: null,
     },
     name: {
       type: String,
-      // required: true,
       default: null,
     },
   },
   perks: {
     type: String,
     maxlength: [500, "Perks should have less than 500 characters"],
-    minLength: [10, "Perks should have at least 10 characters"],
     trim: true,
     default: null,
   },

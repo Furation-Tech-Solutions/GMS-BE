@@ -48,6 +48,14 @@ class ApiError extends ErrorClass {
       "NoContent"
     );
   }
+  
+  static castError(): ApiError {
+    return new ApiError(
+      HttpStatus.BAD_REQUEST,
+      ErrorMessage.INVAILD_ID,
+      "CastError"
+    );
+  }
 
   static notFound(): ApiError {
     return new ApiError(
