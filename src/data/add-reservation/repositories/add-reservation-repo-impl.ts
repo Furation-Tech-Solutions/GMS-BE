@@ -24,6 +24,7 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       const createdAddReservation = await this.addReservationDataSource.create(
         addReservation
       );
+
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
     } catch (error: any) {
       if (error instanceof ApiError) {
@@ -36,6 +37,7 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       );
     }
   }
+
 
   async deleteAddReservation(id: string): Promise<Either<ErrorClass, void>> {
     try {
@@ -50,7 +52,7 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
           error.name == "notfound" ? ApiError.notFound() : ApiError.castError()
         );
       }
-      return Left<ErrorClass, void>(ApiError.badRequest());
+      return Left<ErrorClass, void>(ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`));
     }
   }
 

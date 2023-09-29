@@ -7,7 +7,7 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: {
+  noOfGuests: { 
     type: Number,
     required: [true, "Please select the Date"],
     default: 1,
@@ -82,13 +82,13 @@ const addReservationSchema = new mongoose.Schema({
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdAt: {

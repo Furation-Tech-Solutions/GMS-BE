@@ -36,13 +36,14 @@ export const OVERLAPPING_SHIFT = "Overlapping shift already exists";
 
 export const OVERLAPPING_DATE = "You have already added that date";
 
-export const ROLE_CONFLICT = "role is already exist";
+export const ROLE_CONFLICT="role is already exist"
 
-export const NAME_EXIST = "name already exists";
+export const NAME_EXIST="name already exists";
 
-export const TAX_TYPE_EXIST = "tax type already exists";
+export const TAX_TYPE_EXIST="tax type already exists";
 
-export const RESERVATION_EXITS =
-  "reservation with specific date,shifta & client";
+export const RESERVATION_EXITS ="reservation with specific date,shifta & client";
 
-export const BLACKOUTDAY_EXITS = " Black out day already exits ";
+export const BLACKOUTDAY_EXITS =" Black out day already exits ";
+
+

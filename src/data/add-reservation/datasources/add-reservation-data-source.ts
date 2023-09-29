@@ -14,7 +14,7 @@ export interface AddReservationDataSource {
 }
 
 export class AddReservationDataSourceImpl implements AddReservationDataSource {
-  constructor(private db: mongoose.Connection) {}
+  constructor(private db: mongoose.Connection) { }
 
   async create(addReservation: AddReservationModel): Promise<any> {
     const clientExists = await Client.findById(addReservation.client);
@@ -38,6 +38,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     });
 
     if (existingAddReservation) throw ApiError.reservationExits();
+
 
     const addReservationData = new AddReservation(addReservation);
     const createdAddReservation = await addReservationData.save();

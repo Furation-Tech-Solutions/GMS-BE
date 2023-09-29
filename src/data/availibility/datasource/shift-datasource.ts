@@ -4,6 +4,7 @@ import ApiError from "@presentation/error-handling/api-error";
 import { ShiftModel } from "@domain/availibility/entities/shift-entity";
 import Shift from "../models/shift-model";
 import moment from "moment";
+import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 
 export interface ShiftDataSource {
   create(shift: ShiftModel): Promise<any>;
@@ -20,25 +21,14 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   async create(shift: ShiftModel): Promise<any> {
 
     const overlappingShift = await Shift.findOne({
-      daysToRepeatThisShift: shift.daysToRepeatThisShift, // Check for the same day
-      $or: [
+      $and: [
         {
-          $and: [
-            {
-              // Convert time strings to moment objects and then compare
-              firstSeating: { $lte:shift.firstSeating},
-              lastSeating: { $gte:shift.firstSeating},
-            },
-          ],
+          firstSeating: shift.firstSeating,
+          lastSeating: shift.lastSeating,
         },
         {
-          $and: [
-            {
-              // Convert time strings to moment objects and then compare
-              firstSeating: { $lte: shift.lastSeating},
-              lastSeating: { $gte:shift.lastSeating },
-            },
-          ],
+          startDate: { $lte: shift.endDate }, // New shift's end date is after or equal to the existing shift's start date
+          endDate: { $gte: shift.startDate },   // New shift's start date is before or equal to the existing shift's end date
         },
       ],
     });
@@ -78,6 +68,9 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   }
 
   async delete(id: string): Promise<void> {
+
+    await AddReservation.deleteMany({ shift: id });
+
     await Shift.findByIdAndDelete(id);
   }
 

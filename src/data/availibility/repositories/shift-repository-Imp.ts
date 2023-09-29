@@ -4,6 +4,7 @@ import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 import { Either, Left, Right } from "monet";
 import { ShiftDataSource } from "../datasource/shift-datasource";
 import { ShiftEntity, ShiftModel } from "@domain/availibility/entities/shift-entity";
+import * as HttpStatus from "@presentation/error-handling/http-status";
 
 export class ShiftRepositoryImpl implements ShiftRepository {
   private readonly dataSource: ShiftDataSource;
@@ -19,11 +20,11 @@ export class ShiftRepositoryImpl implements ShiftRepository {
       let newShift = await this.dataSource.create(shift);
       
       return Right<ErrorClass, ShiftEntity>(newShift);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ApiError && error.status === 409) {
         return Left<ErrorClass, ShiftEntity>(ApiError.overlappingShift());
       }
-      return Left<ErrorClass, ShiftEntity>(ApiError.badRequest());
+      return Left<ErrorClass, ShiftEntity>(ApiError.customError(HttpStatus.BAD_REQUEST, error.message));
     }
   }
 
