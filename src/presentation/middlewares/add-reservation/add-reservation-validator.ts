@@ -78,18 +78,22 @@ const reservationValidator = (
     timeSlot: isUpdate
       ? Joi.string()
           .trim()
-          .regex(/^\d{2}:\d{2}$/)
+          // .regex(/^\d{2}:\d{2}$/)
+          .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9] (AM|PM)$/)
           .optional()
           .messages({
-            "string.pattern.base": "Time Slot should be in the format 'HH:mm'",
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm AM/PM'",
           })
       : Joi.string()
           .trim()
-          .regex(/^\d{2}:\d{2}$/)
+          // .regex(/^\d{2}:\d{2}$/)
+          .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9] (AM|PM)$/)
           .required()
           .messages({
             "any.required": "Please select the Time Slot",
-            "string.pattern.base": "Time Slot should be in the format 'HH:mm'",
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm AM/PM'",
           }),
     client: isUpdate
       ? Joi.string()
@@ -203,6 +207,21 @@ const reservationValidator = (
           .messages({
             "any.required": "Please select the Update By",
           }),
+    createdBy: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Created By",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Created By",
+          }),
     confirmationMailSending: Joi.boolean().optional(),
   };
 
@@ -247,7 +266,7 @@ export const validateReservationInputMiddleware = (
 
       // Respond with the custom error
       // const err = ApiError.badRequest();
-      return res.status(500).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   };
 };
