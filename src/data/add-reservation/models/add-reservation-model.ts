@@ -7,7 +7,7 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: {
+  noOfGuests: { 
     type: Number,
     required: [true, "Please select the Date"],
     default: 1,

@@ -188,7 +188,7 @@ export class ShiftMapper {
           ? shiftData._id
             ? shiftData._id.toString()
             : undefined
-          : shiftData._id.toString(),
+          : undefined,
         shiftName: shiftData.shiftName,
         shiftCategory: shiftData.shiftCategory,
         startDate: shiftData.startDate,
