@@ -82,13 +82,13 @@ const addReservationSchema = new mongoose.Schema({
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: "",
+    default: null,
   },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: "",
+    default: null,
   },
 
   createdAt: {
