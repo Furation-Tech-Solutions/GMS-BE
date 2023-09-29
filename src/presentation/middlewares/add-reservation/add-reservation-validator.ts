@@ -16,8 +16,8 @@ interface ReservationInput {
   reservationNote?: string;
   bookedBy?: { _id: mongoose.Schema.Types.ObjectId; name: string };
   perks?: string;
-  updatedBy?: string;
-  createdBy?: string;
+  updatedBy?: string | null;
+  createdBy?: string | null;
   confirmationMailSending?: boolean;
 }
 
@@ -32,11 +32,11 @@ const reservationValidator = (
     date: isUpdate
       ? Joi.date().iso().optional().messages({
           "any.required": "Please select a valid Date in ISO format",
-          "date.iso": "Please select a valid Date in ISO format",
+          "date.invalid": "Please select a valid Date",
         })
       : Joi.date().iso().required().messages({
-          "any.required": "Please select a valid Date in ISO format",
-          "date.iso": "Please select a valid Date in ISO format",
+          "string.isoDate": "Please select a valid Date in ISO format",
+          "date.invalid": "Please select a valid Date",
         }),
     noOfGuests: isUpdate
       ? Joi.number().optional().messages({
@@ -162,7 +162,6 @@ const reservationValidator = (
       .trim()
       .default("")
       .optional()
-      .default("")
       .messages({
         "string.max": "Reservation note should have less than 2000 characters",
       }),
@@ -184,11 +183,11 @@ const reservationValidator = (
             .trim()
             .pattern(objectIdPattern, "MongoDB ObjectId")
             .required()
-            .default("")
+            .default("651164b63d20dce2ae531ac5")
             .messages({
               "any.required": "Please specify _id in bookedBy",
             }),
-          name: Joi.string().trim().required().default("").messages({
+          name: Joi.string().trim().required().default("Shiva").messages({
             "any.required": "Please specify name in bookedBy",
           }),
         }),
@@ -207,7 +206,7 @@ const reservationValidator = (
           .trim()
           .pattern(objectIdPattern, "MongoDB ObjectId")
           .optional()
-          .default("")
+          .default("65116a3e13633df078698e90")
           .messages({
             "any.required": "Please select the Update By",
           }),
@@ -223,7 +222,7 @@ const reservationValidator = (
           .trim()
           .pattern(objectIdPattern, "MongoDB ObjectId")
           .optional()
-          .default("")
+          .default("65116a3e13633df078698e90")
           .messages({
             "any.required": "Please select the Created By",
           }),
@@ -255,6 +254,15 @@ export const validateReservationInputMiddleware = (
     try {
       // Extract the request body
       const { body } = req;
+
+      body.createdBy = body.createdBy || "65116a3e13633df078698e90";
+      body.updatedBy = body.updatedBy || "65116a3e13633df078698e90";
+      body.bookedBy = body.bookedBy || {
+        _id: "651164b63d20dce2ae531ac5",
+        name: "Shiva",
+      };
+
+      req.body = body;
 
       // Validate the reservation input using the reservationValidator
       const validatedInput: ReservationInput = reservationValidator(
