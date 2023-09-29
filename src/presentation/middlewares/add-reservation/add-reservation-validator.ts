@@ -78,18 +78,20 @@ const reservationValidator = (
     timeSlot: isUpdate
       ? Joi.string()
           .trim()
-          .regex(/^\d{2}:\d{2}$/)
+          .pattern(new RegExp(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/))
           .optional()
           .messages({
-            "string.pattern.base": "Time Slot should be in the format 'HH:mm'",
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm:ss'",
           })
       : Joi.string()
           .trim()
-          .regex(/^\d{2}:\d{2}$/)
+          .pattern(new RegExp(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/))
           .required()
           .messages({
             "any.required": "Please select the Time Slot",
-            "string.pattern.base": "Time Slot should be in the format 'HH:mm'",
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm:ss'",
           }),
     client: isUpdate
       ? Joi.string()
@@ -155,10 +157,15 @@ const reservationValidator = (
               "string.pattern.base": "Invalid MongoDB ObjectId",
             })
         ),
-    reservationNote: Joi.string().max(2000).min(1).trim().optional().messages({
-      "string.max": "Reservation note should have less than 2000 characters",
-      "string.min": "Reservation note should have more than 1 character",
-    }),
+    reservationNote: Joi.string()
+      .max(2000)
+      .trim()
+      .default("")
+      .optional()
+      .default("")
+      .messages({
+        "string.max": "Reservation note should have less than 2000 characters",
+      }),
     bookedBy: isUpdate
       ? Joi.object({
           _id: Joi.string()
@@ -177,16 +184,16 @@ const reservationValidator = (
             .trim()
             .pattern(objectIdPattern, "MongoDB ObjectId")
             .required()
+            .default("")
             .messages({
               "any.required": "Please specify _id in bookedBy",
             }),
-          name: Joi.string().trim().required().messages({
+          name: Joi.string().trim().required().default("").messages({
             "any.required": "Please specify name in bookedBy",
           }),
         }),
-    perks: Joi.string().max(2000).min(5).trim().optional().messages({
+    perks: Joi.string().max(2000).trim().default("").optional().messages({
       "string.max": "Perks should have less than 2000 characters",
-      "string.min": "Perks should have at least 5 characters",
     }),
     updatedBy: isUpdate
       ? Joi.string()
@@ -200,8 +207,25 @@ const reservationValidator = (
           .trim()
           .pattern(objectIdPattern, "MongoDB ObjectId")
           .optional()
+          .default("")
           .messages({
             "any.required": "Please select the Update By",
+          }),
+    createdBy: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Created By",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .default("")
+          .messages({
+            "any.required": "Please select the Created By",
           }),
     confirmationMailSending: Joi.boolean().optional(),
   };
@@ -247,7 +271,7 @@ export const validateReservationInputMiddleware = (
 
       // Respond with the custom error
       // const err = ApiError.badRequest();
-      return res.status(500).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   };
 };
