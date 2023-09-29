@@ -17,7 +17,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   constructor(private db: mongoose.Connection) {}
 
   async create(addReservation: AddReservationModel): Promise<any> {
-    try {
+    // try {
       const clientExists = await Client.findById(addReservation.client);
 
       const bookingCheckCredetial = {
@@ -39,7 +39,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       });
 
       if (existingAddReservation) {
-        throw ApiError.emailExist();
+        throw ApiError.reservationExits();
       }
 
       const addReservationData = new AddReservation(addReservation);
@@ -57,9 +57,9 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       }
 
       return createdAddReservation.toObject();
-    } catch (error) {
-      throw ApiError.badRequest();
-    }
+    // } catch (error) {
+    //   throw ApiError.badRequest();
+    // }
   }
 
   async delete(id: string): Promise<void> {

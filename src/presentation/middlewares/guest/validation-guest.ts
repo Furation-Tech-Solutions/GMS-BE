@@ -8,7 +8,7 @@ interface GuestInput {
   lastName: string;
   email: string;
   confirmationMailSending: boolean;
-  bookedBy: string;
+  bookedBy: { _id: mongoose.Schema.Types.ObjectId; name: string };
   additionalGuest?: string[];
   reservationTags?: mongoose.Schema.Types.ObjectId[];
   status?: string;
@@ -21,109 +21,130 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
   const guestSchema = Joi.object<GuestInput>({
     firstName: isUpdate
       ? Joi.string().max(30).min(3).optional().trim().messages({
-        "string.max": "First name should have less than 30 characters",
-        "string.min": "First name should have more than 3 characters",
-      })
+          "string.max": "First name should have less than 30 characters",
+          "string.min": "First name should have more than 3 characters",
+        })
       : Joi.string().max(30).min(3).required().trim().messages({
-        "string.max": "First name should have less than 30 characters",
-        "string.min": "First name should have more than 3 characters",
-        "any.required": "First name is required",
-      }),
+          "string.max": "First name should have less than 30 characters",
+          "string.min": "First name should have more than 3 characters",
+          "any.required": "First name is required",
+        }),
 
     lastName: isUpdate
       ? Joi.string().max(30).min(3).optional().trim().messages({
-        "string.max": "Last name should have less than 30 characters",
-        "string.min": "Last name should have more than 3 characters",
-      })
+          "string.max": "Last name should have less than 30 characters",
+          "string.min": "Last name should have more than 3 characters",
+        })
       : Joi.string().max(30).min(3).required().trim().messages({
-        "string.max": "Last name should have less than 30 characters",
-        "string.min": "Last name should have more than 3 characters",
-        "any.required": "Last name is required",
-      }),
+          "string.max": "Last name should have less than 30 characters",
+          "string.min": "Last name should have more than 3 characters",
+          "any.required": "Last name is required",
+        }),
 
     email: isUpdate
       ? Joi.string().email().optional().trim().messages({
-        "string.email": "Invalid email format",
-        // "any.required": "Email is required",
-      })
+          "string.email": "Invalid email format",
+          // "any.required": "Email is required",
+        })
       : Joi.string().email().required().trim().messages({
-        "string.email": "Invalid email format",
-        "any.required": "Email is required",
-      }),
+          "string.email": "Invalid email format",
+          "any.required": "Email is required",
+        }),
     confirmationMailSending: isUpdate
       ? Joi.boolean().optional().messages({
-        "any.required": "Confirmation mail sending status is required",
-      })
+          "any.required": "Confirmation mail sending status is required",
+        })
       : Joi.boolean().optional().default(false).messages({
-        "any.required": "Confirmation mail sending status is required",
-      }),
+          "any.required": "Confirmation mail sending status is required",
+        }),
 
+    // bookedBy: isUpdate
+    //   ? Joi.object().optional().messages({
+    //       "object.base": "Booking user ID must be a string",
+    //       "object.empty": "Booking user ID is required",
+    //     })
+    //   : Joi.object().required().messages({
+    //       "object.base": "Booking user ID must be a string",
+    //       "object.empty": "Booking user ID is required",
+    //       "any.required": "Booking user ID is required",
+    //     }),
     bookedBy: isUpdate
-      ? Joi.string().optional().messages({
-        "object.base": "Booking user ID must be a string",
-        "object.empty": "Booking user ID is required",
-      })
-      : Joi.string().required().messages({
-        "object.base": "Booking user ID must be a string",
-        "object.empty": "Booking user ID is required",
-        "any.required": "Booking user ID is required",
-      }),
+      ? Joi.object({
+          _id: Joi.string().trim().optional().messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().optional().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
+        })
+      : Joi.object({
+          _id: Joi.string().trim().required().messages({
+            "any.required": "Please specify _id in bookedBy",
+          }),
+          name: Joi.string().trim().required().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
+        })
+          .required()
+          .messages({
+            "object.base": "Booked by must be an object with _id and name",
+          }),
 
     additionalGuest: isUpdate
       ? Joi.array().items(Joi.string().max(30).trim()).optional().messages({
-        "array.base": "Additional guests must be an array of strings",
-      })
+          "array.base": "Additional guests must be an array of strings",
+        })
       : Joi.array().items(Joi.string().max(30).trim()).optional().messages({
-        "array.base": "Additional guests must be an array of strings",
-      }),
+          "array.base": "Additional guests must be an array of strings",
+        }),
 
     reservationTags: isUpdate
       ? Joi.array().items(Joi.string().trim()).optional().messages({
-        "array.base": "Reservation tags must be an array of strings",
-      })
+          "array.base": "Reservation tags must be an array of strings",
+        })
       : Joi.array().items(Joi.string().trim()).optional().messages({
-        "array.base": "Reservation tags must be an array of strings",
-      }),
+          "array.base": "Reservation tags must be an array of strings",
+        }),
 
     status: isUpdate
       ? Joi.string()
-        .valid("checked In", "checked Out", "-")
-        .optional()
-        .trim()
-        .messages({
-          "any.only": "Invalid status value",
-        })
+          .valid("checked In", "checked Out", "-")
+          .optional()
+          .trim()
+          .messages({
+            "any.only": "Invalid status value",
+          })
       : Joi.string()
-        .valid("checked In", "checked Out", "-")
-        .optional()
-        .trim()
-        .messages({
-          "any.only": "Invalid status value",
-        }),
+          .valid("checked In", "checked Out", "-")
+          .optional()
+          .trim()
+          .messages({
+            "any.only": "Invalid status value",
+          }),
 
     notes: isUpdate
       ? Joi.string().max(500).min(10).optional().trim().messages({
-        "string.max": "Notes should have less than 500 characters",
-        "string.min": "Notes should have more than 10 characters",
-      })
+          "string.max": "Notes should have less than 500 characters",
+          "string.min": "Notes should have more than 10 characters",
+        })
       : Joi.string().max(500).min(10).optional().trim().messages({
-        "string.max": "Notes should have less than 500 characters",
-        "string.min": "Notes should have more than 10 characters",
-      }),
+          "string.max": "Notes should have less than 500 characters",
+          "string.min": "Notes should have more than 10 characters",
+        }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Updated By",
-      })
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
+          "any.required": "Please select the Created By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = guestSchema.validate(input, {

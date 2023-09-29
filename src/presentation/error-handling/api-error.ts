@@ -171,15 +171,15 @@ class ApiError extends ErrorClass {
   static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
-  static userNotFound():ApiError{
-    return new ApiError(HttpStatus.NOT_FOUND, ErrorMessage.NO_USERS_FOUND,"no user found");
+  static userNotFound(): ApiError {
+    return new ApiError(HttpStatus.NOT_FOUND, ErrorMessage.NO_USERS_FOUND, "no user found");
   }
 
-  static reservationExits():ApiError{
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.RESERVATION_EXITS,"no user found");
+  static reservationExits(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.RESERVATION_EXITS, "reservationExits");
   }
-  static blackoutDayExits():ApiError{
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.BLACKOUTDAY_EXITS,"invalid");
+  static blackoutDayExits(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.BLACKOUTDAY_EXITS, "invalid");
   }
 }
 

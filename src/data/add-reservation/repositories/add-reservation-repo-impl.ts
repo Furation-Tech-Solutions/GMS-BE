@@ -7,6 +7,8 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 
+import * as HttpStatus from "@presentation/error-handling/http-status";
+
 export class AddReservationRepositoryImpl implements AddReservationRepository {
   private readonly addReservationDataSource: AddReservationDataSource;
 
@@ -21,24 +23,29 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       const createdAddReservation = await this.addReservationDataSource.create(
         addReservation
       );
+
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
-    } catch (error) {
-      if (error instanceof ApiError ) {
+    } catch (error: any) { 
+      if (error instanceof ApiError && error.status === 409) {
+        console.log(error.name)
         return Left<ErrorClass, AddReservationEntity>(ApiError.reservationExits());
       }
-      return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
+
+        return Left<ErrorClass, AddReservationEntity>(ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`));
+      
     }
   }
+
 
   async deleteAddReservation(id: string): Promise<Either<ErrorClass, void>> {
     try {
       const result = await this.addReservationDataSource.delete(id);
       return Right<ErrorClass, void>(result);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ApiError && error.name === "notfound") {
         return Left<ErrorClass, void>(ApiError.notFound());
       }
-      return Left<ErrorClass, void>(ApiError.badRequest());
+      return Left<ErrorClass, void>(ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`));
     }
   }
 

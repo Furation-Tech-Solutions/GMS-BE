@@ -2,19 +2,19 @@ import { strict } from "assert";
 import { array, boolean, string } from "joi";
 import mongoose from "mongoose";
 
-const bookedByData = new mongoose.Schema(
-  {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-  },
-  { _id: false }
-);
+// const bookedByData = new mongoose.Schema(
+//   {
+//     id: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       required: true,
+//     },
+//     name: {
+//       type: String,
+//       required: true,
+//     },
+//   },
+//   { _id: false }
+// );
 
 const guestSchema = new mongoose.Schema({
   firstName: {
@@ -45,8 +45,17 @@ const guestSchema = new mongoose.Schema({
     default: false,
   },
   bookedBy: {
-    type: String,
-    required: true,
+    // type: bookedByData,
+    _id: {
+      type: String,
+      // required: true,
+      default: null,
+    },
+    name: {
+      type: String,
+      // required: true,
+      default: null,
+    },
   },
   // bookedBy: {
   //     type: mongoose.Schema.Types.ObjectId,

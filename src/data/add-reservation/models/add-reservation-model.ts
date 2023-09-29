@@ -58,9 +58,17 @@ const addReservationSchema = new mongoose.Schema({
     required: [true, "Please select the Table"],
   },
   bookedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "bookedByName",
-    default: null,
+    // type: bookedByData,
+    _id: {
+      type: String,
+      // required: true,
+      default: null,
+    },
+    name: {
+      type: String,
+      // required: true,
+      default: null,
+    },
   },
   perks: {
     type: String,
