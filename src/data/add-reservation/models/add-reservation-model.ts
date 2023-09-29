@@ -49,7 +49,7 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
     trim: true,
-    default: null,
+    default: "",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
@@ -60,18 +60,18 @@ const addReservationSchema = new mongoose.Schema({
     // type: bookedByData,
     _id: {
       type: String,
-      default: null,
+      default: "",
     },
     name: {
       type: String,
-      default: null,
+      default: "",
     },
   },
   perks: {
     type: String,
     maxlength: [500, "Perks should have less than 500 characters"],
     trim: true,
-    default: null,
+    default: "",
   },
 
   confirmationMailSending: {
@@ -82,13 +82,13 @@ const addReservationSchema = new mongoose.Schema({
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdAt: {
