@@ -152,15 +152,14 @@ async updateUser(req: Request, res: Response): Promise<void> {
   );
 }
 async getUserByEmail(req: Request, res: Response): Promise<void> {
-  const userEmail: UserLoginModel = req.body;
+  const { email, firebaseToken } = req.body;
 
   const user: Either<ErrorClass, UserEntity> =
-      await this.getUserByEmailUseCase.execute(userEmail);
+      await this.getUserByEmailUseCase.execute(email, firebaseToken);
 
       user.cata(
         (error: ErrorClass) =>{
         // console.log("error in get by email",error);
-        
             res.status(error.status).json({ error: error.message })
         },
         (result: UserEntity) => {
