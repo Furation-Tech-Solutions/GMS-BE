@@ -52,6 +52,7 @@ bookedByNameRouter.get(
 
 bookedByNameRouter.patch(
   "/update/:nameId",
+  verifyLoggedInUser,
   validateBookedByNameInputMiddleware(true),
   bookedByNameService.updateName.bind(bookedByNameService)
 );

@@ -37,8 +37,14 @@ export class SeatingAreaService {
   }
 
   async createSeatingArea(req: Request, res: Response): Promise<void> {
+    const user=req.user
+    const newSeatingAreaData={
+        ...req.body,
+        createdBy:user._id,
+        updatedBy:user._id
+    }
     const seatingAreaData: SeatingAreaModel = SeatingAreaMapper.toModel(
-      req.body
+      newSeatingAreaData
     );
 
     const newSeatingArea: Either<ErrorClass, SeatingAreaEntity> =
@@ -110,7 +116,12 @@ export class SeatingAreaService {
 
   async updateSeatingArea(req: Request, res: Response): Promise<void> {
     const seatingAreaId: string = req.params.seatingAreaId;
-    const seatingAreaData: SeatingAreaModel = req.body;
+    const user=req.user
+    const newSeatingAreaData={
+        ...req.body,
+        updatedBy:user._id
+    }
+    const seatingAreaData: SeatingAreaModel = newSeatingAreaData;
     // Get the existing outlet by ID
     const existingSeatingArea: Either<ErrorClass, SeatingAreaEntity> =
       await this.getSeatingAreaByIdUsecase.execute(seatingAreaId);

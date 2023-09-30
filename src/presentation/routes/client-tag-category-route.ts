@@ -10,6 +10,7 @@ import { GetAllClientTagCategories } from "@domain/client-tag-category/usecases/
 import { UpdateClientTagCategory } from "@domain/client-tag-category/usecases/update-client_tag_category";
 
 import { validateClientTagCategoryInputMiddleware } from "@presentation/middlewares/client-tag-category/validation-client-tag-category";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 // Create an instance of the TagCategoryDataSourceImpl and pass the mongoose connection
 const clientTagCategoryDataSource = new ClientTagCategoryDataSourceImpl(mongoose.connection);
 
@@ -39,6 +40,7 @@ export const clientTagCategoryRouter = Router();
 clientTagCategoryRouter.post(
     "/add",
     validateClientTagCategoryInputMiddleware(false),
+ verifyLoggedInUser,
     clientTagCategoryService.createClientTagCategory.bind(clientTagCategoryService)
 );
 
@@ -61,6 +63,7 @@ clientTagCategoryRouter.get("/", clientTagCategoryService.getAllClientTagCategor
 clientTagCategoryRouter.put(
     "/:ClientTagCategoryId",
     validateClientTagCategoryInputMiddleware(true),
+    verifyLoggedInUser,
     clientTagCategoryService.updateClientTagCategory.bind(clientTagCategoryService)
 );
 

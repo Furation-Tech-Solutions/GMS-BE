@@ -84,7 +84,14 @@ export class BookedByNameService {
       async updateName(req: Request, res: Response): Promise<void> {
         
           const nameId: string = req.params.nameId;
-          const nameData: BookedByNameModel = req.body;
+
+          const user = req.user
+
+         const newCreatedBookedByName = {
+          ...req.body,
+          updatedBy:user._id
+         }
+          const nameData: BookedByNameModel = newCreatedBookedByName;
     
           // Get the existing admin by ID
           const existingName: Either<ErrorClass,BookedByNameEntity > | null =

@@ -35,7 +35,13 @@ export class TableService {
   }
 
   async createTable(req: Request, res: Response): Promise<void> {
-    const tableData: TableModel = TableMapper.toModel(req.body);
+    const user=req.user
+    const newTableData={
+        ...req.body,
+        createdBy:user._id,
+        updatedBy:user._id
+    }
+    const tableData: TableModel = TableMapper.toModel(newTableData);
 
     const newTable: Either<ErrorClass, TableEntity> =
       await this.createTableUsecase.execute(tableData);
@@ -101,7 +107,12 @@ export class TableService {
 
   async updateTable(req: Request, res: Response): Promise<void> {
     const tableId: string = req.params.tableId;
-    const tableData: TableModel = req.body;
+    const user=req.user
+    const newTableData={
+        ...req.body,
+        updatedBy:user._id
+    }
+    const tableData: TableModel = newTableData;
     // Get the existing outlet by ID
     const existingTable: Either<ErrorClass, TableEntity> =
       await this.getTableByIdUsecase.execute(tableId);

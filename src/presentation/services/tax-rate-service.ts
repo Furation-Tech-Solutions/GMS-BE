@@ -37,7 +37,13 @@ export class TaxRateService{
 
 
 async createTaxRate(req: Request, res: Response): Promise<void> {
-    const taxRateData: TaxRateModel = TaxRateMapper.toModel(req.body);
+    const user=req.user
+    const newTaxRateData={
+        ...req.body,
+        createdBy:user._id,
+        updatedBy:user._id
+    }
+    const taxRateData: TaxRateModel = TaxRateMapper.toModel(newTaxRateData);
     // console.log(req.body)
 
     const newRate: Either<ErrorClass, TaxRateEntity> =
@@ -109,7 +115,12 @@ async createTaxRate(req: Request, res: Response): Promise<void> {
 
 async updateTaxRate(req: Request, res: Response): Promise<void> {
     const taxRateId: string = req.params.taxRateId;
-    const taxRateData: TaxRateModel = req.body;
+    const user=req.user
+    const newTaxRateData={
+        ...req.body,
+        updatedBy:user._id
+    }
+    const taxRateData: TaxRateModel = newTaxRateData;
 
     // console.log(TaxRateData,"data of access level",req.body)
 

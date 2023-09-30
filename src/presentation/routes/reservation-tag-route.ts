@@ -9,6 +9,7 @@ import { GetReservationTagById } from "@domain/reservation-tag/usecases/get-rese
 import { GetAllReservationTag } from "@domain/reservation-tag/usecases/get-all-reservation-tag";
 import { UpdateReservationTag } from "@domain/reservation-tag/usecases/update-reservation-tag";
 import { validateReservationTagInputMiddleware } from "@presentation/middlewares/reservation-tag/validation-reservation-tag";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 // Create an instance of the TagDataSourceImpl and pass the mongoose connection
 const reservationTagDataSource = new ReservationTagDataSourceImpl(mongoose.connection);
@@ -38,7 +39,8 @@ export const reservationTagRouter = Router();
 // Route handling for creating a new tag
 reservationTagRouter.post(
     "/add",
-    validateReservationTagInputMiddleware(false),
+    validateReservationTagInputMiddleware(false), 
+    verifyLoggedInUser,
     reservationTagService.createReservationTag.bind(reservationTagService)
 );
 
@@ -61,6 +63,7 @@ reservationTagRouter.get("/", reservationTagService.getAllReservationTags.bind(r
 reservationTagRouter.put(
     "/:ReservationTagId",
     validateReservationTagInputMiddleware(false),
+verifyLoggedInUser,
     reservationTagService.updateReservationTag.bind(reservationTagService)
 );
 

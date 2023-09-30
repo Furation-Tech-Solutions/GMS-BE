@@ -34,7 +34,13 @@ export class ClientTagCategoryServices {
     }
 
     async createClientTagCategory(req: Request, res: Response): Promise<void> {
-        const clientTagCategoryData: ClientTagCategoryModel = ClientTagCategoryMapper.toModel(req.body);
+        const user=req.user
+        const newClientTagCategoryData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const clientTagCategoryData: ClientTagCategoryModel = ClientTagCategoryMapper.toModel(newClientTagCategoryData);
 
         const newClientTagCategory: Either<ErrorClass, ClientTagCategoryEntity> =
             await this.createClientTagCategoryUsecases.execute(clientTagCategoryData);
@@ -105,7 +111,12 @@ export class ClientTagCategoryServices {
 
     async updateClientTagCategory(req: Request, res: Response): Promise<void> {
         const clientTagCategoryId: string = req.params.ClientTagCategoryId;
-        const clientTagCategoryData: ClientTagCategoryModel = req.body;
+        const user=req.user
+        const newClientTagCategoryData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const clientTagCategoryData: ClientTagCategoryModel = newClientTagCategoryData;
 
         const existingClientTagCategory: Either<ErrorClass, ClientTagCategoryEntity> =
             await this.getClientTagCategoryByIdUsecases.execute(clientTagCategoryId);

@@ -10,6 +10,7 @@ import { GetAllTables } from "@domain/table/usecases/get-tables";
 import { DeleteTable } from "@domain/table/usecases/delete-table";
 import { UpdateTable } from "@domain/table/usecases/update-table";
 import { validateTableInputMiddleware } from "@presentation/middlewares/table/table-validation";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -42,6 +43,7 @@ export const tableRouter = Router();
 tableRouter.post(
   "/create",
   validateTableInputMiddleware(false),
+verifyLoggedInUser,
   // checkPermission(["1103"]),
   tableService.createTable.bind(tableService)
 );
@@ -59,6 +61,7 @@ tableRouter.put(
   "/updateTable/:tableId",
   // checkPermission(["1103"]),
   validateTableInputMiddleware(true),
+  verifyLoggedInUser,
   tableService.updateTable.bind(tableService)
 );
 

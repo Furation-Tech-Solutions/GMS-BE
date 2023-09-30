@@ -34,7 +34,13 @@ export class ReservationTagServices {
     }
 
     async createReservationTag(req: Request, res: Response): Promise<void> {
-        const reservationTagData: ReservationTagModel = ReservationTagMapper.toModel(req.body);
+        const user=req.user
+        const newReservationTagData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const reservationTagData: ReservationTagModel = ReservationTagMapper.toModel(newReservationTagData);
 
         const newReservationTag: Either<ErrorClass, ReservationTagEntity> =
             await this.createReservantionTagUsecase.execute(reservationTagData);
@@ -105,7 +111,12 @@ export class ReservationTagServices {
 
     async updateReservationTag(req: Request, res: Response): Promise<void> {
         const reservationTagId: string = req.params.ReservationTagId;
-        const reservationTagData: ReservationTagModel = req.body;
+        const user=req.user
+        const newReservationTagData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const reservationTagData: ReservationTagModel = newReservationTagData;
 
         const existingReservationTag: Either<ErrorClass, ReservationTagEntity> =
             await this.getReservationTagByIdUsecase.execute(reservationTagId);
