@@ -1,4 +1,4 @@
-export const NOT_FOUND =  "not found";
+export const NOT_FOUND = "not found";
 
 export const FETCH_SUCCESS = "fetched successfully";
 
@@ -9,6 +9,8 @@ export const NO_USERS_FOUND = "No users found";
 export const GENERIC_ERROR = "An unexpected error occurred";
 
 export const DELETED_SUCCESS = "deleted successfully";
+
+export const INVAILD_ID = "invalid ID";
 
 export const BAD_REQUEST = "Missing required data";
 
@@ -24,7 +26,7 @@ export const UNDEFINE_MESSAGE = "mongourl or mongooptions are undefined";
 
 export const SERVER_RUNNING = "your server is running on port";
 
-export const FORBIDDEN = "You are not authorized to do that!"
+export const FORBIDDEN = "You are not authorized to do that!";
 
 export const AWS_PRESIGN_ERROR = "unable to create presigned URL";
 
@@ -40,8 +42,8 @@ export const NAME_EXIST="name already exists";
 
 export const TAX_TYPE_EXIST="tax type already exists";
 
-// export const FIRST_NAME_EXIST="User already exists"
+export const RESERVATION_EXITS ="reservation with specific date,shifta & client";
 
-
+export const BLACKOUTDAY_EXITS =" Black out day already exits ";
 
 

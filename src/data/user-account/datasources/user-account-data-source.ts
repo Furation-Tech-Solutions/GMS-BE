@@ -11,7 +11,7 @@ export interface UserDataSource{
   delete(id:string):Promise<void>;
   read(id: string): Promise<any | null>;
   update(id:string,user_account:UserModel):Promise<any>;
-  userLogin(user:UserLoginModel):Promise<any| null>
+  userLogin(email: string, firebaseToken: string):Promise<any| null>
 
 }
 
@@ -20,8 +20,11 @@ export class UserDataSourceImpl implements UserDataSource {
   constructor(private db: mongoose.Connection) {}
 
 async create(user: UserModel): Promise<any> {
+ 
     const existingUser = await UserAccount.findOne({ email: user.email });
+
     if (existingUser) {
+
       throw ApiError.emailExist();
     }
 
@@ -32,6 +35,7 @@ async create(user: UserModel): Promise<any> {
     return createdUser.toObject();
     
   }
+
   async getAllUsers(): Promise<any[]> {
     //change by jatin
     try{
@@ -88,16 +92,18 @@ async update(id: string, user_account: UserModel): Promise<any> {
       throw ApiError.badRequest();
   }
 }
-async userLogin(user:UserLoginModel):Promise<any| null>{
+async userLogin(email: string, firebaseToken: string):Promise<any| null>{
   try{
-    const userData = await UserAccount.findOne({ email: user.email });
+
+    const userData = await UserAccount.findOne({ email: email });
+
     if(userData){
        // Check if the Firebase token exists in the array
-       const firebaseTokenExists = userData.firebaseDeviceToken.includes(user.firebaseToken);
+       const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
 
        if (!firebaseTokenExists) {
          // If not found, add the Firebase token to the array
-         userData.firebaseDeviceToken.push(user.firebaseToken);
+         userData.firebaseDeviceToken.push(firebaseToken);
          await userData.save(); // Save the updated document
        }
       return userData.toObject();

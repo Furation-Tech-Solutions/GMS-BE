@@ -7,9 +7,9 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: {
+  noOfGuests: { 
     type: Number,
-    require: [true, "Please select the Date"],
+    required: [true, "Please select the Date"],
     default: 1,
   },
   shift: {
@@ -21,7 +21,7 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: "2:00:00",
-    // required: [true, "Please select the Duration"],
+    required: [true, "Please select the Duration"],
   },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
@@ -42,32 +42,36 @@ const addReservationSchema = new mongoose.Schema({
 
   // Additional Detail
   reservationTags: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTagCategory" },
+    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTag" },
   ],
 
   reservationNote: {
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
-    minLength: [1, "Last name should have more than 1 character"],
     trim: true,
-    default: null,
+    default: "",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
     required: [true, "Please select the Table"],
   },
-  bookedByUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "bookedByName",
-    default: null,
+  bookedBy: {
+    // type: bookedByData,
+    _id: {
+      type: String,
+      default: "",
+    },
+    name: {
+      type: String,
+      default: "",
+    },
   },
   perks: {
     type: String,
     maxlength: [500, "Perks should have less than 500 characters"],
-    minLength: [10, "Perks should have at least 10 characters"],
     trim: true,
-    default: null,
+    default: "",
   },
 
   confirmationMailSending: {
@@ -78,13 +82,13 @@ const addReservationSchema = new mongoose.Schema({
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
-    default: null,
+    default: "",
   },
 
   createdAt: {

@@ -64,7 +64,7 @@ userRouter.post(
     "/login",
 userService.getUserByEmail.bind(userService)
 )
-userRouter.post(
+userRouter.get(
     "/logout",
     userService.logoutUser.bind(userService)
 )

@@ -1,25 +1,28 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 interface ReservationInput {
-  date: string;
-  noOfGuests: string;
+  date: Date;
+  noOfGuests: number;
   shift: string;
-  duration: string;
   seatingArea: string;
   timeSlot: string;
   client: string;
-  reservationTags: string[];
-  reservationNote: string;
   table: string;
-  bookedBy: string;
-  perks: string;
-  updatedBy: string;
-  createdBy: string;
-  confirmationMailSending: boolean;
-  createdAt: Date;
+  duration: string;
+  reservationTags?: string[];
+  reservationNote?: string;
+  bookedBy?: { _id: mongoose.Schema.Types.ObjectId; name: string };
+  perks?: string;
+  updatedBy?: string | null;
+  createdBy?: string | null;
+  confirmationMailSending?: boolean;
 }
+
+// Define a pattern for MongoDB ObjectId (24 hexadecimal characters)
+const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
 const reservationValidator = (
   input: ReservationInput,
@@ -27,11 +30,13 @@ const reservationValidator = (
 ) => {
   const baseSchema = {
     date: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Date",
+      ? Joi.date().iso().optional().messages({
+          "any.required": "Please select a valid Date in ISO format",
+          "date.invalid": "Please select a valid Date",
         })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Date",
+      : Joi.date().iso().required().messages({
+          "string.isoDate": "Please select a valid Date in ISO format",
+          "date.invalid": "Please select a valid Date",
         }),
     noOfGuests: isUpdate
       ? Joi.number().optional().messages({
@@ -41,66 +46,187 @@ const reservationValidator = (
           "any.required": "Please select the Number of Guests",
         }),
     shift: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Shift",
-        })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Shift",
-        }),
-    duration: Joi.string().trim().default("2 hr"),
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Shift",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .required()
+          .messages({
+            "any.required": "Please select the Shift",
+          }),
     seatingArea: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Seating Area",
-        })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Seating Area",
-        }),
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Seating Area",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .required()
+          .messages({
+            "any.required": "Please select the Seating Area",
+          }),
     timeSlot: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Time Slot",
-        })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Time Slot",
-        }),
+      ? Joi.string()
+          .trim()
+          .pattern(new RegExp(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/))
+          .optional()
+          .messages({
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm:ss'",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(new RegExp(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/))
+          .required()
+          .messages({
+            "any.required": "Please select the Time Slot",
+            "string.pattern.base":
+              "Time Slot should be in the format 'HH:mm:ss'",
+          }),
     client: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Client",
-        })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Client",
-        }),
-    reservationTags: Joi.array().items(Joi.string().trim()),
-    reservationNote: Joi.string().max(2000).min(1).trim().messages({
-      "string.max": "Reservation note should have less than 2000 characters",
-      "string.min": "Reservation note should have more than 1 character",
-    }),
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Client",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .required()
+          .messages({
+            "any.required": "Please select the Client",
+          }),
     table: isUpdate
-      ? Joi.string().trim().optional().messages({
-          "any.required": "Please select the Table",
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Table",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .required()
+          .messages({
+            "any.required": "Please select the Table",
+          }),
+    duration: isUpdate
+      ? Joi.string()
+          .regex(/^\d{2}:\d{2}:\d{2}$/)
+          .trim()
+          .optional()
+      : Joi.string()
+          .regex(/^\d{2}:\d{2}:\d{2}$/)
+          .trim()
+          .required()
+          .default("02:00:00")
+          .messages({
+            "any.required": "Duration is required",
+            "string.pattern.base": "Duration should be in HH:mm:ss format",
+          }),
+    reservationTags: isUpdate
+      ? Joi.array().items(
+          Joi.string()
+            .trim()
+            .pattern(objectIdPattern, "MongoDB ObjectId")
+            .optional()
+            .messages({
+              "string.pattern.base": "Invalid MongoDB ObjectId",
+            })
+        )
+      : Joi.array().items(
+          Joi.string()
+            .trim()
+            .pattern(objectIdPattern, "MongoDB ObjectId")
+            .required()
+            .messages({
+              "any.required": "Please provide a valid MongoDB ObjectId",
+              "string.pattern.base": "Invalid MongoDB ObjectId",
+            })
+        ),
+    reservationNote: Joi.string()
+      .max(2000)
+      .trim()
+      .default("")
+      .optional()
+      .messages({
+        "string.max": "Reservation note should have less than 2000 characters",
+      }),
+    bookedBy: isUpdate
+      ? Joi.object({
+          _id: Joi.string()
+            .trim()
+            .pattern(objectIdPattern, "MongoDB ObjectId")
+            .optional()
+            .messages({
+              "any.required": "Please specify _id in bookedBy",
+            }),
+          name: Joi.string().trim().optional().messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
         })
-      : Joi.string().trim().required().messages({
-          "any.required": "Please select the Table",
+      : Joi.object({
+          _id: Joi.string()
+            .trim()
+            .pattern(objectIdPattern, "MongoDB ObjectId")
+            .required()
+            .default("651164b63d20dce2ae531ac5")
+            .messages({
+              "any.required": "Please specify _id in bookedBy",
+            }),
+          name: Joi.string().trim().required().default("Shiva").messages({
+            "any.required": "Please specify name in bookedBy",
+          }),
         }),
-    bookedBy: Joi.string().trim(),
-    perks: Joi.string().max(2000).min(5).trim().messages({
+    perks: Joi.string().max(2000).trim().default("").optional().messages({
       "string.max": "Perks should have less than 2000 characters",
-      "string.min": "Perks should have at least 5 characters",
     }),
     updatedBy: isUpdate
-      ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Updated By",
-      })
-      : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Updated By",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .default("65116a3e13633df078698e90")
+          .messages({
+            "any.required": "Please select the Update By",
+          }),
     createdBy: isUpdate
-      ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
-      : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      }),
-    confirmationMailSending: Joi.boolean().default(false),
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the Created By",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .default("65116a3e13633df078698e90")
+          .messages({
+            "any.required": "Please select the Created By",
+          }),
+    confirmationMailSending: Joi.boolean().optional(),
   };
 
   const { error, value } = Joi.object(baseSchema).validate(input, {
@@ -129,6 +255,15 @@ export const validateReservationInputMiddleware = (
       // Extract the request body
       const { body } = req;
 
+      body.createdBy = body.createdBy || "65116a3e13633df078698e90";
+      body.updatedBy = body.updatedBy || "65116a3e13633df078698e90";
+      body.bookedBy = body.bookedBy || {
+        _id: "651164b63d20dce2ae531ac5",
+        name: "Shiva",
+      };
+
+      req.body = body;
+
       // Validate the reservation input using the reservationValidator
       const validatedInput: ReservationInput = reservationValidator(
         body,
@@ -144,7 +279,7 @@ export const validateReservationInputMiddleware = (
 
       // Respond with the custom error
       // const err = ApiError.badRequest();
-      return res.status(500).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   };
 };

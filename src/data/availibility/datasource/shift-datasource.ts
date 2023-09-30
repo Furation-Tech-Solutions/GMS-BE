@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { ShiftModel } from "@domain/availibility/entities/shift-entity";
 import Shift from "../models/shift-model";
+import moment from "moment";
+import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 
 export interface ShiftDataSource {
   create(shift: ShiftModel): Promise<any>;
@@ -15,22 +17,18 @@ export interface ShiftDataSource {
 export class ShiftDataSourceImpl implements ShiftDataSource {
   constructor(private db: mongoose.Connection) {}
 
+
   async create(shift: ShiftModel): Promise<any> {
 
     const overlappingShift = await Shift.findOne({
-      daysToRepeatThisShift: shift.daysToRepeatThisShift, // Check for the same day
-      $or: [
+      $and: [
         {
-          $and: [
-            { firstSeating: { $lte: shift.firstSeating } }, // New shift starts before or at the same time
-            { lastSeating: { $gte: shift.firstSeating } }, // New shift ends after or at the same time
-          ],
+          firstSeating: shift.firstSeating,
+          lastSeating: shift.lastSeating,
         },
         {
-          $and: [
-            { firstSeating: { $lte: shift.lastSeating } }, // New shift starts before or at the same time
-            { lastSeating: { $gte: shift.lastSeating } }, // New shift ends after or at the same time
-          ],
+          startDate: { $lte: shift.endDate }, // New shift's end date is after or equal to the existing shift's start date
+          endDate: { $gte: shift.startDate },   // New shift's start date is before or equal to the existing shift's end date
         },
       ],
     });
@@ -70,6 +68,9 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   }
 
   async delete(id: string): Promise<void> {
+
+    await AddReservation.deleteMany({ shift: id });
+
     await Shift.findByIdAndDelete(id);
   }
 

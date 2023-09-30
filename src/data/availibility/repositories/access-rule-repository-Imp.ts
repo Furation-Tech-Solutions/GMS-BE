@@ -21,8 +21,9 @@ export class AccessRuleRepositoryImpl implements AccessRuleRepository{
       
       return Right<ErrorClass, AccessRuleEntity>(accessRuleData);
     } catch (error) {
-      if (error instanceof ApiError && error.status === 409) {
-        return Left<ErrorClass, AccessRuleEntity>(ApiError.overlappingShift());
+      console.log(error)
+      if (error instanceof ApiError) {
+        return Left<ErrorClass, AccessRuleEntity>(ApiError.nameExist());
       }
       return Left<ErrorClass, AccessRuleEntity>(ApiError.badRequest());
     }

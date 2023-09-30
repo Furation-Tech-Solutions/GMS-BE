@@ -18,6 +18,11 @@ export class BlackoutDayDataSourceImpl implements BlackoutDayDataSource {
   constructor(private db: mongoose.Connection) {}
 
   async create(blackoutDayData: BlackoutDayModel): Promise<any> {
+    const blackoutDayExits = await BlackoutDay.findOne({date: blackoutDayData.date})
+
+    if(blackoutDayExits) {
+      throw ApiError.blackoutDayExits()
+    }
     const newBlackoutDayData = new BlackoutDay(blackoutDayData);
     const savedBlackoutDayDataData: mongoose.Document = await newBlackoutDayData.save();
     return savedBlackoutDayDataData.toObject();

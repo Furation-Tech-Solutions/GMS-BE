@@ -48,14 +48,14 @@ export class BookedByNameDataSourceImpl implements BookedByNameDataSource {
         }
       }
       async updateName(id: string, name: BookedByNameModel): Promise<any> {
-        try {
-          const updatedName = await BookedByName.findByIdAndUpdate(id, name, {
+        // try {
+          const updatedName = await BookedByName.findByIdAndUpdate(id, {name}, {
             new: true,
           }); // No need for conversion here
           return updatedName ? updatedName.toObject() : null; // Convert to plain JavaScript object before returning
-        } catch (error) {
-          throw ApiError.badRequest();
-        }
+        // } catch (error) {
+          // throw ApiError.badRequest();
+        // }
       }
 
     

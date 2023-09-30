@@ -1,65 +1,82 @@
 import express, { Request, Response } from 'express';
 import admin from '@main/config/firebase-sdk/firebase-config';
-import { ErrorClass } from '@presentation/error-handling/api-error';
-import { Either } from 'monet';
-import { UserEntity } from '@domain/user-account/entities/user-account';
 import { UserAccount } from '@data/user-account/models/user-account-model';
 
+const notificationOptions = {
+  priority: 'high',
+  timeToLive: 60 * 60 * 24,
+};
 
-const notification_options = {
-    priority: "high",
-    timeToLive: 60 * 60 * 24,
-  };
+export const sendPushNotification = async (req: Request, res: Response) => {
+  try {
+    // Validate the request body
+    const { title } = req.body;
+    if (!title) {
+      return res.status(400).json({ error: 'Missing title or firebaseDeviceToken' });
+    }
 
-  export const sendPushNotification = async (req: Request, res: Response) => {
-    try {
-      // Validate the request body
-      const { title } = req.body;  
-      if (!title) {
-        return res.status(400).json({ error: 'Missing title or firebaseDeviceToken' });
-      }
-  
-      const users = await UserAccount.find({});
-      
-      const loggedInUsers = users.filter((user) => user.isLogin === true);
-  
-      const sendNotifications = loggedInUsers.map(async (user) => {
-        const { firstName, lastName, firebaseDeviceToken } = user;
+    // Fetch users with isLogin === true
+    const loggedInUsers = await UserAccount.find({ isLogin: true });
+
+    
+
+    if (loggedInUsers.length === 0) {
+      return res.status(400).json({ error: 'No logged-in users found' });
+    }
+
+    const results: { messageId: string; deviceId: string }[] = [];
+
+    for (const user of loggedInUsers) {
+      if (user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
         const payload = {
           notification: {
             title: title,
-            body: `Hello, ${firstName} ${lastName}! This is a broadcasted notification.`,
+            body: `Hello! This is a broadcasted notification.`,
           },
         };
 
+        const tokens = user.firebaseDeviceToken;
 
-  
+        
+
         try {
-          const response = await admin.messaging().sendToDevice(
-            firebaseDeviceToken,
-            payload,
-            notification_options
-          );
-  
-          if (response.results[0].messageId == null) {
-            console.error(response.results[0].error);
-            return Promise.reject(response.results[0].error);
-          } else {
+          const response = await admin.messaging().sendMulticast({
+            tokens: tokens,
+            notification: payload.notification,
+            options: notificationOptions,
+          });
 
-            return `Notification sent successfully with messageId: ${response.results[0].messageId}`;
+          const successResults = response.responses.filter((result: any) => result.success);
+          const failureResults = response.responses.filter((result: any) => !result.success);
+
+          if (failureResults.length > 0) {
+            console.error('Failed to send some messages:', failureResults);
           }
+
+          results.push(
+            ...successResults.map((result: any) => ({
+              messageId: result.messageId,
+              deviceId: result.canonicalRegistrationToken || result.token,
+            }))
+          );
         } catch (error) {
-          console.error(error);
-          return Promise.reject(error);
+          console.error('Error sending multicast message:', error);
+          res.status(500).json({ error: 'Internal server error' });
+          return;
         }
-      });
-  
-      const results = await Promise.all(sendNotifications);
-      res.status(200).json({ message: 'Notifications sent successfully', results });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      }
     }
-  };
 
-
+    if (results.length > 0) {
+      res.status(200).json({
+        message: 'Notifications sent successfully',
+        results: results,
+      });
+    } else {
+      res.status(400).json({ error: 'No valid tokens found for sending notifications' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

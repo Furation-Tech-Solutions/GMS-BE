@@ -17,8 +17,16 @@ export class AccessRuleDataSourceImpl implements AccessRuleDataSource {
 
   async create(accessRule: AccessRuleModel): Promise<any> {
 
+    const overlappingAccessRule = await AccessRule.findOne({name: accessRule.name})
+
+    if(overlappingAccessRule){
+      throw ApiError.nameExist()
+    }
+
     const accessRuleData = new AccessRule(accessRule);
+
     const savedAccessRule: mongoose.Document = await accessRuleData.save();
+ 
     return savedAccessRule.toObject();
   }
 

@@ -4,100 +4,94 @@ export class GuestModel {
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public confirmationMailSending: boolean,
-    public additionalGuest: string[],
-    public reservationTags: string[],
+    public confirmationMailSending: boolean = false,
+    public additionalGuest: string[] = [],
+    public reservationTags: string[] = [],
     public notes: string = "",
-    public bookedBy: string | { _id: string } = "",
+    public bookedBy: { _id: string; name: string } | undefined,
     public status: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: string
   ) {}
 }
-// add to the guestModel
-// public bookedBy: string = "",
 
 // Guest Entity provided by Guest Repository is converted to Express API Response
 export class GuestEntity {
   constructor(
-    public _id: string | undefined = undefined, // Set a default value for id
+    public _id: string | undefined = undefined,
     public firstName: string = "",
     public lastName: string = "",
     public email: string = "",
-    public confirmationMailSending: boolean,
-    public additionalGuest: string[],
-    public reservationTags: string[],
+    public confirmationMailSending: boolean = false,
+    public additionalGuest: string[] = [],
+    public reservationTags: string[] = [],
     public notes: string = "",
-    public bookedBy: string | { _id: string },
+    public bookedBy: { _id: string; name: string } | undefined,
     public status: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: string
   ) {}
 }
 
-// add to the GuestEntity
-// public bookedBy: string = "",
+/* ============ */
 
-/* ================================================= */
 export class GuestMapper {
   static toEntity(
     guestData: any,
     includeId?: boolean,
-    existingguest?: GuestEntity
+    existingGuest?: GuestEntity
   ): GuestEntity {
-    if (existingguest != null) {
-      // If existingguest is provided, merge the data from guestData with the existingguest
+    if (existingGuest != null) {
       return {
-        ...existingguest,
+        ...existingGuest,
         firstName:
           guestData.firstName !== undefined
             ? guestData.firstName
-            : existingguest.firstName,
+            : existingGuest.firstName,
         lastName:
           guestData.lastName !== undefined
             ? guestData.lastName
-            : existingguest.lastName,
+            : existingGuest.lastName,
         email:
-          guestData.email !== undefined ? guestData.email : existingguest.email,
+          guestData.email !== undefined ? guestData.email : existingGuest.email,
         confirmationMailSending:
           guestData.confirmationMailSending !== undefined
             ? guestData.confirmationMailSending
-            : existingguest.confirmationMailSending,
+            : existingGuest.confirmationMailSending,
         bookedBy:
           guestData.bookedBy !== undefined
-            ? { _id: guestData.bookedBy }
-            : existingguest.bookedBy,
+            ? guestData.bookedBy
+            : existingGuest.bookedBy,
         additionalGuest:
-          guestData.aditionalGuest !== undefined
+          guestData.additionalGuest !== undefined
             ? guestData.additionalGuest
-            : existingguest.additionalGuest,
+            : existingGuest.additionalGuest,
         reservationTags:
           guestData.reservationTags !== undefined
             ? guestData.reservationTags
-            : existingguest.reservationTags,
+            : existingGuest.reservationTags,
         notes:
-          guestData.notes !== undefined ? guestData.notes : existingguest.notes,
+          guestData.notes !== undefined ? guestData.notes : existingGuest.notes,
         status:
           guestData.status !== undefined
             ? guestData.status
-            : existingguest.status,
+            : existingGuest.status,
         updatedBy:
           guestData.updatedBy !== undefined
             ? guestData.updatedBy
-            : existingguest.updatedBy,
+            : existingGuest.updatedBy,
         createdBy:
           guestData.createdBy !== undefined
             ? guestData.createdBy
-            : existingguest.createdBy,
+            : existingGuest.createdBy,
         createdAt:
           guestData.createdAt !== undefined
             ? guestData.createdAt
-            : existingguest.createdAt,
+            : existingGuest.createdAt,
       };
     } else {
-      // If existingGuest is not provided, create a new GuestEntity using guestData
       const guestEntity: GuestEntity = {
         _id: includeId
           ? guestData._id
@@ -108,7 +102,7 @@ export class GuestMapper {
         lastName: guestData.lastName,
         email: guestData.email,
         confirmationMailSending: guestData.confirmationMailSending,
-        bookedBy: { _id: guestData.bookedBy },
+        bookedBy: guestData.bookedBy,
         additionalGuest: guestData.additionalGuest,
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
@@ -120,8 +114,8 @@ export class GuestMapper {
       return guestEntity;
     }
   }
+
   static toModel(guest: GuestEntity): any {
-    // console.log(guest.aditionalGuest);
     return {
       firstName: guest.firstName,
       lastName: guest.lastName,

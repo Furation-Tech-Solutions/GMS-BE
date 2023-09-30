@@ -1,7 +1,7 @@
 // Import necessary classes, interfaces, and dependencies
 import mongoose from "mongoose";
 import { Router } from "express"; // Correctly import Request and Response
-import { validateShiftInputMiddleware } from "@presentation/middlewares/avaibility/shift/shift-validation";
+
 import { ProgramScheduleRepositoryImpl } from "@data/availibility/repositories/daily-programs-repository-imp";
 import { ProgramScheduleDataSourceImpl } from "@data/availibility/datasource/daily-programs-datasource";
 import { CreateProgramSchedule } from "@domain/availibility/usecases/daily-programs/create-usecase";
