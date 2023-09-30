@@ -145,6 +145,11 @@ export const validateBookingRequestInputMiddleware = (
       // Extract the request body
       const { body } = req;
 
+      body.createdBy = body.createdBy || "65116a3e13633df078698e90";
+      body.updatedBy = body.updatedBy || "65116a3e13633df078698e90";
+
+      req.body = body;
+
       // Validate the booking request input using the bookingRequestValidator
       const validatedInput: BookingRequestInput = bookingRequestValidator(
         body,
