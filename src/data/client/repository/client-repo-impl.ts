@@ -18,7 +18,7 @@ export class ClientRepositoryImpl implements ClientRepository {
             if (error instanceof ApiError && error.name === "conflict") {
                 return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
             }
-            return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
+            return Left<ErrorClass , ClientEntity>(ApiError.badRequest());
         }
     }
 
