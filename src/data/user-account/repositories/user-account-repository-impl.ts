@@ -72,9 +72,9 @@ export class UserRepositoryImpl implements UserRepository {
           return Left<ErrorClass, UserEntity>(ApiError.badRequest());
       }
   }
-  async getUserByEmail(user:UserLoginModel): Promise<Either<ErrorClass, UserEntity>>{
+  async getUserByEmail(email:string, firebaseToken: string): Promise<Either<ErrorClass, UserEntity>>{
     try{
-      const request = await this.dataSource.userLogin(user); // Use the booking request data source
+      const request = await this.dataSource.userLogin(email, firebaseToken); // Use the booking request data source
       return request
           ? Right<ErrorClass, UserEntity>(request)
           : Left<ErrorClass, UserEntity>(ApiError.notFound());

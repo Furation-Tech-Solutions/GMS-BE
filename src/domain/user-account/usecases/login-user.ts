@@ -4,7 +4,7 @@ import { UserRepository } from "../repositories/user-repository";
 import {  UserEntity, UserLoginModel } from "../entities/user-account";
 
 export interface GetUserByEmailUseCase {
-  execute: (user: UserLoginModel) => Promise<Either<ErrorClass, UserEntity>>;
+  execute: (email: string, firebaseToken: string) => Promise<Either<ErrorClass, UserEntity>>;
 }
 
 export class GetUserByEmail implements GetUserByEmailUseCase {
@@ -13,8 +13,8 @@ export class GetUserByEmail implements GetUserByEmailUseCase {
   constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
-  async execute(user: UserLoginModel): Promise<Either<ErrorClass, UserEntity>> {
-    return await this.userRepository.getUserByEmail(user); // Change to getBookingRequestById
+  async execute(user: string, firebaseToken: string): Promise<Either<ErrorClass, UserEntity>> {
+    return await this.userRepository.getUserByEmail(user, firebaseToken); // Change to getBookingRequestById
 
   }
 }
