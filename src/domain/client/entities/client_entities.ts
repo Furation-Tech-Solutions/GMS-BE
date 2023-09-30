@@ -76,7 +76,7 @@ export class ClientMapper {
         lastName:
           clientData.lastName !== undefined
             ? clientData.lastName
-            : existingClient.firstName,
+            : existingClient.lastName,
         salutation:
           clientData.salutation !== undefined
             ? clientData.salutation

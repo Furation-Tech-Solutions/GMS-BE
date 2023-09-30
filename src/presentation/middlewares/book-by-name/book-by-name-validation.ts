@@ -21,18 +21,18 @@ const bookedByNameValidator = (
     }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Updated By",
-      })
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
+          "any.required": "Please select the Created By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = schema.validate(input, {
@@ -61,6 +61,11 @@ export const validateBookedByNameInputMiddleware = (
       // Extract the request body
       const { body } = req;
 
+      body.createdBy = body.createdBy || "65116a3e13633df078698e90";
+      body.updatedBy = body.updatedBy || "65116a3e13633df078698e90";
+
+      req.body = body;
+
       // Validate the input using the bookedByNameValidator
       const validatedInput: BookedByNameInput = bookedByNameValidator(
         body,
@@ -78,8 +83,8 @@ export const validateBookedByNameInputMiddleware = (
       // const err = ApiError.badRequest();
       res.status(500).json({
         success: false,
-        message: error.message
-      })
+        message: error.message,
+      });
     }
   };
 };
