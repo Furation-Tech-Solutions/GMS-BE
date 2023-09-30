@@ -17,8 +17,18 @@ const unauthorizedResponse = (res: Response) => {
 export const checkPermission = (requiredPermission: string[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const email = req.cookies.email;
-      const permittedUser: UserEntity | null = await UserAccount.findOne({ email: email });
+      const cookieEmail = req.cookies.email;
+      const headerEmail=req.headers.email
+      // console.log(email,req.cookies,"in permission array")
+
+      const emailToCheck = headerEmail || cookieEmail;
+
+      if (!emailToCheck) {
+        // Handle the case when email is not present in headers or cookies
+        unauthorizedResponse(res);
+        return;
+      }
+      const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
       if (!permittedUser) {
         unauthorizedResponse(res);
         return;
