@@ -41,7 +41,13 @@ export class UserService{
 async createUser(req: Request, res: Response): Promise<void> {
 
     // console.log(req.body)
-    const { randomPassword, ...userDataWithoutPassword } = req.body;
+    const user=req.user
+    const newUserData={
+        ...req.body,
+        createdBy:user._id,
+        updatedBy:user._id
+    }
+    const { randomPassword, ...userDataWithoutPassword } = newUserData;
     const userData: UserModel = UserMapper.toModel(userDataWithoutPassword);
 
     const newUser: Either<ErrorClass, UserEntity> =
@@ -113,7 +119,12 @@ async getUserById(req: Request, res: Response): Promise<void> {
 }
 async updateUser(req: Request, res: Response): Promise<void> {
   const UserID: string = req.params.userId;
-  const userData: UserModel = req.body;
+  const user=req.user
+    const newUserData={
+        ...req.body,
+        updatedBy:user._id
+    }
+  const userData: UserModel = newUserData;
 
   const existingUser: Either<ErrorClass, UserEntity> =
       await this.getUserByIdUseCase.execute(UserID);

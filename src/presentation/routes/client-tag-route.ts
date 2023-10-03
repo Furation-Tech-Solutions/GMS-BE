@@ -9,6 +9,7 @@ import { GetClientTagById } from "@domain/client-tag/usecases/get-client-tag-by-
 import { GetAllClientTag } from "@domain/client-tag/usecases/get-all-client-tag";
 import { UpdateClientTag } from "@domain/client-tag/usecases/update-client-tag";
 import { validateClientTagInputMiddleware } from "@presentation/middlewares/client-tag/validation-client-tag";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 // Create an instance of the TagDataSourceImpl and pass the mongoose connection
 const clientTagDataSource = new ClientTagDataSourceImpl(mongoose.connection);
@@ -40,6 +41,7 @@ clientTagRouter.post(
     "/add",
 // checkPermission(["1108"]),
     validateClientTagInputMiddleware(false),
+    verifyLoggedInUser,
     clientTagService.createClientTag.bind(clientTagService)
 );
 
@@ -64,7 +66,7 @@ clientTagRouter.get("/", clientTagService.getAllClientTags.bind(clientTagService
 clientTagRouter.put(
     "/:ClientTagId",
 // checkPermission(["1108"]),
-
     validateClientTagInputMiddleware(true),
+    verifyLoggedInUser,
     clientTagService.updateClientTag.bind(clientTagService)
 );

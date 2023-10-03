@@ -31,7 +31,13 @@ export class RoomService {
   }
 
   async createRoom(req: Request, res: Response): Promise<void> {
-    const roomData: RoomModel = RoomMapper.toModel(req.body);
+    const user=req.user
+        const newRoomData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+    const roomData: RoomModel = RoomMapper.toModel(newRoomData);
 
     const newRoom: Either<ErrorClass, RoomEntity> =
       await this.createRoomUsecase.execute(roomData);
@@ -98,7 +104,12 @@ export class RoomService {
 
   async updateRoom(req: Request, res: Response): Promise<void> {
     const roomId: string = req.params.roomId;
-    const roomData: RoomModel = req.body;
+    const user=req.user
+        const newRoomData={
+            ...req.body,
+            updatedBy:user._id
+        }
+    const roomData: RoomModel = newRoomData;
     // Get the existing outlet by ID
     const existingRoom: Either<ErrorClass, RoomEntity> =
       await this.getRoomByIdUsecase.execute(roomId);

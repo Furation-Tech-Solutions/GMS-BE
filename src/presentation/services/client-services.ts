@@ -34,7 +34,13 @@ export class ClientServices {
     }
 
     async createClient(req: Request, res: Response): Promise<void> {
-        const clientData: ClientModel = ClientMapper.toModel(req.body);
+        const user=req.user;
+        const newClientData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const clientData: ClientModel = ClientMapper.toModel(newClientData);
 
         const newClient: Either<ErrorClass, ClientEntity> =
             await this.createClientUsecases.execute(clientData);
@@ -106,7 +112,12 @@ export class ClientServices {
 
     async updateClient(req: Request, res: Response): Promise<void> {
         const clientId: string = req.params.clientId;
-        const clientData: ClientModel = req.body;
+        const user=req.user
+        const newClientData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const clientData: ClientModel = newClientData;
         const existingClient: Either<ErrorClass, ClientEntity> =
             await this.getClientByIdUsecases.execute(clientId);
         existingClient.cata(

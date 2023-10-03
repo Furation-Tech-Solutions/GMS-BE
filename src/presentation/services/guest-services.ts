@@ -37,7 +37,14 @@ export class GuestServices {
     async createGuest(req: Request, res: Response): Promise<void> {
         // Extract guest data from the request body and convert it to Guest Model
         // console.log(req.body);
-        const guestData: GuestModel = GuestMapper.toModel(req.body);
+        const user=req.user
+        const newGuestData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+
+        const guestData: GuestModel = GuestMapper.toModel(newGuestData);
         // console.log(guestData,"line-25");
         // Call the CreateGeaustUsecase to create the guest
         const newGuest: Either<ErrorClass, GuestEntity> =
@@ -117,7 +124,12 @@ export class GuestServices {
 
     async updateGuest(req: Request, res: Response): Promise<void> {
         const guestId: string = req.params.guestId;
-        const guestData: GuestModel = req.body;
+        const user=req.user
+        const newGuestData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const guestData: GuestModel = newGuestData;
 
         // Get the existing guest by ID
         const existingGuest: Either<ErrorClass, GuestEntity> =
