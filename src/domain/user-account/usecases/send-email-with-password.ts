@@ -18,9 +18,9 @@
   
 //     async execute(password: string): Promise<Either<ErrorClass, void>> {
 
-//       if (newUserResult.isRight()) {
+//     //   if (newUserResult.isRight()) {
 //         // If the user registration is successful, send a registration email
-//         const newUser = newUserResult.right();
+//         // const newUser = newUserResult.right();
 //         //  const password=Date.now()
 
 //         const registrationEmailOptions = {
