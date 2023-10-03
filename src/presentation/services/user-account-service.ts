@@ -204,6 +204,7 @@ async logoutUser(req:Request,res:Response):Promise<void>{
         }
       
   //  console.log(user,"user in logout service")
+  res.removeHeader('email');
   return  res.status(200)
         .cookie("email", null, {expires: new Date(Date.now()), httpOnly: true})
         .json({
