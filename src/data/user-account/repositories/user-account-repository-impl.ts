@@ -83,4 +83,16 @@ export class UserRepositoryImpl implements UserRepository {
       return Left<ErrorClass, UserEntity>(ApiError.badRequest());
     }
   }
+  async logoutUser(email:string): Promise<Either<ErrorClass, UserEntity>>{
+    try{
+      const request = await this.dataSource.userLogout(email); // Use the booking request data source
+      return request
+          ? Right<ErrorClass, UserEntity>(request)
+          : Left<ErrorClass, UserEntity>(ApiError.notFound());
+    }
+    catch(err){
+      return Left<ErrorClass, UserEntity>(ApiError.badRequest());
+    }
+  }
+  
     }

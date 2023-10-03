@@ -12,4 +12,5 @@ export interface UserRepository {
         data: UserModel
     ): Promise<Either<ErrorClass, UserEntity>>;
     getUserByEmail(email: string, firebaseToken: string): Promise<Either<ErrorClass, UserEntity>>
+    logoutUser(email: string): Promise<Either<ErrorClass, UserEntity>>
 }   
