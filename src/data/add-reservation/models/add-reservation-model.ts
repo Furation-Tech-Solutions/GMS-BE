@@ -7,7 +7,7 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
-  noOfGuests: { 
+  noOfGuests: {
     type: Number,
     required: [true, "Please select the Date"],
     default: 1,
@@ -48,6 +48,11 @@ const addReservationSchema = new mongoose.Schema({
   reservationNote: {
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
+    trim: true,
+    default: "",
+  },
+  reservationStatus: {
+    type: String,
     trim: true,
     default: "",
   },
