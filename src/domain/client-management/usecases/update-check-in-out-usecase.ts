@@ -7,7 +7,8 @@ import { CheckInCheckOutEntity, CheckInCheckOutModel } from "../entities/check-i
 export interface UpdateCheckInCheckOutUsecase {
   execute: (
     checkId: string,
-    checkInCheckOutData: CheckInCheckOutModel
+    checkInCheckOutData: CheckInCheckOutModel,
+    action: string
   ) => Promise<Either<ErrorClass, CheckInCheckOutEntity>>;
 }
 
@@ -20,8 +21,9 @@ export class UpdateCheckInCheckOut implements UpdateCheckInCheckOutUsecase {
 
   async execute(
     checkId: string,
-    checkInCheckOutData: CheckInCheckOutModel
+    checkInCheckOutData: CheckInCheckOutModel,
+    action: string
   ): Promise<Either<ErrorClass, CheckInCheckOutEntity>> {
-    return await this.checkInCheckOutRepository.updateCheckOut(checkId, checkInCheckOutData);
+    return await this.checkInCheckOutRepository.updateCheckOut(checkId, checkInCheckOutData, action);
   }
 }

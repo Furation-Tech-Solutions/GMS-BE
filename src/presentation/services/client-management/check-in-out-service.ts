@@ -85,11 +85,14 @@ export class CheckInCheckOutService {
 
 
   async updateCheckInCheckOut(req: Request, res: Response): Promise<void> {
-    const checkId: string = req.params.adminId;
+    const reservationId: string = req.params.reservationId;
+    const action = req.params.action
     const checkInCheckOutData: CheckInCheckOutModel = req.body;
+
+    
     // Get the existing admin by ID
     const existingCheckInCheckOut: Either<ErrorClass, CheckInCheckOutEntity> =
-      await this.getCheckInCheckOutByIdUsecase.execute(checkId);
+      await this.getCheckInCheckOutByIdUsecase.execute(reservationId);
 
     existingCheckInCheckOut.cata(
       (error: ErrorClass) => {
@@ -98,15 +101,17 @@ export class CheckInCheckOutService {
       async (result: CheckInCheckOutEntity) => {
         const resData = CheckInCheckOutMapper.toEntity(result, true);
         const updatedCheckInCheckOutDataEntity: CheckInCheckOutEntity = CheckInCheckOutMapper.toEntity(
-            checkInCheckOutData,
+          checkInCheckOutData,
           true,
           resData
         );
 
+        // console.log(updatedCheckInCheckOutDataEntity);
+
         // Call the UpdateAdminUsecase to update the admin
         const updatedCheckInCheckOut: Either<ErrorClass, CheckInCheckOutEntity> =
-          await this.updateCheckInCheckOutUsecase.execute(checkId, updatedCheckInCheckOutDataEntity);
-
+          await this.updateCheckInCheckOutUsecase.execute(reservationId, updatedCheckInCheckOutDataEntity, action);
+          
           updatedCheckInCheckOut.cata(
           (error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });

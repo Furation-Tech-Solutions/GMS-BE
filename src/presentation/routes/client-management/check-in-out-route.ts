@@ -51,19 +51,19 @@ checkInCheckOutRouter.post(
 
 // Route handling for getting an admin by ID
 checkInCheckOutRouter.get(
-  "/getById/:adminId",
+  "/getById/:reservationId",
   checkInCheckOutService.getCheckInCheckOutById.bind(checkInCheckOutService)
 );
 
 // Route handling for updating an admin by ID
 checkInCheckOutRouter.put(
-  "/update/:adminId",
+  "/update/:reservationId/:action",
   checkInCheckOutService.updateCheckInCheckOut.bind(checkInCheckOutService)
 );
 
 // Route handling for deleting an admin by ID
 checkInCheckOutRouter.delete(
-  "/delete/:adminId",
+  "/delete/:reservationId",
   checkInCheckOutService.deleteCheckInCheckOut.bind(checkInCheckOutService)
 );
 

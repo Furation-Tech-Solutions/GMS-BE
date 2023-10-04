@@ -3,6 +3,10 @@ import { ICheckOut } from "types/client-management/types";
 
 
 const checkInCheckOutSchema: Schema<ICheckOut> = new Schema<ICheckOut>({
+    resrvation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AddReservation',
+    },
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Client',

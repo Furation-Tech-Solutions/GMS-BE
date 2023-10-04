@@ -4,7 +4,7 @@ import { Either, Left, Right } from "monet";
 import { CheckInCheckOutDataSource } from "../datasource/check-in-out-datasource";
 import { CheckInCheckOutEntity, CheckInCheckOutModel } from "@domain/client-management/entities/check-in-out-entities";
 import { CheckInCheckOutRepository } from "@domain/client-management/repositories/check-in-out-repository";
-
+import * as HttpStatus from "@presentation/error-handling/http-status";
 export class CheckInCheckOutRepositoryImpl implements CheckInCheckOutRepository {
   private readonly dataSource: CheckInCheckOutDataSource;
 
@@ -19,11 +19,11 @@ export class CheckInCheckOutRepositoryImpl implements CheckInCheckOutRepository 
       let newCheck = await this.dataSource.create(checkInCheckOut);
       
       return Right<ErrorClass, CheckInCheckOutEntity>(newCheck);
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 409) {
-        return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.emailExist());
+    } catch (error: any) {
+      if (error instanceof ApiError) {
+        return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.userNotFound());
       }
-      return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.badRequest());
+      return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.customError(HttpStatus.BAD_REQUEST, error.message));
     }
   }
 
@@ -38,13 +38,17 @@ export class CheckInCheckOutRepositoryImpl implements CheckInCheckOutRepository 
 
   async updateCheckOut(
     id: string,
-    data: CheckInCheckOutModel
+    data: CheckInCheckOutModel,
+    action: string
   ): Promise<Either<ErrorClass, CheckInCheckOutEntity>> {
     try {
-      const response = await this.dataSource.update(id, data);
+      const response = await this.dataSource.update(id, data, action);
       return Right<ErrorClass, CheckInCheckOutEntity>(response);
-    } catch (error) {
-      return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.badRequest());
+    } catch (error:any) {
+      if(error instanceof ApiError) {
+        return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.notFound());
+      }
+      return Left<ErrorClass, CheckInCheckOutEntity>(ApiError.customError(HttpStatus.BAD_REQUEST, error.message));
     }
   }
 

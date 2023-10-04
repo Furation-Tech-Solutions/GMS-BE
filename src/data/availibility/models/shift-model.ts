@@ -125,7 +125,6 @@ const shiftPropertySchema = new Schema<IShiftProperty>({
     enum: ['At Any Time', 'Never', 'Up Until Cut-off Time'],
     default: 'At Any Time',
   },
-
   timeBeforeCutOff: {
     type: timeCutOffSchema,
   }, 

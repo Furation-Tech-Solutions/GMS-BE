@@ -1,5 +1,6 @@
 export class CheckInCheckOutModel {
     constructor(
+      public resrvation: string = '',
       public client: string = '',
       public checkIn: string = '',
       public checkOutTime: string = '',
@@ -26,6 +27,7 @@ export class CheckInCheckOutModel {
   export class CheckInCheckOutEntity {
     constructor(
       public _id: string | undefined = undefined,
+      public resrvation: string,
       public client: string,
       public checkIn: string,
       public checkOutTime: string,
@@ -53,6 +55,7 @@ export class CheckInCheckOutModel {
       if (existingCheckOutData != null) {
         return {
           ...existingCheckOutData,
+          resrvation: checkOutData.resrvation !== undefined ? checkOutData.resrvation : existingCheckOutData.resrvation,
           client: checkOutData.client !== undefined ? checkOutData.client : existingCheckOutData.client,
           checkIn: checkOutData.checkIn !== undefined ? checkOutData.checkIn : existingCheckOutData.checkIn,
           checkOutTime:
@@ -82,6 +85,7 @@ export class CheckInCheckOutModel {
       } else {
         const checkOutEntity: CheckInCheckOutEntity = {
           _id: includeId ? (checkOutData._id ? checkOutData._id.toString() : undefined) : checkOutData._id.toString(),
+          resrvation: checkOutData.resrvation,
           client: checkOutData.client,
           checkIn: checkOutData.checkIn,
           checkOutTime: checkOutData.checkOutTime,
@@ -99,6 +103,7 @@ export class CheckInCheckOutModel {
   
     static toModel(checkOutData: CheckInCheckOutEntity): CheckInCheckOutModel {
       return {
+        resrvation: checkOutData.resrvation,
         client: checkOutData.client,
         checkIn: checkOutData.checkIn,
         checkOutTime: checkOutData.checkOutTime,
