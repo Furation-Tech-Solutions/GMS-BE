@@ -57,7 +57,7 @@ addReservationRouter.post(
   "/create",
   verifyLoggedInUser,
   // checkPermission(["1101","5101"]),
-  // validateReservationInputMiddleware(false),
+  validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );
 
