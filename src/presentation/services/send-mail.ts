@@ -12,12 +12,12 @@ class EmailService {
  
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: env.mailhost,
+            host: "smtp.gmail.com",
             port: 465,
             secure: true,
             auth: {
-                user: env.user,
-                pass: env.password
+                user: "masaischoolproject@gmail.com",
+                pass: "pssmfzaekhcypqlj"
             }
         });
     }
