@@ -11,7 +11,9 @@ export interface UserDataSource{
   delete(id:string):Promise<void>;
   read(id: string): Promise<any | null>;
   update(id:string,user_account:UserModel):Promise<any>;
-  userLogin(email: string, firebaseToken: string):Promise<any| null>
+  userLogin(email: string, firebaseToken: string):Promise<any| null>;
+  userLogout(email: string):Promise<any| null>;
+  // userLogout(user:UserModel):Promise<any|null>
 
 }
 
@@ -100,12 +102,14 @@ async userLogin(email: string, firebaseToken: string):Promise<any| null>{
     if(userData){
        // Check if the Firebase token exists in the array
        const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
-
+        
        if (!firebaseTokenExists) {
          // If not found, add the Firebase token to the array
          userData.firebaseDeviceToken.push(firebaseToken);
          await userData.save(); // Save the updated document
        }
+       userData.isLogin = true;
+       await userData.save(); // Save the updated isLogin value
       return userData.toObject();
     }
     return null;
@@ -113,5 +117,24 @@ async userLogin(email: string, firebaseToken: string):Promise<any| null>{
   catch(err){
     throw ApiError.badRequest();
   }
+}
+
+async userLogout(email:string):Promise<any|null>{
+  try{
+    const userData = await UserAccount.findOne({ email: email });
+
+    if(userData){
+       // Check if the Firebase token exists in the array        
+      
+       userData.isLogin = false;
+       await userData.save(); // Save the updated isLogin value
+      return userData.toObject();
+    }
+    return null
+  }
+  catch(err){
+    throw ApiError.badRequest();
+  }
+
 }
 }

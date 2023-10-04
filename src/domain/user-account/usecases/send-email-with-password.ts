@@ -1,4 +1,4 @@
-// import { Either } from "monet";
+// import { Either, Left, Right } from "monet";
 // import { UserEntity, UserModel } from "../entities/user-account";
 // import { ErrorClass } from "@presentation/error-handling/api-error";
 // import { UserRepository } from "../repositories/user-repository";
@@ -6,7 +6,9 @@
 
 // export interface SendEmailUsecase {
 //     execute: (
-//       password: string) => Promise<Either<ErrorClass, void>>;
+//       password: string,
+//       userData:UserModel
+//       ) => Promise<Either<ErrorClass, void>>;
 //   }
   
 //   export class SendEmail implements SendEmailUsecase {
@@ -16,23 +18,18 @@
 //       this.emailService = emailService;
 //     }
   
-//     async execute(password: string): Promise<Either<ErrorClass, void>> {
-
-//       if (newUserResult.isRight()) {
-//         // If the user registration is successful, send a registration email
-//         const newUser = newUserResult.right();
-//         //  const password=Date.now()
+//     async execute(password: string,userData:UserModel): Promise<Either<ErrorClass, void>> {
 
 //         const registrationEmailOptions = {
-//           email: newUser.email,
+//           email: userData.email,
 //           subject: 'Welcome to [Website/Application Name] - Your Registration Details',
-//           message: ` Dear ${newUser.firstName},
+//           message: ` Dear ${userData.firstName},
 
 //           Welcome to Akina! We're excited to have you as a new member of our community. Thank you for choosing to register with us.
       
 //           Below are your registration details:
       
-//           Username/Email: ${newUser.email}
+//           Username/Email: ${userData.email}
 //           Password: "your_password
       
 //           Please keep this email in a safe place and do not share your password with anyone. For security reasons, we recommend changing your password as soon as you log in for the first time. You can do this by following these steps:
@@ -53,12 +50,16 @@
 //         try {
 //           // Use the EmailService to send the email
 //           await this.emailService.sendEmail(registrationEmailOptions);
+//           return Right(undefined);
+          
 //         } catch (error) {
 //           // Handle email sending errors here
 //           console.error('Error sending registration email:', error);
+//           return Left(new ErrorClass(500,"EmailSendingError", "Error sending registration email")); // Return a Left value (error)
+          
 //         }
-//       }
-  
-//       return newUserResult;
+//     //   }
+          
+//     //   return userData;
 //     }
 //   }

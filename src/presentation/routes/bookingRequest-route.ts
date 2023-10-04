@@ -10,12 +10,14 @@ import { UpdateBookingRequest } from "@domain/bookingRequest/usecases/update-boo
 import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-bookingRequest"; // Import the DeleteBookingRequest use case
 import { validateBookingRequestInputMiddleware } from "@presentation/middlewares/booking req/validation-bookingReq"; // Import the validateBookingRequestInputMiddleware
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import EmailService from "@presentation/services/send-mail";
 
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
 const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
 
 // Create an instance of the BookingRequestRepositoryImpl and pass the BookingRequestDataSourceImpl
 const bookingRequestRepository = new BookingRequestRepositoryImpl(bookingRequestDataSource);
+const emailService = new EmailService();
 
 // Create instances of the required use cases and pass the BookingRequestRepositoryImpl
 const createBookingRequestUsecase = new CreateBookingRequest(bookingRequestRepository);
@@ -30,7 +32,8 @@ const bookingRequestService = new BookingRequestServices(
     deleteBookingRequestUsecase,
     getBookingRequestByIdUsecase,
     getAllBookingRequestsUsecase,
-    updateBookingRequestUsecase
+    updateBookingRequestUsecase,
+    emailService
 );
 
 // Create an Express router

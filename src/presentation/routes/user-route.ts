@@ -12,21 +12,24 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import EmailService from "@presentation/services/send-mail";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { LogoutUser } from "@domain/user-account/usecases/logout-user";
+// import { SendEmail } from "@domain/user-account/usecases/send-email-with-password";
 
 const mongooseConnection = mongoose.connection;
 
 const userDataSource=new UserDataSourceImpl(mongooseConnection)
 const userRepository=new UserRepositoryImpl(userDataSource)
 const emailService = new EmailService();
+// const emailUseCase=new SendEmail(emailService)
 
 
-const createUserUseCase=new CreateUser(userRepository,emailService)
+const createUserUseCase=new CreateUser(userRepository)
 const getAllUserUseCase=new GetAllUsers(userRepository)
 const deleteUserUseCase=new DeleteUser(userRepository)
 const getUserByIdUseCase=new GetUserById(userRepository)
 const updateUserUseCase=new UpdateUser(userRepository)
 const getUserByEmailUseCase=new GetUserByEmail(userRepository)
-
+const logoutUserUseCase=new LogoutUser(userRepository)
 
 const userService=new UserService(
     createUserUseCase,
@@ -35,6 +38,8 @@ const userService=new UserService(
     getUserByIdUseCase,
     updateUserUseCase,
     getUserByEmailUseCase,
+    logoutUserUseCase,
+    emailService
 )
 
 export const userRouter=Router()
@@ -69,5 +74,6 @@ userService.getUserByEmail.bind(userService)
 )
 userRouter.get(
     "/logout",
+    verifyLoggedInUser,
     userService.logoutUser.bind(userService)
 )

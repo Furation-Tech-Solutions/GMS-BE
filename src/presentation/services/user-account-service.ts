@@ -8,6 +8,9 @@ import { UpdateUserUseCase } from "@domain/user-account/usecases/update-user";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { NextFunction, Request, Response } from "express";
 import { Either } from "monet";
+import { LogoutUserUseCase } from "@domain/user-account/usecases/logout-user";
+import EmailService from "./send-mail";
+import { registrationEmailTemplate } from "./email-template";
 
 
 
@@ -19,6 +22,8 @@ export class UserService{
     private readonly getUserByIdUseCase:GetUserByIdUseCase;
     private readonly updateUserUseCase:UpdateUserUseCase;
     private readonly getUserByEmailUseCase:GetUserByEmailUseCase;
+    private readonly logoutUserUseCase:LogoutUserUseCase;
+    private readonly emailService:EmailService;
 
     constructor(
         createUserUseCase:CreateUserUsecase,
@@ -27,6 +32,8 @@ export class UserService{
         getUserByIdUseCase:GetUserByIdUseCase,
         updateUserUseCase:UpdateUserUseCase,
         getUserByEmailUseCase:GetUserByEmailUseCase,
+        logoutUserUseCase:LogoutUserUseCase,
+        emailService:EmailService
     ){
         this.createUserUseCase = createUserUseCase;
         this.getAllUserUseCase = getAllUserUseCase;
@@ -34,6 +41,9 @@ export class UserService{
         this.getUserByIdUseCase=getUserByIdUseCase;
         this.updateUserUseCase=updateUserUseCase;
         this.getUserByEmailUseCase=getUserByEmailUseCase;
+        this.logoutUserUseCase=logoutUserUseCase;
+      this.emailService = emailService;
+
     }
 
 
@@ -41,6 +51,7 @@ export class UserService{
 async createUser(req: Request, res: Response): Promise<void> {
 
     // console.log(req.body)
+    
     const user=req.user
     const newUserData={
         ...req.body,
@@ -58,6 +69,13 @@ async createUser(req: Request, res: Response): Promise<void> {
         res.status(error.status).json({ error: error.message }),
       (result: UserEntity) => {
         const resData = UserMapper.toEntity(result, true);
+        const emailOption={
+          email:result.email,
+          subject:registrationEmailTemplate.subject,
+          message:registrationEmailTemplate.message(req.body)
+        }
+      this.emailService.sendEmail(emailOption);
+
         return res.json(resData);
       }
     );
@@ -156,6 +174,7 @@ async updateUser(req: Request, res: Response): Promise<void> {
               },
               (result: UserEntity) => {
                   const resData = UserMapper.toEntity(result, true);
+
                   res.json(resData);
               }
           );
@@ -184,12 +203,29 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
 }
 
 async logoutUser(req:Request,res:Response):Promise<void>{
+  const userData=req.user
+  const user: Either<ErrorClass, UserEntity> =
+  await this.logoutUserUseCase.execute(userData.email);
 
-  res.status(200)
+  user.cata(
+    (error: ErrorClass) =>{
+    // console.log("error in get by email",error);
+        res.status(error.status).json({ error: error.message })
+    },
+    (result: UserEntity) => {
+        if (result == undefined) {
+          // console.log(result,"result is this in service")
+            return res.json({ message: "Data Not Found" });
+        }
+      
+  //  console.log(user,"user in logout service")
+  res.removeHeader('email');
+  return  res.status(200)
         .cookie("email", null, {expires: new Date(Date.now()), httpOnly: true})
         .json({
             success: true,
             massage: "Logged Out",
         })
+})
 }
 }
