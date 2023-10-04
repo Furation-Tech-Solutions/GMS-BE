@@ -10,13 +10,14 @@ export class AddReservationModel {
     // public source: string | undefined = undefined,
     public reservationTags: string[] = [],
     public reservationNote: string = "",
+    public reservationStatus: string = "",
     public table: string | undefined = undefined,
-    public bookedBy: { _id: string; name: string } | undefined ,
+    public bookedBy: { _id: string; name: string } | undefined,
     public perks: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
-  ) {}
+  ) { }
 }
 
 export class AddReservationEntity {
@@ -32,14 +33,15 @@ export class AddReservationEntity {
     // public source: string | undefined,
     public reservationTags: string[],
     public reservationNote: string,
+    public reservationStatus: string,
     public table: string | undefined,
-    public bookedBy: { _id: string; name: string } | undefined ,
+    public bookedBy: { _id: string; name: string } | undefined,
     public perks: string,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
     public createdAt: string
-  ) {}
+  ) { }
 }
 
 export class AddReservationMapper {
@@ -91,6 +93,10 @@ export class AddReservationMapper {
           reservationData.reservationNote !== undefined
             ? reservationData.reservationNote
             : existingReservation.reservationNote,
+        reservationStatus:
+          reservationData.reservationStatus !== undefined
+            ? reservationData.reservationStatus
+            : existingReservation.reservationStatus,
         table:
           reservationData.table !== undefined
             ? reservationData.table
@@ -141,6 +147,7 @@ export class AddReservationMapper {
         // // source: reservationData.source,
         reservationTags: reservationData.reservationTags,
         reservationNote: reservationData.reservationNote,
+        reservationStatus: reservationData.reservationStatus,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
         updatedBy: { _id: reservationData.updatedBy },
@@ -165,6 +172,7 @@ export class AddReservationMapper {
       // reservation.source,
       reservation.reservationTags,
       reservation.reservationNote,
+      reservation.reservationStatus,
       reservation.table,
       reservation.bookedBy,
       reservation.perks,

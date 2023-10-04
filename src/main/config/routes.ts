@@ -27,6 +27,7 @@ import { whatsAppRouter } from "@presentation/routes/whatsapp-message-route";
 import { notificationRouter } from "@presentation/routes/notification/notification-route";
 import { userRouter } from "@presentation/routes/user-route";
 import { superAdminRouter } from "@presentation/routes/super-admin-routes";
+import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
 
 
 export default (app: Express): void => {
@@ -67,5 +68,6 @@ export default (app: Express): void => {
   app.use("/api/v1/client/tag", clientTagRouter);
   app.use("/api/v1/reservation/tag", reservationTagRouter);
   app.use("/api/v1", notificationRouter);
+  app.use("/api/v1/check", checkInCheckOutRouter);
   app.use(router);
 };

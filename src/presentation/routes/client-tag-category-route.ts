@@ -40,7 +40,7 @@ export const clientTagCategoryRouter = Router();
 clientTagCategoryRouter.post(
     "/add",
     validateClientTagCategoryInputMiddleware(false),
- verifyLoggedInUser,
+     verifyLoggedInUser,
     clientTagCategoryService.createClientTagCategory.bind(clientTagCategoryService)
 );
 

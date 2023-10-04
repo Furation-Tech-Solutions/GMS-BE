@@ -42,31 +42,31 @@ export const roomRouter = Router();
 // Route handling for creating a new Room
 roomRouter.post(
   "/create",
-//  checkPermission(["1103"]),
+  //  checkPermission(["1103"]),
   validateRoomInputMiddleware(false),
-verifyLoggedInUser,
+  verifyLoggedInUser,
   roomService.createRoom.bind(roomService)
 );
 
 //Route handling for getRoomById
 roomRouter.get("/getById/:roomId",
-// checkPermission("1103"),
- roomService.getRoomById.bind(roomService));
+  // checkPermission("1103"),
+  roomService.getRoomById.bind(roomService));
 
 //Route hanndling for getRooms
 roomRouter.get("/getAllRooms",
- roomService.getAllRooms.bind(roomService));
+  roomService.getAllRooms.bind(roomService));
 
 roomRouter.put(
   "/updateRoom/:roomId",
-// checkPermission(["1103"]),
+  // checkPermission(["1103"]),
   validateRoomInputMiddleware(true),
-verifyLoggedInUser,
+  verifyLoggedInUser,
   roomService.updateRoom.bind(roomService)
 );
 
 roomRouter.delete(
   "/deleteRoom/:roomId",
-// checkPermission(["1103"]),
+  // checkPermission(["1103"]),
   roomService.deleteRoom.bind(roomService)
 );

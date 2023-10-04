@@ -4,6 +4,7 @@ import { AddReservationModel } from "@domain/add-reservation/entities/add-reserv
 import { AddReservation } from "../models/add-reservation-model";
 import { Client } from "@data/client/models/client_model";
 import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
+import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
@@ -40,8 +41,19 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     if (existingAddReservation) throw ApiError.reservationExits();
 
 
+
     const addReservationData = new AddReservation(addReservation);
     const createdAddReservation = await addReservationData.save();
+
+
+    const checkInCheckOutObject = {
+      resrvation: createdAddReservation._id,
+      client: createdAddReservation.client
+    }
+
+    const checkInCheckOutData = new CheckInCheckOut(checkInCheckOutObject);
+
+    const createdCheckInCheckOutData: mongoose.Document = await checkInCheckOutData.save();
 
     if (bookingRequiestExists !== null) {
       bookingRequiestExists.status = { name: "Booked", color: "Green" };
@@ -120,6 +132,55 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
+
+    const existResevation = await AddReservation.findById(id);
+
+    const existingCheckInCheckOut = await CheckInCheckOut.findOne({ resrvation: id });
+
+    // if (!existingCheckInCheckOut) throw ApiError.notFound();
+
+
+    const dateString = new Date();
+    const dateObject = new Date(dateString);
+
+    // Get hours, minutes, and seconds
+    const hours = dateObject.getHours();
+    const minutes = dateObject.getMinutes();
+    const seconds = dateObject.getSeconds();
+
+    // Format the time as HH:MM:SS
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+
+
+    if (existResevation?.reservationStatus !== "arrived" && existResevation?.reservationStatus !== "left" && addReservation.reservationStatus === "arrived") {
+
+
+      const newCheckInData = {
+        checkInTime: formattedTime
+      }
+
+      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut?._id, newCheckInData, {
+        new: true,
+      });
+
+
+
+    }
+    if (existResevation?.reservationStatus !== "left" && addReservation.reservationStatus === "left") {
+
+      const newCheckOutData = {
+        checkOutTime: formattedTime
+      }
+
+      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut?._id, newCheckOutData, {
+        new: true,
+      });
+
+
+
+    }
+
     const updatedAddReservation = await AddReservation.findByIdAndUpdate(
       id,
       addReservation,
