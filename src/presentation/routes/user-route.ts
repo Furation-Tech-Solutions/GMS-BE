@@ -16,21 +16,21 @@ import { LogoutUser } from "@domain/user-account/usecases/logout-user";
 
 const mongooseConnection = mongoose.connection;
 
-const userDataSource=new UserDataSourceImpl(mongooseConnection)
-const userRepository=new UserRepositoryImpl(userDataSource)
+const userDataSource = new UserDataSourceImpl(mongooseConnection)
+const userRepository = new UserRepositoryImpl(userDataSource)
 const emailService = new EmailService();
 
 
-const createUserUseCase=new CreateUser(userRepository,emailService)
-const getAllUserUseCase=new GetAllUsers(userRepository)
-const deleteUserUseCase=new DeleteUser(userRepository)
-const getUserByIdUseCase=new GetUserById(userRepository)
-const updateUserUseCase=new UpdateUser(userRepository)
-const getUserByEmailUseCase=new GetUserByEmail(userRepository)
-const logoutUserUseCase=new LogoutUser(userRepository)
+const createUserUseCase = new CreateUser(userRepository, emailService)
+const getAllUserUseCase = new GetAllUsers(userRepository)
+const deleteUserUseCase = new DeleteUser(userRepository)
+const getUserByIdUseCase = new GetUserById(userRepository)
+const updateUserUseCase = new UpdateUser(userRepository)
+const getUserByEmailUseCase = new GetUserByEmail(userRepository)
+const logoutUserUseCase = new LogoutUser(userRepository)
 
 
-const userService=new UserService(
+const userService = new UserService(
     createUserUseCase,
     getAllUserUseCase,
     deleteUserUseCase,
@@ -40,12 +40,12 @@ const userService=new UserService(
     logoutUserUseCase
 )
 
-export const userRouter=Router()
+export const userRouter = Router()
 
 userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     userService.createUser.bind(userService)
 )
 userRouter.get(
@@ -55,12 +55,12 @@ userRouter.get(
 userRouter.delete(
     "/delete/:userId",
     userService.deleteUser.bind(userService)
- )
- userRouter.get(
+)
+userRouter.get(
     "/get/:userId",
     userService.getUserById.bind(userService)
- )
- userRouter.patch(
+)
+userRouter.patch(
     "/update/:userId",
     validateUserAccountInputMiddleware(true),
     verifyLoggedInUser,
@@ -68,7 +68,7 @@ userRouter.delete(
 );
 userRouter.post(
     "/login",
-userService.getUserByEmail.bind(userService)
+    userService.getUserByEmail.bind(userService)
 )
 userRouter.get(
     "/logout",

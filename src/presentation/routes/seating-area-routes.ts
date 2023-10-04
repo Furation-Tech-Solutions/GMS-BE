@@ -46,7 +46,7 @@ seatingAreaRouter.post(
   "/create",
   // checkPermission(["1103"]),
   validateSeatingAreaInputMiddleware(false),
-verifyLoggedInUser,
+  verifyLoggedInUser,
   seatingAreaService.createSeatingArea.bind(seatingAreaService)
 );
 
@@ -66,7 +66,7 @@ seatingAreaRouter.put(
   "/updateSeatingArea/:seatingAreaId",
   // checkPermission(["1103"]),
   validateSeatingAreaInputMiddleware(true),
-verifyLoggedInUser,
+  verifyLoggedInUser,
   seatingAreaService.updateSeatingArea.bind(seatingAreaService)
 );
 

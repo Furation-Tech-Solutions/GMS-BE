@@ -14,17 +14,17 @@ import mongoose from "mongoose";
 
 const mongooseConnection = mongoose.connection;
 
-const taxRateDataSource=new TaxRateDataSourceImpl(mongooseConnection)
-const taxRateRepository=new TaxRateRepositoryImpl(taxRateDataSource)
+const taxRateDataSource = new TaxRateDataSourceImpl(mongooseConnection)
+const taxRateRepository = new TaxRateRepositoryImpl(taxRateDataSource)
 
-const createTaxRateUseCase=new CreateTaxRate(taxRateRepository)
+const createTaxRateUseCase = new CreateTaxRate(taxRateRepository)
 // const getAllUserUseCase=new GetAllUsers(userRepository)
-const getAllTaxRateUseCase=new GetAllTaxRate(taxRateRepository)
-const deleteTaxRateUseCase=new DeleteTaxRate(taxRateRepository)
-const getTaxRateByIdUseCase=new GetTaxRateById(taxRateRepository)
-const updateTaxRateUseCase=new UpdateTaxRate(taxRateRepository)
+const getAllTaxRateUseCase = new GetAllTaxRate(taxRateRepository)
+const deleteTaxRateUseCase = new DeleteTaxRate(taxRateRepository)
+const getTaxRateByIdUseCase = new GetTaxRateById(taxRateRepository)
+const updateTaxRateUseCase = new UpdateTaxRate(taxRateRepository)
 
-const taxRateService=new TaxRateService(
+const taxRateService = new TaxRateService(
     createTaxRateUseCase,
     getAllTaxRateUseCase,
     deleteTaxRateUseCase,
@@ -33,29 +33,29 @@ const taxRateService=new TaxRateService(
     // getAllUserUseCase
 )
 
-export const taxRateRouter=Router()
+export const taxRateRouter = Router()
 
 taxRateRouter.post(
     "/create",
     validateTaxRateInputMiddleware(false),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     taxRateService.createTaxRate.bind(taxRateService)
 )
 taxRateRouter.get(
     "/getAll",
     taxRateService.getAllTaxRate.bind(taxRateService)
- );
- taxRateRouter.delete(
+);
+taxRateRouter.delete(
     "/delete/:taxRateId",
     taxRateService.deleteTaxRate.bind(taxRateService)
- )
- taxRateRouter.get(
+)
+taxRateRouter.get(
     "/getById/:taxRateId",
     taxRateService.getTaxRateById.bind(taxRateService)
 );
 taxRateRouter.put(
     "/update/:taxRateId",
     validateTaxRateInputMiddleware(true),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     taxRateService.updateTaxRate.bind(taxRateService)
 );
