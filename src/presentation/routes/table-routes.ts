@@ -43,7 +43,7 @@ export const tableRouter = Router();
 tableRouter.post(
   "/create",
   validateTableInputMiddleware(false),
-verifyLoggedInUser,
+  verifyLoggedInUser,
   // checkPermission(["1103"]),
   tableService.createTable.bind(tableService)
 );

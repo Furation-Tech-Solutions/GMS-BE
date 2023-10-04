@@ -42,7 +42,7 @@ export const guestRouter = Router();
 guestRouter.post(
     "/add",
     validateGuestInputMiddleware(false),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     guestService.createGuest.bind(guestService)
 );
 // Route handling for deleting an guest by ID

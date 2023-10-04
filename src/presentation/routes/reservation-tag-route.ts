@@ -39,7 +39,7 @@ export const reservationTagRouter = Router();
 // Route handling for creating a new tag
 reservationTagRouter.post(
     "/add",
-    validateReservationTagInputMiddleware(false), 
+    validateReservationTagInputMiddleware(false),
     verifyLoggedInUser,
     reservationTagService.createReservationTag.bind(reservationTagService)
 );
@@ -63,7 +63,7 @@ reservationTagRouter.get("/", reservationTagService.getAllReservationTags.bind(r
 reservationTagRouter.put(
     "/:ReservationTagId",
     validateReservationTagInputMiddleware(false),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     reservationTagService.updateReservationTag.bind(reservationTagService)
 );
 

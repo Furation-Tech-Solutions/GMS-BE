@@ -60,9 +60,9 @@ clientRouter.get(
 );
 
 // Route handling for getting all clients
-clientRouter.get("/", 
-// checkPermission(["1102"]),
-clientService.getAllClients.bind(clientService));
+clientRouter.get("/",
+    // checkPermission(["1102"]),
+    clientService.getAllClients.bind(clientService));
 
 // Route handling for updating a client by ID
 clientRouter.put(

@@ -57,7 +57,7 @@ checkInCheckOutRouter.get(
 
 // Route handling for updating an admin by ID
 checkInCheckOutRouter.put(
-  "/update/:reservationId/:action",
+  "/update/:reservationId",
   checkInCheckOutService.updateCheckInCheckOut.bind(checkInCheckOutService)
 );
 

@@ -17,12 +17,12 @@ const serverNameDataSource = new ServersNameDataSourceImpl(mongooseConnection);
 const serverNameRepository = new ServersNameRepositoryImpl(serverNameDataSource);
 
 const createServerNameUseCase = new CreateServerName(serverNameRepository)
-const getAllServersNameUseCase=new GetAllServersName(serverNameRepository)
+const getAllServersNameUseCase = new GetAllServersName(serverNameRepository)
 const getServerNameByIdUseCase = new GetServerNameById(serverNameRepository)
 const UpdateServerNameUseCase = new UpdateServerName(serverNameRepository)
-const deleteServerNameUseCase=new DeleteServerName(serverNameRepository)
+const deleteServerNameUseCase = new DeleteServerName(serverNameRepository)
 
-const serverNameService=new ServerNameService(
+const serverNameService = new ServerNameService(
     createServerNameUseCase,
     getAllServersNameUseCase,
     getServerNameByIdUseCase,
@@ -30,25 +30,25 @@ const serverNameService=new ServerNameService(
     deleteServerNameUseCase,
 )
 
-export const serverNameRouter=Router()
+export const serverNameRouter = Router()
 
 
 serverNameRouter.post(
     "/addServerName",
     validateServersNameInputMiddleware(false),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     serverNameService.createServerName.bind(serverNameService)
 )
 serverNameRouter.get(
-    "/getAllServerNames",serverNameService.getAllServersName.bind(serverNameService)
+    "/getAllServerNames", serverNameService.getAllServersName.bind(serverNameService)
 )
 serverNameRouter.patch(
     "/update/:serverNameId",
     validateServersNameInputMiddleware(true),
-verifyLoggedInUser,
+    verifyLoggedInUser,
     serverNameService.updateServerName.bind(serverNameService)
-    )
+)
 serverNameRouter.delete(
     "/delete/:serverNameId",
     serverNameService.deleteServerName.bind(serverNameService)
-  );
+);
