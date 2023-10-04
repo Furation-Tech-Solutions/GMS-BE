@@ -14,6 +14,6 @@ export default {
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   mailhost: process.env.HOST,
   sendmailport: process.env.MAILPORT,
-  user: process.env.USER,
+  user: process.env.DOMAIN_MAIL,
   password: process.env.PASSWORD,
 };
