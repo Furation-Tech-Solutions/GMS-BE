@@ -11,6 +11,8 @@ import { UserService } from "@presentation/services/user-account-service";
 import { Router } from "express";
 import mongoose from "mongoose";
 import EmailService from "@presentation/services/send-mail";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { LogoutUser } from "@domain/user-account/usecases/logout-user";
 
 const mongooseConnection = mongoose.connection;
 
@@ -25,6 +27,7 @@ const deleteUserUseCase=new DeleteUser(userRepository)
 const getUserByIdUseCase=new GetUserById(userRepository)
 const updateUserUseCase=new UpdateUser(userRepository)
 const getUserByEmailUseCase=new GetUserByEmail(userRepository)
+const logoutUserUseCase=new LogoutUser(userRepository)
 
 
 const userService=new UserService(
@@ -34,6 +37,7 @@ const userService=new UserService(
     getUserByIdUseCase,
     updateUserUseCase,
     getUserByEmailUseCase,
+    logoutUserUseCase
 )
 
 export const userRouter=Router()
@@ -41,6 +45,7 @@ export const userRouter=Router()
 userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
+verifyLoggedInUser,
     userService.createUser.bind(userService)
 )
 userRouter.get(
@@ -58,6 +63,7 @@ userRouter.delete(
  userRouter.patch(
     "/update/:userId",
     validateUserAccountInputMiddleware(true),
+    verifyLoggedInUser,
     userService.updateUser.bind(userService)
 );
 userRouter.post(
@@ -66,5 +72,6 @@ userService.getUserByEmail.bind(userService)
 )
 userRouter.get(
     "/logout",
+    verifyLoggedInUser,
     userService.logoutUser.bind(userService)
 )

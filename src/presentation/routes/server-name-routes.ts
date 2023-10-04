@@ -5,6 +5,7 @@ import { DeleteServerName } from "@domain/servers-name/usecase/delete-server-nam
 import { GetAllServersName } from "@domain/servers-name/usecase/get-all-server-name";
 import { GetServerNameById } from "@domain/servers-name/usecase/get-server-name-by-id";
 import { UpdateServerName } from "@domain/servers-name/usecase/update-server-name";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { validateServersNameInputMiddleware } from "@presentation/middlewares/servers-name/servers-name-validation";
 import { ServerNameService } from "@presentation/services/servers-name-services"
 import { Router } from "express"
@@ -35,6 +36,7 @@ export const serverNameRouter=Router()
 serverNameRouter.post(
     "/addServerName",
     validateServersNameInputMiddleware(false),
+verifyLoggedInUser,
     serverNameService.createServerName.bind(serverNameService)
 )
 serverNameRouter.get(
@@ -43,6 +45,7 @@ serverNameRouter.get(
 serverNameRouter.patch(
     "/update/:serverNameId",
     validateServersNameInputMiddleware(true),
+verifyLoggedInUser,
     serverNameService.updateServerName.bind(serverNameService)
     )
 serverNameRouter.delete(

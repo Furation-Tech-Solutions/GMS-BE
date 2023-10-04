@@ -9,6 +9,7 @@ import { GetClientById } from "@domain/client/usecases/get-clients-by-id"; // Im
 import { UpdateClient } from "@domain/client/usecases/update-client"; // Import the UpdateClient use case
 import { DeleteClient } from "@domain/client/usecases/delete-client"; // Import the DeleteClient use case
 import { validateClientInputMiddleware } from "@presentation/middlewares/client/validation-client"; // Import the DeleteClient use case
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
@@ -40,6 +41,7 @@ export const clientRouter = Router();
 // Route handling for creating a new client
 clientRouter.post(
     "/add",
+    verifyLoggedInUser,
     validateClientInputMiddleware(false),
     clientService.createClient.bind(clientService)
 );
@@ -65,6 +67,7 @@ clientService.getAllClients.bind(clientService));
 // Route handling for updating a client by ID
 clientRouter.put(
     "/:clientId",
+    verifyLoggedInUser,
     validateClientInputMiddleware(true),
     clientService.updateClient.bind(clientService)
 );

@@ -52,9 +52,9 @@ export class BookingRequestMapper {
             ? bookingreqData.name
             : existingbookingreq.firstName,
         lastName:
-          bookingreqData.firstName !== undefined
+          bookingreqData.lastName !== undefined
             ? bookingreqData.name
-            : existingbookingreq.firstName,
+            : existingbookingreq.lastName,
         email:
           bookingreqData.email !== undefined
             ? bookingreqData.email

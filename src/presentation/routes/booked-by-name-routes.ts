@@ -5,7 +5,9 @@ import { DeleteBookedByName } from "@domain/booked-by-name/usecase/delete-booked
 import { GetAllBookedByName } from "@domain/booked-by-name/usecase/get-all-booked-by-name";
 import { GetNameById } from "@domain/booked-by-name/usecase/get-booked-by-name-by-id";
 import { UpdateBookedByName } from "@domain/booked-by-name/usecase/update-booked-by-name";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { validateBookedByNameInputMiddleware } from "@presentation/middlewares/book-by-name/book-by-name-validation";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 import { BookedByNameService } from "@presentation/services/booked-by-name-services";
 import { Router } from "express"; // Correctly import Request and Response
 import mongoose from "mongoose";
@@ -37,6 +39,8 @@ export const bookedByNameRouter = Router();
 
 bookedByNameRouter.post(
   "/addName",
+  verifyLoggedInUser,
+  // checkPermission(["1101"]),
   validateBookedByNameInputMiddleware(false),
   bookedByNameService.createBookedByName.bind(bookedByNameService)
 );
@@ -48,6 +52,7 @@ bookedByNameRouter.get(
 
 bookedByNameRouter.patch(
   "/update/:nameId",
+  verifyLoggedInUser,
   validateBookedByNameInputMiddleware(true),
   bookedByNameService.updateName.bind(bookedByNameService)
 );

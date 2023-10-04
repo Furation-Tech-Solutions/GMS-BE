@@ -5,6 +5,7 @@ import { GetAllBookedByNameUsecase } from "@domain/booked-by-name/usecase/get-al
 import { GetNameByIdUsecase } from "@domain/booked-by-name/usecase/get-booked-by-name-by-id";
 import { UpdateBookedByNameUseCase } from "@domain/booked-by-name/usecase/update-booked-by-name";
 import { ErrorClass } from "@presentation/error-handling/api-error";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { NextFunction, Request, Response } from "express";
 import { Either } from "monet";
 
@@ -40,8 +41,14 @@ export class BookedByNameService {
 
     }
     async createBookedByName(req: Request, res: Response): Promise<void> {
-  
-        const bookedByNameData: BookedByNameModel = BookedByNameMapper.toModel(req.body);
+         const user = req.user
+
+         const newCreatedBookedByName = {
+          ...req.body,
+          createdBy:user._id,
+          updatedBy:user._id
+         }
+        const bookedByNameData: BookedByNameModel = BookedByNameMapper.toModel(newCreatedBookedByName);
     
         const newBookedByName: Either<ErrorClass, BookedByNameEntity> =
           await this.createBookedByNameUseCase.execute(bookedByNameData);
@@ -77,7 +84,14 @@ export class BookedByNameService {
       async updateName(req: Request, res: Response): Promise<void> {
         
           const nameId: string = req.params.nameId;
-          const nameData: BookedByNameModel = req.body;
+
+          const user = req.user
+
+         const newCreatedBookedByName = {
+          ...req.body,
+          updatedBy:user._id
+         }
+          const nameData: BookedByNameModel = newCreatedBookedByName;
     
           // Get the existing admin by ID
           const existingName: Either<ErrorClass,BookedByNameEntity > | null =

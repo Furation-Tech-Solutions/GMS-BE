@@ -7,26 +7,34 @@ import { UserAccount } from "@data/user-account/models/user-account-model";
 /*
   Middleware to verify Firebase token and set user in the request object
 */
+
 const verifyLoggedInUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email } = req.cookies;
+    const  headerEmail  = req.headers.email;
+    const  cookieEmail  = req.cookies.email;
+        
+    if (headerEmail || cookieEmail) {
+      const emailToCheck = headerEmail || cookieEmail;
+      const user = await UserAccount.findOne({ email: emailToCheck });
+       if (user) {
+        req.user = user; // Set the user in the request object
+        next(); 
+      } else {
+        const unAuthorized = ApiError.unAuthorized();
+        res.status(unAuthorized.status).json({ message: unAuthorized.message });
+      }
+      
+    }
 
-    if (email) {
- 
-      const user = await UserAccount.findOne({ email: email });
- 
-      req.user = user; // Set the user in the request objec
-
-    } else {
+     else {
       const unAuthorized = ApiError.unAuthorized();
       res.status(unAuthorized.status).json({ message: unAuthorized.message });
     }
-
-    next();
+    
   } catch (error) {
     const internalError = ApiError.internalError();
     res.status(internalError.status).json({ message: internalError.message });
@@ -132,6 +140,7 @@ const adminActiveStatus = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export {
+  verifyLoggedInUser,
   authorziedUser,
   verifyTokenAndAuthorizationToSuperAdmin,
   verifyTokenAndAuthorizationToAdmin,

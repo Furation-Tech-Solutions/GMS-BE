@@ -35,8 +35,15 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    const user=req.user
+
+    const newReservationData={
+      ...req.body,
+      createdBy:user._id,
+      updatedBy:user._id
+    }
     const addReservationData: AddReservationModel =
-      AddReservationMapper.toModel(req.body);
+      AddReservationMapper.toModel(newReservationData);
 
     const newAddReservation: Either<ErrorClass, AddReservationEntity> =
       await this.createAddReservationUsecase.execute(addReservationData);
@@ -109,7 +116,13 @@ export class AddReservationServices {
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
-    const addReservationData: AddReservationModel = req.body;
+    const user=req.user
+
+    const newReservationData={
+      ...req.body,
+      updatedBy:user._id
+    }
+    const addReservationData: AddReservationModel = newReservationData;
 
     const existingAddReservation: Either<ErrorClass, AddReservationEntity> =
       await this.getAddReservationByIdUsecase.execute(addReservationId);

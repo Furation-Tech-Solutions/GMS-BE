@@ -8,6 +8,7 @@ import { UpdateUserUseCase } from "@domain/user-account/usecases/update-user";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { NextFunction, Request, Response } from "express";
 import { Either } from "monet";
+import { LogoutUserUseCase } from "@domain/user-account/usecases/logout-user";
 
 
 
@@ -19,6 +20,7 @@ export class UserService{
     private readonly getUserByIdUseCase:GetUserByIdUseCase;
     private readonly updateUserUseCase:UpdateUserUseCase;
     private readonly getUserByEmailUseCase:GetUserByEmailUseCase;
+    private readonly logoutUserUseCase:LogoutUserUseCase;
 
     constructor(
         createUserUseCase:CreateUserUsecase,
@@ -27,6 +29,7 @@ export class UserService{
         getUserByIdUseCase:GetUserByIdUseCase,
         updateUserUseCase:UpdateUserUseCase,
         getUserByEmailUseCase:GetUserByEmailUseCase,
+        logoutUserUseCase:LogoutUserUseCase
     ){
         this.createUserUseCase = createUserUseCase;
         this.getAllUserUseCase = getAllUserUseCase;
@@ -34,6 +37,7 @@ export class UserService{
         this.getUserByIdUseCase=getUserByIdUseCase;
         this.updateUserUseCase=updateUserUseCase;
         this.getUserByEmailUseCase=getUserByEmailUseCase;
+        this.logoutUserUseCase=logoutUserUseCase
     }
 
 
@@ -41,7 +45,13 @@ export class UserService{
 async createUser(req: Request, res: Response): Promise<void> {
 
     // console.log(req.body)
-    const { randomPassword, ...userDataWithoutPassword } = req.body;
+    const user=req.user
+    const newUserData={
+        ...req.body,
+        createdBy:user._id,
+        updatedBy:user._id
+    }
+    const { randomPassword, ...userDataWithoutPassword } = newUserData;
     const userData: UserModel = UserMapper.toModel(userDataWithoutPassword);
 
     const newUser: Either<ErrorClass, UserEntity> =
@@ -113,7 +123,12 @@ async getUserById(req: Request, res: Response): Promise<void> {
 }
 async updateUser(req: Request, res: Response): Promise<void> {
   const UserID: string = req.params.userId;
-  const userData: UserModel = req.body;
+  const user=req.user
+    const newUserData={
+        ...req.body,
+        updatedBy:user._id
+    }
+  const userData: UserModel = newUserData;
 
   const existingUser: Either<ErrorClass, UserEntity> =
       await this.getUserByIdUseCase.execute(UserID);
@@ -173,12 +188,29 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
 }
 
 async logoutUser(req:Request,res:Response):Promise<void>{
+  const userData=req.user
+  const user: Either<ErrorClass, UserEntity> =
+  await this.logoutUserUseCase.execute(userData.email);
 
-  res.status(200)
+  user.cata(
+    (error: ErrorClass) =>{
+    // console.log("error in get by email",error);
+        res.status(error.status).json({ error: error.message })
+    },
+    (result: UserEntity) => {
+        if (result == undefined) {
+          // console.log(result,"result is this in service")
+            return res.json({ message: "Data Not Found" });
+        }
+      
+  //  console.log(user,"user in logout service")
+  res.removeHeader('email');
+  return  res.status(200)
         .cookie("email", null, {expires: new Date(Date.now()), httpOnly: true})
         .json({
             success: true,
             massage: "Logged Out",
         })
+})
 }
 }

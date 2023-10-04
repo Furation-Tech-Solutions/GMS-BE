@@ -10,6 +10,7 @@ import { GetAllReservationStatus } from "@domain/reservation-status/usecases/get
 import { UpdateReservationStatus } from "@domain/reservation-status/usecases/update-reservation-status";
 import { DeleteReservationStatus } from "@domain/reservation-status/usecases/delete-reservation-status";
 import { validateReservationStatusInputMiddleware } from "@presentation/middlewares/reservationStatus/validation-reservation-status";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -57,6 +58,7 @@ reservationStatusRouter.post(
   "/create",
   // checkPermission("1103"),
   validateReservationStatusInputMiddleware(false),
+  verifyLoggedInUser,
   reservationStatusService.createReservationStatus.bind(
     reservationStatusService
   )
@@ -82,6 +84,7 @@ reservationStatusRouter.get(
 reservationStatusRouter.put(
   "/updateReservationStatus/:reservationStatusId",
   validateReservationStatusInputMiddleware(true),
+  verifyLoggedInUser,
   // checkPermission("1103"),
   reservationStatusService.updateReservationStatus.bind(
     reservationStatusService

@@ -34,7 +34,14 @@ export class BookingRequestServices {
     }
 
     async createBookingRequest(req: Request, res: Response): Promise<void> {
-        const bookingrequestData: BookingRequestModel = BookingRequestMapper.toModel(req.body);
+
+        const user=req.user;
+        const newBookingRequestData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const bookingrequestData: BookingRequestModel = BookingRequestMapper.toModel(newBookingRequestData);
 
         const newBookingRequest: Either<ErrorClass, BookingRequestEntity> =
             await this.createBookingRequestUsecases.execute(bookingrequestData);
@@ -105,7 +112,13 @@ export class BookingRequestServices {
 
     async updateBookingRequest(req: Request, res: Response): Promise<void> {
         const BookingRequestID: string = req.params.bookingRequestId;
-        const bookingRequestData: BookingRequestModel = req.body;
+
+        const user=req.user;
+        const newBookingRequestData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const bookingRequestData: BookingRequestModel = newBookingRequestData;
 
         const existingBookingRequest: Either<ErrorClass, BookingRequestEntity> =
             await this.getBookingRequestByIdUsecases.execute(BookingRequestID);

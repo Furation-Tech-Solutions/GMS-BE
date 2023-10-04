@@ -153,7 +153,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
 
 
-    if (existResevation?.reservationStatus !== "arrived" && addReservation.reservationStatus === "arrived") {
+    if (existResevation?.reservationStatus !== "arrived" && existResevation?.reservationStatus !== "left" && addReservation.reservationStatus === "arrived") {
 
 
       const newCheckInData = {

@@ -21,7 +21,7 @@ export class BookedByNameDataSourceImpl implements BookedByNameDataSource {
         if (existingBookedByName) {
           throw ApiError.nameExist();
         }
-    
+        //  console.log(req.user,"user in datasource")
         const bookedByNameData = new BookedByName(bookedByName);
     
         const createdBookedByName: mongoose.Document = await bookedByNameData.save();

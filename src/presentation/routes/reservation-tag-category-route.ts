@@ -8,6 +8,7 @@ import { DeleteReservationTagCategory } from "@domain/reservation-tag-category/u
 import { GetReservationTagCategoryById } from "@domain/reservation-tag-category/usecases/get-reservation_tag_category-by-id";
 import { GetAllReservationTagCategories } from "@domain/reservation-tag-category/usecases/get-all-reservation_tag_category";
 import { UpdateReservationTagCategory } from "@domain/reservation-tag-category/usecases/update-reservation_tag_category";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 // Create an instance of the ReservationTagCategoryDataSourceImpl and pass the mongoose connection
 const reservationTagCategoryDataSource = new ReservationTagCategoryDataSourceImpl(mongoose.connection);
@@ -37,6 +38,7 @@ export const reservationTagCategoryRouter = Router();
 // Route handling for creating a new tag category
 reservationTagCategoryRouter.post(
     "/add",
+   verifyLoggedInUser,
     reservationTagCategoryService.createReservationTagCategory.bind(reservationTagCategoryService)
 );
 
@@ -58,6 +60,7 @@ reservationTagCategoryRouter.get("/", reservationTagCategoryService.getAllReserv
 // Route handling for updating a tag category by ID
 reservationTagCategoryRouter.put(
     "/:ReservationTagCategoryId",
+     verifyLoggedInUser,
     reservationTagCategoryService.updateReservationTagCategory.bind(reservationTagCategoryService)
 );
 

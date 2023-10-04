@@ -35,8 +35,15 @@ export class ReservationStatusService {
   }
 
   async createReservationStatus(req: Request, res: Response): Promise<void> {
+    const user=req.user
+        const newReservattionStatusData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+
     const reservationStatusData: ReservationStatusModel =
-      ReservationStatusMapper.toModel(req.body);
+      ReservationStatusMapper.toModel(newReservattionStatusData);
 
     const newResevationStatus: Either<ErrorClass, ReservationStatusEntity> =
       await this.createReservationStatusUsecase.execute(reservationStatusData);
@@ -106,7 +113,12 @@ export class ReservationStatusService {
 
   async updateReservationStatus(req: Request, res: Response): Promise<void> {
     const reservationStatusId: string = req.params.reservationStatusId;
-    const reservationStatusData: ReservationStatusModel = req.body;
+    const user=req.user
+        const newReservattionStatusData={
+            ...req.body,
+            updatedBy:user._id
+        }
+    const reservationStatusData: ReservationStatusModel = newReservattionStatusData;
 
     // Get the existing outlet by ID
     const existingReservationStatus: Either<

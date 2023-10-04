@@ -34,7 +34,13 @@ export class ClientTagServices {
     }
 
     async createClientTag(req: Request, res: Response): Promise<void> {
-        const clientTagData: ClientTagModel = ClientTagMapper.toModel(req.body);
+        const user=req.user
+        const newClientTagData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const clientTagData: ClientTagModel = ClientTagMapper.toModel(newClientTagData);
 
         const newClientTag: Either<ErrorClass, ClientTagEntity> =
             await this.createClientTagUsecase.execute(clientTagData);
@@ -105,7 +111,12 @@ export class ClientTagServices {
 
     async updateClientTag(req: Request, res: Response): Promise<void> {
         const clientTagId: string = req.params.ClientTagId;
-        const clientTagData: ClientTagModel = req.body;
+        const user=req.user
+        const newClientTagData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const clientTagData: ClientTagModel = newClientTagData;
 
         const existingClientTag: Either<ErrorClass, ClientTagEntity> =
             await this.getClientTagByIdUsecase.execute(clientTagId);

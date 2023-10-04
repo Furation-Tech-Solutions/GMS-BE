@@ -30,7 +30,13 @@ export class ReservationTagCategoryServices {
     }
 
     async createReservationTagCategory(req: Request, res: Response): Promise<void> {
-        const reservationTagCategoryData: ReservationTagCategoryModel = ReservationTagCategoryMapper.toModel(req.body);
+        const user=req.user
+        const newReservationTagCategoryData={
+            ...req.body,
+            createdBy:user._id,
+            updatedBy:user._id
+        }
+        const reservationTagCategoryData: ReservationTagCategoryModel = ReservationTagCategoryMapper.toModel(newReservationTagCategoryData);
 
         const newClientTagCategory: Either<ErrorClass, ReservationTagCategoryEntity> =
             await this.createReservationTagCategoryUsecase.execute(reservationTagCategoryData);
@@ -101,7 +107,12 @@ export class ReservationTagCategoryServices {
 
     async updateReservationTagCategory(req: Request, res: Response): Promise<void> {
         const reservationTagCategoryId: string = req.params.ReservationTagCategoryId;
-        const reservationTagCategoryData: ReservationTagCategoryModel = req.body;
+        const user=req.user
+        const newReservationTagCategoryData={
+            ...req.body,
+            updatedBy:user._id
+        }
+        const reservationTagCategoryData: ReservationTagCategoryModel = newReservationTagCategoryData;
 
         const existingReservationTagCategory: Either<ErrorClass, ReservationTagCategoryEntity> =
             await this.getReservationTagCategoryByIdUsecase.execute(reservationTagCategoryId);

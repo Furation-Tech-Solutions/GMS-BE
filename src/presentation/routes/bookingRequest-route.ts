@@ -9,6 +9,7 @@ import { GetBookingRequestById } from "@domain/bookingRequest/usecases/get-booki
 import { UpdateBookingRequest } from "@domain/bookingRequest/usecases/update-bookingReq"; // Import the UpdateBookingRequest use case
 import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-bookingRequest"; // Import the DeleteBookingRequest use case
 import { validateBookingRequestInputMiddleware } from "@presentation/middlewares/booking req/validation-bookingReq"; // Import the validateBookingRequestInputMiddleware
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
 const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
@@ -38,6 +39,7 @@ export const bookingRequestRouter = Router();
 // Route handling for creating a new booking request
 bookingRequestRouter.post(
     "/add",
+  verifyLoggedInUser,
     validateBookingRequestInputMiddleware(false),
     bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
@@ -60,6 +62,7 @@ bookingRequestRouter.get("/", bookingRequestService.getAllBookingRequests.bind(b
 // Route handling for updating a booking request by ID
 bookingRequestRouter.put(
     "/:bookingRequestId",
+  verifyLoggedInUser,
     validateBookingRequestInputMiddleware(true),
     bookingRequestService.updateBookingRequest.bind(bookingRequestService)
 );

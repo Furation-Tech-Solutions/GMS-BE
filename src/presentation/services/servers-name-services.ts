@@ -32,7 +32,13 @@ export class ServerNameService{
     }
 
     async createServerName(req:Request, res:Response):Promise<void>{
-        const serverNameData: ServersNameModel = ServersNameMapper.toModel(req.body);
+      const user=req.user
+      const newServerNameData={
+          ...req.body,
+          createdBy:user._id,
+          updatedBy:user._id
+      }
+        const serverNameData: ServersNameModel = ServersNameMapper.toModel(newServerNameData);
     
         const newServerName: Either<ErrorClass, ServersNameEntity> =
           await this.createServerNameUseCase.execute(serverNameData);
@@ -69,7 +75,12 @@ export class ServerNameService{
       async updateServerName(req: Request, res: Response): Promise<void> {
         
         const nameId: string = req.params.serverNameId;
-        const nameData: ServersNameModel = req.body;
+        const user=req.user
+      const newServerNameData={
+          ...req.body,
+          updatedBy:user._id
+      }
+        const nameData: ServersNameModel = newServerNameData;
   
         // Get the existing admin by ID
         const existingName: Either<ErrorClass,ServersNameEntity > | null =

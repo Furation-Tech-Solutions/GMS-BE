@@ -26,7 +26,10 @@ export class ReservationTagCategoryDataSourceImpl
       const existingReservationTagCategory =
         await ReservationTagCategory.findOne({
           name: reservationTagCategory.name,
-        }).populate('tags');
+        }).populate({
+          path: "tags",
+          select: "id name",
+        });
       if (existingReservationTagCategory) {
         throw ApiError.emailExist();
       }
@@ -51,7 +54,12 @@ export class ReservationTagCategoryDataSourceImpl
 
   async read(id: string): Promise<any | null> {
     try {
-      const reservationTagCategory = await ReservationTagCategory.findById(id).populate('tags');
+      const reservationTagCategory = await ReservationTagCategory.findById(
+        id
+      ).populate({
+        path: "tags",
+        select: "id name",
+      });
       return reservationTagCategory ? reservationTagCategory.toObject() : null;
     } catch (error) {
       throw ApiError.badRequest();
@@ -60,7 +68,11 @@ export class ReservationTagCategoryDataSourceImpl
 
   async getAll(): Promise<any[]> {
     try {
-      const reservationTagCategories = await ReservationTagCategory.find().populate('tags');
+      const reservationTagCategories =
+        await ReservationTagCategory.find().populate({
+          path: "tags",
+          select: "id name",
+        });
       return reservationTagCategories.map((reservationTagCategory) =>
         reservationTagCategory.toObject()
       );
@@ -81,7 +93,10 @@ export class ReservationTagCategoryDataSourceImpl
           {
             new: true,
           }
-        ).populate('tags');
+        ).populate({
+          path: "tags",
+          select: "id name",
+        });
       return updatedReservationTagCategory
         ? updatedReservationTagCategory.toObject()
         : null;
