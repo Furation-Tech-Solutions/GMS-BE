@@ -131,6 +131,7 @@ export class ReservationStatusService {
         res.status(error.status).json({ error: error.message });
       },
       async (result: ReservationStatusEntity) => {
+        
         const resData = ReservationStatusMapper.toEntity(result, true);
         const updatedReservationStatusEntity: ReservationStatusEntity =
           ReservationStatusMapper.toEntity(
@@ -154,8 +155,9 @@ export class ReservationStatusService {
           },
           (response: ReservationStatusEntity) => {
             // Convert updatedOutlet from OutletEntity to plain JSON object using OutletMapper
+             console.log(response,"response i updated reservation")
             const responseData = ReservationStatusMapper.toModel(response);
-
+             
             // Send the updated outlet as a JSON response
             res.json(responseData);
           }

@@ -22,12 +22,12 @@ class EmailService {
         });
     }
 
-    async sendEmail(options: EmailOptions): Promise<void> {
+    async sendEmail(emailOption:EmailOptions): Promise<void> {
         const mailOptions = {
             from: env.user,
-            to: options.email,
-            subject: options.subject,
-            text: options.message,
+            to: emailOption.email,
+            subject: emailOption.subject,
+            text:emailOption.message,
         };
 
         try {
