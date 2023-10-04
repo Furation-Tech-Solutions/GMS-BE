@@ -24,7 +24,9 @@ class EmailService {
 
     async sendEmail(emailOption:EmailOptions): Promise<void> {
         const mailOptions = {
+
             from: "masaischoolproject@gmail.com",
+
             to: emailOption.email,
             subject: emailOption.subject,
             text:emailOption.message,
