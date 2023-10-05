@@ -1,5 +1,5 @@
 {
-  "name": "Aquifer",
+  "name": "aquifer",
   "version": "1.0.0",
   "description": "Infrastructure and services related to Project Waterfall.",
   "main": "index.js",
