@@ -66,7 +66,8 @@ const guestSchema = new mongoose.Schema({
     type: [String],
   },
   reservationTags: {
-    type: [String],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ReservationTag",
   },
   status: {
     type: String,

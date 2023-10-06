@@ -7,8 +7,8 @@ export class ReservationStatusModel {
     public classification: string,
     public active: boolean | undefined,
     public durationHolds: number | undefined,
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
   ) {}
 }
 
@@ -22,8 +22,8 @@ export class ReservationStatusEntity {
     public classification: string,
     public active: boolean,
     public durationHolds: number | undefined,
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined
   ) {}
 }
 
@@ -62,11 +62,11 @@ export class ReservationStatusMapper {
             : existingReservationStatus.durationHolds,
         updatedBy:
           reservationStatusData.updatedBy !== undefined
-            ? reservationStatusData.updatedBy
+            ? { _id: reservationStatusData.updatedBy }
             : existingReservationStatus.updatedBy,
         createdBy:
           reservationStatusData.createdBy !== undefined
-            ? reservationStatusData.createdBy
+            ? { _id: reservationStatusData.createdBy }
             : existingReservationStatus.createdBy,
       };
     } else {
@@ -82,8 +82,8 @@ export class ReservationStatusMapper {
         classification: reservationStatusData.classification,
         active: reservationStatusData.active,
         durationHolds: reservationStatusData.durationHolds,
-        updatedBy: reservationStatusData.updatedBy,
-        createdBy: reservationStatusData.createdBy,
+        updatedBy: { _id: reservationStatusData.updatedBy },
+        createdBy: { _id: reservationStatusData.createdBy },
       };
       return reservationStatusEntity;
     }

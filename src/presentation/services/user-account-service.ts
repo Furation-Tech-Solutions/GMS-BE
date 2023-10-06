@@ -169,7 +169,7 @@ async updateUser(req: Request, res: Response): Promise<void> {
 
               updatedUser.cata(
               (error: ErrorClass) => {
-                console.log("error is this",error)
+                // console.log("error is this",error)
                   res.status(error.status).json({ error: error.message });
               },
               (result: UserEntity) => {
