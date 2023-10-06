@@ -66,7 +66,7 @@ export class UserRepositoryImpl implements UserRepository {
           return Right<ErrorClass, UserEntity>(updatedUser);
       } catch (e) {
           if (e instanceof ApiError && e.name === "conflict" ) {
-            console.log(e,"error in data source impl")
+            // console.log(e,"error in data source impl")
               return Left<ErrorClass, UserEntity>(ApiError.bookingRequestExists());
           }
           return Left<ErrorClass, UserEntity>(ApiError.badRequest());

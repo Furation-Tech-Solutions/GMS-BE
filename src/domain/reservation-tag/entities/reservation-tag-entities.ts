@@ -3,8 +3,8 @@ export class ReservationTagModel {
   constructor(
     public name: string = "",
     public categoryNameId: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -15,8 +15,8 @@ export class ReservationTagEntity {
     public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public categoryNameId: string = "",
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -41,11 +41,11 @@ export class ReservationTagMapper {
             : existingReservationTag.categoryNameId,
         updatedBy:
           reservationTagData.updatedBy !== undefined
-            ? reservationTagData.updatedBy
+            ? { _id: reservationTagData.updatedBy }
             : existingReservationTag.updatedBy,
         createdBy:
           reservationTagData.createdBy !== undefined
-            ? reservationTagData.createdBy
+            ? { _id: reservationTagData.createdBy }
             : existingReservationTag.createdBy,
         createdAt:
           reservationTagData.createdAt !== undefined
@@ -61,8 +61,8 @@ export class ReservationTagMapper {
           : reservationTagData._id.toString(),
         name: reservationTagData.name,
         categoryNameId: reservationTagData.categoryNameId,
-        updatedBy: reservationTagData.updatedBy,
-        createdBy: reservationTagData.createdBy,
+        updatedBy: { _id: reservationTagData.updatedBy },
+        createdBy: { _id: reservationTagData.createdBy },
         createdAt: reservationTagData.createdAt,
       };
       return ReservationTagEntity;

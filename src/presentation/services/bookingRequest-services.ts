@@ -55,7 +55,7 @@ export class BookingRequestServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: BookingRequestEntity) => {
-                console.log(result,"bookingrequest in service create")
+                // console.log(result,"bookingrequest in service create")
                 // this.emailService.sendEmail({result);
                  
                 const resData = BookingRequestMapper.toEntity(result, true);
@@ -159,7 +159,7 @@ export class BookingRequestServices {
                         res.status(error.status).json({ error: error.message });
                     },
                     (result: BookingRequestEntity) => {
-                        console.log(result,"bookingrequest in service")
+                        // console.log(result,"bookingrequest in service")
                         
                         const resData = BookingRequestMapper.toEntity(result, true);
                         res.json(resData);

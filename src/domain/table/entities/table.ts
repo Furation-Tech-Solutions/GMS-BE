@@ -8,7 +8,7 @@ export class TableModel {
     public seatingArea: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 // Table Entity
@@ -22,7 +22,7 @@ export class TableEntity {
     public seatingArea: string, // Assuming seatingArea is an ObjectId string
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 // Table Mapper
@@ -75,7 +75,7 @@ export class TableMapper {
         partySizeMini: tableData.partySizeMini,
         partySizeMax: tableData.partySizeMax,
         tableCombinations: tableData.tableCombinations,
-        seatingArea: tableData.seatingArea.toString(), // Convert ObjectId to string
+        seatingArea: tableData.seatingArea, // Convert ObjectId to string
         updatedBy: { _id: tableData.updatedBy },
         createdBy: { _id: tableData.createdBy },
       };
