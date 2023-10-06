@@ -11,6 +11,8 @@ import { GetAllBookingRequestsUsecase } from "@domain/bookingRequest/usecases/ge
 import { UpdateBookingRequestUsecase } from "@domain/bookingRequest/usecases/update-bookingReq";
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
+import EmailService from "./send-mail";
+import { bookingRequestConfirmationEmailTemplate } from "./email-template";
 
 export class BookingRequestServices {
     private readonly createBookingRequestUsecases: CreateBookingRequestUsecase;
@@ -18,19 +20,22 @@ export class BookingRequestServices {
     private readonly getBookingRequestByIdUsecases: GetBookingRequestByIdUsecase;
     private readonly getAllBookingRequestsUsecases: GetAllBookingRequestsUsecase;
     private readonly updateBookingRequestUsecases: UpdateBookingRequestUsecase;
-
+    private readonly emailService:EmailService;
     constructor(
         createBookingRequestUsecases: CreateBookingRequestUsecase,
         deleteBookingRequestUsecases: DeleteBookingRequestUsecase,
         getBookingRequestByIdUsecases: GetBookingRequestByIdUsecase,
         getAllBookingRequestsUsecases: GetAllBookingRequestsUsecase,
         updateBookingRequestUsecases: UpdateBookingRequestUsecase,
+        emailService: EmailService
     ) {
         this.createBookingRequestUsecases = createBookingRequestUsecases;
         this.deleteBookingRequestUsecases = deleteBookingRequestUsecases;
         this.getBookingRequestByIdUsecases = getBookingRequestByIdUsecases;
         this.getAllBookingRequestsUsecases = getAllBookingRequestsUsecases;
         this.updateBookingRequestUsecases = updateBookingRequestUsecases;
+        this.emailService = emailService
+
     }
 
     async createBookingRequest(req: Request, res: Response): Promise<void> {
@@ -50,7 +55,16 @@ export class BookingRequestServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: BookingRequestEntity) => {
+                console.log(result,"bookingrequest in service create")
+                // this.emailService.sendEmail({result);
+                 
                 const resData = BookingRequestMapper.toEntity(result, true);
+                const emailOption={
+                    email:result.email,
+                    subject:bookingRequestConfirmationEmailTemplate.subject,
+                    message:bookingRequestConfirmationEmailTemplate.message(resData)
+                  }
+                this.emailService.sendEmail(emailOption);
                 return res.json(resData);
             }
         );
@@ -145,6 +159,8 @@ export class BookingRequestServices {
                         res.status(error.status).json({ error: error.message });
                     },
                     (result: BookingRequestEntity) => {
+                        console.log(result,"bookingrequest in service")
+                        
                         const resData = BookingRequestMapper.toEntity(result, true);
                         res.json(resData);
                     }
