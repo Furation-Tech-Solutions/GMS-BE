@@ -86,11 +86,11 @@ export class AddReservationServices {
                 const clientWithEmail = result.client as { email: string };
               const emailOption={
           // email:clientWithEmail.email ,
-          email:"satan.sharma@furation.tech",
+          email:"shehzadmalik123.sm@gmail.com",
           subject:reservationStatusEmailTemplate.subject,
           message:reservationStatusEmailTemplate.message(result)
            }
-      
+            
           await this.emailService.sendEmail(emailOption);
          }
           else {

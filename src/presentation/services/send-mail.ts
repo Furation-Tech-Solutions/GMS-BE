@@ -24,13 +24,14 @@ class EmailService {
 
     async sendEmail(emailOption:EmailOptions): Promise<void> {
         const mailOptions = {
-            from: env.from,
+            from: env.user,
             to: emailOption.email,
             subject: emailOption.subject,
             text:emailOption.message || "",
         };
 
         try {
+            console.log(mailOptions,"mailoption")
             await this.transporter.sendMail(mailOptions);
             // console.log("Email sent successfully");
         } catch (error) {
