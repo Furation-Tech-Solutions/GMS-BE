@@ -39,10 +39,9 @@ export class CheckInCheckOutRepositoryImpl implements CheckInCheckOutRepository 
   async updateCheckOut(
     id: string,
     data: CheckInCheckOutModel,
-    action: string
   ): Promise<Either<ErrorClass, CheckInCheckOutEntity>> {
     try {
-      const response = await this.dataSource.update(id, data, action);
+      const response = await this.dataSource.update(id, data);
       return Right<ErrorClass, CheckInCheckOutEntity>(response);
     } catch (error:any) {
       if(error instanceof ApiError) {
