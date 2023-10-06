@@ -12,6 +12,8 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 import { ClientServices } from "./client-services";
+import { reservationStatusEmailTemplate } from "./email-template";
+import EmailService from "./send-mail";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -19,22 +21,29 @@ export class AddReservationServices {
   private readonly getAddReservationByIdUsecase: GetAddReservationByIdUsecase;
   private readonly getAllAddReservationUsecase: GetAllAddReservationUsecase;
   private readonly updateAddReservationUsecase: UpdateAddReservationUsecase;
+  private readonly emailService:EmailService;
+
 
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
     deleteAddReservationUsecase: DeleteAddReservationUsecase,
     getAddReservationByIdUsecase: GetAddReservationByIdUsecase,
     getAllAddReservationUsecase: GetAllAddReservationUsecase,
-    updateAddReservationUsecase: UpdateAddReservationUsecase
+    updateAddReservationUsecase: UpdateAddReservationUsecase,
+    emailService: EmailService
+
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
     this.deleteAddReservationUsecase = deleteAddReservationUsecase;
     this.getAddReservationByIdUsecase = getAddReservationByIdUsecase;
     this.getAllAddReservationUsecase = getAllAddReservationUsecase;
     this.updateAddReservationUsecase = updateAddReservationUsecase;
+    this.emailService = emailService
+
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    try{
     const user=req.user
 
     const newReservationData={
@@ -49,13 +58,58 @@ export class AddReservationServices {
       await this.createAddReservationUsecase.execute(addReservationData);
 
     newAddReservation.cata(
-      (error: ErrorClass) =>
+      async (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-      (result: AddReservationEntity) => {
+      async (result: AddReservationEntity) => {
+
         const resData = AddReservationMapper.toEntity(result, true);
-        return res.json(resData);
+        console.log(resData,"resData in reservation")
+
+        //called the get reservation by id to send populated data to email template
+        const addReservationId:string| undefined = resData._id;
+        if (addReservationId) {
+
+        const addReservation: Either<ErrorClass, AddReservationEntity> =
+          await this.getAddReservationByIdUsecase.execute(addReservationId);
+    
+        addReservation.cata(
+          async (error: ErrorClass) =>
+            res.status(error.status).json({ error: error.message }),
+          async (result: AddReservationEntity) => {
+            if (!result) {
+              return res.json({ message: "Reservation not found." });
+            }
+            console.log(result,"reservation of perticular id")
+            // const reservtionData = AddReservationMapper.toEntity(result);
+            // return res.json(resData);
+              if (typeof result.client==="object" && 'email' in result.client) {
+                const clientWithEmail = result.client as { email: string };
+              const emailOption={
+          // email:clientWithEmail.email ,
+          email:"shehzadmalik123.sm@gmail.com",
+          subject:reservationStatusEmailTemplate.subject,
+          message:reservationStatusEmailTemplate.message(result)
+           }
+      
+          await this.emailService.sendEmail(emailOption);
+         }
+          else {
+            // Handle the case where client or client.email is undefined
+            return res.json({ message: "Client information is missing." });
+          }
+          }
+        );
+        }
+
+         return  res.json(resData);
+        
+
       }
-    );
+    )
+    }
+    catch(err){
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 
   async deleteAddReservation(req: Request, res: Response): Promise<void> {

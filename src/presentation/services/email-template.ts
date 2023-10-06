@@ -4,7 +4,7 @@ import { UserEntity } from "@domain/user-account/entities/user-account";
 
 export interface EmailTemplate {
     subject: string;
-    message: (user: any) => string;
+    message: (user: any) => string | null;
   }
   
   export const registrationEmailTemplate: EmailTemplate = {
@@ -28,6 +28,33 @@ export interface EmailTemplate {
   The [Your Platform Name] Team`;
     },
   };
+
+  export const reservationStatusEmailTemplate: EmailTemplate = {
+    subject: 'Reservation Status Notification',
+    message: (reservation: any) => {
+      return `Dear ${reservation.client.firstName},
+  
+    We are pleased to inform you that your reservation with the following details has been successfully created:
+  
+    Reservation Date: ${reservation.date}
+    Number of Guests: ${reservation.noOfGuests}
+    Shift: ${reservation.shift.shiftName}
+    Duration: ${reservation.duration}
+    Seating Area: ${reservation.seatingArea.seatingAreaName}
+    Time Slot: ${reservation.timeSlot}
+    Table Number: ${reservation.table.tableNo}
+    Reservation Note: ${reservation.reservationNote}
+    Perks: ${reservation.perks}
+  
+    Your reservation is confirmed and ready for your visit. If you have any questions or need to make changes to your reservation, please don't hesitate to contact us at [Support Email Address] or [Support Phone Number].
+  
+    We look forward to serving you and providing a wonderful dining experience.
+  
+    Best regards,
+    The [Your Hotel Name] Team`;
+    },
+  };
+  
   
   export const loginEmailTemplate: EmailTemplate = {
     subject: 'Login Notification',
@@ -48,22 +75,44 @@ export interface EmailTemplate {
   export const bookingRequestConfirmationEmailTemplate: EmailTemplate = {
     subject: 'Booking Request Confirmation',
     message: (user: any) => {
-      return `Dear ${user.firstName},
+      const allowedStatuses = ["Booked", "Declined"];
 
-      Your booking request with status has been "completed". Here are the details:
-      
-      Booking ID: ${user._id}
-      Check-in Date: ${user.reservationDate}
-      Check-out Time: ${user.reservationTime}
-      Number of Guests: ${user.numberOfGuest}
-      Duration: ${user.duration}
-      
-      We look forward to welcoming you on your arrival. If you have any questions or need further assistance, please feel free to contact us at [Contact Email Address].
-      
-      Thank you for choosing us for your stay.
-      
-      Best regards,
-      The [Your Hotel/Service Name] Team`
-    },
+    if (!allowedStatuses.includes(user.status.name)) {
+      return null; // Return null if the status is not allowed
+    }
+
+    let statusMessage = '';
+
+    switch (user.status.name) {
+      case 'Booked':
+        statusMessage = 'Your booking request has been confirmed.';
+        break;
+      case 'Declined':
+        statusMessage = 'Unfortunately, your booking request has been declined.';
+        break;
+      default:
+        statusMessage = 'Your booking request status has been updated.';
+    }
+
+    return `Dear ${user.firstName},
+
+${statusMessage}
+
+Here are the details of your booking request:
+
+Reservation Date: ${user.reservationDate}
+Reservation Time: ${user.reservationTime}
+Number of Guests: ${user.numberOfGuest}
+Duration: ${user.duration}
+Status: ${user.status.name}
+
+We look forward to serving you. If you have any questions or need further assistance, please feel free to contact us at [Contact Email Address].
+
+Thank you for choosing us for your stay.
+
+Best regards,
+The [Your Hotel/Service Name] Team`;
+  },
+    
   };
   

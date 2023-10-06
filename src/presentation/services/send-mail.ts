@@ -4,7 +4,7 @@ import env from '@main/config/env';
 interface EmailOptions {
     email: string;
     subject: string;
-    message: string;
+    message: string | null ;
 }
 
 class EmailService {
@@ -27,7 +27,7 @@ class EmailService {
             from: env.user,
             to: emailOption.email,
             subject: emailOption.subject,
-            text:emailOption.message,
+            text:emailOption.message || "",
         };
 
         try {

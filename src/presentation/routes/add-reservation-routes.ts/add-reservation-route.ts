@@ -11,6 +11,7 @@ import { AddReservationServices } from "@presentation/services/add-reservation-s
 import { validateReservationInputMiddleware } from "@presentation/middlewares/add-reservation/add-reservation-validator";
 import { checkPermission } from "@presentation/permission/permission-middleware";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import EmailService from "@presentation/services/send-mail";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 // Create an instance of the AddReservationDataSourceImpl and pass the mongoose connection
@@ -22,6 +23,7 @@ const addReservationDataSource = new AddReservationDataSourceImpl(
 const addReservationRepository = new AddReservationRepositoryImpl(
   addReservationDataSource
 );
+const emailService = new EmailService();
 
 // Create instances of the required use cases and pass the AddReservationRepositoryImpl
 const createAddReservationUsecase = new CreateAddReservation(
@@ -46,7 +48,8 @@ const addReservationService = new AddReservationServices(
   deleteAddReservationUsecase,
   getAddReservationByIdUsecase,
   getAllAddReservationUsecase,
-  updateAddReservationUsecase
+  updateAddReservationUsecase,
+  emailService
 );
 
 // Create an Express router
