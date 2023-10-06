@@ -60,6 +60,9 @@ async deleteShift(id: string): Promise<Either<ErrorClass, void>> {
       const res = await this.dataSource.delete(id);
       return Right<ErrorClass, void>(res);
     } catch (error) {
+      if (error instanceof ApiError ) {
+        return Left<ErrorClass, void>(ApiError.notFound());
+      }
       return Left<ErrorClass, void>(ApiError.badRequest());
     }
   }
