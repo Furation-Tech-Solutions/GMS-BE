@@ -86,7 +86,7 @@ export class AddReservationServices {
                 const clientWithEmail = result.client as { email: string };
               const emailOption={
           // email:clientWithEmail.email ,
-          email:"shehzadmalik123.sm@gmail.com",
+          email:"satan.sharma@furation.tech",
           subject:reservationStatusEmailTemplate.subject,
           message:reservationStatusEmailTemplate.message(result)
            }

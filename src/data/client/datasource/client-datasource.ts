@@ -16,6 +16,7 @@ export interface ClientDataSource {
 export class ClientDataSourceImpl implements ClientDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(client: ClientModel): Promise<any> {
+
     const existingClient = await Client.findOne({ email: client.email });
     if (existingClient) {
       throw ApiError.clientExist();
