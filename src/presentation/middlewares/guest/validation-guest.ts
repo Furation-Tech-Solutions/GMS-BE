@@ -108,14 +108,14 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
 
     status: isUpdate
       ? Joi.string()
-          .valid("checked In", "checked Out", "-")
+          .valid("Checked In", "Checked Out", "-")
           .optional()
           .trim()
           .messages({
             "any.only": "Invalid status value",
           })
       : Joi.string()
-          .valid("checked In", "checked Out", "-")
+          .valid("Checked In", "Checked Out", "-")
           .optional()
           .trim()
           .messages({
