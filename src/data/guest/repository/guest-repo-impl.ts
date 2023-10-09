@@ -3,6 +3,7 @@ import { GuestRepository } from "@domain/guest/repositories/guest-repo";
 import { GuestDataSource } from "../datasource/guest-datasource";
 import { Either, Right, Left } from "monet";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
+import mongoose from "mongoose";
 
 export class GuestRepositoryImpl implements GuestRepository {
   private readonly guestDataSource: GuestDataSource;
@@ -10,15 +11,19 @@ export class GuestRepositoryImpl implements GuestRepository {
     this.guestDataSource = guestDataSource;
   }
 
-  async createGuest(guest: GuestModel): Promise<Either<ErrorClass, GuestEntity>> {
+  async createGuest(
+    guest: GuestModel
+  ): Promise<Either<ErrorClass, GuestEntity>> {
     try {
       const i = await this.guestDataSource.create(guest);
       return Right<ErrorClass, GuestEntity>(i);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ApiError && error.name === "conflict") {
         return Left<ErrorClass, GuestEntity>(ApiError.emailExist());
       }
-      return Left<ErrorClass, GuestEntity>(ApiError.badRequest());
+      return Left<ErrorClass, GuestEntity>(
+        ApiError.customError(400, error.message)
+      );
     }
   }
   async deleteGuest(id: string): Promise<Either<ErrorClass, void>> {
@@ -27,6 +32,9 @@ export class GuestRepositoryImpl implements GuestRepository {
       const i = await this.guestDataSource.delete(id);
       return Right<ErrorClass, void>(i);
     } catch (e) {
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, void>(ApiError.castError());
+      }
       if (e instanceof ApiError && e.name === "notfound") {
         return Left<ErrorClass, void>(ApiError.notFound());
       }
@@ -41,8 +49,8 @@ export class GuestRepositoryImpl implements GuestRepository {
       const i = await this.guestDataSource.update(id, data);
       return Right<ErrorClass, GuestEntity>(i);
     } catch (e) {
-      if (e instanceof ApiError && e.name === "conflict") {
-        return Left<ErrorClass, GuestEntity>(ApiError.emailExist());
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, GuestEntity>(ApiError.castError());
       }
       return Left<ErrorClass, GuestEntity>(ApiError.badRequest());
     }
@@ -62,13 +70,16 @@ export class GuestRepositoryImpl implements GuestRepository {
     }
   }
 
-
   async getGuestbyId(id: string): Promise<Either<ErrorClass, GuestEntity>> {
     // return await this.dataSource.read(id);
     try {
       const i = await this.guestDataSource.read(id);
       return Right<ErrorClass, GuestEntity>(i);
     } catch (e) {
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, GuestEntity>(ApiError.castError());
+      }
+
       if (e instanceof ApiError && e.name === "notfound") {
         return Left<ErrorClass, GuestEntity>(ApiError.notFound());
       }

@@ -65,10 +65,12 @@ const guestSchema = new mongoose.Schema({
   additionalGuest: {
     type: [String],
   },
-  reservationTags: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "ReservationTag",
-  },
+  reservationTags: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReservationTag",
+    },
+  ],
   status: {
     type: String,
     enum: ["Checked In", "Checked Out", "No Status"],
