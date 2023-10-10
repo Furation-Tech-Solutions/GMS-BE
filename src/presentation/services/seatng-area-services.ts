@@ -148,7 +148,7 @@ export class SeatingAreaService {
           },
           (response: SeatingAreaEntity) => {
             // Convert updatedOutlet from OutletEntity to plain JSON object using OutletMapper
-            const responseData = SeatingAreaMapper.toModel(response);
+            const responseData = SeatingAreaMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
             res.json(responseData);
