@@ -11,7 +11,10 @@ import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-boo
 import { validateBookingRequestInputMiddleware } from "@presentation/middlewares/booking req/validation-bookingReq"; // Import the validateBookingRequestInputMiddleware
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import EmailService from "@presentation/services/send-mail";
+import {SentMessageInfo, Transporter} from "nodemailer"
 
+
+// const transporter =  createTransporter();
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
 const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
 
@@ -43,7 +46,7 @@ export const bookingRequestRouter = Router();
 bookingRequestRouter.post(
     "/add",
       verifyLoggedInUser,
-    validateBookingRequestInputMiddleware(false),
+    // validateBookingRequestInputMiddleware(false),
     bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
 

@@ -4,7 +4,7 @@ import env from '@main/config/env';
 interface EmailOptions {
     email: string;
     subject: string;
-    message: string;
+    message: string | null ;
 }
 
 class EmailService {
@@ -27,10 +27,11 @@ class EmailService {
             from: env.user,
             to: emailOption.email,
             subject: emailOption.subject,
-            text:emailOption.message,
+            html:emailOption.message || "",
         };
 
         try {
+            console.log(mailOptions,"mailoption")
             await this.transporter.sendMail(mailOptions);
             // console.log("Email sent successfully");
         } catch (error) {
