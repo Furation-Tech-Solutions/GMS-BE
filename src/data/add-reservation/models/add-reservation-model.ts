@@ -33,16 +33,16 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Time Slot"],
   },
-  // Client
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
     required: [true, "Please select the Client"],
   },
-
-  // Additional Detail
   reservationTags: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "ReservationTag" },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReservationTag",
+    },
   ],
 
   reservationNote: {
@@ -89,16 +89,14 @@ const addReservationSchema = new mongoose.Schema({
     ref: "UserAccount",
     default: "",
   },
-
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
     default: "",
   },
-
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

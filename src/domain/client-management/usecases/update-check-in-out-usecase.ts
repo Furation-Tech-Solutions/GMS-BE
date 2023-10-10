@@ -8,7 +8,6 @@ export interface UpdateCheckInCheckOutUsecase {
   execute: (
     checkId: string,
     checkInCheckOutData: CheckInCheckOutModel,
-    action: string
   ) => Promise<Either<ErrorClass, CheckInCheckOutEntity>>;
 }
 
@@ -22,8 +21,7 @@ export class UpdateCheckInCheckOut implements UpdateCheckInCheckOutUsecase {
   async execute(
     checkId: string,
     checkInCheckOutData: CheckInCheckOutModel,
-    action: string
   ): Promise<Either<ErrorClass, CheckInCheckOutEntity>> {
-    return await this.checkInCheckOutRepository.updateCheckOut(checkId, checkInCheckOutData, action);
+    return await this.checkInCheckOutRepository.updateCheckOut(checkId, checkInCheckOutData);
   }
 }

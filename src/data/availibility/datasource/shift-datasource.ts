@@ -68,10 +68,14 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   }
 
   async delete(id: string): Promise<void> {
+   const deletedShift =  await Shift.findByIdAndDelete(id);
 
-    await AddReservation.deleteMany({ shift: id });
-
-    await Shift.findByIdAndDelete(id);
+  //   if (deletedShift) {
+  //     await AddReservation.updateMany({ shift: id }, { $unset: { shift: 1 } });
+  // } else {
+  //     throw ApiError.notFound();
+  // }
+ 
   }
 
   async getAll(): Promise<any[]> {

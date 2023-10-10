@@ -7,7 +7,7 @@ import { AddReservation } from "@data/add-reservation/models/add-reservation-mod
 
 export interface CheckInCheckOutDataSource {
   create(checkInCheckOut: string): Promise<any>;
-  update(id: string, checkInCheckOut: CheckInCheckOutModel, action: string): Promise<any>; 
+  update(id: string, checkInCheckOut: CheckInCheckOutModel ): Promise<any>; 
   delete(id: string): Promise<void>;
   read(id: string): Promise<CheckInCheckOutEntity>; 
   getAllAdmins(): Promise<CheckInCheckOutEntity[]>; 
@@ -38,53 +38,18 @@ export class CheckInCheckOutSourceImpl implements CheckInCheckOutDataSource {
 
     
     const checkInCheckOutData = new CheckInCheckOut(newcheckInCheckOutData);
-
     
     const createdCheckInCheckOutData: mongoose.Document = await checkInCheckOutData.save();
 
     return createdCheckInCheckOutData.toObject();
   }
 
-  async update(id: string, checkInCheckOut: CheckInCheckOutModel, action: string): Promise<any> {
+  async update(id: string, checkInCheckOut: CheckInCheckOutModel): Promise<any> {
 
-      const existingCheckInCheckOut = await CheckInCheckOut.findOne({resrvation: id});
-
-      if(!existingCheckInCheckOut) throw ApiError.notFound();
-
-      const dateString = new Date();
-      const dateObject = new Date(dateString);
-      
-      // Get hours, minutes, and seconds
-      const hours = dateObject.getHours();
-      const minutes = dateObject.getMinutes();
-      const seconds = dateObject.getSeconds();
-
-      // Format the time as HH:MM:SS
-      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-  
-      if(action === "arrived"){
-        const newcheckInCheckOutData = {
-          checkInTime: formattedTime
-        }
-
-        const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut._id, newcheckInCheckOutData, {
-          new: true,
-        });
-
-
-        return updatedCheckInCheckOut ? updatedCheckInCheckOut.toObject() : null; 
-
-      }else if (action === "left"){
-        const newcheckInCheckOutData = {
-          checkOutTime: formattedTime
-        }
-        const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut._id, newcheckInCheckOutData, {
-          new: true,
-        });
-
-        return updatedCheckInCheckOut ? updatedCheckInCheckOut.toObject() : null; // Convert to plain JavaScript object before returning
-      }
+    const updatedData = await CheckInCheckOut.findByIdAndUpdate(id, checkInCheckOut, {
+      new: true,
+    }); // No need for conversion here
+    return updatedData ? updatedData.toObject() : null;
      
   } 
 
@@ -94,7 +59,13 @@ export class CheckInCheckOutSourceImpl implements CheckInCheckOutDataSource {
 
   async read(id: string): Promise<any> {
     try {
-      const checkInCheckOut = await AddReservation.findById(id);
+      const checkInCheckOut = await CheckInCheckOut.findOne({
+        $or: [
+          { reservation: id }, 
+          { _id: id }, 
+        ],
+      });
+
 
       if (!checkInCheckOut) {
         throw ApiError.notFound();

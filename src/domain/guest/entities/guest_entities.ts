@@ -80,11 +80,11 @@ export class GuestMapper {
             : existingGuest.status,
         updatedBy:
           guestData.updatedBy !== undefined
-            ? guestData.updatedBy
+            ? { _id: guestData.updatedBy }
             : existingGuest.updatedBy,
         createdBy:
           guestData.createdBy !== undefined
-            ? guestData.createdBy
+            ? { _id: guestData.createdBy }
             : existingGuest.createdBy,
         createdAt:
           guestData.createdAt !== undefined
@@ -107,8 +107,8 @@ export class GuestMapper {
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
         status: guestData.status,
-        updatedBy: guestData.updatedBy,
-        createdBy: guestData.createdBy,
+        updatedBy: { _id: guestData.updatedBy },
+        createdBy: { _id: guestData.createdBy },
         createdAt: guestData.createdAt,
       };
       return guestEntity;

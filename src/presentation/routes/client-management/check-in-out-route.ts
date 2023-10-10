@@ -51,7 +51,7 @@ checkInCheckOutRouter.post(
 
 // Route handling for getting an admin by ID
 checkInCheckOutRouter.get(
-  "/getById/:reservationId",
+  "/getById/:checkId",
   checkInCheckOutService.getCheckInCheckOutById.bind(checkInCheckOutService)
 );
 

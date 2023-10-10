@@ -65,9 +65,12 @@ const guestSchema = new mongoose.Schema({
   additionalGuest: {
     type: [String],
   },
-  reservationTags: {
-    type: [String],
-  },
+  reservationTags: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReservationTag",
+    },
+  ],
   status: {
     type: String,
     enum: ["Checked In", "Checked Out", "No Status"],
@@ -90,7 +93,7 @@ const guestSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

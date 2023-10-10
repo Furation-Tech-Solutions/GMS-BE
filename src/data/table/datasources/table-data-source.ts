@@ -28,12 +28,18 @@ export class TableDataSourceImpl implements TableDataSource {
   }
 
   async getById(id: string): Promise<any | null> {
-    const table = await Table.findById(id);
+    const table = await Table.findById(id).populate({
+      path: "seatingArea",
+      select: "id abbreviation seatingAreaName",
+    });
     return table ? table.toObject() : null;
   }
 
   async getAllTables(): Promise<any[]> {
-    const tables = await Table.find();
+    const tables = await Table.find().populate({
+      path: "seatingArea",
+      select: "id abbreviation seatingAreaName",
+    });
     return tables.map((table) => table.toObject());
   }
 
