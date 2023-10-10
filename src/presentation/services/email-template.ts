@@ -17,6 +17,7 @@ export interface EmailTemplate {
   Below are your registration details:
   
   Username/Email: ${user.email}
+  Password:${user.randomPassword}
   
   Please keep this email in a safe place and do not share your login credentials with anyone. For security reasons, we recommend changing your password as soon as you log in for the first time.
   

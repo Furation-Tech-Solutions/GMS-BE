@@ -12,8 +12,28 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 import { ClientServices } from "./client-services";
-import { reservationStatusEmailTemplate } from "./email-template";
+// import { reservationStatusEmailTemplate } from "./email-template";
 import EmailService from "./send-mail";
+import { createWhatsAppMessage } from "./whatsapp-template";
+import WhatsAppService from "./whatsapp-services";
+import fs from "fs"
+import { postDiningTemplate, reservationTemplate } from "./email-templates";
+import { reservationStatusEmailTemplate } from "./email-template";
+
+// Read the HTML/CSS email template file
+// const path = require('path');
+// // Read the HTML/CSS email template file
+// const filePath = path.join(__dirname, 'add-reservation-template.html');
+// // const emailTemplate = fs.readFileSync('add-reservation-template.html', 'utf-8');
+const emailTemplate = fs.readFile('./src/presentation/template/email-template/add-reservation-template.html', 'utf-8',function(err,data){
+  if(err){
+    console.log(err,"error is this")
+  }
+  else{
+  console.log(data,"data is this")
+  }
+});
+// console.log(emailTemplate,"emailTemplate is thus");
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -22,6 +42,7 @@ export class AddReservationServices {
   private readonly getAllAddReservationUsecase: GetAllAddReservationUsecase;
   private readonly updateAddReservationUsecase: UpdateAddReservationUsecase;
   private readonly emailService:EmailService;
+  private readonly whatsAppService:WhatsAppService
 
 
   constructor(
@@ -30,7 +51,8 @@ export class AddReservationServices {
     getAddReservationByIdUsecase: GetAddReservationByIdUsecase,
     getAllAddReservationUsecase: GetAllAddReservationUsecase,
     updateAddReservationUsecase: UpdateAddReservationUsecase,
-    emailService: EmailService
+    emailService: EmailService,
+    whatsAppService:WhatsAppService
 
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
@@ -38,11 +60,14 @@ export class AddReservationServices {
     this.getAddReservationByIdUsecase = getAddReservationByIdUsecase;
     this.getAllAddReservationUsecase = getAllAddReservationUsecase;
     this.updateAddReservationUsecase = updateAddReservationUsecase;
-    this.emailService = emailService
+    this.emailService = emailService;
+    this.whatsAppService=whatsAppService
+
 
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    
     try{
     const user=req.user
 
@@ -79,19 +104,36 @@ export class AddReservationServices {
             if (!result) {
               return res.json({ message: "Reservation not found." });
             }
-            console.log(result,"reservation of perticular id")
             // const reservtionData = AddReservationMapper.toEntity(result);
-            // return res.json(resData);
+            const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
+            const whatsappMessage = createWhatsAppMessage.message(result);
+
+            try {
+              const whatsappResponse = await this.whatsAppService.sendWhatsAppMessage(whatsappRecipient, whatsappMessage);
+              console.log('WhatsApp Response:', whatsappResponse);
+            } catch (whatsappError) {
+              console.error('WhatsApp Error:', whatsappError);
+            }
+
               if (typeof result.client==="object" && 'email' in result.client) {
                 const clientWithEmail = result.client as { email: string };
-              const emailOption={
-          // email:clientWithEmail.email ,
-          email:"shehzadmalik123.sm@gmail.com",
-          subject:reservationStatusEmailTemplate.subject,
-          message:reservationStatusEmailTemplate.message(result)
-           }
+                 // Replace placeholders with actual data in the email template
+        
+          const emailContent = reservationTemplate(result, clientWithEmail);
+          //     const emailOption={
+          // // email:clientWithEmail.email ,
+          // email:"satan.sharma@furation.tech",
+          // subject:reservationStatusEmailTemplate.subject,
+          // message:reservationStatusEmailTemplate.message(result)
+          //  }
+          const emailOption={
+            email:"shehzadmalik123.sm@gmail.com",
+            subject:"Reservation Confirmation",
+            message:emailContent
+          }
             
           await this.emailService.sendEmail(emailOption);
+
          }
           else {
             // Handle the case where client or client.email is undefined
@@ -135,7 +177,7 @@ export class AddReservationServices {
     const addReservation: Either<ErrorClass, AddReservationEntity> =
       await this.getAddReservationByIdUsecase.execute(addReservationId);
 
-    addReservation.cata(
+    addReservation.cata(   
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity) => {
@@ -200,11 +242,70 @@ export class AddReservationServices {
             updatedAddReservationEntity
           );
         updatedAddReservation.cata(
-          (error: ErrorClass) => {
+          async(error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });
           },
-          (result: AddReservationEntity) => {
+          async(result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
+            console.log(resData,"resData",resData.reservationStatus)
+
+            
+            if(resData.reservationStatus=="isLeft"){
+                //called the get reservation by id to send populated data to email template
+        const addReservationId:string| undefined = resData._id;
+       
+         if (addReservationId) {
+        const addReservation: Either<ErrorClass, AddReservationEntity> =
+          await this.getAddReservationByIdUsecase.execute(addReservationId);
+    
+        addReservation.cata(
+          async (error: ErrorClass) =>
+            res.status(error.status).json({ error: error.message }),
+          async (result: AddReservationEntity) => {
+            if (!result) {
+              return res.json({ message: "Reservation not found." });
+            }
+            // const reservtionData = AddReservationMapper.toEntity(result);
+            // return res.json(resData);
+
+            const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
+            const whatsappMessage = createWhatsAppMessage.message(result);
+
+            try {
+              const whatsappResponse = await this.whatsAppService.sendWhatsAppMessage(whatsappRecipient, whatsappMessage);
+              console.log('WhatsApp Response:', whatsappResponse);
+            } catch (whatsappError) {
+              console.error('WhatsApp Error:', whatsappError);
+            }
+
+              if (typeof result.client==="object" && 'email' in result.client) {
+                const clientWithEmail = result.client as { email: string };
+                 // Replace placeholders with actual data in the email template
+        
+          const emailContent = postDiningTemplate(result, clientWithEmail);
+          //     const emailOption={
+          // // email:clientWithEmail.email ,
+          // email:"satan.sharma@furation.tech",
+          // subject:reservationStatusEmailTemplate.subject,
+          // message:reservationStatusEmailTemplate.message(result)
+          //  }
+          const emailOption={
+            email:"shehzadmalik123.sm@gmail.com",
+            subject:"Thank You for Dining with Us - We Value Your Feedback",
+            message:emailContent
+          }
+            
+          await this.emailService.sendEmail(emailOption);
+
+         }
+          else {
+            // Handle the case where client or client.email is undefined
+            return res.json({ message: "Client information is missing." });
+          }
+          }
+        );
+        }
+            }
             res.json(resData);
           }
         );

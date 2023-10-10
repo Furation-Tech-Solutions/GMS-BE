@@ -69,5 +69,6 @@ export default (app: Express): void => {
   app.use("/api/v1/reservation/tag", reservationTagRouter);
   app.use("/api/v1", notificationRouter);
   app.use("/api/v1/check", checkInCheckOutRouter);
+
   app.use(router);
 };

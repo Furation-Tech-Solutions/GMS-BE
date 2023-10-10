@@ -27,7 +27,7 @@ class EmailService {
             from: env.user,
             to: emailOption.email,
             subject: emailOption.subject,
-            text:emailOption.message || "",
+            html:emailOption.message || "",
         };
 
         try {
