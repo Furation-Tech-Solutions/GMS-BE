@@ -137,7 +137,7 @@ export class OutletService {
           },
           (response: OutletEntity) => {
             // Convert updatedOutlet from OutletEntity to plain JSON object using OutletMapper
-            const responseData = OutletMapper.toModel(response);
+            const responseData = OutletMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
             res.json(responseData);

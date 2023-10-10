@@ -108,7 +108,7 @@ export class ProgramScheduleService {
           },
           (response: ProgramScheduleEntity) => {
             // Convert updatedAdmin from AdminEntity to plain JSON object using AdminMapper
-            const responseData = ProgramScheduleMapper.toModel(response);
+            const responseData = ProgramScheduleMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
             res.json(responseData);

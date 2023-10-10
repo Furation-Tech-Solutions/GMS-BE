@@ -139,7 +139,7 @@ export class TableService {
           },
           (response: TableEntity) => {
             // Convert updatedTable from TableEntity to plain JSON object using TableMapper
-            const responseData = TableMapper.toModel(response);
+            const responseData = TableMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
             res.json(responseData);
