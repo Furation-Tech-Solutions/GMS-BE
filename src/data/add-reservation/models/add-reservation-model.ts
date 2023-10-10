@@ -39,9 +39,9 @@ const addReservationSchema = new mongoose.Schema({
     required: [true, "Please select the Client"],
   },
   reservationTags: [
-    { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: "ReservationTag" 
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReservationTag",
     },
   ],
 
@@ -58,7 +58,7 @@ const addReservationSchema = new mongoose.Schema({
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Table",  
+    ref: "Table",
     required: [true, "Please select the Table"],
   },
   bookedBy: {
@@ -96,7 +96,7 @@ const addReservationSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
