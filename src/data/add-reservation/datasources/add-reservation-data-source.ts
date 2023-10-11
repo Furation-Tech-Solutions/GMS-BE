@@ -46,7 +46,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const createdAddReservation = await addReservationData.save();
 
     const checkInCheckOutObject = {
-      resrvation: createdAddReservation._id,
+      reservation: createdAddReservation._id,
       client: createdAddReservation.client,
     };
 
@@ -138,8 +138,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
     const existResevation = await AddReservation.findById(id);
 
-    const existingCheckInCheckOut = await CheckInCheckOut.findOne({
-      resrvation: id,
+    const existingCheckInCheckOut = await CheckInCheckOut.findOne(
+      reservation: id,
     });
 
     // if (!existingCheckInCheckOut) throw ApiError.notFound();
