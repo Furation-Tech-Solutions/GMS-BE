@@ -11,6 +11,7 @@ import {
   AddReservationMapper,
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
+
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
@@ -86,6 +87,7 @@ export class AddReservationServices {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
+
 
   async deleteAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
@@ -180,7 +182,6 @@ export class AddReservationServices {
           },
           async(result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
-            console.log(resData,"resData",resData.reservationStatus)
 
             
             if(resData.reservationStatus=="isLeft"){
