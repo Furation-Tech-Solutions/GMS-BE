@@ -14,10 +14,11 @@ class WhatsAppService {
 //   constructor(){
 
 //   }
-
+ 
   async sendWhatsAppMessage(recipient: string, message: string): Promise<any> {
+    const accesstoken=env.accessToken
     const headers = {
-      Authorization: `Bearer ${env.accessToken}`,
+      Authorization: 'Bearer EAAIjVZA1T21gBOw0PnsssvCjCV2OJrgbOPDJm9oKhRyd4VUGD5AdCZCzmYvVDEbs0WkqnaiCZCKbZBoOJHI4qmAZCKuldKN0h95XxtkbbHsXExwn5IvdiJdZBC9by3h0pqxLQfyeIHZACvF3rqTn5Ca16dsyca7Exi35s2l5HQ2GXBIGA6IN1bGSyyZAwH8UuR1lAHJwsn2H8lIBjaxLCdN8iN4jWzgZD',
       'Content-Type': 'application/json',
     };
     const apiurl:string=env.apiUrl??"https://graph.facebook.com/v17.0/121686631017880/messages"
