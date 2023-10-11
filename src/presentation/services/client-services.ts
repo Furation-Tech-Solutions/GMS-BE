@@ -41,14 +41,13 @@ export class ClientServices {
             updatedBy:user._id
         }
         const clientData: ClientModel = ClientMapper.toModel(newClientData);
-
         const newClient: Either<ErrorClass, ClientEntity> =
             await this.createClientUsecases.execute(clientData);
-
         newClient.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: ClientEntity) => {
+
                 const resData = ClientMapper.toEntity(result, true);
                 return res.json(resData);
             }
