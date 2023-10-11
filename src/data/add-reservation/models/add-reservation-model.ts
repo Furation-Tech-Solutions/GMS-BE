@@ -54,7 +54,7 @@ const addReservationSchema = new mongoose.Schema({
   reservationStatus: {
     type: String,
     trim: true,
-    default: "",
+    default: "upcoming",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
