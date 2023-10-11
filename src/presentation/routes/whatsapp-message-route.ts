@@ -109,6 +109,7 @@
 import { Router } from "express";
 import { NextFunction, Request, Response } from "express";
 const axios = require('axios');
+import env from '@main/config/env';
 
 
 
@@ -117,10 +118,10 @@ export const whatsAppRouter=Router()
 whatsAppRouter.post("/add",async(req:Request,res:Response)=>{
   
   const apiUrl = 'https://graph.facebook.com/v17.0/121686631017880/messages';
-  const accessToken = 'EAAIjVZA1T21gBO6ZCnZCNIKi8HaZAJPFycDRgjpEG89mTsLccZCktDL4GEnSUjHjaJLhmos5Il5QFi1eV8kYAo73oBvZADke0netXiZBAAvEk0RqvMrgRZC0cVao3TITGJiaC6PueZBBVZAZBMsWCFiq8PqaRJsG81Xk1ffA9IwcDXWZAAynLJ7BOCnoivd0sjz5nPjWvw5BWi6bnXDDiDFMIxpF2lk7v0UxegZDZD'; // Replace with your actual access token
+  // const accessToken = 'EAAIjVZA1T21gBO6ZCnZCNIKi8HaZAJPFycDRgjpEG89mTsLccZCktDL4GEnSUjHjaJLhmos5Il5QFi1eV8kYAo73oBvZADke0netXiZBAAvEk0RqvMrgRZC0cVao3TITGJiaC6PueZBBVZAZBMsWCFiq8PqaRJsG81Xk1ffA9IwcDXWZAAynLJ7BOCnoivd0sjz5nPjWvw5BWi6bnXDDiDFMIxpF2lk7v0UxegZDZD'; // Replace with your actual access token
 
   const headers = {
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: `Bearer ${env.accessToken}`,
     'Content-Type': 'application/json',
   };
 

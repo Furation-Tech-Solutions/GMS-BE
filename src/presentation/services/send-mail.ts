@@ -31,7 +31,7 @@ class EmailService {
         };
 
         try {
-            console.log(mailOptions,"mailoption")
+            // console.log(mailOptions,"mailoption")
             await this.transporter.sendMail(mailOptions);
             // console.log("Email sent successfully");
         } catch (error) {

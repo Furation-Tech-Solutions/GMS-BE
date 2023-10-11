@@ -1,33 +1,42 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+// import axios, { AxiosResponse, AxiosError } from 'axios';
+import env from '@main/config/env';
+const axios = require('axios');
+
 
 class WhatsAppService {
-  private apiUrl: string;
-  private accessToken: string;
+//   private apiUrl: string;
+//   private accessToken: string;
 
-  constructor(apiUrl?: string, accessToken?: string) {
-    this.apiUrl = apiUrl || "https://graph.facebook.com/v17.0/121686631017880/messages";
-    this.accessToken = accessToken || "EAAIjVZA1T21gBO6ZCnZCNIKi8HaZAJPFycDRgjpEG89mTsLccZCktDL4GEnSUjHjaJLhmos5Il5QFi1eV8kYAo73oBvZADke0netXiZBAAvEk0RqvMrgRZC0cVao3TITGJiaC6PueZBBVZAZBMsWCFiq8PqaRJsG81Xk1ffA9IwcDXWZAAynLJ7BOCnoivd0sjz5nPjWvw5BWi6bnXDDiDFMIxpF2lk7v0UxegZDZD";
-  }
+//   constructor(apiUrl?: string, accessToken?: string) {
+//     this.apiUrl = apiUrl || "https://graph.facebook.com/v17.0/121686631017880/messages";
+//     this.accessToken = accessToken || "EAAIjVZA1T21gBOyWDgaKWZCnChtc5ojhSnGuHjbQT2sA3lTiFlFWoGBXdf8vVma8p8sIAgLCbvt9qpGSnW6msi0M9n7nGO5MzqWIiyjhZB5uCCiHiIC3fw1vqVVtZAvuKXDWZBKH3iQ7g7rONZArZBRTBnayrAVbA459IVRJyZA6a5cPszMhlRBio3lLzHwuI2acM9WtcBhFioJumSxHnZBF6hZCJqLAcZD"
+//   }
+//   constructor(){
+
+//   }
 
   async sendWhatsAppMessage(recipient: string, message: string): Promise<any> {
     const headers = {
-      Authorization: `Bearer ${this.accessToken}`,
+      Authorization: `Bearer ${env.accessToken}`,
       'Content-Type': 'application/json',
     };
+    const apiurl:string=env.apiUrl??"https://graph.facebook.com/v17.0/121686631017880/messages"
 
     const whatsappData = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
-      to: recipient,
-      type: 'text',
-      text: {
-        preview_url: false,
-        body: message,
-      },
-    };
+      "messaging_product": 'whatsapp',
+      "recipient_type": 'individual',
+      "to": `${recipient}`,
+    //   "to": "919881239491",
+      "type": 'text',
+      "text": {
+        "preview_url": false,
+        "body": `${message}`
+      }
+    }
 
     try {
-      const response: AxiosResponse<any> = await axios.post(this.apiUrl, whatsappData, { headers });
+      const response= await axios.post("https://graph.facebook.com/v17.0/121686631017880/messages", whatsappData, { headers });
+      console.log(response,"response of whatsapp data")
       return response.data;
     } catch (error) {
       throw error;
