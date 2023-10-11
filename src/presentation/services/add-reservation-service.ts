@@ -11,7 +11,10 @@ import {
   AddReservationMapper,
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
-import { ClientServices } from "./client-services";
+import EmailService from "./send-mail";
+import WhatsAppService from "./whatsapp-services";
+import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
+
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -19,22 +22,34 @@ export class AddReservationServices {
   private readonly getAddReservationByIdUsecase: GetAddReservationByIdUsecase;
   private readonly getAllAddReservationUsecase: GetAllAddReservationUsecase;
   private readonly updateAddReservationUsecase: UpdateAddReservationUsecase;
+  private readonly emailService:EmailService;
+  private readonly whatsAppService:WhatsAppService
+
 
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
     deleteAddReservationUsecase: DeleteAddReservationUsecase,
     getAddReservationByIdUsecase: GetAddReservationByIdUsecase,
     getAllAddReservationUsecase: GetAllAddReservationUsecase,
-    updateAddReservationUsecase: UpdateAddReservationUsecase
+    updateAddReservationUsecase: UpdateAddReservationUsecase,
+    emailService: EmailService,
+    whatsAppService:WhatsAppService
+
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
     this.deleteAddReservationUsecase = deleteAddReservationUsecase;
     this.getAddReservationByIdUsecase = getAddReservationByIdUsecase;
     this.getAllAddReservationUsecase = getAllAddReservationUsecase;
     this.updateAddReservationUsecase = updateAddReservationUsecase;
+    this.emailService = emailService;
+    this.whatsAppService=whatsAppService
+
+
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    
+    try{
     const user=req.user
 
     const newReservationData={
@@ -49,13 +64,27 @@ export class AddReservationServices {
       await this.createAddReservationUsecase.execute(addReservationData);
 
     newAddReservation.cata(
-      (error: ErrorClass) =>
+      async (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-      (result: AddReservationEntity) => {
+      async (result: AddReservationEntity) => {
+
         const resData = AddReservationMapper.toEntity(result, true);
-        return res.json(resData);
+         
+        //called the get reservation by id to send populated data to email template
+        const addReservationId:string| undefined = resData._id;
+        if (addReservationId) {
+          const emailhandler=new EmailHandler()
+          await emailhandler.handleReservation(addReservationId)
+        }
+
+         return  res.json(resData);
+
       }
-    );
+    )
+    }
+    catch(err){
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 
   async deleteAddReservation(req: Request, res: Response): Promise<void> {
@@ -81,7 +110,7 @@ export class AddReservationServices {
     const addReservation: Either<ErrorClass, AddReservationEntity> =
       await this.getAddReservationByIdUsecase.execute(addReservationId);
 
-    addReservation.cata(
+    addReservation.cata(   
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity) => {
@@ -146,11 +175,24 @@ export class AddReservationServices {
             updatedAddReservationEntity
           );
         updatedAddReservation.cata(
-          (error: ErrorClass) => {
+          async(error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });
           },
-          (result: AddReservationEntity) => {
+          async(result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
+            console.log(resData,"resData",resData.reservationStatus)
+
+            
+            if(resData.reservationStatus=="isLeft"){
+                //called the get reservation by id to send populated data to email template
+        const addReservationId:string| undefined = resData._id;
+       
+         if (addReservationId) {
+           const emailhandler=new EmailHandler()
+          await emailhandler.handleLeftReservation(addReservationId)
+        
+        }
+            }
             res.json(resData);
           }
         );

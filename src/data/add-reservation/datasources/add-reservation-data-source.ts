@@ -138,7 +138,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
     const existResevation = await AddReservation.findById(id);
 
-    const existingCheckInCheckOut = await CheckInCheckOut.findOne({
+    const existingCheckInCheckOut = await CheckInCheckOut.findOne(
       reservation: id,
     });
 

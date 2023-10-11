@@ -59,6 +59,8 @@ export class BookingRequestServices {
                 // this.emailService.sendEmail({result);
                  
                 const resData = BookingRequestMapper.toEntity(result, true);
+       
+
                 const emailOption={
                     email:result.email,
                     subject:bookingRequestConfirmationEmailTemplate.subject,
