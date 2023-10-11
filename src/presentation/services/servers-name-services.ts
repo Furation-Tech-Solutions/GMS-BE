@@ -109,7 +109,7 @@ export class ServerNameService{
           },
           (response: ServersNameEntity) => {
             // Convert updatedAdmin from AdminEntity to plain JSON object using AdminMapper
-            const responseData = ServersNameMapper.toModel(response);
+            const responseData = ServersNameMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
             res.json(responseData);

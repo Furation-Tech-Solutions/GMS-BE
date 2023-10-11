@@ -15,7 +15,7 @@ export interface AddReservationDataSource {
 }
 
 export class AddReservationDataSourceImpl implements AddReservationDataSource {
-  constructor(private db: mongoose.Connection) { }
+  constructor(private db: mongoose.Connection) {}
 
   async create(addReservation: AddReservationModel): Promise<any> {
     const clientExists = await Client.findById(addReservation.client);
@@ -40,20 +40,18 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
     if (existingAddReservation) throw ApiError.reservationExits();
 
-
-
     const addReservationData = new AddReservation(addReservation);
     const createdAddReservation = await addReservationData.save();
 
-
     const checkInCheckOutObject = {
-      resrvation: createdAddReservation._id,
-      client: createdAddReservation.client
-    }
+      reservation: createdAddReservation._id,
+      client: createdAddReservation.client,
+    };
 
     const checkInCheckOutData = new CheckInCheckOut(checkInCheckOutObject);
 
-    const createdCheckInCheckOutData: mongoose.Document = await checkInCheckOutData.save();
+    const createdCheckInCheckOutData: mongoose.Document =
+      await checkInCheckOutData.save();
 
     if (bookingRequiestExists !== null) {
       bookingRequiestExists.status = { name: "Booked", color: "Green" };
@@ -64,6 +62,10 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async delete(id: string): Promise<void> {
+    await CheckInCheckOut.findOneAndDelete({
+      reservation: id,
+    });
+
     await AddReservation.findByIdAndDelete(id);
   }
 
@@ -132,13 +134,13 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
-
     const existResevation = await AddReservation.findById(id);
 
-    const existingCheckInCheckOut = await CheckInCheckOut.findOne({ resrvation: id });
+    const existingCheckInCheckOut = await CheckInCheckOut.findOne({
+      reservation: id,
+    });
 
     // if (!existingCheckInCheckOut) throw ApiError.notFound();
-
 
     const dateString = new Date();
     const dateObject = new Date(dateString);
@@ -149,36 +151,42 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const seconds = dateObject.getSeconds();
 
     // Format the time as HH:MM:SS
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
-
-
-    if (existResevation?.reservationStatus !== "arrived" && existResevation?.reservationStatus !== "left" && addReservation.reservationStatus === "arrived") {
-
-
+    if (
+      existResevation?.reservationStatus !== "arrived" &&
+      existResevation?.reservationStatus !== "left" &&
+      addReservation.reservationStatus === "arrived"
+    ) {
       const newCheckInData = {
-        checkInTime: formattedTime
-      }
+        checkInTime: formattedTime,
+      };
 
-      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut?._id, newCheckInData, {
-        new: true,
-      });
-
-
-
+      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(
+        existingCheckInCheckOut?._id,
+        newCheckInData,
+        {
+          new: true,
+        }
+      );
     }
-    if (existResevation?.reservationStatus !== "left" && addReservation.reservationStatus === "left") {
-
+    if (
+      existResevation?.reservationStatus !== "left" &&
+      addReservation.reservationStatus === "left"
+    ) {
       const newCheckOutData = {
-        checkOutTime: formattedTime
-      }
+        checkOutTime: formattedTime,
+      };
 
-      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(existingCheckInCheckOut?._id, newCheckOutData, {
-        new: true,
-      });
-
-
-
+      const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(
+        existingCheckInCheckOut?._id,
+        newCheckOutData,
+        {
+          new: true,
+        }
+      );
     }
 
     const updatedAddReservation = await AddReservation.findByIdAndUpdate(

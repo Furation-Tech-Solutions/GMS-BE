@@ -27,7 +27,7 @@ interface ICheckIn extends Document {
   }
   
   interface ICheckOut extends Document {
-    resrvation: mongoose.Types.ObjectId;
+    reservation: mongoose.Types.ObjectId;
     client: mongoose.Types.ObjectId;
     checkInTime: string;
     checkOutTime: string;

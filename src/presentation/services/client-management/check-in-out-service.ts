@@ -117,7 +117,7 @@ export class CheckInCheckOutService {
           },
           (response: CheckInCheckOutEntity) => {
             // Convert updatedAdmin from AdminEntity to plain JSON object using AdminMapper
-            const responseData = CheckInCheckOutMapper.toModel(response);
+            const responseData = CheckInCheckOutMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
             res.json(responseData);

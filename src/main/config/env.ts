@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+
 export default {
   port: process.env.PORT ?? 3000,
   mongoUrl: process.env.MONGO_URL,
@@ -15,5 +16,9 @@ export default {
   mailhost: process.env.HOST,
   sendmailport: process.env.MAILPORT,
   user: process.env.DOMAIN_MAIL,
+  from: process.env.FROM,
   password: process.env.PASSWORD,
+  apiUrl:process.env.APIURL,
+accessToken:process.env.ACCESS_TOKEN
 };
+

@@ -224,7 +224,7 @@ export class ClientMapper {
       anniversaryDate: client.anniversaryDate,
       gender: client.gender,
       updatedBy: client.updatedBy,
-      createBy: client.createdBy,
+      createdBy: client.createdBy,
       createdAt: client.createdAt,
     };
   }

@@ -84,7 +84,7 @@ export class SeatingAreaService {
     // Call the GetAllOutletsUsecase to get all outlets
     const seatingAreas: Either<ErrorClass, SeatingAreaEntity[]> =
       await this.getAllSeatingAreasUsecase.execute();
-    console.log(seatingAreas);
+    // console.log(seatingAreas);
     seatingAreas.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
@@ -148,7 +148,7 @@ export class SeatingAreaService {
           },
           (response: SeatingAreaEntity) => {
             // Convert updatedOutlet from OutletEntity to plain JSON object using OutletMapper
-            const responseData = SeatingAreaMapper.toModel(response);
+            const responseData = SeatingAreaMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
             res.json(responseData);

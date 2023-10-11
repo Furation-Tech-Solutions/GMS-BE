@@ -31,12 +31,12 @@ export class RoomService {
   }
 
   async createRoom(req: Request, res: Response): Promise<void> {
-    const user=req.user
-        const newRoomData={
-            ...req.body,
-            createdBy:user._id,
-            updatedBy:user._id
-        }
+    const user = req.user;
+    const newRoomData = {
+      ...req.body,
+      createdBy: user._id,
+      updatedBy: user._id,
+    };
     const roomData: RoomModel = RoomMapper.toModel(newRoomData);
 
     const newRoom: Either<ErrorClass, RoomEntity> =
@@ -104,11 +104,11 @@ export class RoomService {
 
   async updateRoom(req: Request, res: Response): Promise<void> {
     const roomId: string = req.params.roomId;
-    const user=req.user
-        const newRoomData={
-            ...req.body,
-            updatedBy:user._id
-        }
+    const user = req.user;
+    const newRoomData = {
+      ...req.body,
+      updatedBy: user._id,
+    };
     const roomData: RoomModel = newRoomData;
     // Get the existing outlet by ID
     const existingRoom: Either<ErrorClass, RoomEntity> =
@@ -136,7 +136,7 @@ export class RoomService {
           },
           (response: RoomEntity) => {
             // Convert updatedOutlet from OutletEntity to plain JSON object using OutletMapper
-            const responseData = RoomMapper.toModel(response);
+            const responseData = RoomMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
             res.json(responseData);

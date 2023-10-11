@@ -8,8 +8,8 @@ export class ReservationTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -25,8 +25,8 @@ export class ReservationTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -71,11 +71,11 @@ export class ReservationTagCategoryMapper {
             : existingReservationTagCategory.tags,
         updatedBy:
           reservationTagCategoryData.updatedBy !== undefined
-            ? reservationTagCategoryData.updatedBy
+            ? { _id: reservationTagCategoryData.updatedBy }
             : existingReservationTagCategory.updatedBy,
         createdBy:
           reservationTagCategoryData.createdBy !== undefined
-            ? reservationTagCategoryData.createdBy
+            ? { _id: reservationTagCategoryData.createdBy }
             : existingReservationTagCategory.createdBy,
         createdAt:
           reservationTagCategoryData.createdAt !== undefined
@@ -96,8 +96,8 @@ export class ReservationTagCategoryMapper {
         display: reservationTagCategoryData.display,
         followers: reservationTagCategoryData.followers,
         tags: reservationTagCategoryData.tags,
-        updatedBy: reservationTagCategoryData.updatedBy,
-        createdBy: reservationTagCategoryData.createdBy,
+        updatedBy: { _id: reservationTagCategoryData.updatedBy },
+        createdBy: { _id: reservationTagCategoryData.createdBy },
         createdAt: reservationTagCategoryData.createdAt,
       };
       return reservationTagCategoryEntity;

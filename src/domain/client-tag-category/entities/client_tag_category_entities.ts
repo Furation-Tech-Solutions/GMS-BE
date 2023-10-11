@@ -8,8 +8,8 @@ export class ClientTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -25,8 +25,8 @@ export class ClientTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public updatedBy: string | undefined = undefined,
-    public createdBy: string | undefined = undefined,
+    public updatedBy: string | { _id: string } | undefined = undefined,
+    public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
   ) {}
 }
@@ -71,11 +71,11 @@ export class ClientTagCategoryMapper {
             : existingClientTagCategory.tags,
         updatedBy:
           clientTagCategoryData.updatedBy !== undefined
-            ? clientTagCategoryData.updatedBy
+            ? { _id: clientTagCategoryData.updatedBy }
             : existingClientTagCategory.updatedBy,
         createdBy:
           clientTagCategoryData.createdBy !== undefined
-            ? clientTagCategoryData.createdBy
+            ? { _id: clientTagCategoryData.createdBy }
             : existingClientTagCategory.createdBy,
         createdAt:
           clientTagCategoryData.createdAt !== undefined
@@ -96,8 +96,8 @@ export class ClientTagCategoryMapper {
         display: clientTagCategoryData.display,
         followers: clientTagCategoryData.followers,
         tags: clientTagCategoryData.tags,
-        updatedBy: clientTagCategoryData.updatedBy,
-        createdBy: clientTagCategoryData.createdBy,
+        updatedBy: { _id: clientTagCategoryData.updatedBy },
+        createdBy: { _id: clientTagCategoryData.createdBy },
         createdAt: clientTagCategoryData.createdAt,
       };
       return clientTagCategoryEntity;

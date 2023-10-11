@@ -168,7 +168,7 @@ const reservationValidator = (
       }),
     reservationStatus: Joi.string()
       .trim()
-      .default("")
+      .default("upcoming")
       .optional()
       .messages({
         "string": "Please fill Reservtion Status",

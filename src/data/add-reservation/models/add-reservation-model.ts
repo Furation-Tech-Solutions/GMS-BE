@@ -39,9 +39,9 @@ const addReservationSchema = new mongoose.Schema({
     required: [true, "Please select the Client"],
   },
   reservationTags: [
-    { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: "ReservationTag" 
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReservationTag",
     },
   ],
 
@@ -54,7 +54,7 @@ const addReservationSchema = new mongoose.Schema({
   reservationStatus: {
     type: String,
     trim: true,
-    default: "",
+    default: "upcoming",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
@@ -96,7 +96,7 @@ const addReservationSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
