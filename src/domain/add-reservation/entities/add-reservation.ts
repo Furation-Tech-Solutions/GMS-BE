@@ -10,14 +10,14 @@ export class AddReservationModel {
     // public source: string | undefined = undefined,
     public reservationTags: string[] = [],
     public reservationNote: string = "",
-    public reservationStatus: string = "",
+    public reservationStatus: string,
     public table: string | undefined = undefined,
     public bookedBy: { _id: string; name: string } | undefined,
     public perks: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
-  ) { }
+  ) {}
 }
 
 export class AddReservationEntity {
@@ -41,7 +41,7 @@ export class AddReservationEntity {
     public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
     public createdAt: string
-  ) { }
+  ) {}
 }
 
 export class AddReservationMapper {
