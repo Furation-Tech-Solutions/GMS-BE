@@ -120,7 +120,7 @@ export class BookedByNameService {
             },
             (response: BookedByNameEntity) => {
               // Convert updatedAdmin from AdminEntity to plain JSON object using AdminMapper
-              const responseData = BookedByNameMapper.toModel(response);
+              const responseData = BookedByNameMapper.toEntity(response);
   
               // Send the updated admin as a JSON response
               res.json(responseData);

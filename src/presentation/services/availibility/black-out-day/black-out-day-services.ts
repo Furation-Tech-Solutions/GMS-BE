@@ -113,7 +113,7 @@ export class BlackoutDayService {
                     },
                     (response: BlackoutDayEntity) => {
                         // Convert updatedAdmin from AdminEntity to plain JSON object using AdminMapper
-                        const responseData = BlackoutDayMapper.toModel(response);
+                        const responseData = BlackoutDayMapper.toEntity(response);
 
                         // Send the updated admin as a JSON response
                         res.json(responseData);
