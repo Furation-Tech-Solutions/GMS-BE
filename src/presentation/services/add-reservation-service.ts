@@ -11,29 +11,10 @@ import {
   AddReservationMapper,
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
-import { ClientServices } from "./client-services";
-// import { reservationStatusEmailTemplate } from "./email-template";
 import EmailService from "./send-mail";
-import { createWhatsAppMessage } from "./whatsapp-template";
 import WhatsAppService from "./whatsapp-services";
-import fs from "fs"
-import { postDiningTemplate, reservationTemplate } from "./email-templates";
-import { reservationStatusEmailTemplate } from "./email-template";
+import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 
-// Read the HTML/CSS email template file
-// const path = require('path');
-// // Read the HTML/CSS email template file
-// const filePath = path.join(__dirname, 'add-reservation-template.html');
-// // const emailTemplate = fs.readFileSync('add-reservation-template.html', 'utf-8');
-const emailTemplate = fs.readFile('./src/presentation/template/email-template/add-reservation-template.html', 'utf-8',function(err,data){
-  if(err){
-    console.log(err,"error is this")
-  }
-  else{
-  console.log(data,"data is this")
-  }
-});
-// console.log(emailTemplate,"emailTemplate is thus");
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -88,63 +69,15 @@ export class AddReservationServices {
       async (result: AddReservationEntity) => {
 
         const resData = AddReservationMapper.toEntity(result, true);
-        console.log(resData,"resData in reservation")
-
+         
         //called the get reservation by id to send populated data to email template
         const addReservationId:string| undefined = resData._id;
         if (addReservationId) {
-
-        const addReservation: Either<ErrorClass, AddReservationEntity> =
-          await this.getAddReservationByIdUsecase.execute(addReservationId);
-    
-        addReservation.cata(
-          async (error: ErrorClass) =>
-            res.status(error.status).json({ error: error.message }),
-          async (result: AddReservationEntity) => {
-            if (!result) {
-              return res.json({ message: "Reservation not found." });
-            }
-            // const reservtionData = AddReservationMapper.toEntity(result);
-            const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
-            const whatsappMessage = createWhatsAppMessage.message(result);
-
-            try {
-              const whatsappResponse = await this.whatsAppService.sendWhatsAppMessage(whatsappRecipient, whatsappMessage);
-              console.log('WhatsApp Response:', whatsappResponse);
-            } catch (whatsappError) {
-              console.error('WhatsApp Error:', whatsappError);
-            }
-
-              if (typeof result.client==="object" && 'email' in result.client) {
-                const clientWithEmail = result.client as { email: string };
-                 // Replace placeholders with actual data in the email template
-        
-          const emailContent = reservationTemplate(result, clientWithEmail);
-          //     const emailOption={
-          // // email:clientWithEmail.email ,
-          // email:"satan.sharma@furation.tech",
-          // subject:reservationStatusEmailTemplate.subject,
-          // message:reservationStatusEmailTemplate.message(result)
-          //  }
-          const emailOption={
-            email:"shehzadmalik123.sm@gmail.com",
-            subject:"Reservation Confirmation",
-            message:emailContent
-          }
-            
-          await this.emailService.sendEmail(emailOption);
-
-         }
-          else {
-            // Handle the case where client or client.email is undefined
-            return res.json({ message: "Client information is missing." });
-          }
-          }
-        );
+          const emailhandler=new EmailHandler()
+          await emailhandler.handleReservation(addReservationId)
         }
 
          return  res.json(resData);
-        
 
       }
     )
@@ -255,55 +188,9 @@ export class AddReservationServices {
         const addReservationId:string| undefined = resData._id;
        
          if (addReservationId) {
-        const addReservation: Either<ErrorClass, AddReservationEntity> =
-          await this.getAddReservationByIdUsecase.execute(addReservationId);
-    
-        addReservation.cata(
-          async (error: ErrorClass) =>
-            res.status(error.status).json({ error: error.message }),
-          async (result: AddReservationEntity) => {
-            if (!result) {
-              return res.json({ message: "Reservation not found." });
-            }
-            // const reservtionData = AddReservationMapper.toEntity(result);
-            // return res.json(resData);
-
-            const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
-            const whatsappMessage = createWhatsAppMessage.message(result);
-
-            try {
-              const whatsappResponse = await this.whatsAppService.sendWhatsAppMessage(whatsappRecipient, whatsappMessage);
-              console.log('WhatsApp Response:', whatsappResponse);
-            } catch (whatsappError) {
-              console.error('WhatsApp Error:', whatsappError);
-            }
-
-              if (typeof result.client==="object" && 'email' in result.client) {
-                const clientWithEmail = result.client as { email: string };
-                 // Replace placeholders with actual data in the email template
+           const emailhandler=new EmailHandler()
+          await emailhandler.handleLeftReservation(addReservationId)
         
-          const emailContent = postDiningTemplate(result, clientWithEmail);
-          //     const emailOption={
-          // // email:clientWithEmail.email ,
-          // email:"satan.sharma@furation.tech",
-          // subject:reservationStatusEmailTemplate.subject,
-          // message:reservationStatusEmailTemplate.message(result)
-          //  }
-          const emailOption={
-            email:"shehzadmalik123.sm@gmail.com",
-            subject:"Thank You for Dining with Us - We Value Your Feedback",
-            message:emailContent
-          }
-            
-          await this.emailService.sendEmail(emailOption);
-
-         }
-          else {
-            // Handle the case where client or client.email is undefined
-            return res.json({ message: "Client information is missing." });
-          }
-          }
-        );
         }
             }
             res.json(resData);
