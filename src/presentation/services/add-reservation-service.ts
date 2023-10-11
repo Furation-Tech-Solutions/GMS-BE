@@ -11,7 +11,8 @@ import {
   AddReservationMapper,
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
-import { ClientServices } from "./client-services";
+
+import { sendMailAllUsers } from "@presentation/middlewares/node-cron/cron";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -53,6 +54,7 @@ export class AddReservationServices {
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity) => {
         const resData = AddReservationMapper.toEntity(result, true);
+        sendMailAllUsers();
         return res.json(resData);
       }
     );
