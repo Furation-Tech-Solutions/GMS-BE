@@ -4,6 +4,7 @@ import {
   AddReservationEntity,
   AddReservationModel,
 } from "../entities/add-reservation";
+import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
 
 export interface AddReservationRepository {
   createAddReservation(
@@ -17,5 +18,7 @@ export interface AddReservationRepository {
     id: string,
     data: AddReservationModel
   ): Promise<Either<ErrorClass, AddReservationEntity>>;
-  getAllAddReservation(): Promise<Either<ErrorClass, AddReservationEntity[]>>;
+  getAllAddReservation(
+    filter: IRFilter
+  ): Promise<Either<ErrorClass, AddReservationEntity[]>>;
 }
