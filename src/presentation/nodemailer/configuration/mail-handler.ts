@@ -108,7 +108,7 @@ catch(err){
   }
   async userEmailHandler(user:any): Promise<void> {
     try{
-      const emailContent = userAccountTemplate(user);
+      const emailContent =  userAccountTemplate(user);
       const emailOption = {
         // email:addReservation.client.email,
         email:user.email,
