@@ -4,7 +4,7 @@ import * as path from 'path';
 
 // Read the HTML/CSS email template file
 
-const filePath ='./src/presentation/nodemailer/email-template'
+const filePath ='./dist/presentation/nodemailer/email-template'
 
 function readEmailTemplate(filePath: string): string {
   try {
@@ -87,7 +87,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     try {
       return fs.readFileSync(`${filePath}/user-email-template.html`, 'utf-8');
     } catch (error) {
-      console.error('Error reading email template:', error);
+      console.error('002 Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -99,6 +99,7 @@ const userEmailTemplate = userTemplate(filePath);
     .replace("[User's Email]", result.email)
     .replace("[User's Random Password]", result.randomPassword)
     
+    console.log(emailContent,"emailContent")
     return emailContent;
           
   }
