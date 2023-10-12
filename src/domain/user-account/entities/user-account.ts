@@ -7,6 +7,7 @@ export class UserModel {
     public email: string = "",
     public jobTitle: string = "",
     public accessLevel: string = "Manager",
+    public profileImage:string = "",
     public managerSettings: {
       emailAlertsEnabled: boolean;
       multifactorAuthenticationEnabled: boolean;
@@ -41,6 +42,7 @@ export class UserEntity {
     public email: string,
     public jobTitle: string,
     public accessLevel: string,
+    public profileImage:string,
     public managerSettings: {
       emailAlertsEnabled: boolean;
       multifactorAuthenticationEnabled: boolean;
@@ -84,6 +86,10 @@ export class UserMapper {
           userData.accessLevel !== undefined
             ? userData.accessLevel
             : existingUser.accessLevel,
+          profileImage:
+            userData.profileImage!==undefined
+              ? userData.profileImage
+              : existingUser.profileImage,
         managerSettings: {
           emailAlertsEnabled:
             userData.managerSettings?.emailAlertsEnabled !== undefined
@@ -144,6 +150,7 @@ export class UserMapper {
         email: userData.email,
         jobTitle: userData.jobTitle,
         accessLevel: userData.accessLevel,
+        profileImage: userData.profileImage,
         managerSettings: {
           emailAlertsEnabled:
             userData.managerSettings?.emailAlertsEnabled || false,
@@ -171,6 +178,7 @@ export class UserMapper {
       email: user.email,
       jobTitle: user.jobTitle,
       accessLevel: user.accessLevel,
+      profileImage:user.profileImage,
       managerSettings: user.managerSettings,
       isLogin: user.isLogin,
       permissions: user.permissions,

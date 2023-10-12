@@ -20,8 +20,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   async create(addReservation: AddReservationModel): Promise<any> {
     const clientExists = await Client.findById(addReservation.client);
 
-    console.log("addReservation", addReservation);
-
     const bookingCheckCredetial = {
       firstName: clientExists?.firstName,
       lastName: clientExists?.lastName,
@@ -46,7 +44,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const createdAddReservation = await addReservationData.save();
 
     const checkInCheckOutObject = {
-      resrvation: createdAddReservation._id,
+      reservation: createdAddReservation._id,
       client: createdAddReservation.client,
     };
 

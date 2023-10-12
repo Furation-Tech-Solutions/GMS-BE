@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
       "Basic iPad",
     ],
   },
+  profileImage:{
+    type:String,
+    default:false
+  },
   managerSettings: {
     emailAlertsEnabled: {
       type: Boolean,

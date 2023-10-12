@@ -64,7 +64,7 @@ userRouter.get(
 )
 userRouter.patch(
     "/update/:userId",
-    validateUserAccountInputMiddleware(true),
+    // validateUserAccountInputMiddleware(true),
     verifyLoggedInUser,
     userService.updateUser.bind(userService)
 );
