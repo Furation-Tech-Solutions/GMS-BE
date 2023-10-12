@@ -12,7 +12,7 @@ export const sendPushNotification = async (req: Request, res: Response) => {
     // Validate the request body
     const { title } = req.body;
     if (!title) {
-      return res.status(400).json({ error: 'Missing title or firebaseDeviceToken' });
+      return res.status(400).json({ error: 'Missing title' });
     }
 
     // Fetch users with isLogin === true
@@ -37,7 +37,6 @@ export const sendPushNotification = async (req: Request, res: Response) => {
 
         const tokens = user.firebaseDeviceToken;
 
-        
 
         try {
           const response = await admin.messaging().sendMulticast({
@@ -46,8 +45,11 @@ export const sendPushNotification = async (req: Request, res: Response) => {
             options: notificationOptions,
           });
 
+          
           const successResults = response.responses.filter((result: any) => result.success);
           const failureResults = response.responses.filter((result: any) => !result.success);
+     
+
 
           if (failureResults.length > 0) {
             console.error('Failed to send some messages:', failureResults);
@@ -59,6 +61,7 @@ export const sendPushNotification = async (req: Request, res: Response) => {
               deviceId: result.canonicalRegistrationToken || result.token,
             }))
           );
+
         } catch (error) {
           console.error('Error sending multicast message:', error);
           res.status(500).json({ error: 'Internal server error' });

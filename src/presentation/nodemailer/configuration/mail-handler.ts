@@ -5,7 +5,7 @@ import { Request, Response } from 'express'; // Import necessary modules and typ
 import { GetAddReservationById } from '@domain/add-reservation/usecases/get-add-reservation-by-id';
 import { AddReservationDataSourceImpl } from '@data/add-reservation/datasources/add-reservation-data-source';
 import mongoose from 'mongoose';
-import { operationTeam, postDiningTemplate, reservationTemplate } from '@presentation/services/email-templates';
+import { operationTeam, postDiningTemplate, reservationTemplate, userAccountTemplate } from '@presentation/services/email-templates';
 import EmailService from '@presentation/services/send-mail';
 import { createWhatsAppMessage } from '@presentation/services/whatsapp-template';
 import WhatsAppService from '@presentation/services/whatsapp-services';
@@ -105,6 +105,22 @@ catch(err){
 catch(err){
     console.log(err);
 }
+  }
+  async userEmailHandler(user:any): Promise<void> {
+    try{
+      const emailContent = userAccountTemplate(user);
+      const emailOption = {
+        // email:addReservation.client.email,
+        email:user.email,
+        subject: "Reservation Confirmation",
+        message: emailContent,
+      };
+      console.log(emailOption,"emailOption inhandler")
+      await emailService.sendEmail(emailOption);
+    }
+    catch(err){
+        console.log(err)
+    }
   }
 }
 

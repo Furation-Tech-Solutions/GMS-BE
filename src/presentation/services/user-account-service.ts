@@ -11,6 +11,7 @@ import { Either } from "monet";
 import { LogoutUserUseCase } from "@domain/user-account/usecases/logout-user";
 import EmailService from "./send-mail";
 import { registrationEmailTemplate } from "./email-template";
+import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 
 
 
@@ -49,8 +50,6 @@ export class UserService{
 
 
 async createUser(req: Request, res: Response): Promise<void> {
-
-    // console.log(req.body)
     
     const user=req.user
     const newUserData={
@@ -65,16 +64,12 @@ async createUser(req: Request, res: Response): Promise<void> {
       await this.createUserUseCase.execute(userData,randomPassword);
 
     newUser.cata(
-      (error: ErrorClass) =>
+      async(error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-      (result: UserEntity) => {
+      async(result: UserEntity) => {
         const resData = UserMapper.toEntity(result, true);
-        const emailOption={
-          email:result.email,
-          subject:registrationEmailTemplate.subject,
-          message:registrationEmailTemplate.message(req.body)
-        }
-      this.emailService.sendEmail(emailOption);
+        const emailhandler=new EmailHandler()
+        await emailhandler.userEmailHandler(req.body)
 
         return res.json(resData);
       }

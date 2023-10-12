@@ -12,9 +12,7 @@ const checkInCheckOutSchema: Schema<ICheckOut> = new Schema<ICheckOut>({
       ref: 'Client',
     },
     checkInTime: String,
-
     checkOutTime: String,
-
     table: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Table',

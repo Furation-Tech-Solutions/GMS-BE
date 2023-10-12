@@ -143,8 +143,10 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
     // if (!existingCheckInCheckOut) throw ApiError.notFound();
 
-    const dateString = new Date();
-    const dateObject = new Date(dateString);
+    const options= { timeZone : 'Asia/Kolkata'};
+  const currentDate= new Date().toLocaleString('en-US', options);
+  const date = new Date(currentDate);
+    const dateObject = new Date(date);
 
     // Get hours, minutes, and seconds
     const hours = dateObject.getHours();
