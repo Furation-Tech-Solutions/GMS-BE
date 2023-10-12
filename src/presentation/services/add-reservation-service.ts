@@ -15,7 +15,7 @@ import {
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
-
+import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -23,9 +23,8 @@ export class AddReservationServices {
   private readonly getAddReservationByIdUsecase: GetAddReservationByIdUsecase;
   private readonly getAllAddReservationUsecase: GetAllAddReservationUsecase;
   private readonly updateAddReservationUsecase: UpdateAddReservationUsecase;
-  private readonly emailService:EmailService;
-  private readonly whatsAppService:WhatsAppService
-
+  private readonly emailService: EmailService;
+  private readonly whatsAppService: WhatsAppService;
 
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
@@ -34,8 +33,7 @@ export class AddReservationServices {
     getAllAddReservationUsecase: GetAllAddReservationUsecase,
     updateAddReservationUsecase: UpdateAddReservationUsecase,
     emailService: EmailService,
-    whatsAppService:WhatsAppService
-
+    whatsAppService: WhatsAppService
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
     this.deleteAddReservationUsecase = deleteAddReservationUsecase;
@@ -43,47 +41,41 @@ export class AddReservationServices {
     this.getAllAddReservationUsecase = getAllAddReservationUsecase;
     this.updateAddReservationUsecase = updateAddReservationUsecase;
     this.emailService = emailService;
-    this.whatsAppService=whatsAppService
-
-
+    this.whatsAppService = whatsAppService;
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-    
-    try{
-    const user=req.user
+    try {
+      const user = req.user;
 
-    const newReservationData={
-      ...req.body,
-      createdBy:user._id,
-      updatedBy:user._id
-    }
-    const addReservationData: AddReservationModel =
-      AddReservationMapper.toModel(newReservationData);
+      const newReservationData = {
+        ...req.body,
+        createdBy: user._id,
+        updatedBy: user._id,
+      };
+      const addReservationData: AddReservationModel =
+        AddReservationMapper.toModel(newReservationData);
 
-    const newAddReservation: Either<ErrorClass, AddReservationEntity> =
-      await this.createAddReservationUsecase.execute(addReservationData);
+      const newAddReservation: Either<ErrorClass, AddReservationEntity> =
+        await this.createAddReservationUsecase.execute(addReservationData);
 
-    newAddReservation.cata(
-      async (error: ErrorClass) =>
-        res.status(error.status).json({ error: error.message }),
-      async (result: AddReservationEntity) => {
+      newAddReservation.cata(
+        async (error: ErrorClass) =>
+          res.status(error.status).json({ error: error.message }),
+        async (result: AddReservationEntity) => {
+          const resData = AddReservationMapper.toEntity(result, true);
 
-        const resData = AddReservationMapper.toEntity(result, true);
-         
-        //called the get reservation by id to send populated data to email template
-        const addReservationId:string| undefined = resData._id;
-        if (addReservationId) {
-          const emailhandler=new EmailHandler()
-          await emailhandler.handleReservation(addReservationId)
+          //called the get reservation by id to send populated data to email template
+          const addReservationId: string | undefined = resData._id;
+          if (addReservationId) {
+            const emailhandler = new EmailHandler();
+            await emailhandler.handleReservation(addReservationId);
+          }
+
+          return res.json(resData);
         }
-
-         return  res.json(resData);
-
-      }
-    )
-    }
-    catch(err){
+      );
+    } catch (err) {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -112,7 +104,7 @@ export class AddReservationServices {
     const addReservation: Either<ErrorClass, AddReservationEntity> =
       await this.getAddReservationByIdUsecase.execute(addReservationId);
 
-    addReservation.cata(   
+    addReservation.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity) => {
@@ -130,8 +122,24 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const { date, shift, status } = req.query;
+
+    const filter: IRFilter = {};
+
+    if (date && typeof date === "string") {
+      filter.date = date;
+    }
+
+    if (shift && typeof shift === "string") {
+      filter.shift = shift;
+    }
+
+    if (status && typeof status === "string") {
+      filter.reservationStatus = status;
+    }
+
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
-      await this.getAllAddReservationUsecase.execute();
+      await this.getAllAddReservationUsecase.execute(filter);
 
     addReservations.cata(
       (error: ErrorClass) =>
@@ -147,12 +155,12 @@ export class AddReservationServices {
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
-    const user=req.user
+    const user = req.user;
 
-    const newReservationData={
+    const newReservationData = {
       ...req.body,
-      updatedBy:user._id
-    }
+      updatedBy: user._id,
+    };
     const addReservationData: AddReservationModel = newReservationData;
 
     const existingAddReservation: Either<ErrorClass, AddReservationEntity> =
@@ -177,12 +185,11 @@ export class AddReservationServices {
             updatedAddReservationEntity
           );
         updatedAddReservation.cata(
-          async(error: ErrorClass) => {
+          async (error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });
           },
-          async(result: AddReservationEntity) => {
+          async (result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
-
             
             if(resData.reservationStatus=="isLeft"){
                 //called the get reservation by id to send populated data to email template

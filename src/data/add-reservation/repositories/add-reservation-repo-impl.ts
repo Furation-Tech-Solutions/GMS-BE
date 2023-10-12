@@ -9,6 +9,7 @@ import {
 
 import * as HttpStatus from "@presentation/error-handling/http-status";
 import mongoose from "mongoose";
+import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
 
 export class AddReservationRepositoryImpl implements AddReservationRepository {
   private readonly addReservationDataSource: AddReservationDataSource;
@@ -38,7 +39,6 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
     }
   }
 
-
   async deleteAddReservation(id: string): Promise<Either<ErrorClass, void>> {
     try {
       const result = await this.addReservationDataSource.delete(id);
@@ -52,7 +52,9 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
           error.name == "notfound" ? ApiError.notFound() : ApiError.castError()
         );
       }
-      return Left<ErrorClass, void>(ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`));
+      return Left<ErrorClass, void>(
+        ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`)
+      );
     }
   }
 
@@ -74,11 +76,11 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
     }
   }
 
-  async getAllAddReservation(): Promise<
-    Either<ErrorClass, AddReservationEntity[]>
-  > {
+  async getAllAddReservation(
+    filter: IRFilter
+  ): Promise<Either<ErrorClass, AddReservationEntity[]>> {
     try {
-      const addReservation = await this.addReservationDataSource.getAll();
+      const addReservation = await this.addReservationDataSource.getAll(filter);
       return Right<ErrorClass, AddReservationEntity[]>(addReservation);
     } catch (error) {
       if (error instanceof ApiError && error.name === "notfound") {
