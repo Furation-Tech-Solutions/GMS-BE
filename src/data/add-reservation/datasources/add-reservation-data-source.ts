@@ -5,13 +5,14 @@ import { AddReservation } from "../models/add-reservation-model";
 import { Client } from "@data/client/models/client_model";
 import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
 import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
+import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
   update(id: string, addReservation: AddReservationModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(): Promise<any[]>;
+  getAll(filter: IRFilter): Promise<any[]>;
 }
 
 export class AddReservationDataSourceImpl implements AddReservationDataSource {
@@ -101,8 +102,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     return addReservation ? addReservation.toObject() : null;
   }
 
-  async getAll(): Promise<any[]> {
-    const addReservations = await AddReservation.find()
+  async getAll(filter: IRFilter): Promise<any[]> {
+    const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
         select: "id shiftName shiftCategory",
