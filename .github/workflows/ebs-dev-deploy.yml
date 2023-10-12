@@ -1,14 +1,11 @@
 name: GMS Beanstalk Deploy Development
 run-name: Elastic Beanstalk Deploy Production
 on:
-  push:
-    branches:
-      - deployment/ebs
-  # pull_request:
-  #     types:
-  #         - closed
-  #     branches:
-  #         - main
+  pull_request:
+      types:
+          - closed
+      branches:
+          - main
 
 jobs:
   deploy:
