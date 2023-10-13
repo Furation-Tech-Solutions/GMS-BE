@@ -60,6 +60,8 @@ guestRouter.get(
 // Route handling for getting all companies
 guestRouter.get("/", guestService.getAllGuests.bind(guestService));
 
+
+
 // Route handling for updating an compnay by ID
 guestRouter.put(
     "/:guestId",
@@ -67,3 +69,5 @@ guestRouter.put(
     verifyLoggedInUser,
     guestService.updateGuest.bind(guestService)
 );
+
+guestRouter.get("/search", guestService.getAllSearchedGuests.bind(guestService));

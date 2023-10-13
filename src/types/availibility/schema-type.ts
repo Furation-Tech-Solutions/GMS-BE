@@ -78,4 +78,9 @@ export interface IShift {
 
 
  
-  
+export interface ShiftWithTimeSlots {
+  _id: string | undefined;
+  shiftName: string;
+  shiftCategory: string;
+  timeSlots: string[];
+}
