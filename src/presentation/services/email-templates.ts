@@ -4,7 +4,7 @@ import * as path from 'path';
 
 // Read the HTML/CSS email template file
 
-const filePath ='./dist/presentation/nodemailer/email-template'
+const filePath = `${path.join(__dirname, "..", "nodemailer", "email-template")}`
 
 function readEmailTemplate(filePath: string): string {
   try {
@@ -67,7 +67,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
   export function operationTeam(result: any, clientWithEmail: any): string {
     // Replace placeholders with actual data in the email template
     const emailContent = operationTeamTemplate
-      .replace("[Client's Full Name]", result.firstName)
+      .replace("[Client's Full Name]", result.client.firstName)
       .replace('[Reservation Date]', result.date)
       .replace('[Number of Guests]', result.noOfGuests)
       .replace('[Shift]', result.shift.shiftName)
