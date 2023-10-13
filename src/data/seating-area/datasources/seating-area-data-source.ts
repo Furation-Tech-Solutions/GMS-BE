@@ -18,25 +18,31 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
     const existingSeatingArea = await SeatingArea.findOne({
       seatingAreaName: seatingArea.seatingAreaName,
     });
-    
+
     if (existingSeatingArea) {
       throw ApiError.emailExist();
     }
 
     const seatingAreaData = new SeatingArea(seatingArea);
-    
+
     const createdSeatingArea = await seatingAreaData.save();
 
     return createdSeatingArea.toObject();
   }
 
   async getById(id: string): Promise<any | null> {
-    const seatingArea = await SeatingArea.findById(id);
+    const seatingArea = await SeatingArea.findById(id).populate({
+      path: "tables",
+      select: "id tableNo partySizeMini partySizeMax",
+    });
     return seatingArea ? seatingArea.toObject() : null;
   }
 
   async getAllSeatingAreas(): Promise<any[]> {
-    const seatingAreas = await SeatingArea.find();
+    const seatingAreas = await SeatingArea.find().populate({
+      path: "tables",
+      select: "id tableNo partySizeMini partySizeMax",
+    });
     return seatingAreas.map((seatingArea) => seatingArea.toObject());
   }
 
@@ -50,7 +56,7 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
     );
     return updatedSeatingArea ? updatedSeatingArea.toObject() : null;
   }
- 
+
   async delete(id: string): Promise<void> {
     await SeatingArea.findByIdAndDelete(id);
   }

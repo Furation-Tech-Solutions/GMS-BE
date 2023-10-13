@@ -3,10 +3,11 @@ export class SeatingAreaModel {
   constructor(
     public abbreviation: string = "",
     public seatingAreaName: string = "",
+    public tables: string[] = [],
     public listOrder: number = 0,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 // Room Entity provided by Seating Repository is converted to Express API Response
@@ -15,10 +16,11 @@ export class SeatingAreaEntity {
     public _id: string | undefined = undefined,
     public abbreviation: string,
     public seatingAreaName: string,
+    public tables: string[] = [],
     public listOrder: number,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 export class SeatingAreaMapper {
@@ -38,6 +40,10 @@ export class SeatingAreaMapper {
           seatingAreaData.seatingAreaName !== undefined
             ? seatingAreaData.seatingAreaName
             : existingSeatingArea.seatingAreaName,
+        tables:
+          seatingAreaData.tables !== undefined
+            ? seatingAreaData.tables
+            : existingSeatingArea.tables,
         listOrder:
           seatingAreaData.listOrder !== undefined
             ? seatingAreaData.listOrder
@@ -60,6 +66,7 @@ export class SeatingAreaMapper {
           : seatingAreaData._id.toString(),
         abbreviation: seatingAreaData.abbreviation,
         seatingAreaName: seatingAreaData.seatingAreaName,
+        tables: seatingAreaData.tables,
         listOrder: seatingAreaData.listOrder,
         updatedBy: { _id: seatingAreaData.updatedBy },
         createdBy: { _id: seatingAreaData.createdBy },
@@ -72,6 +79,7 @@ export class SeatingAreaMapper {
     return {
       abbreviation: seatingArea.abbreviation,
       seatingAreaName: seatingArea.seatingAreaName,
+      tables: seatingArea.tables,
       listOrder: seatingArea.listOrder,
       createdBy: seatingArea.updatedBy,
       updatedBy: seatingArea.createdBy,
