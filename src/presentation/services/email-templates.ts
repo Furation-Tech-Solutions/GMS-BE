@@ -3,10 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Read the HTML/CSS email template file
-// const filePath = path.join(__dirname, '../src','presentation', 'template', 'email-template', 'add-reservation-template.html');
-// const filePath ='./src/presentation/template/email-template/add-reservation-template.html'
-const filePath ='./src/presentation/nodemailer/email-template'
-//  path.join(__dirname, '../src','presentation', 'template', 'email-template', 'add-reservation-template.html');
+
+const filePath ='./dist/presentation/nodemailer/email-template'
 
 function readEmailTemplate(filePath: string): string {
   try {
@@ -69,7 +67,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
   export function operationTeam(result: any, clientWithEmail: any): string {
     // Replace placeholders with actual data in the email template
     const emailContent = operationTeamTemplate
-      .replace('[Client\'s Full Name]', result.firstName)
+      .replace("[Client's Full Name]", result.firstName)
       .replace('[Reservation Date]', result.date)
       .replace('[Number of Guests]', result.noOfGuests)
       .replace('[Shift]', result.shift.shiftName)
@@ -83,6 +81,27 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
       .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
   
     return emailContent;
+  }
+
+  function userTemplate(filePath: string): string {
+    try {
+      return fs.readFileSync(`${filePath}/user-email-template.html`, 'utf-8');
+    } catch (error) {
+      console.error('002 Error reading email template:', error);
+      return ''; // Return an empty string or handle the error as needed
+    }
+  }
+const userEmailTemplate = userTemplate(filePath);
+
+  export function userAccountTemplate(result: any): string {
+    const emailContent = userEmailTemplate
+    .replace("[User's First Name]", result.firstName)
+    .replace("[User's Email]", result.email)
+    .replace("[User's Random Password]", result.randomPassword)
+    
+    console.log(emailContent,"emailContent")
+    return emailContent;
+          
   }
 
 

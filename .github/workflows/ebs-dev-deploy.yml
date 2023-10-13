@@ -1,0 +1,51 @@
+name: GMS Beanstalk Deploy Development
+run-name: Elastic Beanstalk Deploy Production
+on:
+  pull_request:
+      types:
+          - closed
+      branches:
+          - main
+
+jobs:
+  deploy:
+    name: deploy backend
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure aws client
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: "ap-south-1"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+      - run: npm install
+      - name: Execute application build Script
+        run: npm run build
+      - name: copy email-templates form src to dist
+        run: |
+          cp -r ./src/presentation/nodemailer/email-template/ ./dist/presentation/nodemailer/email-template/
+      - name: Create code bundle for deployment
+        run: zip code-bundle-${{github.sha}}.zip -r ./dist/ -r ./.ebextensions package.json package-lock.json Procfile
+      - name: Copy code bundle to s3 bucket for code
+        run: aws s3 cp code-bundle-${{github.sha}}.zip s3://gms-backend-ebs-deploy/code-bundle-${{github.sha}}.zip
+      - name: create new ElasticBeanstalk Application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name guest-management-system \
+          --source-bundle S3Bucket="gms-backend-ebs-deploy",S3Key="code-bundle-${{github.sha}}.zip" \
+          --version-label "${{github.sha}}" \
+          --description "commit-sha-${{github.sha}}"
+      - name: Update elasticbeanstalk environment with latest application-version
+        run: |
+          aws elasticbeanstalk update-environment \
+          --application-name guest-management-system \
+          --environment-id "e-h47gvdacmx" \
+          --version-label "${{github.sha}}"
+      - name: Success
+        run: |
+          echo "Successfull"
