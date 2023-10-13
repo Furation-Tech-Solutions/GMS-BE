@@ -41,7 +41,11 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
     if (existingAddReservation) throw ApiError.reservationExits();
 
-    const addReservationData = new AddReservation(addReservation);
+    const newAddReservation = {
+      ...addReservation,
+      date: addReservation.date.slice(0, 10),
+    };
+    const addReservationData = new AddReservation(newAddReservation);
     const createdAddReservation = await addReservationData.save();
 
     const checkInCheckOutObject = {
@@ -143,9 +147,9 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
     // if (!existingCheckInCheckOut) throw ApiError.notFound();
 
-    const options= { timeZone : 'Asia/Kolkata'};
-  const currentDate= new Date().toLocaleString('en-US', options);
-  const date = new Date(currentDate);
+    const options = { timeZone: "Asia/Kolkata" };
+    const currentDate = new Date().toLocaleString("en-US", options);
+    const date = new Date(currentDate);
     const dateObject = new Date(date);
 
     // Get hours, minutes, and seconds

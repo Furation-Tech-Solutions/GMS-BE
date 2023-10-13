@@ -3,6 +3,7 @@ import { Either, Left, Right } from "monet";
 import { TableDataSource } from "../datasources/table-data-source";
 import { TableRepository } from "@domain/table/repositories/table-repository";
 import { TableEntity, TableModel } from "@domain/table/entities/table";
+import mongoose from "mongoose";
 
 export class TableRepositoryImpl implements TableRepository {
   private readonly dataSource: TableDataSource;
@@ -17,11 +18,13 @@ export class TableRepositoryImpl implements TableRepository {
     try {
       let i = await this.dataSource.create(table);
       return Right<ErrorClass, TableEntity>(i);
-    } catch (e) {
-      if (typeof ApiError.emailExist) {
-        return Left<ErrorClass, TableEntity>(ApiError.emailExist());
+    } catch (e: any) {
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, TableEntity>(ApiError.castError());
       }
-      return Left<ErrorClass, TableEntity>(ApiError.badRequest());
+      return Left<ErrorClass, TableEntity>(
+        ApiError.customError(e.status, e.message)
+      );
     }
   }
 
