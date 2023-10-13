@@ -8,6 +8,7 @@ import { UpdateShiftUsecase } from "@domain/availibility/usecases/shift-usecase/
 import { GetShiftByIdUsecase } from "@domain/availibility/usecases/shift-usecase/get-shift-by-id.usecase";
 import { DeleteShiftUsecase } from "@domain/availibility/usecases/shift-usecase/delete-usecase";
 import { GetAllShiftsUsecase } from "@domain/availibility/usecases/shift-usecase/getall-shifts-usecase";
+import { ShiftWithTimeSlots } from "types/availibility/schema-type";
 
 export class ShiftService {
   private readonly createShiftUsecase: CreateShiftUsecase;
@@ -203,4 +204,63 @@ export class ShiftService {
       }
     );
   }
+
+  async  getAllFilterShifts(req: Request, res: Response): Promise<void> {
+    try {
+      const shifts: Either<ErrorClass, ShiftEntity[]> = await this.getAllShiftUsecase.execute();
+      const { date, shiftCategory } = req.query;
+      const selectedDate = new Date(`${date}`);
+  
+      shifts.cata(
+        (error: ErrorClass) => res.status(error.status).json({ error: error.message }),
+        (shifts: ShiftEntity[]) => {
+          const filteredShifts = shifts.filter((shift) => {
+            const shiftStartDate = new Date(shift.startDate);
+  
+            if (shift.endDate && new Date(shift.endDate) < selectedDate) {
+              return false;
+            }
+  
+            if (selectedDate >= shiftStartDate && shift.shiftCategory === shiftCategory) {
+              return true;
+            }
+  
+            return false;
+          });
+  
+          if (filteredShifts && filteredShifts.length > 0) {
+            const results: ShiftWithTimeSlots[] = [];
+  
+            for (const shift of filteredShifts) {
+              const timeSlots: string[] = [];
+              const firstSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.firstSeating}`);
+              const lastSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.lastSeating}`);
+              const timeInterval = shift.timeInterval;
+  
+              while (firstSeatingTime <= lastSeatingTime) {
+                timeSlots.push(firstSeatingTime.toTimeString().slice(0, 8)); // Format as HH:mm
+  
+                firstSeatingTime.setMinutes(firstSeatingTime.getMinutes() + timeInterval);
+              }
+  
+              results.push({
+                _id: shift._id,
+                shiftName: shift.shiftName,
+                shiftCategory: shift.shiftCategory,
+                timeSlots,
+              });
+            }
+
+            return res.json(results);
+          } else {
+            res.status(400).json({ message: `Shift of ${shiftCategory} category not found on a particular date` });
+          }
+        }
+      );
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while processing the request." });
+    }
+  }
 }
+
+

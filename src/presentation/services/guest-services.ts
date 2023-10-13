@@ -37,11 +37,11 @@ export class GuestServices {
     async createGuest(req: Request, res: Response): Promise<void> {
         // Extract guest data from the request body and convert it to Guest Model
         // console.log(req.body);
-        const user=req.user
-        const newGuestData={
+        const user = req.user
+        const newGuestData = {
             ...req.body,
-            createdBy:user._id,
-            updatedBy:user._id
+            createdBy: user._id,
+            updatedBy: user._id
         }
 
         const guestData: GuestModel = GuestMapper.toModel(newGuestData);
@@ -124,10 +124,10 @@ export class GuestServices {
 
     async updateGuest(req: Request, res: Response): Promise<void> {
         const guestId: string = req.params.guestId;
-        const user=req.user
-        const newGuestData={
+        const user = req.user
+        const newGuestData = {
             ...req.body,
-            updatedBy:user._id
+            updatedBy: user._id
         }
         const guestData: GuestModel = newGuestData;
 
@@ -163,6 +163,43 @@ export class GuestServices {
                         res.json(resData);
                     }
                 );
+            }
+        );
+    }
+
+
+    async getAllSearchedGuests(
+        req: Request,
+        res: Response,
+    ): Promise<void> {
+        console.log("firstName", "lastName", "email")
+        const { firstName, lastName, email } = req.query;
+        console.log(firstName, lastName, email)
+        // Call the getAllGuestsUsecases to get all Guests
+        const guests: Either<ErrorClass, GuestEntity[]> = await this.getAllGuestsUsecases.execute();
+        console.log(guests)
+        guests.cata(
+            (error: ErrorClass) =>
+                res.status(error.status).json({ error: error.message }),
+            (result: GuestEntity[]) => {
+                const filteredGuests = result.filter((guest) => {
+                    const firstNameMatch = firstName
+                        ? (guest.firstName as string).toLowerCase().includes(firstName as string)
+                        : true;
+                    const lastNameMatch = lastName
+                        ? (guest.lastName as string).toLowerCase().includes(lastName as string)
+                        : true;
+                    const emailMatch = email
+                        ? (guest.email as string).toLowerCase().includes(email as string)
+                        : true;
+
+                    return firstNameMatch && lastNameMatch && emailMatch;
+                });
+
+                const responseData = filteredGuests.map((guest) => GuestMapper.toEntity(guest));
+
+                // Send the guests that match the search criteria as a JSON response
+                return res.json(responseData);
             }
         );
     }

@@ -58,3 +58,5 @@ shiftRouter.delete("/delete/:shiftId", shiftService.deleteShift.bind(shiftServic
 
 // Route handling for getting all shifts
 shiftRouter.get("/getAll", shiftService.getAllShifts.bind(shiftService));
+
+shiftRouter.get("/filter", shiftService.getAllFilterShifts.bind(shiftService));
