@@ -80,7 +80,6 @@ export class AddReservationServices {
     }
   }
 
-
   async deleteAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
 
@@ -122,7 +121,7 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const { date, shift, status } = req.query;
+    const { date, shift, status, table } = req.query;
 
     const filter: IRFilter = {};
 
@@ -136,6 +135,9 @@ export class AddReservationServices {
 
     if (status && typeof status === "string") {
       filter.reservationStatus = status;
+    }
+    if (table && typeof table === "string") {
+      filter.table = table;
     }
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
@@ -190,16 +192,15 @@ export class AddReservationServices {
           },
           async (result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
-            
-            if(resData.reservationStatus=="isLeft"){
-                //called the get reservation by id to send populated data to email template
-        const addReservationId:string| undefined = resData._id;
-       
-         if (addReservationId) {
-           const emailhandler=new EmailHandler()
-          await emailhandler.handleLeftReservation(addReservationId)
-        
-        }
+
+            if (resData.reservationStatus == "isLeft") {
+              //called the get reservation by id to send populated data to email template
+              const addReservationId: string | undefined = resData._id;
+
+              if (addReservationId) {
+                const emailhandler = new EmailHandler();
+                await emailhandler.handleLeftReservation(addReservationId);
+              }
             }
             res.json(resData);
           }

@@ -3,4 +3,5 @@ export interface IRFilter {
   date?: string;
   shift?: string;
   reservationStatus?: string;
+  table?: string;
 }

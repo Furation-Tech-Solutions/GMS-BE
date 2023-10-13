@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+// const table = new mongoose.Schema(
+//   {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "Table",
+//   },
+//   { _id: false }
+// );
+
 const seatingAreaSchema = new mongoose.Schema({
   abbreviation: {
     type: String,
@@ -15,6 +23,12 @@ const seatingAreaSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
+  tables: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Table",
+    },
+  ],
   listOrder: {
     type: Number,
     required: true,
