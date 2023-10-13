@@ -5,6 +5,7 @@
 /coverage
 globalConfig.json
 yarn-error.log
+distout.zip
 
 # Logs
 logs

@@ -104,23 +104,73 @@ export class GuestServices {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        // Call the getAllGuestsUsecases to get all Guests
-        const guests: Either<ErrorClass, GuestEntity[]> =
-            await this.getAllGuestsUsecases.execute();
-
-        guests.cata(
-            (error: ErrorClass) =>
-                res.status(error.status).json({ error: error.message }),
-            (result: GuestEntity[]) => {
-                // Convert compnays from an array of guestsEntity to an array of plain JSON objects using CompanyMapper
-                const responseData = result.map((guest) =>
-                    GuestMapper.toEntity(guest)
-                );
-                // Send the admins as a JSON response
-                return res.json(responseData);
-            }
-        );
+        try {
+            // Call the getAllGuestsUsecases to get all Guests
+            const guests: Either<ErrorClass, GuestEntity[]> =
+                await this.getAllGuestsUsecases.execute();
+    
+            guests.cata(
+                (error: ErrorClass) =>
+                    res.status(error.status).json({ error: error.message }),
+                (result: GuestEntity[]) => {
+                    const searchQuery = req.query.search;
+                    const filterByDate = req.query.date; // Date filter
+                    const filterByStatus = req.query.status; // Status filter
+                    let responseData = result.map((guest) =>
+                        GuestMapper.toEntity(guest)
+                    );
+    
+                    responseData.sort((a, b) => {
+                        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+                    });
+                    
+                    // Filter by date
+                    if (filterByDate) {
+                        responseData = responseData.filter((item) => {
+                            // Convert both 'createdAt' and 'filterByDate' to Date objects
+                            const createdAtDate = new Date(item.createdAt);
+                            const filterDate = new Date(`${filterByDate}`);
+    
+                            // Compare the date to filter
+                            return createdAtDate.toDateString() === filterDate.toDateString();
+                        });
+                    }
+    
+                    // Filter by status
+                    if (filterByStatus) {
+                        const statusString = filterByStatus as string; // Explicit type assertion
+                        responseData = responseData.filter((item) =>
+                            item.status.toLowerCase() === statusString.toLowerCase()
+                        );
+                    }
+    
+                    // Search
+                    if (searchQuery) {
+                        const regex = new RegExp(searchQuery as string, 'i');
+                        responseData = responseData.filter((item) => {
+                            return (
+                                regex.test(item.firstName) ||
+                                regex.test(item.lastName) ||
+                                regex.test(item.email)
+                            );
+                        });
+                    }
+    
+                    if (responseData && responseData.length > 0) {
+                        return res.json(responseData);
+                    } else {
+                        return res.status(404).json({ message: 'No matching guests found.' });
+                    }
+                }
+            );
+        } catch (error) {
+            res.status(500).json({ error: 'Internal server error.' });
+        }
     }
+    
+    
+    
+    
 
     async updateGuest(req: Request, res: Response): Promise<void> {
         const guestId: string = req.params.guestId;

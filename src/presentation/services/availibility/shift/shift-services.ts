@@ -208,20 +208,20 @@ export class ShiftService {
   async  getAllFilterShifts(req: Request, res: Response): Promise<void> {
     try {
       const shifts: Either<ErrorClass, ShiftEntity[]> = await this.getAllShiftUsecase.execute();
-      const { date, shiftCategory } = req.query;
+      const { date, shift } = req.query;
       const selectedDate = new Date(`${date}`);
   
       shifts.cata(
         (error: ErrorClass) => res.status(error.status).json({ error: error.message }),
         (shifts: ShiftEntity[]) => {
-          const filteredShifts = shifts.filter((shift) => {
-            const shiftStartDate = new Date(shift.startDate);
+          const filteredShifts = shifts.filter((newShift) => {
+            const shiftStartDate = new Date(newShift.startDate);
   
-            if (shift.endDate && new Date(shift.endDate) < selectedDate) {
+            if (newShift.endDate && new Date(newShift.endDate) < selectedDate) {
               return false;
             }
   
-            if (selectedDate >= shiftStartDate && shift.shiftCategory === shiftCategory) {
+            if (selectedDate >= shiftStartDate && newShift.shiftCategory === shift) {
               return true;
             }
   
@@ -236,7 +236,7 @@ export class ShiftService {
               const firstSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.firstSeating}`);
               const lastSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.lastSeating}`);
               const timeInterval = shift.timeInterval;
-  
+              
               while (firstSeatingTime <= lastSeatingTime) {
                 timeSlots.push(firstSeatingTime.toTimeString().slice(0, 8)); // Format as HH:mm
   
@@ -253,7 +253,7 @@ export class ShiftService {
 
             return res.json(results);
           } else {
-            res.status(400).json({ message: `Shift of ${shiftCategory} category not found on a particular date` });
+            res.status(400).json({ message: `Shift of ${shift} category not found on a particular date` });
           }
         }
       );
