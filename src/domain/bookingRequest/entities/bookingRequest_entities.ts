@@ -33,7 +33,7 @@ export class BookingRequestEntity {
     public reservationTime: string = "",
     public numberOfGuest: number = 0,
     public duration: string = "",
-    public status: IBookingRequestStatus = { name:"", color:""},
+    public status: IBookingRequestStatus  = { name:"", color:""} ,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public createdAt: Date

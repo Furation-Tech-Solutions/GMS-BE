@@ -110,7 +110,6 @@ export class GuestServices {
             // Call the getAllGuestsUsecases to get all Guests
             const guests: Either<ErrorClass, GuestEntity[]> =
                 await this.getAllGuestsUsecases.execute();
-
             guests.cata(
                 (error: ErrorClass) =>
                     res.status(error.status).json({ error: error.message }),
@@ -192,6 +191,10 @@ export class GuestServices {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: ErrorMessage.INTERNAL_SERVER_ERROR });
         }
     }
+    
+    
+    
+    
 
 
     async updateGuest(req: Request, res: Response): Promise<void> {
