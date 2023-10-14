@@ -13,6 +13,8 @@ import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import EmailService from "./send-mail";
 import { bookingRequestConfirmationEmailTemplate } from "./email-template";
+import * as HttpStatus from "@presentation/error-handling/http-status";
+import * as ErrorMessage from "@presentation/error-handling/message-error";
 
 export class BookingRequestServices {
     private readonly createBookingRequestUsecases: CreateBookingRequestUsecase;
@@ -118,9 +120,63 @@ export class BookingRequestServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: BookingRequestEntity[]) => {
-                const responseData = result.map((bookingRequest) =>
-                    BookingRequestMapper.toEntity(bookingRequest)
+
+                const { date, status, sort, search } = req.query;
+
+                let responseData = result.map((bookingRequest) =>
+                  BookingRequestMapper.toEntity(bookingRequest)
                 );
+        
+                sort === "1"
+                  ? responseData.sort((a, b) => {
+                      return (
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                      );
+                    })
+                  : responseData.sort((a, b) => {
+                      return (
+                        new Date(a.createdAt).getTime() -
+                        new Date(b.createdAt).getTime()
+                      );
+                    });
+        
+                // Filter by date
+                if (date && typeof date === "string") {
+                  responseData = responseData.filter((item) => {
+                    // Convert both 'createdAt' and 'filterByDate' to Date objects
+                    const createdAtDate = new Date(item.createdAt);
+                    const filterDate = new Date(`${date}`);
+                    // Compare the date to filter
+                    return createdAtDate.toDateString() === filterDate.toDateString();
+                  });
+                }
+        
+                // Filter by status
+                if (status && typeof status === "string") {
+                  responseData = responseData.filter((item) => {
+                    if (item) {
+                      return item.status.name.toLowerCase() === status.toLowerCase();
+                    }
+                    return false;
+                  });
+                }
+        
+                // Search
+                if (search && typeof search === "string") {
+                  const regex = new RegExp(search, "i");
+                  responseData = responseData.filter((item) => {
+                    return (
+                      regex.test(item.firstName) ||
+                      regex.test(item.lastName) ||
+                      regex.test(item.email)
+                    );
+                  });
+                }
+                if (!responseData || responseData.length === 0) {
+                    return res.status(HttpStatus.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND });
+                }
+
                 return res.json(responseData);
             }
         );

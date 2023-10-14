@@ -10,7 +10,7 @@ export interface BookingRequestRepository {
     getBookingRequestById(id: string): Promise<Either<ErrorClass, BookingRequestEntity>>;
     updateBookingRequest(
         id: string,
-        data: BookingRequestModel
+        data: BookingRequestEntity
     ): Promise<Either<ErrorClass, BookingRequestEntity>>;
     getAllBookingRequests(): Promise<Either<ErrorClass, BookingRequestEntity[]>>;
 }

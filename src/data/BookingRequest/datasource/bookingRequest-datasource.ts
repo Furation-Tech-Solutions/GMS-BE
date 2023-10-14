@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { BookingRequestModel } from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import the BookingRequestModel
+import { BookingRequestEntity, BookingRequestModel } from "@domain/bookingRequest/entities/bookingRequest_entities"; // Import the BookingRequestModel
 import { BookingRequest } from "../models/bookingRequest-model";
 import ApiError from "@presentation/error-handling/api-error";
 import EmailService from "@presentation/services/send-mail";
@@ -7,7 +7,7 @@ import EmailService from "@presentation/services/send-mail";
 // Create BookingRequestDataSource Interface
 export interface BookingRequestDataSource {
     create(bookingRequest: BookingRequestModel): Promise<any>;
-    update(id: string, bookingRequest: BookingRequestModel): Promise<any>;
+    update(id: string, bookingRequest: BookingRequestEntity): Promise<any>;
     delete(id: string): Promise<void>;
     read(id: string): Promise<any | null>;
     getAllBookingRequests(): Promise<any[]>;
@@ -56,7 +56,7 @@ export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
             throw ApiError.badRequest();
         }
     }
-    async update(id: string, bookingRequest: BookingRequestModel): Promise<any> {
+    async update(id: string, bookingRequest: BookingRequestEntity): Promise<any> {
         try {
             const updatedBookingRequest = await BookingRequest.findByIdAndUpdate(id, bookingRequest, {
                 new: true,

@@ -1,3 +1,5 @@
+import { IBookingRequestStatus } from "types/booking-requests-status-type";
+
 // Express API request populate the BookingRequest Model
 export class BookingRequestModel {
   constructor(
@@ -17,6 +19,7 @@ export class BookingRequestModel {
   ) {}
 }
 
+
 // BookingRequest Entity provided by BookingRequest Repository is converted to Express API Response
 export class BookingRequestEntity {
   constructor(
@@ -30,7 +33,7 @@ export class BookingRequestEntity {
     public reservationTime: string = "",
     public numberOfGuest: number = 0,
     public duration: string = "",
-    public status: string = "",
+    public status: IBookingRequestStatus  = { name:"", color:""} ,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public createdAt: Date

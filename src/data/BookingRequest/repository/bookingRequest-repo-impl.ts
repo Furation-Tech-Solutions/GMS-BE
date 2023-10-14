@@ -34,7 +34,7 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
         }
     }
 
-    async updateBookingRequest(id: string, data: BookingRequestModel): Promise<Either<ErrorClass, BookingRequestEntity>> {
+    async updateBookingRequest(id: string, data: BookingRequestEntity): Promise<Either<ErrorClass, BookingRequestEntity>> {
         try {
             const updatedRequest = await this.bookingRequestDataSource.update(id, data); // Use the booking request data source
             return Right<ErrorClass, BookingRequestEntity>(updatedRequest);
