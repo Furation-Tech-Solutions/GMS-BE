@@ -5,8 +5,8 @@ import { Either, Right, Left } from "monet";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 
 export class ClientRepositoryImpl implements ClientRepository {
-    private readonly clientDataSource: ClientDataSource; 
-    constructor(clientDataSource: ClientDataSource) { 
+    private readonly clientDataSource: ClientDataSource;
+    constructor(clientDataSource: ClientDataSource) {
         this.clientDataSource = clientDataSource;
     }
 
@@ -14,11 +14,12 @@ export class ClientRepositoryImpl implements ClientRepository {
         try {
             const createdClient = await this.clientDataSource.create(client); // Use the client data source
             return Right<ErrorClass, ClientEntity>(createdClient);
-        } catch (error) {
+        } catch (error: any) {
+            console.log("error", { error: error, message: error.message })
             if (error instanceof ApiError && error.name === "conflict") {
                 return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
             }
-            return Left<ErrorClass , ClientEntity>(ApiError.badRequest());
+            return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
         }
     }
 
