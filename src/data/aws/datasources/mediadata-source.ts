@@ -25,10 +25,17 @@ export class OutletMediaDataSourceImpl implements OutletMediaDataSource {
       const fileName = file_Name.slice(0, file_Name.lastIndexOf('.'));
       const fileExtension = file_Name.slice(file_Name.lastIndexOf('.') + 1);
       // console.log(uniqueIdentifier,fileName,fileExtension);
+      let path=""
+      if(data_type==="template"){
+         path=`template/${fileName}`+`.${fileExtension}`
+      }
+      else{
+        path=`${data_type}/${uniqueIdentifier}_${fileName}` + `.${fileExtension}`
+      }
 
       const params = {
-        Bucket: "gms-imageupload",
-        Key: `${data_type}/${uniqueIdentifier}_${fileName}` + `.${fileExtension}`,
+        Bucket: "gms-media-assets",
+        Key: path,
         Expires: 3600,
       };
       // return "presignedurl"

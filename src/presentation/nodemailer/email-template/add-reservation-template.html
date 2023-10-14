@@ -1,73 +1,184 @@
-<!DOCTYPE html>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Status Notification</title>
+    <title>Email Preview</title>
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 24px;
-            color: #333;
-        }
-        p {
-            font-size: 16px;
-            color: #555;
-        }
-        .header {
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .content {
-            padding: 20px;
-        }
-        .footer {
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
+    width: 50%;
+    border: 2px solid #F1F3F5;
+    background-color: #F1F3F5;
+  margin:auto;
+  padding:20px
+ }
+.containerConentDiv{
+width:95%;
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
+/* CSS for the header */
+.header {
+    background-color: #F1F3F5;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 5px;
+    color: #495057;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+/* CSS for the image */
+/* .image {
+    width: 150px;
+    height: 100px;
+} */
+/* CSS for the name */
+.name {
+    color: #858E96;
+    font-size: 25px;
+    font-family: 'Lato', sans-serif;
+}
+/* CSS for the reservation details */
+.reservation-details {
+    color: #343A40;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+/* CSS for the quote and author */
+.quote {
+    color: #777A7C;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Lato', sans-serif;
+    font-style: italic;
+}
+/* CSS for the button */
+/* .button {
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    font-size: 14px;
+    padding: 5px 20px;
+    min-width: 15px;
+    min-height: 38px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color:blue;
+} */
+/* .confirm-button {
+ background: linear-gradient(to right, #6B46C1, #4F46E5);
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19.36px;
+    padding: 5px 10px;
+    min-width: 15px;
+    min-height: 38px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+      font-family: 'Inter', sans-serif;
+  cursor:pointer;
+border:none
+ } */
+/* .confirm-button:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+} */
+/* CSS for the manage and cancel reservation links */
+.reservation-links {
+    display: flex;
+    justify-content: space-between;
+  width:70%;
+  align-items: center;
+margin:auto;
+margin-Top:30px
+}
+.link {
+    color: #777A7C;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+  cursor:pointer
+}
+/* CSS for the horizontal line */
+.hr {
+    margin: 5px 0;
+    border: 1px solid #E5E7EB;
+}
+/* CSS for the contact information */
+.contact-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.contact-title {
+    color: #343A40;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+.contact-details {
+    color: #777A7C;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    font-weight: medium;
+}
+/* CSS for the GMS contact information */
+.gms-contact {
+    color: #494F56;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+.gms-name {
+    color: #000000;
+    font-weight: bold;
+    font-size: 17px;
+}
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Reservation Status Notification</h1>
+        <div class=" containerConentDiv">
+            <!-- <div>
+                <img src="https://estella.reserve1st.com/assets/reservesidebarlogo-bdc3edde.svg" alt="" class="image">
+            </div> -->
+            <div>
+                <p class="name">[Client's Full Name]</p>
+            </div>
+            <div>
+                <p class="reservation-details">[Reservation Date] reservation for [Number of Guests] guests at [Time Slot]</p>
+            </div>
+            <div>
+                <p class="quote">“[Shift]”</p>
+                <p class="quote">- [Client's First Name]</p>
+            </div>
+            <!-- <div>
+                <button class="confirm-button">CONFIRM RESERVATION</button>
+            </div> -->
         </div>
-        <div class="content">
-            <p>Dear [Client's First Name],</p>
-            <p>We are pleased to inform you that your reservation with the following details has been successfully created:</p>
-            <ul>
-                <li>Reservation Date: [Reservation Date]</li>
-                <li>Number of Guests: [Number of Guests]</li>
-                <li>Shift: [Shift]</li>
-                <li>Duration: [Duration]</li>
-                <li>Seating Area: [Seating Area]</li>
-                <li>Time Slot: [Time Slot]</li>
-                <li>Table Number: [Table Number]</li>
-                <li>Reservation Note: [Reservation Note]</li>
-                <li>Perks: [Perks]</li>
-            </ul>
-            <p>Your reservation is confirmed and ready for your visit. If you have any questions or need to make changes to your reservation, please don't hesitate to contact us at [Support Email Address] or [Support Phone Number].</p>
-            <p>We look forward to serving you and providing a wonderful dining experience.</p>
+        <div class="reservation-links">
+            <div class="link">Manage reservation</div>
+            <div class="link">Cancel reservation</div>
         </div>
-        <div class="footer">
-            <p>Best regards,<br>The [Your Hotel Name] Team</p>
+        <hr class="hr">
+        <div class="contact-info">
+            <p class="contact-title">Contact</p>
+            <p class="contact-details">+91 9756765458</p>
+            <p class="contact-details">sdasd Road dasd  Mumbai, MH 400050</p>
+        </div>
+        <div class="contact-info">
+            <p class="gms-contact">Contact <span class="gms-name">GMS</span></p>
+            <p class="gms-details">You are receiving this email from ESTELLA through GMS</p>
         </div>
     </div>
 </body>

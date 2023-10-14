@@ -27,13 +27,15 @@ class EmailHandler {
       // Your reservation creation logic here..
         const addReservation = await getAddReservationByIdUsecase.read(id);
 
-        const emailContent = reservationTemplate(addReservation, addReservation.client.email);
+        const emailContent =await reservationTemplate(addReservation, addReservation.client.email);
+        console.log(emailContent,"emailContent is this")
         const emailOption = {
           // email:addReservation.client.email,
           email:addReservation.client.email,
           subject: "Reservation Confirmation",
           message: emailContent,
         };
+        console.log(emailOption,"emailOption")
         await emailService.sendEmail(emailOption);
         
         const user=await UserAccount.find({})
@@ -42,7 +44,7 @@ class EmailHandler {
             if(res.accessLevel=="Superuser"){
             try {
             
-                const emailContent = operationTeam(addReservation, addReservation.client.email);
+                const emailContent = await operationTeam(addReservation, addReservation.client.email);
                 const emailOption = {
                   email: res.email,
                   subject: "Reservation Confirmation ",
