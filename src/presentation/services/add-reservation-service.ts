@@ -15,7 +15,10 @@ import {
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
-import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
+import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
+import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
+import mongoose from "mongoose";
+import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -136,6 +139,7 @@ export class AddReservationServices {
     if (status && typeof status === "string") {
       filter.reservationStatus = status;
     }
+
     if (table && typeof table === "string") {
       filter.table = table;
     }
@@ -143,10 +147,12 @@ export class AddReservationServices {
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
 
+
     addReservations.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-      (result: AddReservationEntity[]) => {
+       (result: AddReservationEntity[]) => {
+
         const responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
         );
@@ -154,6 +160,7 @@ export class AddReservationServices {
       }
     );
   }
+
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
@@ -208,4 +215,7 @@ export class AddReservationServices {
       }
     );
   }
+
+
+  // { /**  filter api for the cover flow data */} 
 }
