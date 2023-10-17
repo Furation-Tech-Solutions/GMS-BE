@@ -79,12 +79,12 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   }
 
   async getAll(): Promise<any[]> {
-    try {
+    // try {
       const shifts = await Shift.find();
       return shifts.map((shift) => shift.toObject()); // Convert to plain JavaScript objects before returning
-    } catch (error) {
-      throw ApiError.notFound();
-    }
+    // } catch (error) {
+      // throw ApiError.notFound();
+    // }
   }
 
 }

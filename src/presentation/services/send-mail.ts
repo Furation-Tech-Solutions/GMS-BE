@@ -23,6 +23,7 @@ class EmailService {
     }
 
     async sendEmail(emailOption:EmailOptions): Promise<void> {
+        
         const mailOptions = {
             from: env.user,
             to: emailOption.email,
