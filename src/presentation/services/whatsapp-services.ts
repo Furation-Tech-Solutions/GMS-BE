@@ -36,7 +36,7 @@ class WhatsAppService {
     }
 
     try {
-      const response= await axios.post("https://graph.facebook.com/v17.0/121686631017880/messages", whatsappData, { headers });
+      const response= await axios.post("https://graph.facebook.com/v17.0/151367741389078/messages", whatsappData, { headers });
       // console.log(response,"response of whatsapp data")
       return response.data;
     } catch (error) {
