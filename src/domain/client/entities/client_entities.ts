@@ -7,6 +7,7 @@ export class ClientModel {
     public jobTitle: string = "",
     public company: string = "",
     public profileNotes: string = "",
+    public profileImage: string = "",
     public privateNotes: string = "",
     public tags: string[] = [],
     public email: string = "",
@@ -19,12 +20,14 @@ export class ClientModel {
     public country: string = "",
     public pincode: number = 0,
     public contactInfoVisibilityOnlyToSuperUser: boolean,
-    public birthDate: Date,
-    public anniversaryDate: Date,
+    public birthDate: string,
+    public anniversaryDate: string,
+    public visits: number = 0,
+    public spends: number = 0,
+    public language: string,
     public gender: string,
     public updatedBy: string | { _id: string } | undefined,
-    public createdBy: string | { _id: string } | undefined,
-    public createdAt: Date
+    public createdBy: string | { _id: string } | undefined // public createdAt: Date
   ) {}
 }
 
@@ -38,6 +41,7 @@ export class ClientEntity {
     public jobTitle: string = "",
     public company: string = "",
     public profileNotes: string = "",
+    public profileImage: string = "",
     public privateNotes: string = "",
     public tags: string[] = [],
     public email: string = "",
@@ -50,8 +54,11 @@ export class ClientEntity {
     public country: string = "",
     public pincode: number = 0,
     public contactInfoVisibilityOnlyToSuperUser: boolean,
-    public birthDate: Date,
-    public anniversaryDate: Date,
+    public birthDate: string,
+    public anniversaryDate: string,
+    public visits: number,
+    public spends: number,
+    public language: string,
     public gender: string,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
@@ -93,6 +100,10 @@ export class ClientMapper {
           clientData.profileNotes !== undefined
             ? clientData.profileNotes
             : existingClient.profileNotes,
+        profileImage:
+          clientData.profileImage !== undefined
+            ? clientData.profileImage
+            : existingClient.profileImage,
         privateNotes:
           clientData.privateNotes !== undefined
             ? clientData.privateNotes
@@ -145,6 +156,18 @@ export class ClientMapper {
           clientData.anniversaryDate !== undefined
             ? clientData.anniversaryDate
             : existingClient.anniversaryDate,
+        visits:
+          clientData.visits !== undefined
+            ? clientData.visits
+            : existingClient.visits,
+        spends:
+          clientData.spends !== undefined
+            ? clientData.spends
+            : existingClient.spends,
+        language:
+          clientData.language !== undefined
+            ? clientData.language
+            : existingClient.language,
         gender:
           clientData.gender !== undefined
             ? clientData.gender
@@ -175,6 +198,7 @@ export class ClientMapper {
         jobTitle: clientData.jobTitle,
         company: clientData.company,
         profileNotes: clientData.profileNotes,
+        profileImage: clientData.profileImage,
         privateNotes: clientData.privateNotes,
         tags: clientData.tags,
         email: clientData.email,
@@ -190,6 +214,9 @@ export class ClientMapper {
           clientData.contactInfoVisibilityOnlyToSuperUser,
         birthDate: clientData.birthDate,
         anniversaryDate: clientData.anniversaryDate,
+        visits: clientData.visits,
+        spends: clientData.spends,
+        language: clientData.language,
         gender: clientData.gender,
         updatedBy: { _id: clientData.updatedBy },
         createdBy: { _id: clientData.createdBy },
@@ -207,6 +234,7 @@ export class ClientMapper {
       jobTitle: client.jobTitle,
       company: client.company,
       profileNotes: client.profileNotes,
+      profileImage: client.profileImage,
       privateNotes: client.privateNotes,
       tags: client.tags,
       email: client.email,
@@ -222,6 +250,9 @@ export class ClientMapper {
         client.contactInfoVisibilityOnlyToSuperUser,
       birthDate: client.birthDate,
       anniversaryDate: client.anniversaryDate,
+      visits: client.visits,
+      spends: client.spends,
+      language: client.language,
       gender: client.gender,
       updatedBy: client.updatedBy,
       createdBy: client.createdBy,
