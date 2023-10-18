@@ -110,7 +110,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
-        select: "id shiftName shiftCategory",
+        select: "id shiftName shiftCategory startDate endDate firstSeating lastSeating timeInterval",
       })
       .populate({
         path: "client",
