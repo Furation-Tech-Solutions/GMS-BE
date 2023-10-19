@@ -195,10 +195,15 @@ export class AddReservationServices {
             );
           });
   
+          const guestsByTimeSlotArray = Object.keys(guestsByTimeSlot).map((key) => ({
+            timeSlot: key,
+            guests: guestsByTimeSlot[key],
+            totalGuests: totalGuestsByTimeSlot[key],
+          }));
   
           return res.json({
             totalGuestsByTimeSlot,
-            guestsByTimeSlot
+            guestsByTimeSlotArray
           });
         }
 
