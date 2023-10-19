@@ -50,8 +50,8 @@ adminRouter.post(
 // Route handling for getting an admin by ID
 adminRouter.get(
   "/getById/:adminId",
-  authorziedUser,
-  adminView,
+  // authorziedUser,
+  // adminView,
   adminService.getAdminById.bind(adminService)
 );
 

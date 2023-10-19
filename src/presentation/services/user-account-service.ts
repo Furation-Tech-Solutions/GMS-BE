@@ -52,6 +52,7 @@ export class UserService{
 async createUser(req: Request, res: Response): Promise<void> {
     
     const user=req.user
+
     const newUserData={
         ...req.body,
         createdBy:user._id,

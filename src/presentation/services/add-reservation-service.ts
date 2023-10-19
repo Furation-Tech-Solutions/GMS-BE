@@ -12,13 +12,17 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 
+import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp"
+
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
-import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
+import { ShiftEntity } from "@domain/availibility/entities/shift-entity";
+import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
+// import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -29,6 +33,8 @@ export class AddReservationServices {
   private readonly emailService: EmailService;
   private readonly whatsAppService: WhatsAppService;
 
+  private readonly shiftDataSourceImpl: ShiftDataSourceImpl
+
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
     deleteAddReservationUsecase: DeleteAddReservationUsecase,
@@ -37,6 +43,7 @@ export class AddReservationServices {
     updateAddReservationUsecase: UpdateAddReservationUsecase,
     emailService: EmailService,
     whatsAppService: WhatsAppService
+
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
     this.deleteAddReservationUsecase = deleteAddReservationUsecase;
@@ -45,6 +52,7 @@ export class AddReservationServices {
     this.updateAddReservationUsecase = updateAddReservationUsecase;
     this.emailService = emailService;
     this.whatsAppService = whatsAppService;
+    this.shiftDataSourceImpl = new ShiftDataSourceImpl(mongoose.connection);
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
@@ -124,15 +132,27 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const { date, shift, status, table } = req.query;
+    const { status, table } = req.query;
+    let shift  = req.query.shift as string;
+    const date  = req.query.date as string;
+    const coverflow  = req.query.coverflow as string;
+
+    const allShifts = await this.shiftDataSourceImpl.getAll();
+    
+
+    const timeSlots = generateTimeSlots(shift, date, allShifts);
 
     const filter: IRFilter = {};
 
-    if (date && typeof date === "string") {
+    if(timeSlots?.filteredShifts && coverflow) {
+      shift = timeSlots?.filteredShifts[0]._id
+    }
+
+    if (date ) {
       filter.date = date;
     }
 
-    if (shift && typeof shift === "string") {
+    if (shift ) {
       filter.shift = shift;
     }
 
@@ -146,17 +166,45 @@ export class AddReservationServices {
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
-
+      
 
     addReservations.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
        (result: AddReservationEntity[]) => {
 
+    
+
         const responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
         );
-        return res.json(responseData);
+
+
+        if(coverflow){
+          const guestsByTimeSlot: { [key: string]: number[] }  = {};
+          const totalGuestsByTimeSlot: { [key: string]: number } = {};
+
+          timeSlots?.timeSlots?.forEach((timeSlot) => {
+            const guestsForTimeSlot = responseData
+              .filter((reservation) => reservation.timeSlot === timeSlot)
+              .map((reservation) => +reservation.noOfGuests);
+  
+            guestsByTimeSlot[timeSlot] = guestsForTimeSlot;
+            totalGuestsByTimeSlot[timeSlot] = guestsForTimeSlot.reduce(
+              (sum, guestCount) => sum + guestCount,
+              0
+            );
+          });
+  
+  
+          return res.json({
+            totalGuestsByTimeSlot,
+            guestsByTimeSlot
+          });
+        }
+
+        return res.json(responseData)
+      
       }
     );
   }
@@ -216,6 +264,7 @@ export class AddReservationServices {
     );
   }
 
-
-  // { /**  filter api for the cover flow data */} 
 }
+
+
+
