@@ -14,6 +14,7 @@ import EmailService from "@presentation/services/send-mail";
 import { verifyAuthorizationToManager, verifyAuthorizationToSuperUser, verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { LogoutUser } from "@domain/user-account/usecases/logout-user";
 import { authorizedUserMiddleware } from "@presentation/middlewares/auth-permission";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 // import { SendEmail } from "@domain/user-account/usecases/send-email-with-password";
 
 const mongooseConnection = mongoose.connection;
@@ -48,6 +49,7 @@ export const userRouter = Router()
 userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
+    checkPermission([101,201]),
     userService.createUser.bind(userService)
 )
 userRouter.get(
