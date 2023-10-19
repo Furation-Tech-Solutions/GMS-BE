@@ -10,6 +10,7 @@ interface ClientInput {
   jobTitle?: string;
   company?: string;
   profileNotes?: string;
+  profileImage?: string;
   privateNotes?: string;
   tags?: string[];
   email: string;
@@ -25,244 +26,295 @@ interface ClientInput {
   birthDate?: Date;
   anniversaryDate?: Date;
   visits?: number;
+  language?: string;
   spends?: number;
   gender: string;
   updatedBy?: string;
   createdBy?: string;
 }
 
+// Define a custom Joi validation rule for the birthDate and anniversaryDate fields
+const customDateValidator = (fieldName: string) =>
+  Joi.string()
+    .custom((value, helpers) => {
+      // Check if the date string has the correct length (dd:mm:yyyy)
+      if (value.length === 10) {
+        const parts = value.split("-");
+        const dd = parseInt(parts[0], 10);
+        const mm = parseInt(parts[1], 10);
+        const yyyy = parseInt(parts[2], 10);
+
+        const currentYear = new Date().getFullYear();
+
+        if (dd <= 31 && mm <= 12 && yyyy <= currentYear) {
+          return value;
+        }
+      }
+
+      return helpers.error(
+        fieldName === "birthDate"
+          ? "string.birthDateInvalid"
+          : "string.anniversaryDateInvalid"
+      );
+    })
+    .messages({
+      "string.birthDateInvalid":
+        "Invalid birth date format. Please use a valid date (dd:mm:yyyy) for birthDate, with a day not exceeding 31, a month not exceeding 12, and a year not greater than the current year.",
+      "string.anniversaryDateInvalid":
+        "Invalid anniversary date format. Please use a valid date (dd:mm:yyyy) for anniversaryDate, with a day not exceeding 31, a month not exceeding 12, and a year not greater than the current year.",
+    });
+
 const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
   const clientSchema = Joi.object<ClientInput>({
     firstName: isUpdate
       ? Joi.string().max(30).min(3).optional().trim().messages({
-        "string.max": "First name should have less than 30 characters",
-        "string.min": "First name should have more than 3 characters",
-      })
+          "string.max": "First name should have less than 30 characters",
+          "string.min": "First name should have more than 3 characters",
+        })
       : Joi.string().max(30).min(3).required().trim().messages({
-        "string.max": "First name should have less than 30 characters",
-        "string.min": "First name should have more than 3 characters",
-        "any.required": "First name is required",
-      }),
+          "string.max": "First name should have less than 30 characters",
+          "string.min": "First name should have more than 3 characters",
+          "any.required": "First name is required",
+        }),
 
     lastName: isUpdate
       ? Joi.string().max(30).min(3).optional().trim().messages({
-        "string.max": "Last name should have less than 30 characters",
-        "string.min": "Last name should have more than 3 characters",
-      })
+          "string.max": "Last name should have less than 30 characters",
+          "string.min": "Last name should have more than 3 characters",
+        })
       : Joi.string().max(30).min(3).required().trim().messages({
-        "string.max": "Last name should have less than 30 characters",
-        "string.min": "Last name should have more than 3 characters",
-        "any.required": "Last name is required",
-      }),
-
+          "string.max": "Last name should have less than 30 characters",
+          "string.min": "Last name should have more than 3 characters",
+          "any.required": "Last name is required",
+        }),
     salutation: isUpdate
       ? Joi.string()
-        .valid("Mr.", "Mrs.", "Ms.", "Miss.", "Dr.")
-        .optional()
-        .trim()
-        .messages({
-          "any.only": "Invalid salutation value",
-          // "any.required": "Salutation is required",
-        })
+          .valid("Mr.", "Mrs.", "Ms.", "Miss.", "Dr.")
+          .optional()
+          .trim()
+          .messages({
+            "any.only": "Invalid salutation value",
+            // "any.required": "Salutation is required",
+          })
       : Joi.string()
-        .valid("Mr.", "Mrs.", "Ms.", "Miss.", "Dr.")
-        .required()
-        .trim()
-        .messages({
-          "any.only": "Invalid salutation value",
-          "any.required": "Salutation is required",
-        }),
+          .valid("Mr.", "Mrs.", "Ms.", "Miss.", "Dr.")
+          .required()
+          .trim()
+          .messages({
+            "any.only": "Invalid salutation value",
+            "any.required": "Salutation is required",
+          }),
 
     jobTitle: isUpdate
       ? Joi.string().max(255).optional().trim().messages({
-        "string.max": "Job title should have less than 255 characters",
-      })
+          "string.max": "Job title should have less than 255 characters",
+        })
       : Joi.string().max(255).optional().trim().messages({
-        "string.max": "Job title should have less than 255 characters",
-      }),
+          "string.max": "Job title should have less than 255 characters",
+        }),
 
     company: isUpdate
       ? Joi.string().max(255).optional().trim().messages({
-        "string.max": "Company name should have less than 255 characters",
-      })
+          "string.max": "Company name should have less than 255 characters",
+        })
       : Joi.string().max(255).optional().trim().messages({
-        "string.max": "Company name should have less than 255 characters",
-      }),
+          "string.max": "Company name should have less than 255 characters",
+        }),
 
     profileNotes: isUpdate
       ? Joi.string().max(500).optional().trim().messages({
-        "string.max": "Profile notes should have less than 500 characters",
-      })
+          "string.max": "Profile notes should have less than 500 characters",
+        })
       : Joi.string().max(500).optional().trim().messages({
-        "string.max": "Profile notes should have less than 500 characters",
-      }),
+          "string.max": "Profile notes should have less than 500 characters",
+        }),
+
+    profileImage: isUpdate
+      ? Joi.string().optional().trim().messages({
+          "string.base": "Profile image should be a string",
+          "string.max": "Profile image should be a valid string",
+        })
+      : Joi.string().optional().trim().messages({
+          "string.base": "Profile image should be a string",
+          "string.max": "Profile image should be a valid string",
+        }),
 
     privateNotes: isUpdate
       ? Joi.string().max(500).optional().trim().messages({
-        "string.max": "Private notes should have less than 500 characters",
-      })
+          "string.max": "Private notes should have less than 500 characters",
+        })
       : Joi.string().max(500).optional().trim().messages({
-        "string.max": "Private notes should have less than 500 characters",
-      }),
+          "string.max": "Private notes should have less than 500 characters",
+        }),
 
     tags: isUpdate
       ? Joi.array().items(Joi.string().max(255).trim()).optional().messages({
-        "array.base": "Tags must be an array of strings",
-      })
+          "array.base": "Tags must be an array of strings",
+        })
       : Joi.array().items(Joi.string().max(255).trim()).optional().messages({
-        "array.base": "Tags must be an array of strings",
-      }),
+          "array.base": "Tags must be an array of strings",
+        }),
 
     email: isUpdate
       ? Joi.string().email().optional().trim().messages({
-        "string.email": "Invalid email format",
-        "any.required": "Email is required",
-      })
+          "string.email": "Invalid email format",
+          "any.required": "Email is required",
+        })
       : Joi.string().email().required().trim().messages({
-        "string.email": "Invalid email format",
-        "any.required": "Email is required",
-      }),
+          "string.email": "Invalid email format",
+          "any.required": "Email is required",
+        }),
 
     altEmail: isUpdate
       ? Joi.string().email().optional().trim().messages({
-        "string.email": "Invalid alternative email format",
-        "any.required": "Alternative email is required",
-      })
+          "string.email": "Invalid alternative email format",
+          "any.required": "Alternative email is required",
+        })
       : Joi.string().email().optional().trim().messages({
-        "string.email": "Invalid alternative email format",
-        "any.required": "Alternative email is required",
-      }),
+          "string.email": "Invalid alternative email format",
+          "any.required": "Alternative email is required",
+        }),
 
     phone: isUpdate
       ? Joi.string()
-        .length(10)
-        .pattern(/^[0-9]+$/)
-        .optional()
-        .trim()
-        .messages({
-          "string.length": "Phone number should have exactly 10 digits",
-          "string.pattern.base": "Phone number should contain only digits",
-          "any.required": "Phone number is required",
-        })
+          .length(10)
+          .pattern(/^[0-9]+$/)
+          .optional()
+          .trim()
+          .messages({
+            "string.length": "Phone number should have exactly 10 digits",
+            "string.pattern.base": "Phone number should contain only digits",
+            "any.required": "Phone number is required",
+          })
       : Joi.string()
-        .length(10)
-        .pattern(/^[0-9]+$/)
-        .required()
-        .trim()
-        .messages({
-          "string.length": "Phone number should have exactly 10 digits",
-          "string.pattern.base": "Phone number should contain only digits",
-          "any.required": "Phone number is required",
-        }),
+          .length(10)
+          .pattern(/^[0-9]+$/)
+          .required()
+          .trim()
+          .messages({
+            "string.length": "Phone number should have exactly 10 digits",
+            "string.pattern.base": "Phone number should contain only digits",
+            "any.required": "Phone number is required",
+          }),
 
     workPhone: isUpdate
       ? Joi.string()
-        .length(10)
-        .pattern(/^[0-9]+$/)
-        .optional()
-        .trim()
-        .messages({
-          "string.length": "Work phone number should have exactly 10 digits",
-          "string.pattern.base":
-            "Work phone number should contain only digits",
-        })
+          .length(10)
+          .pattern(/^[0-9]+$/)
+          .optional()
+          .trim()
+          .messages({
+            "string.length": "Work phone number should have exactly 10 digits",
+            "string.pattern.base":
+              "Work phone number should contain only digits",
+          })
       : Joi.string()
-        .length(10)
-        .pattern(/^[0-9]+$/)
-        .optional()
-        .trim()
-        .messages({
-          "string.length": "Work phone number should have exactly 10 digits",
-          "string.pattern.base":
-            "Work phone number should contain only digits",
-        }),
+          .length(10)
+          .pattern(/^[0-9]+$/)
+          .optional()
+          .trim()
+          .messages({
+            "string.length": "Work phone number should have exactly 10 digits",
+            "string.pattern.base":
+              "Work phone number should contain only digits",
+          }),
 
     address: isUpdate
       ? Joi.string().max(500).optional().trim().messages({
-        "string.max": "Address should have less than 500 characters",
-      })
+          "string.max": "Address should have less than 500 characters",
+        })
       : Joi.string().max(500).optional().trim().messages({
-        "string.max": "Address should have less than 500 characters",
-      }),
+          "string.max": "Address should have less than 500 characters",
+        }),
     city: isUpdate
       ? Joi.string().max(255).optional().trim().messages({
-        "string.max": "City should have less than 255 characters",
-      })
+          "string.max": "City should have less than 255 characters",
+        })
       : Joi.string().max(255).optional().trim().messages({
-        "string.max": "City should have less than 255 characters",
-      }),
+          "string.max": "City should have less than 255 characters",
+        }),
 
     state: isUpdate
       ? Joi.string().max(255).optional().trim().messages({
-        "string.max": "State should have less than 255 characters",
-      })
+          "string.max": "State should have less than 255 characters",
+        })
       : Joi.string().max(500).optional().trim().messages({
-        "string.max": "Address should have less than 500 characters",
-      }),
+          "string.max": "State should have less than 500 characters",
+        }),
 
     pincode: isUpdate
       ? Joi.string().max(20).optional().trim().messages({
-        "string.max": "Pincode should have less than 20 characters",
-      })
+          "string.max": "Pincode should have less than 20 characters",
+        })
       : Joi.string().max(20).optional().trim().messages({
-        "string.max": "Pincode should have less than 20 characters",
-      }),
+          "string.max": "Pincode should have less than 20 characters",
+        }),
 
     country: isUpdate
       ? Joi.string().max(255).optional().trim().messages({
-        "string.max": "Country should have less than 255 characters",
-      })
+          "string.max": "Country should have less than 255 characters",
+        })
       : Joi.string().max(255).optional().trim().messages({
-        "string.max": "Country should have less than 255 characters",
-      }),
+          "string.max": "Country should have less than 255 characters",
+        }),
 
     contactInfoVisibilityOnlyToSuperUser: isUpdate
       ? Joi.boolean().optional().default(false)
       : Joi.boolean().optional().default(false),
 
-    birthDate: isUpdate ? Joi.date().optional() : Joi.date().optional(),
+    birthDate: isUpdate
+      ? customDateValidator("birthDate").optional()
+      : customDateValidator("birthDate").optional(),
 
-    anniversaryDate: isUpdate ? Joi.date().optional() : Joi.date().optional(),
+    anniversaryDate: isUpdate
+      ? customDateValidator("anniversaryDate").optional()
+      : customDateValidator("anniversaryDate").optional(),
 
     visits: isUpdate
       ? Joi.number().integer().optional().default(0)
       : Joi.number().integer().optional().default(0),
-
+    language: isUpdate
+      ? Joi.string().max(25).optional().trim().messages({
+          "string.max": "Language should have less than 25 characters",
+        })
+      : Joi.string().max(25).optional().default("English").trim().messages({
+          "string.max": "Language should have less than 25 characters",
+        }),
     spends: isUpdate
       ? Joi.number().optional().default(0)
       : Joi.number().optional().default(0),
 
     gender: isUpdate
       ? Joi.string()
-        .valid("Male", "Female", "Other")
-        .optional()
-        .trim()
-        .messages({
-          "any.only": "Invalid gender value",
-          "any.required": "Gender is required",
-        })
+          .valid("Male", "Female", "Other")
+          .optional()
+          .trim()
+          .messages({
+            "any.only": "Invalid gender value",
+            "any.required": "Gender is required",
+          })
       : Joi.string()
-        .valid("Male", "Female", "Other")
-        .required()
-        .trim()
-        .messages({
-          "any.only": "Invalid gender value",
-          "any.required": "Gender is required",
-        }),
+          .valid("Male", "Female", "Other")
+          .required()
+          .trim()
+          .messages({
+            "any.only": "Invalid gender value",
+            "any.required": "Gender is required",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Updated By",
-      })
+          "any.required": "Please select the Updated By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Update By",
-      }),
+          "any.required": "Please select the Update By",
+        }),
     createdBy: isUpdate
       ? Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      })
+          "any.required": "Please select the Created By",
+        })
       : Joi.string().trim().optional().messages({
-        "any.required": "Please select the Created By",
-      }),
+          "any.required": "Please select the Created By",
+        }),
   });
 
   const { error, value } = clientSchema.validate(input, {

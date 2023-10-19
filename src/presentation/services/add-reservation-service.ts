@@ -20,9 +20,9 @@ import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
-import { ShiftEntity } from "@domain/availibility/entities/shift-entity";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
+
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -168,12 +168,11 @@ export class AddReservationServices {
       await this.getAllAddReservationUsecase.execute(filter);
       
 
+
     addReservations.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
        (result: AddReservationEntity[]) => {
-
-    
 
         const responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
