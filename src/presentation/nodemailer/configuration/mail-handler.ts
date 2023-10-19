@@ -38,26 +38,26 @@ class EmailHandler {
         console.log(emailOption,"emailOption")
         await emailService.sendEmail(emailOption);
         
-        // const user=await UserAccount.find({})
+        const user=await UserAccount.find({})
 
-        // user.map(async(res)=>{
-        //     if(res.accessLevel=="Superuser"){
-        //     try {
+        user.map(async(res)=>{
+            if(res.accessLevel=="Superuser"){
+            try {
             
-        //         const emailContent = await operationTeam(addReservation, addReservation.client.email);
-        //         const emailOption = {
-        //           email: res.email,
-        //           subject: "Reservation Confirmation ",
-        //           message: emailContent,
-        //         };
-        //         await emailService.sendEmail(emailOption);
-        //       } catch (error) {
-        //         console.error(`Error sending email to ${res}: ${error}`);
-        //       }
-        //     }
+                const emailContent = await operationTeam(addReservation, addReservation.client.email);
+                const emailOption = {
+                  email: res.email,
+                  subject: "Reservation Confirmation ",
+                  message: emailContent,
+                };
+                await emailService.sendEmail(emailOption);
+              } catch (error) {
+                console.error(`Error sending email to ${res}: ${error}`);
+              }
+            }
 
            
-        //   })
+          })
 
            // Generate whatsapp content
                const whatsappMessage = createWhatsAppMessage.message(addReservation);
