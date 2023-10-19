@@ -959,9 +959,6 @@
     },
     {
         
-            
-              
-        {
             "101": "Ability to create manager and sub-managers",
             "102": "Ability to add a reservation along with table no, reservation tags",
             "103": "Ability to update a reservation along with table no, reservation tags",
@@ -986,8 +983,7 @@
             "304": "Ability to update a reservation with left status for pre-payment and on-site spend",
             "305": "Ability to view, edit, create, and delete guestlist",
             "306": "Ability to view, edit, and create clients"
-          }
-          
+     
     }
 
 
