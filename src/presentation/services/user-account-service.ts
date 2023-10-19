@@ -52,9 +52,18 @@ export class UserService{
 async createUser(req: Request, res: Response): Promise<void> {
     
     const user=req.user
-
+    let permissions: number[]=[]
+    if (req.body.accessLevel === 'Admin') {
+      permissions = [101,102,103,104,105,106,107,108,109]
+    } else if (req.body.accessLevel === 'Manager') {
+      permissions = [201,202,203,204,205,206,207,208,209]
+    } else if (req.body.accessLevel  === 'Submanager') {
+      permissions = [301,302,303,304,305,306]
+      
+    }
     const newUserData={
         ...req.body,
+        permissions,
         createdBy:user._id,
         updatedBy:user._id
     }

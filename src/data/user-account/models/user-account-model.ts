@@ -73,11 +73,7 @@ const userSchema = new mongoose.Schema({
   },
   permissions: {
     type: [],
-    default: [],
-  },
-  emailNotification: {
-    type: [],
-    default: [],
+    default:false
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
