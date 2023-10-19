@@ -58,20 +58,29 @@ const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
             "number.integer": "Party size maximum should be a positive integer",
             "any.required": "Party size maximum is required",
           }),
+    // tableCombinations: isUpdate
+    //   ? Joi.array()
+    //       .items(Joi.object({ mergeable_with: Joi.string().trim() }))
+    //       .optional()
+    //       .messages({
+    //         "array.base": "Table combinations must be an array of objects",
+    //       })
+    //   : Joi.array()
+    //       .items(Joi.object({ mergeable_with: Joi.string().trim() }))
+    //       .optional()
+    //       .messages({
+    //         "array.base": "Table combinations must be an array of objects",
+    //         "any.required": "Table combinations must be an array of objects",
+    //       }),
     tableCombinations: isUpdate
-      ? Joi.array()
-          .items(Joi.object({ mergeable_with: Joi.string().trim() }))
-          .optional()
-          .messages({
-            "array.base": "Table combinations must be an array of objects",
-          })
-      : Joi.array()
-          .items(Joi.object({ mergeable_with: Joi.string().trim() }))
-          .optional()
-          .messages({
-            "array.base": "Table combinations must be an array of objects",
-            "any.required": "Table combinations must be an array of objects",
-          }),
+      ? Joi.array().items(Joi.string().trim()).optional().messages({
+          "array.base": "Table combinations must be an array of strings",
+        })
+      : Joi.array().items(Joi.string().trim()).optional().messages({
+          "array.base": "Table combinations must be an array of strings",
+          "any.required": "Table combinations must be an array of strings",
+        }),
+
     seatingArea: isUpdate
       ? Joi.string().trim().optional().messages({
           "string.empty": "Seating area ID is required",

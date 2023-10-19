@@ -8,8 +8,8 @@ const tagRef = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ClientTag",
     },
-  }
-  // { _id: false }
+  },
+  { _id: false }
 );
 
 const clientSchema = new mongoose.Schema({
@@ -37,7 +37,7 @@ const clientSchema = new mongoose.Schema({
   jobTitle: {
     type: String,
   },
-  image: {
+  profileImage: {
     type: String,
   },
   company: {

@@ -6,6 +6,7 @@ import { Client } from "@data/client/models/client_model";
 import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
 import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
 import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
+import { Table } from "@data/table/models/table-model";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
@@ -13,6 +14,10 @@ export interface AddReservationDataSource {
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
   getAll(filter: IRFilter): Promise<any[]>;
+  checkTableAvability(
+    id: string,
+    reservationDetail: AddReservationModel
+  ): Promise<any>;
 }
 
 export class AddReservationDataSourceImpl implements AddReservationDataSource {
@@ -86,7 +91,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "table",
-        select: "id tableNo",
+        select: "id tableNo partySizeMini partySizeMax",
       })
       .populate({
         path: "seatingArea",
@@ -110,7 +115,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
-        select: "id shiftName shiftCategory startDate endDate firstSeating lastSeating timeInterval",
+        select:
+          "id shiftName shiftCategory startDate endDate firstSeating lastSeating timeInterval",
       })
       .populate({
         path: "client",
@@ -118,7 +124,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "table",
-        select: "id tableNo",
+        select: "id tableNo partySizeMini partySizeMax",
       })
       .populate({
         path: "seatingArea",
@@ -140,12 +146,38 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
 
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
     const existResevation = await AddReservation.findById(id);
-
     const existingCheckInCheckOut = await CheckInCheckOut.findOne({
       reservation: id,
     });
 
-    // if (!existingCheckInCheckOut) throw ApiError.notFound();
+    // if (addReservation.table) {
+    //   const existingTable = await Table.findOne({ _id: addReservation.table });
+
+    //   if (existingTable) {
+    //     const newReservedTime = {
+    //       reservation_id: addReservation._id,
+    //       startTime: addReservation.timeSlot,
+    //       duration: addReservation.duration,
+    //       // endTime:
+    //     };
+
+    //     // Check for reservation time conflicts
+    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
+    //       return time.startTime === newReservedTime.startTime;
+    //     });
+
+    //     if (hasTimeConflict) {
+    //       throw ApiError.customError(
+    //         409,
+    //         "Table is all ready booked for given time."
+    //       );
+    //     }
+
+    //     // If no time conflict, push the new reservedTime
+    //     existingTable.reservedTimes.push(newReservedTime);
+    //     await existingTable.save();
+    //   }
+    // }
 
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
@@ -205,5 +237,18 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     );
 
     return updatedAddReservation ? updatedAddReservation.toObject() : null;
+  }
+
+  async checkTableAvability(
+    tableId: string,
+    reservationData: AddReservationModel
+  ): Promise<any> {
+    const getAllReservationsByTableID = await AddReservation.find({
+      table: tableId,
+    });
+
+    return getAllReservationsByTableID
+      // ? getAllReservationsByTableID.toObject()
+      // : null;
   }
 }
