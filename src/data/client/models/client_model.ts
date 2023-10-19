@@ -37,6 +37,9 @@ const clientSchema = new mongoose.Schema({
   jobTitle: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   company: {
     type: String,
   },
@@ -46,10 +49,6 @@ const clientSchema = new mongoose.Schema({
   privateNotes: {
     type: String,
   },
-  // tags: {
-  //   type: [tagRef],
-  //   // ref: "ClientTags", give the id of tag from clientTagCategory.
-  // },
   tags: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -67,7 +66,6 @@ const clientSchema = new mongoose.Schema({
     type: String,
     unique: true,
     trim: true,
-    // required: true,
     lowercase: true,
   },
   phone: {
@@ -121,15 +119,16 @@ const clientSchema = new mongoose.Schema({
     default: false,
   },
   birthDate: {
-    type: Date,
+    type: String,
   },
   anniversaryDate: {
-    type: Date,
+    type: String,
   },
   visits: {
     type: Number,
     default: 0,
   },
+  // visiteDate: [String],
   spends: {
     type: Number,
     default: 0,
@@ -138,6 +137,10 @@ const clientSchema = new mongoose.Schema({
     type: String,
     enum: ["Male", "Female", "Other"],
     required: [true, "please Select the Gender"],
+  },
+  language: {
+    type: String,
+    default: "English",
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,

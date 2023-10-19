@@ -50,7 +50,7 @@ export class ClientDataSourceImpl implements ClientDataSource {
     } // Convert to a plain JavaScript object before returning
   }
   async getAllClients(): Promise<any[]> {
-    try {
+    // try {
       //   const clients = await Client.find().populate("tags");
       const clients = await Client.find().populate({
         path: "tags", // Populate the reservationTags field
@@ -62,10 +62,11 @@ export class ClientDataSourceImpl implements ClientDataSource {
         },
       });
       return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning
-    } catch (error) {
-      throw ApiError.badRequest();
-    }
+    // } catch (error) {
+    //   throw ApiError.badRequest();
+    // }
   }
+  
   async update(id: string, client: ClientModel): Promise<any> {
     try {
       const updatedClient = await Client.findByIdAndUpdate(id, client, {
