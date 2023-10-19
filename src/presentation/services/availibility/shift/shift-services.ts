@@ -205,6 +205,9 @@ export class ShiftService {
     );
   }
 
+
+  
+
   async  getAllFilterShifts(req: Request, res: Response): Promise<void> {
     try {
       const shifts: Either<ErrorClass, ShiftEntity[]> = await this.getAllShiftUsecase.execute();
@@ -213,7 +216,7 @@ export class ShiftService {
   
       shifts.cata(
         (error: ErrorClass) => res.status(error.status).json({ error: error.message }),
-        (shifts: ShiftEntity[]) => {
+         (shifts: ShiftEntity[]) => {
           const filteredShifts = shifts.filter((newShift) => {
             const shiftStartDate = new Date(newShift.startDate);
   
@@ -242,7 +245,7 @@ export class ShiftService {
   
                 firstSeatingTime.setMinutes(firstSeatingTime.getMinutes() + timeInterval);
               }
-  
+
               results.push({
                 _id: shift._id,
                 shiftName: shift.shiftName,
@@ -252,6 +255,7 @@ export class ShiftService {
             }
 
             return res.json(results);
+
           } else {
             res.status(400).json({ message: `Shift of ${shift} category not found on a particular date` });
           }
@@ -261,6 +265,7 @@ export class ShiftService {
       res.status(500).json({ error: "An error occurred while processing the request." });
     }
   }
+
 }
 
 

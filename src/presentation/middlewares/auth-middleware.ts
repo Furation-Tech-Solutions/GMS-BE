@@ -22,6 +22,8 @@ const verifyLoggedInUser = async (
       const user = await UserAccount.findOne({ email: emailToCheck });
       if (user) {
         req.user = user
+
+        
         next();
       } else {
         const unAuthorized = ApiError.unAuthorized();
@@ -45,41 +47,41 @@ const verifyLoggedInUser = async (
   }
 };
 
-const authorziedUser: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const id = req.params.adminId;
-  if (id) {
-    const user = await Admin.findById(id);
-    const superUser = await UserAccount.findById(id);
+// const authorziedUser: RequestHandler = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   const id = req.params.adminId;
+//   if (id) {
+//     const user = await Admin.findById(id);
+//     const superUser = await UserAccount.findById(id);
 
-    if (user || superUser) {
-      const mergedUser = {
-        admin: user,
-        userAccount: superUser
-      };
+//     if (user || superUser) {
+//       const mergedUser = {
+//         admin: user,
+//         userAccount: superUser
+//       };
 
-      req.user = mergedUser;
-      next();
-    } else {
-      const err = ApiError.notFound();
-      return res.status(err.status).json(err.message);
-    }
-  };
-}
+//       req.user = mergedUser;
+//       next();
+//     } else {
+//       const err = ApiError.notFound();
+//       return res.status(err.status).json(err.message);
+//     }
+//   };
+// }
 
 /*
   Middleware to verify token and authorization for superadmin
 */
-const verifyTokenAndAuthorizationToSuperAdmin = (
+const verifyAuthorizationToSuperUser = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && req.user.superAdmin) {
+    if (req.user && req.user.accessLevel === 'Superuser') {
       next();
     } else {
       const forbidden = ApiError.forbidden();
@@ -91,13 +93,13 @@ const verifyTokenAndAuthorizationToSuperAdmin = (
 /*
   Middleware to verify token and authorization for admin
 */
-const verifyTokenAndAuthorizationToAdmin = (
+const verifyAuthorizationToManager = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && req.user.admin) {
+    if (req.user && req.user.accessLevel === 'Manager') {
       next();
     } else {
       const forbidden = ApiError.forbidden();
@@ -109,13 +111,13 @@ const verifyTokenAndAuthorizationToAdmin = (
 /*
   Middleware to verify token and authorization for admin or superadmin
 */
-const verifyTokenAndAuthorizationToAdminAndSuperAdmin = (
+const verifyAuthorizationToSubManager = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && (req.user.admin || req.user.superAdmin)) {
+    if (req.user && req.user.accessLevel === 'Sub-Manager') {
       next();
     } else {
       const forbidden = ApiError.forbidden();
@@ -145,9 +147,12 @@ const adminActiveStatus = (req: Request, res: Response, next: NextFunction) => {
 
 export {
   verifyLoggedInUser,
-  authorziedUser,
-  verifyTokenAndAuthorizationToSuperAdmin,
-  verifyTokenAndAuthorizationToAdmin,
-  verifyTokenAndAuthorizationToAdminAndSuperAdmin,
-  adminActiveStatus,
+  verifyAuthorizationToSuperUser,
+  verifyAuthorizationToManager,
+  verifyAuthorizationToSubManager,
+  // authorziedUser,
+  // verifyTokenAndAuthorizationToSuperAdmin,
+  // verifyTokenAndAuthorizationToAdmin,
+  // verifyTokenAndAuthorizationToAdminAndSuperAdmin,
+  // adminActiveStatus,
 };
