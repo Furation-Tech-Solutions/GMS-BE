@@ -38,7 +38,6 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
 
       permittedUser.permissions.forEach((permission:any)=>{
         if(requiredPermission.includes(permission)){
-
           hasRequiredPermission = true;
         }
       })

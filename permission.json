@@ -960,7 +960,10 @@
     {
         
             "101": "Ability to create manager and sub-managers",
+<<<<<<< HEAD
             "110": "Ability to create manager and superuser",
+=======
+>>>>>>> 1be6cb2f8ec3f86575d86b2178f40ac55ff1d066
             "102": "Ability to add a reservation along with table no, reservation tags",
             "103": "Ability to update a reservation along with table no, reservation tags",
             "104": "Ability to delete a reservation",
