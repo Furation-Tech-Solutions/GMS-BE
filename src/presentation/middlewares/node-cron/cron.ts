@@ -3,7 +3,7 @@ import { UserAccount } from "@data/user-account/models/user-account-model";
 import EmailService from "@presentation/services/send-mail";
 import cron from "node-cron";
 
-export const   = () => {
+export const sendMailConfirmedReservations = () => {
 
     try {
         // Schedule the cron job to run every day at 12 PM

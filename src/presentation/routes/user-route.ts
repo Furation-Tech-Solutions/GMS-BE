@@ -48,7 +48,6 @@ export const userRouter = Router()
 userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
-    authorizedUserMiddleware,
     userService.createUser.bind(userService)
 )
 userRouter.get(
