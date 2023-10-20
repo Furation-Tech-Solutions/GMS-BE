@@ -177,7 +177,7 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
       ? Joi.string().email().allow("").optional().trim().messages({
           "string.email": "Invalid alternative email format",
         })
-      : Joi.string().emai.optional().trim().messages({
+      : Joi.string().email().optional().trim().messages({
           "string.email": "Invalid alternative email format",
         }),
 

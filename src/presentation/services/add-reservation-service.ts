@@ -18,10 +18,7 @@ import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { TableBlockCheckUsecase } from "@domain/add-reservation/usecases/table-block-check";
-import {
-  IRFilter,
-  TReservationCover,
-} from "types/add-reservation-filter.ts/filter-type";
+import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";

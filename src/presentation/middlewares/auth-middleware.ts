@@ -22,8 +22,6 @@ const verifyLoggedInUser = async (
       const user = await UserAccount.findOne({ email: emailToCheck });
       if (user) {
         req.user = user
-
-        
         next();
       } else {
         const unAuthorized = ApiError.unAuthorized();
