@@ -65,9 +65,10 @@ const clientSchema = new mongoose.Schema({
   },
   altEmail: {
     type: String,
-    unique: true,
     trim: true,
     lowercase: true,
+    required: false, // Use "required" instead of "require"
+    default: "",
   },
   phone: {
     type: String,

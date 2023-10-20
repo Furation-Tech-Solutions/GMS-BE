@@ -12,18 +12,20 @@ import {
   AddReservationModel,
 } from "@domain/add-reservation/entities/add-reservation";
 
-import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp"
+import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { TableBlockCheckUsecase } from "@domain/add-reservation/usecases/table-block-check";
-import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
+import {
+  IRFilter,
+  TReservationCover,
+} from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
-
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -35,7 +37,7 @@ export class AddReservationServices {
   private readonly emailService: EmailService;
   private readonly whatsAppService: WhatsAppService;
 
-  private readonly shiftDataSourceImpl: ShiftDataSourceImpl
+  private readonly shiftDataSourceImpl: ShiftDataSourceImpl;
 
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
@@ -46,7 +48,6 @@ export class AddReservationServices {
     tableBlockCheckUsecase: TableBlockCheckUsecase,
     emailService: EmailService,
     whatsAppService: WhatsAppService
-
   ) {
     this.createAddReservationUsecase = createAddReservationUsecase;
     this.deleteAddReservationUsecase = deleteAddReservationUsecase;
@@ -121,15 +122,18 @@ export class AddReservationServices {
       updatedBy: user._id,
     };
 
-    const checkedTable: Either<ErrorClass, AddReservationEntity> =
+    const checkedTable: Either<ErrorClass, AddReservationEntity[]> =
       await this.tableBlockCheckUsecase.execute(tableId, reservationDetails);
 
     checkedTable.cata(
       (error: ErrorClass) => {
         res.status(error.status).json({ error: error.message });
       },
-      (result: AddReservationEntity) => {
-        return res.json(result);
+      (result: AddReservationEntity[]) => {
+        const responseData = result.map((result) =>
+          AddReservationMapper.toEntity(result)
+        );
+        return res.json(responseData);
       }
     );
   }
@@ -159,26 +163,25 @@ export class AddReservationServices {
     next: NextFunction
   ): Promise<void> {
     const { status, table } = req.query;
-    let shift  = req.query.shift as string;
-    const date  = req.query.date as string;
-    const coverflow  = req.query.coverflow as string;
+    let shift = req.query.shift as string;
+    const date = req.query.date as string;
+    const coverflow = req.query.coverflow as string;
 
     const allShifts = await this.shiftDataSourceImpl.getAll();
-    
 
     const timeSlots = generateTimeSlots(shift, date, allShifts);
 
     const filter: IRFilter = {};
 
-    if(timeSlots?.filteredShifts && coverflow) {
-      shift = timeSlots?.filteredShifts[0]._id
+    if (timeSlots?.filteredShifts && coverflow) {
+      shift = timeSlots?.filteredShifts[0]._id;
     }
 
-    if (date ) {
+    if (date) {
       filter.date = date;
     }
 
-    if (shift ) {
+    if (shift) {
       filter.shift = shift;
     }
 
@@ -191,7 +194,6 @@ export class AddReservationServices {
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
-      
 
     addReservations.cata(
       (error: ErrorClass) =>
@@ -201,37 +203,37 @@ export class AddReservationServices {
           AddReservationMapper.toEntity(addReservation)
         );
 
-
-        if(coverflow){
-          const guestsByTimeSlot: { [key: string]: number[] }  = {};
+        if (coverflow) {
+          const guestsByTimeSlot: { [key: string]: number[] } = {};
           const totalGuestsByTimeSlot: { [key: string]: number } = {};
 
           timeSlots?.timeSlots?.forEach((timeSlot) => {
             const guestsForTimeSlot = responseData
               .filter((reservation) => reservation.timeSlot === timeSlot)
               .map((reservation) => +reservation.noOfGuests);
-  
+
             guestsByTimeSlot[timeSlot] = guestsForTimeSlot;
             totalGuestsByTimeSlot[timeSlot] = guestsForTimeSlot.reduce(
               (sum, guestCount) => sum + guestCount,
               0
             );
           });
-  
-          const guestsByTimeSlotArray = Object.keys(guestsByTimeSlot).map((key) => ({
-            timeSlot: key,
-            guests: guestsByTimeSlot[key],
-            totalGuests: totalGuestsByTimeSlot[key],
-          }));
-  
+
+          const guestsByTimeSlotArray = Object.keys(guestsByTimeSlot).map(
+            (key) => ({
+              timeSlot: key,
+              guests: guestsByTimeSlot[key],
+              totalGuests: totalGuestsByTimeSlot[key],
+            })
+          );
+
           return res.json({
             totalGuestsByTimeSlot,
-            guestsByTimeSlotArray
+            guestsByTimeSlotArray,
           });
         }
 
-        return res.json(responseData)
-      
+        return res.json(responseData);
       }
     );
   }
@@ -290,6 +292,3 @@ export class AddReservationServices {
     );
   }
 }
-
-
-
