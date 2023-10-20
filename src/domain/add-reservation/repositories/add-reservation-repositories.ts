@@ -25,5 +25,5 @@ export interface AddReservationRepository {
   tableBlockCheck(
     id: string,
     data: AddReservationModel
-  ): Promise<Either<ErrorClass, AddReservationEntity>>;
+  ): Promise<Either<ErrorClass, AddReservationEntity[]>>;
 }

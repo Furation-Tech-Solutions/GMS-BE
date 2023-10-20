@@ -78,7 +78,7 @@ addReservationRouter.delete(
   addReservationService.deleteAddReservation.bind(addReservationService)
 );
 
-// Route handling for getting a Add Reservation by ID
+// // Route handling for getting a Add Reservation by ID
 addReservationRouter.get(
   "/:addReservationId",
   // checkPermission(["1101","5101"]),
@@ -102,7 +102,7 @@ addReservationRouter.put(
 );
 // Route handling for updating a Add Reservation by ID
 addReservationRouter.get(
-  "/:tableId",
+  "/check/:tableId",
   verifyLoggedInUser,
   // checkPermission(["1101","5101"]),
   validateReservationInputMiddleware(true),

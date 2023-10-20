@@ -129,11 +129,11 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     profileImage: isUpdate
-      ? Joi.string().optional().trim().messages({
+      ? Joi.string().allow("").optional().default("").trim().messages({
           "string.base": "Profile image should be a string",
           "string.max": "Profile image should be a valid string",
         })
-      : Joi.string().optional().trim().messages({
+      : Joi.string().allow("").optional().default("").trim().messages({
           "string.base": "Profile image should be a string",
           "string.max": "Profile image should be a valid string",
         }),
@@ -164,14 +164,21 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
           "any.required": "Email is required",
         }),
 
+    // altEmail: isUpdate
+    //   ? Joi.string().email().optional().trim().messages({
+    //       "string.email": "Invalid alternative email format",
+    //       "any.required": "Alternative email is required",
+    //     })
+    //   : Joi.string().email().optional().trim().messages({
+    //       "string.email": "Invalid alternative email format",
+    //       "any.required": "Alternative email is required",
+    //     }),
     altEmail: isUpdate
-      ? Joi.string().email().optional().trim().messages({
+      ? Joi.string().email().allow("").optional().trim().messages({
           "string.email": "Invalid alternative email format",
-          "any.required": "Alternative email is required",
         })
       : Joi.string().email().optional().trim().messages({
           "string.email": "Invalid alternative email format",
-          "any.required": "Alternative email is required",
         }),
 
     phone: isUpdate

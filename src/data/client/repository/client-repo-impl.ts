@@ -7,6 +7,7 @@ import { ClientDataSource } from "../datasource/client-datasource"; // Import th
 import { Either, Right, Left } from "monet";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 import * as HttpStatus from "@presentation/error-handling/http-status";
+import mongoose from "mongoose";
 
 export class ClientRepositoryImpl implements ClientRepository {
   private readonly clientDataSource: ClientDataSource;
@@ -21,11 +22,16 @@ export class ClientRepositoryImpl implements ClientRepository {
       const createdClient = await this.clientDataSource.create(client); // Use the client data source
       return Right<ErrorClass, ClientEntity>(createdClient);
     } catch (error: any) {
-      console.log("error", { error: error, message: error.message });
       if (error instanceof ApiError && error.name === "conflict") {
         return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
       }
-      return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
+
+      if (error instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, ClientEntity>(ApiError.castError());
+      }
+      return Left<ErrorClass, ClientEntity>(
+        ApiError.customError(HttpStatus.BAD_REQUEST, error.message)
+      );
     }
   }
 
@@ -48,11 +54,22 @@ export class ClientRepositoryImpl implements ClientRepository {
     try {
       const updatedClient = await this.clientDataSource.update(id, data); // Use the client data source
       return Right<ErrorClass, ClientEntity>(updatedClient);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof ApiError && e.name === "conflict") {
         return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
       }
-      return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, ClientEntity>(ApiError.castError());
+      }
+      if (e instanceof ApiError) {
+        return Left<ErrorClass, ClientEntity>(
+          ApiError.customError(e.status, e.message)
+        );
+      }
+      return Left<ErrorClass, ClientEntity>(
+        ApiError.customError(HttpStatus.BAD_REQUEST, e.message)
+      );
+      // return Left<ErrorClass, ClientEntity>(ApiError.badRequest());
     }
   }
 

@@ -150,35 +150,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       reservation: id,
     });
 
-    // if (addReservation.table) {
-    //   const existingTable = await Table.findOne({ _id: addReservation.table });
-
-    //   if (existingTable) {
-    //     const newReservedTime = {
-    //       reservation_id: addReservation._id,
-    //       startTime: addReservation.timeSlot,
-    //       duration: addReservation.duration,
-    //       // endTime:
-    //     };
-
-    //     // Check for reservation time conflicts
-    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
-    //       return time.startTime === newReservedTime.startTime;
-    //     });
-
-    //     if (hasTimeConflict) {
-    //       throw ApiError.customError(
-    //         409,
-    //         "Table is all ready booked for given time."
-    //       );
-    //     }
-
-    //     // If no time conflict, push the new reservedTime
-    //     existingTable.reservedTimes.push(newReservedTime);
-    //     await existingTable.save();
-    //   }
-    // }
-
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
     const date = new Date(currentDate);
@@ -246,8 +217,51 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const getAllReservationsByTableID = await AddReservation.find({
       table: tableId,
     });
-    return getAllReservationsByTableID
-      // ? getAllReservationsByTableID.toObject()
-      // : null;
+
+    console.log("datasource====>", { tableId, reservationData });
+    const bookTbleForDate = getAllReservationsByTableID.filter(
+      (reservation) => {
+        return reservation.date === reservationData.date;
+      }
+    );
+
+    // if (getAllReservationsByTableID) {
+    //   // getAllReservationsByTableID.date,
+    //   // getAllReservationsByTableID.duration,
+    //   // getAllReservationsByTableID.timeSlot,
+    // }
+
+    // if (addReservation.table) {
+    //   const existingTable = await Table.findOne({ _id: addReservation.table });
+
+    //   if (getAllReservationsByTableID) {
+    //     const newReservedTime = {
+    //       reservation_id: reservationData._id,
+    //       startTime: reservationData.timeSlot,
+    //       duration: reservationData.duration,
+    //       // endTime:
+    //     };
+
+    //     // Check for reservation time conflicts
+    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
+    //       return time.startTime === newReservedTime.startTime;
+    //     });
+
+    //     if (hasTimeConflict) {
+    //       throw ApiError.customError(
+    //         409,
+    //         "Table is all ready booked for given time."
+    //       );
+    //     }
+
+    //     // If no time conflict, push the new reservedTime
+    //     existingTable.reservedTimes.push(newReservedTime);
+    //     await existingTable.save();
+    //   }
+    // // }
+
+    return getAllReservationsByTableID.map((reservation) =>
+      reservation.toObject()
+    );
   }
 }

@@ -112,23 +112,24 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
   async tableBlockCheck(
     id: string,
     reservationDetail: AddReservationEntity
-  ): Promise<Either<ErrorClass, AddReservationEntity>> {
+  ): Promise<Either<ErrorClass, AddReservationEntity[]>> {
     try {
       const result = await this.addReservationDataSource.checkTableAvability(
         id,
         reservationDetail
       );
-      return Right<ErrorClass, AddReservationEntity>(result);
+      return Right<ErrorClass, AddReservationEntity[]>(result);
     } catch (error: any) {
+      console.log("reservation datatsource===>", { error: error });
       if (
         error instanceof mongoose.Error.CastError ||
         error.name == "notfound"
       ) {
-        return Left<ErrorClass, AddReservationEntity>(
+        return Left<ErrorClass, AddReservationEntity[]>(
           error.name == "notfound" ? ApiError.notFound() : ApiError.castError()
         );
       }
-      return Left<ErrorClass, AddReservationEntity>(
+      return Left<ErrorClass, AddReservationEntity[]>(
         ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`)
       );
     }
