@@ -246,7 +246,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const getAllReservationsByTableID = await AddReservation.find({
       table: tableId,
     });
-
     return getAllReservationsByTableID
       // ? getAllReservationsByTableID.toObject()
       // : null;
