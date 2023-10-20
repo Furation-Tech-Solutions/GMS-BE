@@ -53,29 +53,31 @@ async createUser(req: Request, res: Response): Promise<void> {
     
     const user=req.user
     let permissions: number[]=[]
-    if (req.body.accessLevel === 'Admin') {
+    if (req.body.accessLevel === 'Superuser') {
       permissions = [101,102,103,104,105,106,107,108,109]
     } else if (req.body.accessLevel === 'Manager') {
       permissions = [201,202,203,204,205,206,207,208,209]
-    } else if (req.body.accessLevel  === 'Submanager') {
+    } else if (req.body.accessLevel  === 'Sub-Manager') {
       permissions = [301,302,303,304,305,306]
       
     }
     const newUserData={
         ...req.body,
         permissions,
-        createdBy:user._id,
+        createdBy: user._id,
         updatedBy:user._id
     }
     const { randomPassword, ...userDataWithoutPassword } = newUserData;
     const userData: UserModel = UserMapper.toModel(userDataWithoutPassword);
 
     const newUser: Either<ErrorClass, UserEntity> =
-      await this.createUserUseCase.execute(userData,randomPassword);
+      await this.createUserUseCase.execute(userData);
+
 
     newUser.cata(
       async(error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
+      
       async(result: UserEntity) => {
         const resData = UserMapper.toEntity(result, true);
         const emailhandler=new EmailHandler()

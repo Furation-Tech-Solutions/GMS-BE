@@ -50,7 +50,7 @@ export async function reservationTemplate(result: any,client:any): Promise<strin
   const startTime =await  formatTime(result.timeSlot);
   // const startTime ="148"
 
-  console.log("fullName",fullName,"date",date,"startTime",startTime)
+  // console.log("fullName",fullName,"date",date,"startTime",startTime)
   
   const emailContent = emailTemplate
     .replace("[Client's Full Name]", fullName)
@@ -109,7 +109,7 @@ function readCustomerLeftEmailTemplate(filePath: string): string {
     try {
       return fs.readFileSync(`${filePath}/post-dining-email.html`, 'utf-8');
     } catch (error) {
-      console.error('Error reading email template:', error);
+      // console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -127,7 +127,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     try {
       return fs.readFileSync(`${filePath}/manager-email-template.html`, 'utf-8');
     } catch (error) {
-      console.error('Error reading email template:', error);
+      // console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -170,7 +170,7 @@ const userEmailTemplate = userTemplate(filePath);
     .replace("[User's Email]", result.email)
     .replace("[User's Random Password]", result.randomPassword)
     
-    console.log(emailContent,"emailContent")
+    // console.log(emailContent,"emailContent")
     return emailContent;
           
   }

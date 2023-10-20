@@ -57,11 +57,8 @@ const userAccountValidator = (
     accessLevel: Joi.string()
       .valid(
         "Superuser",
-        "User Manager Only",
         "Manager",
         "Sub-Manager",
-        "Basic",
-        "Basic iPad"
       )
       .required()
       .messages({
