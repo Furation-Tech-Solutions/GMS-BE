@@ -7,6 +7,7 @@ export class TableModel {
     public tableCombinations: string[] | undefined = [],
     public reservedTimes: string[] | undefined = [],
     public seatingArea: string = "",
+    public isBlocked: boolean = false,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -22,6 +23,7 @@ export class TableEntity {
     public tableCombinations: string[] | undefined = [], // Optional field
     public reservedTimes: string[] | undefined = [], // Optional field
     public seatingArea: string, // Assuming seatingArea is an ObjectId string
+    public isBlocked: boolean = false,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -61,6 +63,10 @@ export class TableMapper {
           tableData.seatingArea !== undefined
             ? tableData.seatingArea
             : existingTable.seatingArea,
+        isBlocked:
+          tableData.isBlocked !== undefined
+            ? tableData.isBlocked
+            : existingTable.isBlocked,
         updatedBy:
           tableData.updatedBy !== undefined
             ? { _id: tableData.updatedBy }
@@ -83,6 +89,7 @@ export class TableMapper {
         tableCombinations: tableData.tableCombinations,
         reservedTimes: tableData.reservedTimes,
         seatingArea: tableData.seatingArea, // Convert ObjectId to string
+        isBlocked: tableData.isBlocked,
         updatedBy: { _id: tableData.updatedBy },
         createdBy: { _id: tableData.createdBy },
       };
@@ -98,6 +105,7 @@ export class TableMapper {
       table.tableCombinations,
       table.reservedTimes,
       table.seatingArea,
+      table.isBlocked,
       table.updatedBy,
       table.createdBy
     );
