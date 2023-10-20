@@ -20,6 +20,7 @@ export class UserRepositoryImpl implements UserRepository {
         return Right<ErrorClass, UserEntity>(u);
       } catch (e) {
         if (typeof ApiError.emailExist) {
+
           return Left<ErrorClass, UserEntity>(ApiError.emailExist());
         }
         return Left<ErrorClass, UserEntity>(ApiError.badRequest());

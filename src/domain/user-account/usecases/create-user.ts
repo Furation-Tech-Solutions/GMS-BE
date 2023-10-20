@@ -6,7 +6,7 @@ import EmailService from "@presentation/services/send-mail";
 // import { SendEmailUsecase } from "./send-email-with-password";
 
 export interface CreateUserUsecase {
-    execute: ( userData: UserModel,password:string) => Promise<Either<ErrorClass, UserEntity>>;
+    execute: ( userData: UserModel) => Promise<Either<ErrorClass, UserEntity>>;
   }
   
   export class CreateUser implements CreateUserUsecase {
@@ -33,7 +33,6 @@ export interface CreateUserUsecase {
       //     console.error('Error sending registration email:', error);
       //   }
       // }
-  
       return newUserResult;
     }
   }
