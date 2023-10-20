@@ -45,7 +45,7 @@ export async function reservationTemplate(result: any,client:any): Promise<strin
   
   // Replace placeholders with actual data in the email template
   const fullName=result.client.firstName+" "+result.client.lastName
-  const date=await formatDate(result.date)
+  const date=await formatDate(result.date);
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
   // const startTime ="148"
@@ -147,7 +147,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
       .replace('[Perks]', result.perks)
       .replace('[Support Email Address]', '[Your Support Email Address]') // Replace with actual support email
       .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
-  
+
     return emailContent;
   }
 
@@ -166,10 +166,8 @@ const userEmailTemplate = userTemplate(filePath);
     .replace("[User's First Name]", result.firstName)
     .replace("[User's Email]", result.email)
     .replace("[User's Random Password]", result.randomPassword)
-    
-    console.log(emailContent,"emailContent")
-    return emailContent;
-          
+
+    return emailContent;    
   }
 
 

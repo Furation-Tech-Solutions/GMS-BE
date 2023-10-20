@@ -21,6 +21,7 @@ import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/fil
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
+import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cron/cron";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 
@@ -206,6 +207,8 @@ export class AddReservationServices {
             guestsByTimeSlotArray
           });
         }
+
+        sendMailConfirmedReservations()
 
         return res.json(responseData)
       
