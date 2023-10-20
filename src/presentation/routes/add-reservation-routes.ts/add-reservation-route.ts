@@ -65,7 +65,7 @@ export const addReservationRouter = Router();
 addReservationRouter.post(
   "/create",
   verifyLoggedInUser,
-  // checkPermission(["1101","5101"]),
+  checkPermission([102,202,301]),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );
@@ -73,6 +73,8 @@ addReservationRouter.post(
 // Route handling for deleting a Add Reservation by ID
 addReservationRouter.delete(
   "/:addReservationId",
+  checkPermission([104,204,302]),
+
   addReservationService.deleteAddReservation.bind(addReservationService)
 );
 
@@ -94,7 +96,7 @@ addReservationRouter.get(
 addReservationRouter.put(
   "/:addReservationId",
   verifyLoggedInUser,
-  // checkPermission(["1101","5101"]),
+  checkPermission([103,203,303,304]),
   validateReservationInputMiddleware(true),
   addReservationService.updateAddReservation.bind(addReservationService)
 );
