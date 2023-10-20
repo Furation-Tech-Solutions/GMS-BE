@@ -5,6 +5,7 @@ export class TableModel {
     public partySizeMini: number = 0,
     public partySizeMax: number = 0,
     public tableCombinations: string[] | undefined = [],
+    public reservedTimes: string[] | undefined = [],
     public seatingArea: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
@@ -19,6 +20,7 @@ export class TableEntity {
     public partySizeMini: number,
     public partySizeMax: number,
     public tableCombinations: string[] | undefined = [], // Optional field
+    public reservedTimes: string[] | undefined = [], // Optional field
     public seatingArea: string, // Assuming seatingArea is an ObjectId string
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
@@ -51,6 +53,10 @@ export class TableMapper {
           tableData.tableCombinations !== undefined
             ? tableData.tableCombinations
             : existingTable.tableCombinations,
+        reservedTimes:
+          tableData.reservedTimes !== undefined
+            ? tableData.reservedTimes
+            : existingTable.reservedTimes,
         seatingArea:
           tableData.seatingArea !== undefined
             ? tableData.seatingArea
@@ -75,6 +81,7 @@ export class TableMapper {
         partySizeMini: tableData.partySizeMini,
         partySizeMax: tableData.partySizeMax,
         tableCombinations: tableData.tableCombinations,
+        reservedTimes: tableData.reservedTimes,
         seatingArea: tableData.seatingArea, // Convert ObjectId to string
         updatedBy: { _id: tableData.updatedBy },
         createdBy: { _id: tableData.createdBy },
@@ -89,6 +96,7 @@ export class TableMapper {
       table.partySizeMini,
       table.partySizeMax,
       table.tableCombinations,
+      table.reservedTimes,
       table.seatingArea,
       table.updatedBy,
       table.createdBy

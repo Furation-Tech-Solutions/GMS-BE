@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+// const reservationTime = new mongoose.Schema(
+//   {
+//     reservation_id: String,
+//     startTime: String,
+//     duration: String,
+//     endTime: String,
+//   },
+//   { _id: false }
+// );
+
 const tableSchema = new mongoose.Schema({
   tableNo: {
     type: Number,
@@ -14,19 +24,13 @@ const tableSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  tableCombinations: [
-    {
-      mergeable_with: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Table",
-      },
-    },
-  ],
+  tableCombinations: [String],
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SeatingArea",
     required: true,
   },
+  // reservedTimes: [reservationTime],
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
