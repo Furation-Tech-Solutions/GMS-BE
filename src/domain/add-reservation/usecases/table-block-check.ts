@@ -7,7 +7,7 @@ export interface TableBlockCheckUsecase {
   execute: (
     tableId: string,
     reservationDetail: AddReservationEntity
-  ) => Promise<Either<ErrorClass, AddReservationEntity>>;
+  ) => Promise<Either<ErrorClass, AddReservationEntity[]>>;
 }
 
 export class TableBlockCheck implements TableBlockCheckUsecase {
@@ -20,7 +20,7 @@ export class TableBlockCheck implements TableBlockCheckUsecase {
   async execute(
     tableId: string,
     reservationDetail: AddReservationEntity
-  ): Promise<Either<ErrorClass, AddReservationEntity>> {
+  ): Promise<Either<ErrorClass, AddReservationEntity[]>> {
     return await this.addReservationRepository.tableBlockCheck(
       tableId,
       reservationDetail
