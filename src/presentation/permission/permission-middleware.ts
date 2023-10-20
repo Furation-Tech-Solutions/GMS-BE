@@ -13,6 +13,10 @@ const unauthorizedResponse = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
   res.status(unAuthorized.status).json({ message: unAuthorized.message });
 };
+const unableToReserved = (res: Response) => {
+  const unAuthorized = ApiError.unAuthorized();
+  res.status(unAuthorized.status).json({ message: "you are not assignable to table" });
+};
 export const checkPermission = (requiredPermission: number[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -60,6 +64,14 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
           return;
         }
       }
+      if (permittedUser.accessLevel === AccessLevel.SubManager) {
+        // If the user is a Manager, they should not be able to create SuperUsers
+        if (req.body.table ) {
+          unableToReserved(res);
+          return;
+        }
+      }
+      
       // Handle other access levels
       switch (permittedUser.accessLevel) {
         case AccessLevel.SuperUser:
