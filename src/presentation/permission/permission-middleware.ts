@@ -36,12 +36,14 @@ export const checkPermission = (requiredPermission: string[]=[]) => {
     
       const isSuperuser = permittedUser.accessLevel === AccessLevel.Superuser;
       let hasRequiredPermission = false;
-      permittedUser.permissions.forEach((permission: any) => {
-        const permissionCode = Object.keys(permission)[0];
-        if (requiredPermission.includes(permissionCode)) {
+
+      permittedUser.permissions.forEach((permission:any)=>{
+        if(requiredPermission.includes(permission)){
           hasRequiredPermission = true;
         }
-      });
+      })
+
+     
       if (isSuperuser && hasRequiredPermission) {
         next();
         return;

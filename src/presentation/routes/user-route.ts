@@ -11,8 +11,9 @@ import { UserService } from "@presentation/services/user-account-service";
 import { Router } from "express";
 import mongoose from "mongoose";
 import EmailService from "@presentation/services/send-mail";
-import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { verifyAuthorizationToManager, verifyAuthorizationToSuperUser, verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { LogoutUser } from "@domain/user-account/usecases/logout-user";
+import { authorizedUserMiddleware } from "@presentation/middlewares/auth-permission";
 // import { SendEmail } from "@domain/user-account/usecases/send-email-with-password";
 
 const mongooseConnection = mongoose.connection;
@@ -47,7 +48,6 @@ export const userRouter = Router()
 userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
-    verifyLoggedInUser,
     userService.createUser.bind(userService)
 )
 userRouter.get(

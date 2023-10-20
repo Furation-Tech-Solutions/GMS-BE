@@ -29,6 +29,7 @@ import { superAdminRouter } from "@presentation/routes/super-admin-routes";
 import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
 
 
+
 export default (app: Express): void => {
   const router = Router();
 

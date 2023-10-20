@@ -23,7 +23,6 @@ export class UserModel {
       },
     public isLogin: boolean = false,
     public permissions: [] = [],
-    public emailNotification: [] = [],
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public firebaseDeviceToken: string = ""
@@ -52,7 +51,6 @@ export class UserEntity {
     },
     public isLogin: boolean,
     public permissions: [],
-    public emailNotification: [],
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public firebaseDeviceToken: string
@@ -121,10 +119,6 @@ export class UserMapper {
           userData.permissions !== undefined
             ? userData.permissions
             : existingUser.permissions,
-        emailNotification:
-          userData.emailNotification !== undefined
-            ? userData.emailNotification
-            : existingUser.emailNotification,
         updatedBy:
           userData.updatedBy !== undefined
             ? { _id: userData.updatedBy }
@@ -162,7 +156,6 @@ export class UserMapper {
         },
         isLogin: userData.isLogin,
         permissions: userData.permissions || [],
-        emailNotification: userData.emailNotification || [],
         updatedBy: { _id: userData.updatedBy },
         createdBy: { _id: userData.createdBy },
         firebaseDeviceToken: userData.firebaseDeviceToken || "",
@@ -182,7 +175,6 @@ export class UserMapper {
       managerSettings: user.managerSettings,
       isLogin: user.isLogin,
       permissions: user.permissions,
-      emailNotification: user.emailNotification,
       updatedBy: user.updatedBy,
       createdBy: user.createdBy,
       firebaseDeviceToken: user.firebaseDeviceToken,
