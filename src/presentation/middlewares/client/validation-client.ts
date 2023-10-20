@@ -33,20 +33,19 @@ interface ClientInput {
   createdBy?: string;
 }
 
-// Define a custom Joi validation rule for the birthDate and anniversaryDate fields
 const customDateValidator = (fieldName: string) =>
   Joi.string()
     .custom((value, helpers) => {
-      // Check if the date string has the correct length (dd:mm:yyyy)
+      // Check if the date string has the correct length (yyyy-mm-dd)
       if (value.length === 10) {
         const parts = value.split("-");
-        const dd = parseInt(parts[0], 10);
+        const yyyy = parseInt(parts[0], 10);
         const mm = parseInt(parts[1], 10);
-        const yyyy = parseInt(parts[2], 10);
+        const dd = parseInt(parts[2], 10);
 
         const currentYear = new Date().getFullYear();
 
-        if (dd <= 31 && mm <= 12 && yyyy <= currentYear) {
+        if (yyyy <= currentYear && mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) {
           return value;
         }
       }
@@ -59,9 +58,9 @@ const customDateValidator = (fieldName: string) =>
     })
     .messages({
       "string.birthDateInvalid":
-        "Invalid birth date format. Please use a valid date (dd:mm:yyyy) for birthDate, with a day not exceeding 31, a month not exceeding 12, and a year not greater than the current year.",
+        "Invalid birth date format. Please use a valid date (yyyy-mm-dd) for birthDate, with a year not greater than the current year, a month between 1 and 12, and a day between 1 and 31.",
       "string.anniversaryDateInvalid":
-        "Invalid anniversary date format. Please use a valid date (dd:mm:yyyy) for anniversaryDate, with a day not exceeding 31, a month not exceeding 12, and a year not greater than the current year.",
+        "Invalid anniversary date format. Please use a valid date (yyyy-mm-dd) for anniversaryDate, with a year not greater than the current year, a month between 1 and 12, and a day between 1 and 31.",
     });
 
 const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {

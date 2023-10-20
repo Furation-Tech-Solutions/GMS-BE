@@ -118,8 +118,10 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
         id,
         reservationDetail
       );
+      console.log("reservation datatsource===>", { result: result });
       return Right<ErrorClass, AddReservationEntity>(result);
     } catch (error: any) {
+      console.log("reservation datatsource===>", { error: error });
       if (
         error instanceof mongoose.Error.CastError ||
         error.name == "notfound"
