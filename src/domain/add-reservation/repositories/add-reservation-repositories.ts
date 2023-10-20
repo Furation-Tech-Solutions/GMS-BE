@@ -21,4 +21,9 @@ export interface AddReservationRepository {
   getAllAddReservation(
     filter: IRFilter
   ): Promise<Either<ErrorClass, AddReservationEntity[]>>;
+
+  tableBlockCheck(
+    id: string,
+    data: AddReservationModel
+  ): Promise<Either<ErrorClass, AddReservationEntity>>;
 }
