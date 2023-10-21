@@ -11,6 +11,7 @@ import { create } from "domain";
 import { DeleteGuest } from "@domain/guest/usecases/delete-guest";
 import { validateGuestInputMiddleware } from "@presentation/middlewares/guest/validation-guest";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 
 // Create an instance of the GuestDataSourceImpl and pass the mongoose connection
 const guestDataSource = new GuestDataSourceImpl(mongoose.connection);
@@ -43,22 +44,29 @@ guestRouter.post(
     "/add",
     validateGuestInputMiddleware(false),
     verifyLoggedInUser,
+    checkPermission([107,207,305]),
     guestService.createGuest.bind(guestService)
 );
 // Route handling for deleting an guest by ID
 guestRouter.delete(
     "/:guestId",
+    checkPermission([107,207,305]),
     guestService.deleteGuest.bind(guestService)
 );
 
 // Route handling for getting an guest by ID
 guestRouter.get(
     "/:guestId",
+    checkPermission([107,207,305]),
+
     guestService.getGuestById.bind(guestService)
 );
 
 // Route handling for getting all companies
-guestRouter.get("/", guestService.getAllGuests.bind(guestService));
+guestRouter.get("/",
+checkPermission([107,207,305]),
+
+ guestService.getAllGuests.bind(guestService));
 
 
 
@@ -67,7 +75,10 @@ guestRouter.put(
     "/:guestId",
     validateGuestInputMiddleware(true),
     verifyLoggedInUser,
+    checkPermission([107,207,305]),
     guestService.updateGuest.bind(guestService)
 );
 
-guestRouter.get("/search", guestService.getAllSearchedGuests.bind(guestService));
+guestRouter.get("/search", 
+checkPermission([107,207,305]),
+guestService.getAllSearchedGuests.bind(guestService));

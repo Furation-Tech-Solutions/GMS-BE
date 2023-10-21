@@ -14,3 +14,8 @@ export type  TReservationCover =  {
   duration: string,
   timeSlot: string
 }
+
+export interface Icron {
+  date: string,
+  reservationStatus:string
+}
