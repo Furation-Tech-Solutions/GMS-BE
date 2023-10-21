@@ -5,7 +5,7 @@ import { AddReservation } from "../models/add-reservation-model";
 import { Client } from "@data/client/models/client_model";
 import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
 import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
-import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
+import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type";
 import { Table } from "@data/table/models/table-model";
 
 export interface AddReservationDataSource {
@@ -111,7 +111,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     return addReservation ? addReservation.toObject() : null;
   }
 
-  async getAll(filter: IRFilter): Promise<any[]> {
+  async getAll(filter: IRFilter | Icron): Promise<any[]> {
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
@@ -149,9 +149,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const existingCheckInCheckOut = await CheckInCheckOut.findOne({
       reservation: id,
     });
-
     const existClient = await Client.findOne({ _id: existResevation?.client });
-
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
     const date = new Date(currentDate);
@@ -237,57 +235,12 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       date: reservationData.date,
     });
 
-    // // Loop through existing reservations to check for time conflicts
-    // for (const existingReservation of getAllReservationsByTableIDAndDate) {
-    //   const existingStartTime = new Date(existingReservation.timeSlot);
-    //   const existingEndTime = new Date(existingStartTime);
-    //   existingEndTime.setHours(
-    //     existingEndTime.getHours() +
-    //       getHoursFromDuration(existingReservation.duration)
-    //   );
-
-    //   const newStartTime = new Date(reservationData.timeSlot);
-    //   const newEndTime = new Date(newStartTime);
-    //   newEndTime.setHours(
-    //     newEndTime.getHours() + getHoursFromDuration(reservationData.duration)
-    //   );
-
-    //   // Check for time conflicts
-    //   if (
-    //     (newStartTime >= existingStartTime && newStartTime < existingEndTime) ||
-    //     (newEndTime > existingStartTime && newEndTime <= existingEndTime)
-    //   ) {
-    //     throw ApiError.customError(
-    //       409,
-    //       `Table is already booked from ${existingReservation.timeSlot} for ${existingReservation.duration} hours.`
-    //     );
-    //   }
-    // }
-
-    // {
-    // "date": "2023-10-20",
-    // "duration": "02:00:00",
-    // "timeSlot": "19:00:00"
-    // }
-
-    // const bookTableForTime = getAllReservationsByTableIDAndDate.filter(
+    // console.log("datasource====>", { tableId, reservationData });
+    // const bookTbleForDate = getAllReservationsByTableID.filter(
     //   (reservation) => {
-
-    //     if (reservation.timeSlot === reservationData.timeSlot) {
-    //       throw ApiError.customError(
-    //         409,
-    //         `Table is alredy Booked form ${reservation.timeSlot} to next ${reservation.duration}hr `
-    //       );
-    //     } else {
-    //       console.log("abhb");
-    //     }
+    //     return reservation.date === reservationData.date;
     //   }
     // );
-
-    // console.log({
-    //   bookTbleForDate: bookTableForTime,
-    //   conflictReservation: bookTableForTime,
-    // });
 
     // if (getAllReservationsByTableID) {
     //   // getAllReservationsByTableID.date,

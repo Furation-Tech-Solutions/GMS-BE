@@ -10,6 +10,7 @@ import { UpdateClient } from "@domain/client/usecases/update-client"; // Import 
 import { DeleteClient } from "@domain/client/usecases/delete-client"; // Import the DeleteClient use case
 import { validateClientInputMiddleware } from "@presentation/middlewares/client/validation-client"; // Import the DeleteClient use case
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
@@ -43,12 +44,14 @@ clientRouter.post(
     "/add",
     verifyLoggedInUser,
     validateClientInputMiddleware(false),
+    checkPermission([106,206,306]),
     clientService.createClient.bind(clientService)
 );
 
 // Route handling for deleting a client by ID
 clientRouter.delete(
     "/:clientId",
+    checkPermission([106,206]),
     clientService.deleteClient.bind(clientService)
 );
 
@@ -56,12 +59,16 @@ clientRouter.delete(
 clientRouter.get(
     "/:clientId",
     // checkPermission(["1102","5102"]),
+    checkPermission([106,206,306]),
+
     clientService.getClientById.bind(clientService)
 );
 
 // Route handling for getting all clients
 clientRouter.get("/",
     // checkPermission(["1102"]),
+    checkPermission([106,206,306]),
+
     clientService.getAllClients.bind(clientService));
 
 // Route handling for updating a client by ID
@@ -69,5 +76,7 @@ clientRouter.put(
     "/:clientId",
     verifyLoggedInUser,
     validateClientInputMiddleware(true),
+    checkPermission([106,206,306]),
+
     clientService.updateClient.bind(clientService)
 );
