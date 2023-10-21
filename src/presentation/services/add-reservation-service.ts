@@ -291,7 +291,7 @@ export class AddReservationServices {
 
               if (addReservationId) {
                 const emailhandler = new EmailHandler();
-                await emailhandler.handleLeftReservation(addReservationId);
+                await emailhandler.handleReservation(addReservationId);
               }
             }
             res.json(resData);
