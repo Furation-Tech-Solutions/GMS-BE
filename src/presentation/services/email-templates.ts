@@ -15,7 +15,7 @@ const s3ReservationEmailTemplateUrl = 'https://gms-media-assets.s3.ap-south-1.am
   const day = date.getDate();
   const month = months[date.getMonth()];
   const year = date.getFullYear();
-
+  
   return `${weekday}, ${day} ${month} ${year}`;
 }
 function formatTime(inputTime: string): string {
@@ -23,14 +23,14 @@ function formatTime(inputTime: string): string {
   const hours = parseInt(timeParts[0], 10);
   const minutes = timeParts[1];
   const period = hours >= 12 ? "PM" : "AM";
-
+  
   // Convert 24-hour format to 12-hour format
   const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-
+  
   return `${formattedHours}:${minutes} ${period}`;
 }
 
-async function readReservationEmailTemplateFromS3(s3Url:string):Promise<string> {
+async function readEmailTemplateFromS3(s3Url:string):Promise<string> {
   try {
     const response = await axios.get(s3Url);
     return response.data;
@@ -39,37 +39,95 @@ async function readReservationEmailTemplateFromS3(s3Url:string):Promise<string> 
     return ''; // Return an empty string or handle the error as needed
   }
 }
-export async function reservationTemplate(result: any,client:any): Promise<string> {
+export async function userAccountTemplate(result: any): Promise<string> {
+const userEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/userRegistration.html`);
+  const emailContent = userEmailTemplate
+  // .replace("[User's First Name]", result.firstName)
+  .replace("[User Email]", result.email)
+  .replace("[User Password]", result.randomPassword)
+  
+  return emailContent;     
+}
+export async function bookingRequestTemplate(result: any): Promise<string> {
+  const fullName=result.client.firstName+" "+result.client.lastName
+  const date=await formatDate(result.date)
+  // const date="12121"
+  const startTime =await  formatTime(result.timeSlot);
+  const bookingRequestEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/under_process_reservation.html`);
+    const emailContent = bookingRequestEmailTemplate
+    // .replace("[User's First Name]", result.firstName)
+    .replace("[Client's Full Name]", result.client.firstName)
+    .replace('[Reservation Date]', date)
+    .replace('[Number of Guests]', result.noOfGuests)
+    .replace('[Time Slot]', startTime)
+    .replace("[Client's First Name]", result.client.firstName)
+    return emailContent;     
+  }
+
+export async function confirmReservation(result: any): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readReservationEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reservationTemplate.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/confirm_reservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName=result.client.firstName+" "+result.client.lastName
   const date=await formatDate(result.date)
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
-  // const startTime ="148"
-
-  // console.log("fullName",fullName,"date",date,"startTime",startTime)
   
   const emailContent = emailTemplate
-    .replace("[Client's Full Name]", fullName)
+    // .replace("[Client's Full Name]", fullName)
     .replace('[Reservation Date]', date)
     .replace('[Number of Guests]', result.noOfGuests)
-    .replace('[Shift]', result.shift.shiftName)
+    // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
-    .replace("[Client's First Name]",result.client.firstName)
-    .replace('[Duration]', result.duration)
+    .replace("[Client's First Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
-    // .replace('[Table Number]', result.table.tableNo)
-    // .replace('[Reservation Note]', result.reservationNote)
-    // .replace('[Perks]', result.perks)
-    // .replace('[Support Email Address]', '[Your Support Email Address]') // Replace with actual support email
-    // .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
-
+    .replace('[Table Number]', result.table.tableNo)
+   
   return emailContent 
 }
 
+export async function cancelReservation(result: any): Promise<string> {
+  // Fetch the email template from S3
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/cancelReservation.html`);
+  
+  // Replace placeholders with actual data in the email template
+  const fullName=result.client.firstName+" "+result.client.lastName
+  const date=await formatDate(result.date)
+  // const date="12121"
+  const startTime =await  formatTime(result.timeSlot);
+  
+  const emailContent = emailTemplate
+    .replace("[Client's First Name]]", result.client.firstName)
+    .replace('[Reservation Date]', date)
+    .replace('[Number of Guests]', result.noOfGuests)
+    // .replace('[Shift]', result.shift.shiftName)
+    .replace('[Time Slot]', startTime)
+    .replace("[Client's Full Name]",fullName)
+    .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+   
+  return emailContent 
+}
+export async function leftReservation(result: any): Promise<string> {
+  // Fetch the email template from S3
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/leftReservation.html`);
+  
+  // Replace placeholders with actual data in the email template
+  const fullName=result.client.firstName+" "+result.client.lastName
+  const date=await formatDate(result.date)
+  // const date="12121"
+  const startTime =await  formatTime(result.timeSlot);
+  
+  const emailContent = emailTemplate
+    // .replace("[Client's First Name]]", result.client.firstName)
+    .replace('[Reservation Date]', date)
+    .replace('[Number of Guests]', result.noOfGuests)
+    // .replace('[Shift]', result.shift.shiftName)
+    .replace('[Time Slot]', startTime)
+    .replace("[Client's Full Name]",fullName)
+   
+  return emailContent 
+}
 // Read the HTML/CSS email template file
 
 const filePath = `${path.join(__dirname, "..", "nodemailer", "email-template")}`
@@ -136,7 +194,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
   
   export async function operationTeam(result: any, clientWithEmail: any): Promise<string> {
     // Replace placeholders with actual data in the email template
-  const emailTemplate = await readReservationEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/operationTeamTemplate.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/operationTeamTemplate.html`);
 
     const fullName=result.client.firstName+" "+result.client.lastName
     const emailContent = emailTemplate
@@ -162,17 +220,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
       return ''; // Return an empty string or handle the error as needed
     }
   }
-const userEmailTemplate = userTemplate(filePath);
+// const userEmailTemplate = userTemplate(filePath);
 
-  export function userAccountTemplate(result: any): string {
-    const emailContent = userEmailTemplate
-    .replace("[User's First Name]", result.firstName)
-    .replace("[User's Email]", result.email)
-    .replace("[User's Random Password]", result.randomPassword)
-    
-    // console.log(emailContent,"emailContent")
-    return emailContent;
-          
-  }
 
 
