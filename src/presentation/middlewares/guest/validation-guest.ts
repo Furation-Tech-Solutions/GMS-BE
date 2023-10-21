@@ -123,14 +123,8 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
           }),
 
     notes: isUpdate
-      ? Joi.string().max(500).min(10).optional().trim().messages({
-          "string.max": "Notes should have less than 500 characters",
-          "string.min": "Notes should have more than 10 characters",
-        })
-      : Joi.string().max(500).min(10).optional().trim().messages({
-          "string.max": "Notes should have less than 500 characters",
-          "string.min": "Notes should have more than 10 characters",
-        }),
+      ? Joi.string().optional().trim()
+      : Joi.string().optional().trim(),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

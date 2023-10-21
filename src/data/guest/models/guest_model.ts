@@ -84,8 +84,6 @@ const guestSchema = new mongoose.Schema(
     },
     notes: {
       type: String,
-      maxLength: [500, "notes should have less then 500 charcters "],
-      minLength: [10, "notes should have 10 charcters"],
     },
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,

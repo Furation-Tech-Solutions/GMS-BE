@@ -60,7 +60,7 @@ const bookingRequestSchema = new mongoose.Schema({
   reservationTime: { type: String },
   numberOfGuest: { type: Number },
   duration: String,
-  status: {
+  status: { 
     type: { name: String, color: String },
     enum: [
       { name: "Active", color: "Blue" },
