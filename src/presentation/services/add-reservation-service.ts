@@ -22,6 +22,7 @@ import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/fil
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
+import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cron/cron";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 export class AddReservationServices {
@@ -160,9 +161,13 @@ export class AddReservationServices {
     next: NextFunction
   ): Promise<void> {
     const { status, table } = req.query;
-    let shift = req.query.shift as string;
-    const date = req.query.date as string;
-    const coverflow = req.query.coverflow as string;
+
+    let shift  = req.query.shift as string;
+    const date  = req.query.date as string;
+    const unassign  = req.query.unassign as string;
+
+    const coverflow  = req.query.coverflow as string;
+
 
     const allShifts = await this.shiftDataSourceImpl.getAll();
 
@@ -187,6 +192,10 @@ export class AddReservationServices {
     }
     if (table && typeof table === "string") {
       filter.table = table;
+    }
+
+    if (date && status === "unassigned") {
+      filter.reservationStatus = "unassigned";
     }
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
@@ -229,8 +238,11 @@ export class AddReservationServices {
             guestsByTimeSlotArray,
           });
         }
+      
 
-        return res.json(responseData);
+        // sendMailConfirmedReservations()
+
+        return res.json(responseData)
       }
     );
   }
@@ -279,7 +291,7 @@ export class AddReservationServices {
 
               if (addReservationId) {
                 const emailhandler = new EmailHandler();
-                await emailhandler.handleLeftReservation(addReservationId);
+                await emailhandler.handleReservation(addReservationId);
               }
             }
             res.json(resData);

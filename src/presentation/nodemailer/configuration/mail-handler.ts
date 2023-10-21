@@ -5,7 +5,7 @@ import { Request, Response } from 'express'; // Import necessary modules and typ
 import { GetAddReservationById } from '@domain/add-reservation/usecases/get-add-reservation-by-id';
 import { AddReservationDataSourceImpl } from '@data/add-reservation/datasources/add-reservation-data-source';
 import mongoose from 'mongoose';
-import { bookingRequestTemplate, cancelReservation, confirmReservation, leftReservation, operationTeam, postDiningTemplate, reservationTemplate, userAccountTemplate } from '@presentation/services/email-templates';
+import { bookingRequestTemplate, cancelReservationTemplate,leftReservationTemplate, confirmReservationTemplate, reminderEmailTemplate, userAccountTemplate } from '@presentation/services/email-templates';
 import EmailService from '@presentation/services/send-mail';
 import { createWhatsAppMessage } from '@presentation/services/whatsapp-template';
 import WhatsAppService from '@presentation/services/whatsapp-services';
@@ -37,8 +37,8 @@ class EmailHandler {
         };
         await emailService.sendEmail(emailOption);
         }
-        if(addReservation.reservationStatus=="unassigned"){
-          const emailContent =await confirmReservation(addReservation);
+        if(addReservation.reservationStatus=="Confirm"){
+          const emailContent =await confirmReservationTemplate(addReservation);
           const emailOption = {
             // email:addReservation.client.email,
             email:addReservation.client.email,
@@ -48,7 +48,7 @@ class EmailHandler {
           await emailService.sendEmail(emailOption);
           }
           if(addReservation.reservationStatus=="Cancel"){
-            const emailContent =await cancelReservation(addReservation);
+            const emailContent =await cancelReservationTemplate(addReservation);
             const emailOption = {
               // email:addReservation.client.email,
               email:addReservation.client.email,
@@ -58,7 +58,7 @@ class EmailHandler {
             await emailService.sendEmail(emailOption);
             }
             if(addReservation.reservationStatus=="Left"){
-              const emailContent =await leftReservation(addReservation);
+              const emailContent =await leftReservationTemplate(addReservation);
               const emailOption = {
                 // email:addReservation.client.email,
                 email:addReservation.client.email,
@@ -103,9 +103,27 @@ class EmailHandler {
             // } 
            
        
-// catch(err){
-//     console.log(err);
-// }
+catch(err){
+    console.log(err);
+}
+  }
+  async reminderEmail(user:any): Promise<void> {
+    try{
+      const emailContent = await reminderEmailTemplate(user);
+      const emailOption = {
+        // email:addReservation.client.email,
+        email:user.email,
+        subject: "Reservation Reminder",
+        message: emailContent,
+      };
+      // console.log(emailOption,"emailOption inhandler")
+      await emailService.sendEmail(emailOption);
+    }
+    catch(err){
+        console.log(err)
+    }
+//   }
+}
           // }
 //   async handleLeftReservation(id:string): Promise<void> {
 //     try {
@@ -139,21 +157,21 @@ class EmailHandler {
 //     console.log(err);
 // }
 //   }
-//   async userEmailHandler(user:any): Promise<void> {
-//     try{
-//       const emailContent = await userAccountTemplate(user);
-//       const emailOption = {
-//         // email:addReservation.client.email,
-//         email:user.email,
-//         subject: "Reservation Confirmation",
-//         message: emailContent,
-//       };
-//       console.log(emailOption,"emailOption inhandler")
-//       await emailService.sendEmail(emailOption);
-//     }
-//     catch(err){
-//         console.log(err)
-//     }
+  async userEmailHandler(user:any): Promise<void> {
+    try{
+      const emailContent = await userAccountTemplate(user);
+      const emailOption = {
+        // email:addReservation.client.email,
+        email:user.email,
+        subject: "User Registration",
+        message: emailContent,
+      };
+      // console.log(emailOption,"emailOption inhandler")
+      await emailService.sendEmail(emailOption);
+    }
+    catch(err){
+        console.log(err)
+    }
 //   }
 }
 }

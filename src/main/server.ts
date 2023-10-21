@@ -4,6 +4,7 @@ import env from '@main/config/env'
 import mongoose from "mongoose";
 import ApiError from '@presentation/error-handling/api-error';
 import * as  Message from '@presentation/error-handling/message-error'
+import { sendMailConfirmedReservations } from '@presentation/middlewares/node-cron/cron';
 
 const app = setupApp();
 
@@ -25,6 +26,8 @@ async function connectToDatabase() {
     app.listen(env.port, () => {
         console.log(`${Message.SERVER_RUNNING} ${env.port}`);
       });
+
+      sendMailConfirmedReservations()
 
   } catch (error) {
 // console.log("error is this-",error,"error")

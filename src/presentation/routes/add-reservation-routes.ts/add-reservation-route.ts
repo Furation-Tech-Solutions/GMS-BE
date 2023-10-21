@@ -74,7 +74,6 @@ addReservationRouter.post(
 addReservationRouter.delete(
   "/:addReservationId",
   checkPermission([104,204,302]),
-
   addReservationService.deleteAddReservation.bind(addReservationService)
 );
 

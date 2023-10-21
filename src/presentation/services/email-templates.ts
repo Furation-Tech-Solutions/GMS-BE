@@ -64,12 +64,12 @@ export async function bookingRequestTemplate(result: any): Promise<string> {
     return emailContent;     
   }
 
-export async function confirmReservation(result: any): Promise<string> {
+export async function confirmReservationTemplate(result: any): Promise<string> {
   // Fetch the email template from S3
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/confirm_reservation.html`);
   
   // Replace placeholders with actual data in the email template
-  const fullName=result.client.firstName+" "+result.client.lastName
+  const fullName= result.client.firstName+" "+result.client.lastName
   const date=await formatDate(result.date)
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
@@ -87,7 +87,7 @@ export async function confirmReservation(result: any): Promise<string> {
   return emailContent 
 }
 
-export async function cancelReservation(result: any): Promise<string> {
+export async function cancelReservationTemplate(result: any): Promise<string> {
   // Fetch the email template from S3
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/cancelReservation.html`);
   
@@ -108,7 +108,7 @@ export async function cancelReservation(result: any): Promise<string> {
    
   return emailContent 
 }
-export async function leftReservation(result: any): Promise<string> {
+export async function leftReservationTemplate(result: any): Promise<string> {
   // Fetch the email template from S3
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/leftReservation.html`);
   
@@ -128,6 +128,29 @@ export async function leftReservation(result: any): Promise<string> {
    
   return emailContent 
 }
+
+export async function reminderEmailTemplate(result: any): Promise<string> {
+  // Fetch the email template from S3
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reminder_email.html`);
+  
+  // Replace placeholders with actual data in the email template
+  const fullName= result.client.firstName+" "+result.client.lastName
+  const date=await formatDate(result.date)
+  // const date="12121"
+  const startTime =await  formatTime(result.timeSlot);
+  
+  const emailContent = emailTemplate
+    // .replace("[Client's Full Name]", fullName)
+    .replace('[Reservation Date]', date)
+    .replace('[Number of Guests]', result.noOfGuests)
+    // .replace('[Shift]', result.shift.shiftName)
+    .replace('[Time Slot]', startTime)
+    .replace("[Client's Name]",fullName)
+    // .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+    .replace('[Table Number]', result.table.tableNo)
+   
+  return emailContent 
+}
 // Read the HTML/CSS email template file
 
 const filePath = `${path.join(__dirname, "..", "nodemailer", "email-template")}`
@@ -144,22 +167,20 @@ const filePath = `${path.join(__dirname, "..", "nodemailer", "email-template")}`
 // // const emailTemplate = readEmailTemplate(filePath);
 
 // export function reservationTemplate(result: any, clientWithEmail: any): string {
-// //   // Replace placeholders with actual data in the email template
-// const fullName=result.client.firstName+" "+result.client.lastName
-
-// //   const emailContent = emailTemplate
-//     .replace("[Client's Full Name]", fullName)
+//   // Replace placeholders with actual data in the email template
+//   const emailContent = emailTemplate
+//     .replace("[Client's First Name]", result.client.firstName)
 //     .replace('[Reservation Date]', result.date)
 //     .replace('[Number of Guests]', result.noOfGuests)
 //     .replace('[Shift]', result.shift.shiftName)
 //     .replace('[Duration]', result.duration)
 //     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
 //     .replace('[Time Slot]', result.timeSlot)
-// //     .replace('[Table Number]', result.table.tableNo)
+//     .replace('[Table Number]', result.table.tableNo)
 //     .replace('[Reservation Note]', result.reservationNote)
-// //     .replace('[Perks]', result.perks)
-// //     .replace('[Support Email Address]', '[Your Support Email Address]') // Replace with actual support email
-// //     .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
+//     .replace('[Perks]', result.perks)
+//     .replace('[Support Email Address]', '[Your Support Email Address]') // Replace with actual support email
+//     .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
 
 //   return emailContent;
 // }
@@ -167,7 +188,7 @@ function readCustomerLeftEmailTemplate(filePath: string): string {
     try {
       return fs.readFileSync(`${filePath}/post-dining-email.html`, 'utf-8');
     } catch (error) {
-      // console.error('Error reading email template:', error);
+      console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -185,7 +206,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     try {
       return fs.readFileSync(`${filePath}/manager-email-template.html`, 'utf-8');
     } catch (error) {
-      // console.error('Error reading email template:', error);
+      console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -211,7 +232,6 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     return emailContent;
   }
 
-  
   function userTemplate(filePath: string): string {
     try {
       return fs.readFileSync(`${filePath}/user-email-template.html`, 'utf-8');

@@ -44,7 +44,7 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
         return;
       }
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
-      console.log(permittedUser,"line 33")
+
       if (!permittedUser) {
         unauthorizedResponse(res);
         // console.log("line 35")
@@ -69,7 +69,7 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       }
       if (permittedUser.accessLevel === AccessLevel.Manager) {
         // If the user is a Manager, they should not be able to create SuperUsers
-        if (req.body.accessLevel=="Superuser" ||req.body.accessLevel=="Manager"  ) {
+        if (req.body.accessLevel=="Superuser" || req.body.accessLevel=="Manager"  ) {
           unauthorizedResponse(res);
           return;
         }
@@ -102,7 +102,6 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
                     }
               }if(reservationData && reservationData.reservationStatus==="unassigned"){
                 if(req.body.reservationStatus || req.body.table ){
-                  console.log("inside updata of reservatio line 100")
                   unableToUpdateReservation(res);
                 }
               }
