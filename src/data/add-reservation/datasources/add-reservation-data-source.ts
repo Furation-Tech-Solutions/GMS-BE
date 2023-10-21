@@ -235,14 +235,12 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       date: reservationData.date,
     });
 
-
-
-    console.log("datasource====>", { tableId, reservationData });
-    const bookTbleForDate = getAllReservationsByTableID.filter(
-      (reservation) => {
-        return reservation.date === reservationData.date;
-      }
-    );
+    // console.log("datasource====>", { tableId, reservationData });
+    // const bookTbleForDate = getAllReservationsByTableID.filter(
+    //   (reservation) => {
+    //     return reservation.date === reservationData.date;
+    //   }
+    // );
 
     // if (getAllReservationsByTableID) {
     //   // getAllReservationsByTableID.date,
@@ -279,8 +277,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     //   }
     // // }
 
-
-    return getAllReservationsByTableID.map((reservation) =>
+    return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()
     );
   }
