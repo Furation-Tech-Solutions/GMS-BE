@@ -956,5 +956,37 @@
                 "default": false
             }
         ]
+    },
+    {
+            "101": "Ability to create manager and sub-managers",
+            "102": "Ability to add a reservation along with table no, reservation tags",
+            "103": "Ability to update a reservation along with table no, reservation tags",
+            "104": "Ability to delete a reservation",
+            "105": "Ability to assign tables associated with a reservation",
+            "106": "Ability to view, edit, create (along with client tags) and delete clients",
+            "107": "Ability to view, edit, create, and delete guestlist",
+            "108": "Ability to convert requests to reservation",
+            "109": "Block table",
+            "201": "Ability to create sub-manager",
+            "202": "Ability to add a reservation along with table no, reservation tags",
+            "203": "Ability to update a reservation along with table no, reservation tags",
+            "204": "Ability to delete a reservation",
+            "205": "Ability to assign tables associated with a reservation",
+            "206": "Ability to view, edit, create (along with client tags) and delete clients",
+            "207": "Ability to view, edit, create, and delete guestlist",
+            "208": "Ability to convert requests to reservation",
+            "209": "Block table",
+            "301": "Ability to add a reservation",
+            "302": "Ability to delete a reservation with unassigned status",
+            "303": "Ability to update a reservation with unassigned status",
+            "304": "Ability to update a reservation with left status for pre-payment and on-site spend",
+            "305": "Ability to view, edit, create, and delete guestlist",
+            "306": "Ability to view, edit, and create clients"
+     
     }
+
+
+
 ]
+
+

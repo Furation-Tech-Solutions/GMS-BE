@@ -28,17 +28,18 @@ class EmailHandler {
         const addReservation = await getAddReservationByIdUsecase.read(id);
 
         const emailContent =await reservationTemplate(addReservation, addReservation.client.email);
-        console.log(emailContent,"emailContent is this")
+        // console.log(emailContent,"emailContent is this")
         const emailOption = {
           // email:addReservation.client.email,
           email:addReservation.client.email,
           subject: "Reservation Confirmation",
           message: emailContent,
         };
-        console.log(emailOption,"emailOption")
+        // console.log(emailOption,"emailOption")
+        
         await emailService.sendEmail(emailOption);
         
-        const user=await UserAccount.find({})
+        const user = await UserAccount.find({})
 
         user.map(async(res)=>{
             if(res.accessLevel=="Superuser"){
@@ -117,7 +118,7 @@ catch(err){
         subject: "Reservation Confirmation",
         message: emailContent,
       };
-      console.log(emailOption,"emailOption inhandler")
+      // console.log(emailOption,"emailOption inhandler")
       await emailService.sendEmail(emailOption);
     }
     catch(err){

@@ -43,18 +43,30 @@ export class TableDataSourceImpl implements TableDataSource {
   }
 
   async getById(id: string): Promise<any | null> {
-    const table = await Table.findById(id).populate({
-      path: "seatingArea",
-      select: "id abbreviation seatingAreaName",
-    });
+    const table = await Table.findById(id)
+      .populate({
+        path: "tableCombinations", // The field to populate
+        model: "Table", // The reference model for tableCombinations
+        select: "tableNo partySizeMini partySizeMax", // The fields to select from the reference model
+      })
+      .populate({
+        path: "seatingArea",
+        select: "id abbreviation seatingAreaName",
+      });
     return table ? table.toObject() : null;
   }
 
   async getAllTables(): Promise<any[]> {
-    const tables = await Table.find().populate({
-      path: "seatingArea",
-      select: "id abbreviation seatingAreaName",
-    });
+    const tables = await Table.find()
+      .populate({
+        path: "tableCombinations", // The field to populate
+        model: "Table", // The reference model for tableCombinations
+        select: "tableNo partySizeMini partySizeMax", // The fields to select from the reference model
+      })
+      .populate({
+        path: "seatingArea",
+        select: "id abbreviation seatingAreaName",
+      });
     return tables.map((table) => table.toObject());
   }
 

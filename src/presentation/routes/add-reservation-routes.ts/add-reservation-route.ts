@@ -13,6 +13,7 @@ import { checkPermission } from "@presentation/permission/permission-middleware"
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import EmailService from "@presentation/services/send-mail";
 import WhatsAppService from "@presentation/services/whatsapp-services";
+import { TableBlockCheck } from "@domain/add-reservation/usecases/table-block-check";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 // Create an instance of the AddReservationDataSourceImpl and pass the mongoose connection
@@ -25,7 +26,7 @@ const addReservationRepository = new AddReservationRepositoryImpl(
   addReservationDataSource
 );
 const emailService = new EmailService();
-const whatsappService = new WhatsAppService()
+const whatsappService = new WhatsAppService();
 
 // Create instances of the required use cases and pass the AddReservationRepositoryImpl
 const createAddReservationUsecase = new CreateAddReservation(
@@ -43,6 +44,7 @@ const getAllAddReservationUsecase = new GetAllAddReservation(
 const updateAddReservationUsecase = new UpdateAddReservation(
   addReservationRepository
 );
+const checkTableBlockUsecase = new TableBlockCheck(addReservationRepository);
 
 // Initialize AddReservationServices and inject required dependencies
 const addReservationService = new AddReservationServices(
@@ -51,6 +53,7 @@ const addReservationService = new AddReservationServices(
   getAddReservationByIdUsecase,
   getAllAddReservationUsecase,
   updateAddReservationUsecase,
+  checkTableBlockUsecase,
   emailService,
   whatsappService
 );
@@ -62,7 +65,7 @@ export const addReservationRouter = Router();
 addReservationRouter.post(
   "/create",
   verifyLoggedInUser,
-  // checkPermission(["1101","5101"]),
+  checkPermission([102, 202, 301]),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
 );
@@ -70,6 +73,8 @@ addReservationRouter.post(
 // Route handling for deleting a Add Reservation by ID
 addReservationRouter.delete(
   "/:addReservationId",
+  verifyLoggedInUser,
+  //  checkPermission([ 104, 204, 302 ]),
   addReservationService.deleteAddReservation.bind(addReservationService)
 );
 
@@ -91,8 +96,15 @@ addReservationRouter.get(
 addReservationRouter.put(
   "/:addReservationId",
   verifyLoggedInUser,
-  // checkPermission(["1101","5101"]),
+  // checkPermission([103,203]),
   validateReservationInputMiddleware(true),
   addReservationService.updateAddReservation.bind(addReservationService)
 );
-
+// Route handling for updating a Add Reservation by ID
+addReservationRouter.get(
+  "/:tableId",
+  verifyLoggedInUser,
+  // checkPermission(["1101","5101"]),
+  validateReservationInputMiddleware(true),
+  addReservationService.tableBlockCheck.bind(addReservationService)
+);

@@ -17,6 +17,7 @@ import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repos
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
+import { TableBlockCheckUsecase } from "@domain/add-reservation/usecases/table-block-check";
 import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
@@ -31,6 +32,7 @@ export class AddReservationServices {
   private readonly getAddReservationByIdUsecase: GetAddReservationByIdUsecase;
   private readonly getAllAddReservationUsecase: GetAllAddReservationUsecase;
   private readonly updateAddReservationUsecase: UpdateAddReservationUsecase;
+  private readonly tableBlockCheckUsecase: TableBlockCheckUsecase;
   private readonly emailService: EmailService;
   private readonly whatsAppService: WhatsAppService;
 
@@ -42,6 +44,7 @@ export class AddReservationServices {
     getAddReservationByIdUsecase: GetAddReservationByIdUsecase,
     getAllAddReservationUsecase: GetAllAddReservationUsecase,
     updateAddReservationUsecase: UpdateAddReservationUsecase,
+    tableBlockCheckUsecase: TableBlockCheckUsecase,
     emailService: EmailService,
     whatsAppService: WhatsAppService
 
@@ -51,6 +54,7 @@ export class AddReservationServices {
     this.getAddReservationByIdUsecase = getAddReservationByIdUsecase;
     this.getAllAddReservationUsecase = getAllAddReservationUsecase;
     this.updateAddReservationUsecase = updateAddReservationUsecase;
+    this.tableBlockCheckUsecase = tableBlockCheckUsecase;
     this.emailService = emailService;
     this.whatsAppService = whatsAppService;
     this.shiftDataSourceImpl = new ShiftDataSourceImpl(mongoose.connection);
@@ -109,6 +113,28 @@ export class AddReservationServices {
     );
   }
 
+  async tableBlockCheck(req: Request, res: Response): Promise<void> {
+    const user = req.user;
+    const tableId: string = req.params.tableId;
+
+    const reservationDetails = {
+      ...req.body,
+      updatedBy: user._id,
+    };
+
+    const checkedTable: Either<ErrorClass, AddReservationEntity> =
+      await this.tableBlockCheckUsecase.execute(tableId, reservationDetails);
+
+    checkedTable.cata(
+      (error: ErrorClass) => {
+        res.status(error.status).json({ error: error.message });
+      },
+      (result: AddReservationEntity) => {
+        return res.json(result);
+      }
+    );
+  }
+
   async getAddReservationById(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
 
@@ -136,6 +162,8 @@ export class AddReservationServices {
     const { status, table } = req.query;
     let shift  = req.query.shift as string;
     const date  = req.query.date as string;
+    const unassign  = req.query.unassign as string;
+
     const coverflow  = req.query.coverflow as string;
 
     const allShifts = await this.shiftDataSourceImpl.getAll();
@@ -160,21 +188,22 @@ export class AddReservationServices {
     if (status && typeof status === "string") {
       filter.reservationStatus = status;
     }
-
     if (table && typeof table === "string") {
       filter.table = table;
+    }
+
+    if (date && status === "unassigned") {
+      filter.reservationStatus = "unassigned";
     }
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
       
 
-
     addReservations.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
-       (result: AddReservationEntity[]) => {
-
+      (result: AddReservationEntity[]) => {
         const responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
         );
@@ -208,14 +237,15 @@ export class AddReservationServices {
           });
         }
 
-        sendMailConfirmedReservations()
+      
+
+        // sendMailConfirmedReservations()
 
         return res.json(responseData)
       
       }
     );
   }
-
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
@@ -270,7 +300,6 @@ export class AddReservationServices {
       }
     );
   }
-
 }
 
 

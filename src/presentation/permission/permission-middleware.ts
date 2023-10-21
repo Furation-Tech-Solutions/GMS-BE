@@ -4,17 +4,18 @@ import { UserAccount } from "@data/user-account/models/user-account-model";
 import { UserEntity } from "@domain/user-account/entities/user-account";
 // Define constants or enums for access levels
 enum AccessLevel {
-  Superuser = "Superuser",
+  SuperUser = "Superuser",
   Manager = "Manager",
-  SubManager = "Sub-Manager",
-  Basic = "Basic",
+  SubManager = "Sub-Manager"
 }
 
 const unauthorizedResponse = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
   res.status(unAuthorized.status).json({ message: unAuthorized.message });
 };
-export const checkPermission = (requiredPermission: string[]=[]) => {
+
+
+export const checkPermission = (requiredPermission: number[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const cookieEmail = req.cookies.email;
@@ -22,47 +23,63 @@ export const checkPermission = (requiredPermission: string[]=[]) => {
       // console.log(email,req.cookies,"in permission array")
 
       const emailToCheck = headerEmail || cookieEmail;
+        // console.log(emailToCheck,"email to check")
 
       if (!emailToCheck) {
         // Handle the case when email is not present in headers or cookies
         unauthorizedResponse(res);
+        // console.log("inside if block 29")
         return;
       }
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
+
       if (!permittedUser) {
         unauthorizedResponse(res);
+        // console.log("line 35")
         return;
       }
     
-      const isSuperuser = permittedUser.accessLevel === AccessLevel.Superuser;
+      const isSuperuser = permittedUser.accessLevel === AccessLevel.SuperUser;
       let hasRequiredPermission = false;
-      permittedUser.permissions.forEach((permission: any) => {
-        const permissionCode = Object.keys(permission)[0];
-        if (requiredPermission.includes(permissionCode)) {
+
+      permittedUser.permissions.forEach((permission:any)=>{
+        if(requiredPermission.includes(permission)){
           hasRequiredPermission = true;
+        // console.log("line 45")
+
         }
-      });
+      })
+
       if (isSuperuser && hasRequiredPermission) {
+        // console.log("line 51"
         next();
         return;
       }
-      
+      if (permittedUser.accessLevel === AccessLevel.Manager) {
+        // If the user is a Manager, they should not be able to create SuperUsers
+        if (req.body.accessLevel=="Superuser" || req.body.accessLevel=="Manager"  ) {
+          unauthorizedResponse(res);
+          return;
+        }
+      }
+
+    
       // Handle other access levels
       switch (permittedUser.accessLevel) {
+        case AccessLevel.SuperUser:
         case AccessLevel.Manager:
         case AccessLevel.SubManager:
-        case AccessLevel.Basic:
-          permittedUser.permissions.forEach((permission: any) => {
-            const permissionCode = Object.keys(permission)[0];
-            if (requiredPermission.includes(permissionCode)) {
+          permittedUser.permissions.forEach((permission:any)=>{
+            if(requiredPermission.includes(permission)){
               hasRequiredPermission = true;
             }
-          });
+          })
           break;
         default:
           hasRequiredPermission = false;
       }
       if (hasRequiredPermission) {
+        
         next();
       } else {
         unauthorizedResponse(res);

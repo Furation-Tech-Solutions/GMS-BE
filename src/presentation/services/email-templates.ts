@@ -44,13 +44,13 @@ export async function reservationTemplate(result: any,client:any): Promise<strin
   const emailTemplate = await readReservationEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reservationTemplate.html`);
   
   // Replace placeholders with actual data in the email template
-  const fullName=result.client.firstName+" "+result.client.lastName
-  const date=await formatDate(result.date);
+  const fullName= result.client.firstName+" "+result.client.lastName
+  const date=await formatDate(result.date)
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
   // const startTime ="148"
 
-  console.log("fullName",fullName,"date",date,"startTime",startTime)
+  // console.log("fullName",fullName,"date",date,"startTime",startTime)
   
   const emailContent = emailTemplate
     .replace("[Client's Full Name]", fullName)
@@ -147,7 +147,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
       .replace('[Perks]', result.perks)
       .replace('[Support Email Address]', '[Your Support Email Address]') // Replace with actual support email
       .replace('[Support Phone Number]', '[Your Support Phone Number]'); // Replace with actual support phone number
-
+  
     return emailContent;
   }
 

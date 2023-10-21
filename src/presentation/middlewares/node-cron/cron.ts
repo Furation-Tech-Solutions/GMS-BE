@@ -1,55 +1,59 @@
+import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
 import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
-import { Client } from "@data/client/models/client_model";
-import EmailService from "@presentation/services/send-mail";
+import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
+import { formattedDateFunc } from "@presentation/utils/formatt-date";
+import mongoose from "mongoose";
 import cron from "node-cron";
 
+const  addReservationDataSourceImpl = new AddReservationDataSourceImpl(mongoose.connection)
+
 export const sendMailConfirmedReservations = () => {
-
     try {
-        // Schedule the cron job to run every day at 12 PM
-        cron.schedule('*/2 * * * *', async function () {
+        cron.schedule('*/2 * * * *', async function () { // Scheduled for 12:00 PM IST
             try {
-                // Find all confirmed reservations for today
-                const today = new Date('2023-09-18');
-                console.log(today)
-                today.setHours(0, 0, 0, 0);
-                const reservations = await AddReservation.find({
-                    date: today,
-                    reservationStatus: 'upcoming'
-                });
+                // Get the formatted date
+                const formattedDate = formattedDateFunc(new Date());
 
-               console.log(reservations, "reservation121")
+                // Find all confirmed reservations for today
+                const reservations = await AddReservation.find({
+                    date: formattedDate,
+                    reservationStatus: 'confirmed'
+                }).populate('client');
+
+                // const reservations =  await addReservationDataSourceImpl.getAll({
+                //         date: formattedDate,
+                //         reservationStatus: 'confirmed'
+                //     })
+
+                    console.log(reservations);
 
                 if (reservations.length > 0) {
-                    const emailService = new EmailService();
+                    const emailService = new EmailHandler();
 
                     // Iterate over reservations and send emails to each client
-                    reservations.forEach(async (reservation) => {
-                        const client = reservation.client
+                    for (const reservation of reservations) {
+                        if (reservation.client && reservation.client.email) {
 
-                        // if (client && client.email) {
-                            const emailOption = {
-                                email: "amul.shinde@furation.tech",
-                                subject: "Your Subject Here",
-                                message: "Your Message Here",
-                            };
+                            await emailService.handleReservation((reservation._id).toString());
 
-                        try {
-                            // Send the email
-                            await emailService.sendEmail(emailOption);
-
-                            console.log(`Email sent to "amul.shindefuration.tech"`);
-                        } catch (error) {
-                            console.error(`Error sending email to" amul.shindefuration.tech"`);
+                            // try {
+                            //     // Send the email
+                            //     await emailService.sendEmail(emailOption);
+                            //     console.log(`Email sent to ${reservation.client.email}`);
+                            // } catch (emailError) {
+                            //     console.error(`Error sending email to ${reservation.client.email}:`, emailError);
+                            // }
                         }
-                    });
+                    }
                 }
-            } catch (error) {
-                console.error("Error retrieving reservations:", error);
+            } catch (reservationsError) {
+                console.error("Error retrieving reservations:", reservationsError);
             }
+        }, {
+            scheduled: true,
+            timezone: "Asia/Kolkata"
         });
-
-    } catch (error) {
-        console.error("Cron job error:", error);
+    } catch (cronError) {
+        console.error("Cron job error:", cronError);
     }
 };

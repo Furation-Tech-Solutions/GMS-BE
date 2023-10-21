@@ -72,6 +72,11 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       if (error instanceof mongoose.Error.CastError) {
         return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }
+      if (error instanceof ApiError) {
+        return Left<ErrorClass, AddReservationEntity>(
+          ApiError.customError(error.status, error.message)
+        );
+      }
       return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
     }
   }
@@ -101,6 +106,31 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
         return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }
       return Left<ErrorClass, AddReservationEntity>(ApiError.badRequest());
+    }
+  }
+
+  async tableBlockCheck(
+    id: string,
+    reservationDetail: AddReservationEntity
+  ): Promise<Either<ErrorClass, AddReservationEntity>> {
+    try {
+      const result = await this.addReservationDataSource.checkTableAvability(
+        id,
+        reservationDetail
+      );
+      return Right<ErrorClass, AddReservationEntity>(result);
+    } catch (error: any) {
+      if (
+        error instanceof mongoose.Error.CastError ||
+        error.name == "notfound"
+      ) {
+        return Left<ErrorClass, AddReservationEntity>(
+          error.name == "notfound" ? ApiError.notFound() : ApiError.castError()
+        );
+      }
+      return Left<ErrorClass, AddReservationEntity>(
+        ApiError.customError(HttpStatus.BAD_REQUEST, `${error.message}`)
+      );
     }
   }
 }
