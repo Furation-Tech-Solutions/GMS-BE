@@ -14,18 +14,17 @@ export const sendMailConfirmedReservations = () => {
                 // Get the formatted date
                 const formattedDate = formattedDateFunc(new Date());
 
-                // Find all confirmed reservations for today
-                const reservations = await AddReservation.find({
-                    date: formattedDate,
-                    reservationStatus: 'confirmed'
-                }).populate('client');
+                // // Find all confirmed reservations for today
+                // const reservations = await AddReservation.find({
+                //     date: formattedDate,
+                //     reservationStatus: 'confirmed'
+                // }).populate('client');
 
-                // const reservations =  await addReservationDataSourceImpl.getAll({
-                //         date: formattedDate,
-                //         reservationStatus: 'confirmed'
-                //     })
+                const reservations =  await addReservationDataSourceImpl.getAll({
+                        date: formattedDate,
+                        reservationStatus: 'confirmed'
+                    })
 
-                    console.log(reservations);
 
                 if (reservations.length > 0) {
                     const emailService = new EmailHandler();

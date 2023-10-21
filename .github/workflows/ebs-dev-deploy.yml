@@ -1,6 +1,7 @@
 name: GMS Beanstalk Deploy Development
-run-name: Elastic Beanstalk Deploy Production
+run-name: Elastic Beanstalk Deploy
 on:
+  workflow_dispatch:
   pull_request:
       types:
           - closed
@@ -30,21 +31,24 @@ jobs:
         run: |
           cp -r ./src/presentation/nodemailer/email-template/ ./dist/presentation/nodemailer/email-template/
       - name: Create code bundle for deployment
-        run: zip code-bundle-${{github.sha}}.zip -r ./dist/ -r ./.ebextensions package.json package-lock.json Procfile
+        run: zip code-bundle.zip -r ./dist/ package.json package-lock.json Procfile
       - name: Copy code bundle to s3 bucket for code
-        run: aws s3 cp code-bundle-${{github.sha}}.zip s3://gms-backend-ebs-deploy/code-bundle-${{github.sha}}.zip
+        run: aws s3 cp code-bundle.zip s3://gms-backend-ebs-deploy/code-bundle-${{github.sha}}.zip
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: create new ElasticBeanstalk Application version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name guest-management-system \
           --source-bundle S3Bucket="gms-backend-ebs-deploy",S3Key="code-bundle-${{github.sha}}.zip" \
           --version-label "${{github.sha}}" \
-          --description "commit-sha-${{github.sha}}"
+          --description "commit-sha-${{github.sha}} created at ${{ steps.date.outputs.date }} "
       - name: Update elasticbeanstalk environment with latest application-version
         run: |
           aws elasticbeanstalk update-environment \
           --application-name guest-management-system \
-          --environment-id "e-h47gvdacmx" \
+          --environment-id "${{vars.ENVIRONMENT_ID}}" \
           --version-label "${{github.sha}}"
       - name: Success
         run: |

@@ -163,6 +163,7 @@ const reservationValidator = (
       .trim()
       .default("")
       .optional()
+      .allow("")
       .messages({
         "string.max": "Reservation note should have less than 2000 characters",
       }),
@@ -199,9 +200,15 @@ const reservationValidator = (
             "any.required": "Please specify name in bookedBy",
           }),
         }),
-    perks: Joi.string().max(2000).trim().default("").optional().messages({
-      "string.max": "Perks should have less than 2000 characters",
-    }),
+    perks: Joi.string()
+      .max(2000)
+      .trim()
+      .default("")
+      .optional()
+      .allow("")
+      .messages({
+        "string.max": "Perks should have less than 2000 characters",
+      }),
     updatedBy: isUpdate
       ? Joi.string()
           .trim()

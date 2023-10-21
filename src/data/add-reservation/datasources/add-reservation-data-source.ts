@@ -5,7 +5,7 @@ import { AddReservation } from "../models/add-reservation-model";
 import { Client } from "@data/client/models/client_model";
 import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
 import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
-import { IRFilter } from "types/add-reservation-filter.ts/filter-type";
+import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type";
 import { Table } from "@data/table/models/table-model";
 
 export interface AddReservationDataSource {
@@ -111,7 +111,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     return addReservation ? addReservation.toObject() : null;
   }
 
-  async getAll(filter: IRFilter): Promise<any[]> {
+  async getAll(filter: IRFilter | Icron): Promise<any[]> {
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
@@ -149,35 +149,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const existingCheckInCheckOut = await CheckInCheckOut.findOne({
       reservation: id,
     });
-
-    // if (addReservation.table) {
-    //   const existingTable = await Table.findOne({ _id: addReservation.table });
-
-    //   if (existingTable) {
-    //     const newReservedTime = {
-    //       reservation_id: addReservation._id,
-    //       startTime: addReservation.timeSlot,
-    //       duration: addReservation.duration,
-    //       // endTime:
-    //     };
-
-    //     // Check for reservation time conflicts
-    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
-    //       return time.startTime === newReservedTime.startTime;
-    //     });
-
-    //     if (hasTimeConflict) {
-    //       throw ApiError.customError(
-    //         409,
-    //         "Table is all ready booked for given time."
-    //       );
-    //     }
-
-    //     // If no time conflict, push the new reservedTime
-    //     existingTable.reservedTimes.push(newReservedTime);
-    //     await existingTable.save();
-    //   }
-    // }
 
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
@@ -246,8 +217,51 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const getAllReservationsByTableID = await AddReservation.find({
       table: tableId,
     });
-    return getAllReservationsByTableID
-      // ? getAllReservationsByTableID.toObject()
-      // : null;
+
+    console.log("datasource====>", { tableId, reservationData });
+    const bookTbleForDate = getAllReservationsByTableID.filter(
+      (reservation) => {
+        return reservation.date === reservationData.date;
+      }
+    );
+
+    // if (getAllReservationsByTableID) {
+    //   // getAllReservationsByTableID.date,
+    //   // getAllReservationsByTableID.duration,
+    //   // getAllReservationsByTableID.timeSlot,
+    // }
+
+    // if (addReservation.table) {
+    //   const existingTable = await Table.findOne({ _id: addReservation.table });
+
+    //   if (getAllReservationsByTableID) {
+    //     const newReservedTime = {
+    //       reservation_id: reservationData._id,
+    //       startTime: reservationData.timeSlot,
+    //       duration: reservationData.duration,
+    //       // endTime:
+    //     };
+
+    //     // Check for reservation time conflicts
+    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
+    //       return time.startTime === newReservedTime.startTime;
+    //     });
+
+    //     if (hasTimeConflict) {
+    //       throw ApiError.customError(
+    //         409,
+    //         "Table is all ready booked for given time."
+    //       );
+    //     }
+
+    //     // If no time conflict, push the new reservedTime
+    //     existingTable.reservedTimes.push(newReservedTime);
+    //     await existingTable.save();
+    //   }
+    // // }
+
+    return getAllReservationsByTableID.map((reservation) =>
+      reservation.toObject()
+    );
   }
 }

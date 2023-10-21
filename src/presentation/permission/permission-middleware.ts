@@ -2,6 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 import { UserAccount } from "@data/user-account/models/user-account-model";
 import { UserEntity } from "@domain/user-account/entities/user-account";
+import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 // Define constants or enums for access levels
 enum AccessLevel {
   SuperUser = "Superuser",
@@ -13,8 +14,19 @@ const unauthorizedResponse = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
   res.status(unAuthorized.status).json({ message: unAuthorized.message });
 };
+const unableToReserved = (res: Response) => {
+  const unAuthorized = ApiError.unAuthorized();
+  res.status(unAuthorized.status).json({ message: "you are not assignable to table" });
+};
+const unableToUpdateReservation=(res:Response)=>{
+  const unAuthorized = ApiError.unAuthorized();
+  res.status(unAuthorized.status).json({ message: "you are not assignable to update reservation" });
+}
+const unableToDelete=(res:Response)=>{
+  const unAuthorized = ApiError.unAuthorized();
+  res.status(unAuthorized.status).json({ message: "you are not assignable to delete reservation" });
 
-
+}
 export const checkPermission = (requiredPermission: number[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -62,8 +74,55 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
           return;
         }
       }
+      if (permittedUser.accessLevel === AccessLevel.SubManager) {
+        // If the user is a Manager, they should not be able to create SuperUsers
+        const reservationId=req.params.addReservationId
+        console.log(reservationId,"reservationid",req.method,req.params)
+        if (req.body.table ) {
+          unableToReserved(res);
+          return;
+        }
+          if(reservationId){
+            console.log("in reservationid")
+            const reservationData=await AddReservation.findById(reservationId)
+            console.log(reservationData,"reservationData is this")
+           
+            if(req.method!=="DELETE"){
+              console.log(req.body,"inside req.body")
+              if(reservationData && reservationData.reservationStatus!=="Left" || reservationData && reservationData.reservationStatus!=="unassigned" ){
+                unableToUpdateReservation(res);
+                  return;
+              }
+              else{
+              if(reservationData && reservationData.reservationStatus==="Left"){
+                    if(!req.body.prepayment ){
+                      unableToUpdateReservation(res);
+                      return;
+  
+                    }
+              }if(reservationData && reservationData.reservationStatus==="unassigned"){
+                if(req.body.reservationStatus || req.body.table ){
+                  unableToUpdateReservation(res);
+                }
+              }
+            }
+                  
+            }
+            else{
+              
+                 if(reservationData && reservationData.reservationStatus!=="unassigned"){
+                  unableToDelete(res)
+                  return
+                 }
+            }
+        }
 
-    
+          }
+          
+      
+      
+      // }
+      
       // Handle other access levels
       switch (permittedUser.accessLevel) {
         case AccessLevel.SuperUser:

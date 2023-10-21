@@ -25,6 +25,10 @@ const tableSchema = new mongoose.Schema({
     required: true,
   },
   tableCombinations: [String],
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SeatingArea",

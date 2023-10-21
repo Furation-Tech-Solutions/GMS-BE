@@ -9,6 +9,7 @@ interface TableInput {
   partySizeMax: number;
   tableCombinations?: mongoose.Schema.Types.ObjectId[];
   seatingArea: mongoose.Schema.Types.ObjectId;
+  isBlocked?: boolean;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -90,6 +91,9 @@ const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
           "string.empty": "Seating area ID is required",
           "any.required": "Seating area ID is required",
         }),
+    isBlocked: isUpdate
+      ? Joi.boolean().optional().default(false)
+      : Joi.boolean().optional().default(false),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

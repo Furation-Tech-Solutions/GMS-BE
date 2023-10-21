@@ -68,13 +68,11 @@ export class ClientDataSourceImpl implements ClientDataSource {
   }
   
   async update(id: string, client: ClientModel): Promise<any> {
-    try {
+    
       const updatedClient = await Client.findByIdAndUpdate(id, client, {
         new: true,
       }); // No need for conversion here
       return updatedClient ? updatedClient.toObject() : null; // Convert to a plain JavaScript object before returning
-    } catch (error) {
-      throw ApiError.badRequest();
-    }
+  
   }
 }
