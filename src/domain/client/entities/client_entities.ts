@@ -23,6 +23,7 @@ export class ClientModel {
     public birthDate: string,
     public anniversaryDate: string,
     public visits: number = 0,
+    public reservationCencel: number = 0,
     public spends: number = 0,
     public language: string,
     public gender: string,
@@ -57,6 +58,7 @@ export class ClientEntity {
     public birthDate: string,
     public anniversaryDate: string,
     public visits: number,
+    public reservationCencel: number,
     public spends: number,
     public language: string,
     public gender: string,
@@ -160,6 +162,10 @@ export class ClientMapper {
           clientData.visits !== undefined
             ? clientData.visits
             : existingClient.visits,
+        reservationCencel:
+          clientData.reservationCencel !== undefined
+            ? clientData.reservationCencel
+            : existingClient.reservationCencel,
         spends:
           clientData.spends !== undefined
             ? clientData.spends
@@ -215,6 +221,7 @@ export class ClientMapper {
         birthDate: clientData.birthDate,
         anniversaryDate: clientData.anniversaryDate,
         visits: clientData.visits,
+        reservationCencel: clientData.reservationCencel,
         spends: clientData.spends,
         language: clientData.language,
         gender: clientData.gender,
@@ -251,6 +258,7 @@ export class ClientMapper {
       birthDate: client.birthDate,
       anniversaryDate: client.anniversaryDate,
       visits: client.visits,
+      reservationCencel: client.reservationCencel,
       spends: client.spends,
       language: client.language,
       gender: client.gender,

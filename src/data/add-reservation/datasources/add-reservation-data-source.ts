@@ -150,6 +150,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       reservation: id,
     });
 
+    const existClient = await Client.findOne({ _id: existResevation?.client });
+
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
     const date = new Date(currentDate);
@@ -190,6 +192,12 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         checkOutTime: formattedTime,
       };
 
+      // Increase the visits of the client
+      if (existClient) {
+        existClient.visits = existClient.visits + 1; // Increment visits
+        await existClient.save(); // Save the changes
+      }
+
       const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(
         existingCheckInCheckOut?._id,
         newCheckOutData,
@@ -199,6 +207,16 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       );
     }
 
+    if (
+      existResevation?.reservationStatus !== "cencel" &&
+      addReservation.reservationStatus === "cencel"
+    ) {
+      // Increase the visits of the client
+      if (existClient) {
+        existClient.reservationCencel = existClient.reservationCencel + 1; // Increment visits
+        await existClient.save(); // Save the changes
+      }
+    }
     const updatedAddReservation = await AddReservation.findByIdAndUpdate(
       id,
       addReservation,
@@ -214,16 +232,62 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     tableId: string,
     reservationData: AddReservationModel
   ): Promise<any> {
-    const getAllReservationsByTableID = await AddReservation.find({
+    const getAllReservationsByTableIDAndDate = await AddReservation.find({
       table: tableId,
+      date: reservationData.date,
     });
 
-    console.log("datasource====>", { tableId, reservationData });
-    const bookTbleForDate = getAllReservationsByTableID.filter(
-      (reservation) => {
-        return reservation.date === reservationData.date;
-      }
-    );
+    // // Loop through existing reservations to check for time conflicts
+    // for (const existingReservation of getAllReservationsByTableIDAndDate) {
+    //   const existingStartTime = new Date(existingReservation.timeSlot);
+    //   const existingEndTime = new Date(existingStartTime);
+    //   existingEndTime.setHours(
+    //     existingEndTime.getHours() +
+    //       getHoursFromDuration(existingReservation.duration)
+    //   );
+
+    //   const newStartTime = new Date(reservationData.timeSlot);
+    //   const newEndTime = new Date(newStartTime);
+    //   newEndTime.setHours(
+    //     newEndTime.getHours() + getHoursFromDuration(reservationData.duration)
+    //   );
+
+    //   // Check for time conflicts
+    //   if (
+    //     (newStartTime >= existingStartTime && newStartTime < existingEndTime) ||
+    //     (newEndTime > existingStartTime && newEndTime <= existingEndTime)
+    //   ) {
+    //     throw ApiError.customError(
+    //       409,
+    //       `Table is already booked from ${existingReservation.timeSlot} for ${existingReservation.duration} hours.`
+    //     );
+    //   }
+    // }
+
+    // {
+    // "date": "2023-10-20",
+    // "duration": "02:00:00",
+    // "timeSlot": "19:00:00"
+    // }
+
+    // const bookTableForTime = getAllReservationsByTableIDAndDate.filter(
+    //   (reservation) => {
+
+    //     if (reservation.timeSlot === reservationData.timeSlot) {
+    //       throw ApiError.customError(
+    //         409,
+    //         `Table is alredy Booked form ${reservation.timeSlot} to next ${reservation.duration}hr `
+    //       );
+    //     } else {
+    //       console.log("abhb");
+    //     }
+    //   }
+    // );
+
+    // console.log({
+    //   bookTbleForDate: bookTableForTime,
+    //   conflictReservation: bookTableForTime,
+    // });
 
     // if (getAllReservationsByTableID) {
     //   // getAllReservationsByTableID.date,
@@ -260,7 +324,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     //   }
     // // }
 
-    return getAllReservationsByTableID.map((reservation) =>
+    return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()
     );
   }
