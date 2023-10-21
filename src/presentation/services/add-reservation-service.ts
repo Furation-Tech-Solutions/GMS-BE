@@ -161,11 +161,13 @@ export class AddReservationServices {
     next: NextFunction
   ): Promise<void> {
     const { status, table } = req.query;
+
     let shift  = req.query.shift as string;
     const date  = req.query.date as string;
     const unassign  = req.query.unassign as string;
 
     const coverflow  = req.query.coverflow as string;
+
 
     const allShifts = await this.shiftDataSourceImpl.getAll();
 
@@ -236,13 +238,11 @@ export class AddReservationServices {
             guestsByTimeSlotArray,
           });
         }
-
       
 
         // sendMailConfirmedReservations()
 
         return res.json(responseData)
-      
       }
     );
   }
