@@ -87,9 +87,33 @@ export class ReservationStatusService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (reservationStatus: ReservationStatusEntity[]) => {
-        const resData = reservationStatus.map((reservationStatus) =>
+        const { classification, search } = req.query;
+
+        let resData = reservationStatus.map((reservationStatus) =>
           ReservationStatusMapper.toEntity(reservationStatus)
         );
+
+        // Filter by classification
+        if (classification && typeof classification === "string") {
+          resData = resData.filter((item) => {
+            if (item) {
+              return (
+                item.classification.toLowerCase() ===
+                classification.toLowerCase()
+              );
+            }
+            return false;
+          });
+        }
+
+        // Search
+        if (search && typeof search === "string") {
+          const regex = new RegExp(search, "i");
+          resData = resData.filter((item) => {
+            return regex.test(item.statusName);
+          });
+        }
+
         return res.json(resData);
       }
     );

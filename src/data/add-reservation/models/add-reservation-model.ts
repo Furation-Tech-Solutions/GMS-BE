@@ -54,7 +54,7 @@ const addReservationSchema = new mongoose.Schema({
   reservationStatus: {
     type: String,
     trim: true,
-    default: "upcoming",
+    default: "unassigned",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
@@ -62,15 +62,8 @@ const addReservationSchema = new mongoose.Schema({
     required: [false, "Please select the Table"],
   },
   bookedBy: {
-    // type: bookedByData,
-    _id: {
-      type: String,
-      default: "",
-    },
-    name: {
-      type: String,
-      default: "",
-    },
+    type: String,
+    default: "",
   },
   perks: {
     type: String,

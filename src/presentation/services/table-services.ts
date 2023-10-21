@@ -1,6 +1,6 @@
 // Import necessary classes, interfaces, and dependencies
 import { NextFunction, Request, Response } from "express";
-import { Either } from "monet";
+import { Either, Success } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { CreateTableUsecase } from "@domain/table/usecases/create-table";
 import {
@@ -12,6 +12,7 @@ import { GetTableByIdUsecase } from "@domain/table/usecases/get-table-by-id";
 import { GetAllTablesUsecase } from "@domain/table/usecases/get-tables";
 import { DeleteTableUsecase } from "@domain/table/usecases/delete-table";
 import { UpdateTableUsecase } from "@domain/table/usecases/update-table";
+import { Table } from "@data/table/models/table-model";
 
 export class TableService {
   private readonly createTableUsecase: CreateTableUsecase;
@@ -35,12 +36,12 @@ export class TableService {
   }
 
   async createTable(req: Request, res: Response): Promise<void> {
-    const user=req.user
-    const newTableData={
-        ...req.body,
-        createdBy:user._id,
-        updatedBy:user._id
-    }
+    const user = req.user;
+    const newTableData = {
+      ...req.body,
+      createdBy: user._id,
+      updatedBy: user._id,
+    };
     const tableData: TableModel = TableMapper.toModel(newTableData);
 
     const newTable: Either<ErrorClass, TableEntity> =
@@ -107,11 +108,11 @@ export class TableService {
 
   async updateTable(req: Request, res: Response): Promise<void> {
     const tableId: string = req.params.tableId;
-    const user=req.user
-    const newTableData={
-        ...req.body,
-        updatedBy:user._id
-    }
+    const user = req.user;
+    const newTableData = {
+      ...req.body,
+      updatedBy: user._id,
+    };
     const tableData: TableModel = newTableData;
     // Get the existing outlet by ID
     const existingTable: Either<ErrorClass, TableEntity> =
@@ -147,5 +148,27 @@ export class TableService {
         );
       }
     );
+  }
+  async tableBlock(req: Request, res: Response): Promise<void> {
+    try {
+      const { tables, isBlocked } = req.body; // Assuming req.body.tables is an array of table IDs
+
+      // If isBlocked is not provided in the request, set it to true by default
+      const updateValue = typeof isBlocked === "boolean" ? isBlocked : true;
+
+      // Update all tables in the provided array
+      const updateResult = await Table.updateMany(
+        { _id: { $in: tables } }, // Find tables by their IDs
+        { isBlocked: updateValue } // Set isBlocked to the specified value
+      );
+
+      if (updateResult.modifiedCount > 0) {
+        res.status(200).json({ message: "Tables successfully updated" });
+      } else {
+        res.status(404).json({ message: "No tables were updated" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 }

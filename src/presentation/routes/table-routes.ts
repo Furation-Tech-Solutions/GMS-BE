@@ -64,6 +64,11 @@ tableRouter.put(
   verifyLoggedInUser,
   tableService.updateTable.bind(tableService)
 );
+tableRouter.patch(
+  "/blockTable",
+  verifyLoggedInUser,
+  tableService.tableBlock.bind(tableService)
+);
 
 tableRouter.delete(
   "/deleteTable/:tableId",
