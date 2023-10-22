@@ -4,8 +4,8 @@ export class CheckInCheckOutModel {
     public client: string = "",
     public checkIn: string = "",
     public checkOutTime: string = "",
-    public prePayment: number = 0,
-    public onSitePayment: number = 0,
+    // public prePayment: number = 0,
+    // public onSitePayment: number = 0,
     public totalBill: number = 0,
     public paymentMethod: string = "",
     public paymentDetails: string = "",
@@ -36,8 +36,8 @@ export class CheckInCheckOutEntity {
     public client: string,
     public checkIn: string,
     public checkOutTime: string,
-    public prePayment: number,
-    public onSitePayment: number,
+    // public prePayment: number,
+    // public onSitePayment: number,
     public totalBill: number,
     public paymentMethod: string,
     public paymentDetails: string,
@@ -78,14 +78,14 @@ export class CheckInCheckOutMapper {
           checkOutData.checkOutTime !== undefined
             ? checkOutData.checkOutTime
             : existingCheckOutData.checkOutTime,
-        prePayment:
-          checkOutData.prePayment !== undefined
-            ? checkOutData.prePayment
-            : existingCheckOutData.prePayment,
-        onSitePayment:
-          checkOutData.onSitePayment !== undefined
-            ? checkOutData.onSitePayment
-            : existingCheckOutData.onSitePayment,
+        // prePayment:
+        //   checkOutData.prePayment !== undefined
+        //     ? checkOutData.prePayment
+        //     : existingCheckOutData.prePayment,
+        // onSitePayment:
+        //   checkOutData.onSitePayment !== undefined
+        //     ? checkOutData.onSitePayment
+        //     : existingCheckOutData.onSitePayment,
         totalBill:
           checkOutData.totalBill !== undefined
             ? checkOutData.totalBill
@@ -126,8 +126,8 @@ export class CheckInCheckOutMapper {
         client: checkOutData.client,
         checkIn: checkOutData.checkIn,
         checkOutTime: checkOutData.checkOutTime,
-        prePayment: checkOutData.prePayment,
-        onSitePayment: checkOutData.onSitePayment,
+        // prePayment: checkOutData.prePayment,
+        // onSitePayment: checkOutData.onSitePayment,
         totalBill: checkOutData.totalBill,
         paymentMethod: checkOutData.paymentMethod,
         paymentDetails: checkOutData.paymentDetails,
@@ -146,8 +146,8 @@ export class CheckInCheckOutMapper {
       client: checkOutData.client,
       checkIn: checkOutData.checkIn,
       checkOutTime: checkOutData.checkOutTime,
-      prePayment: checkOutData.prePayment,
-      onSitePayment: checkOutData.onSitePayment,
+      // prePayment: checkOutData.prePayment,
+      // onSitePayment: checkOutData.onSitePayment,
       totalBill: checkOutData.totalBill,
       paymentMethod: checkOutData.paymentMethod,
       paymentDetails: checkOutData.paymentDetails,
