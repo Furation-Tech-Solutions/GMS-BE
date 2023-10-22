@@ -18,6 +18,8 @@ interface ReservationInput {
   bookedBy?: string;
   serverName?: string;
   perks?: string;
+  prePayment?: number;
+  onSitePayment?: number;
   updatedBy?: string | null;
   createdBy?: string | null;
   confirmationMailSending?: boolean;
@@ -240,6 +242,20 @@ const reservationValidator = (
           .messages({
             "any.required": "Please select the Update By",
           }),
+    prePayment: isUpdate
+      ? Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the Pre Payment",
+        })
+      : Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the Pre Payment",
+        }),
+    onSitePayment: isUpdate
+      ? Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the onsite Payment ",
+        })
+      : Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the onsite Payment",
+        }),
     createdBy: isUpdate
       ? Joi.string()
           .trim()
