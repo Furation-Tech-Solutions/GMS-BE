@@ -33,7 +33,7 @@ export const sendMailConfirmedReservations = () => {
                     for (const reservation of reservations) {
                         if (reservation.client && reservation.client.email) {
 
-                            await emailService.handleReservation((reservation._id).toString());
+                            await emailService.reminderEmail((reservation._id).toString());
 
                             // try {
                             //     // Send the email
