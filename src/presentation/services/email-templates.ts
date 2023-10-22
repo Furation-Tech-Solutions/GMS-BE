@@ -39,6 +39,7 @@ async function readEmailTemplateFromS3(s3Url:string):Promise<string> {
     return ''; // Return an empty string or handle the error as needed
   }
 }
+
 export async function userAccountTemplate(result: any): Promise<string> {
 const userEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/userRegistration.html`);
   const emailContent = userEmailTemplate
@@ -92,7 +93,7 @@ export async function cancelReservationTemplate(result: any): Promise<string> {
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/cancelReservation.html`);
   
   // Replace placeholders with actual data in the email template
-  const fullName=result.client.firstName+" "+result.client.lastName
+  const fullName= result.client.firstName+" "+result.client.lastName
   const date=await formatDate(result.date)
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
@@ -133,14 +134,17 @@ export async function reminderEmailTemplate(result: any): Promise<string> {
   // Fetch the email template from S3
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reminder_email.html`);
   
+  // console.log(emailTemplate, "emailTemplate")
   // Replace placeholders with actual data in the email template
+console.log(result)
+  console.log(result.client.firstName, result.client.lastName, "firsName lastName")
   const fullName= result.client.firstName+" "+result.client.lastName
   const date=await formatDate(result.date)
   // const date="12121"
   const startTime =await  formatTime(result.timeSlot);
   
   const emailContent = emailTemplate
-    // .replace("[Client's Full Name]", fullName)
+    .replace("[Client's First Name]", result.client.firstNam)
     .replace('[Reservation Date]', date)
     .replace('[Number of Guests]', result.noOfGuests)
     // .replace('[Shift]', result.shift.shiftName)
@@ -149,6 +153,9 @@ export async function reminderEmailTemplate(result: any): Promise<string> {
     // .replace('[Seating Area]', result.seatingArea.seatingAreaName)
     .replace('[Table Number]', result.table.tableNo)
    
+
+    // console.log(emailContent, "emailContent");
+
   return emailContent 
 }
 // Read the HTML/CSS email template file

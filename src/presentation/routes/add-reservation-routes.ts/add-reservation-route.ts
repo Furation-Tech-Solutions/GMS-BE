@@ -62,6 +62,7 @@ const addReservationService = new AddReservationServices(
 export const addReservationRouter = Router();
 
 // Route handling for creating a new Add Reservation
+
 addReservationRouter.post(
   "/create",
   verifyLoggedInUser,
@@ -106,4 +107,9 @@ addReservationRouter.get(
   // checkPermission(["1101","5101"]),
   validateReservationInputMiddleware(true),
   addReservationService.tableBlockCheck.bind(addReservationService)
+);
+
+addReservationRouter.get(
+  "/availibility/one",
+  addReservationService.getAllReservationsForTableAndTime.bind(addReservationService)
 );

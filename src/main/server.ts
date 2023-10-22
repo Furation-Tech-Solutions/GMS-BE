@@ -27,7 +27,9 @@ async function connectToDatabase() {
         console.log(`${Message.SERVER_RUNNING} ${env.port}`);
       });
 
+
       sendMailConfirmedReservations()
+
 
   } catch (error) {
 // console.log("error is this-",error,"error")
