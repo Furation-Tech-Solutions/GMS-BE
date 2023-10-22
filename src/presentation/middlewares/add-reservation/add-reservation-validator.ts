@@ -16,6 +16,7 @@ interface ReservationInput {
   reservationNote?: string;
   reservationStatus?: string;
   bookedBy?: string;
+  serverName?: string;
   perks?: string;
   updatedBy?: string | null;
   createdBy?: string | null;
@@ -180,6 +181,13 @@ const reservationValidator = (
         })
       : Joi.string().trim().allow("").optional().messages({
           "any.required": "Please specify name in bookedBy",
+        }),
+    serverName: isUpdate
+      ? Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in server name",
+        })
+      : Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in server name",
         }),
     // bookedBy: isUpdate
     //   ? Joi.object({

@@ -65,6 +65,10 @@ const addReservationSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  serverName: {
+    type: String,
+    default: "",
+  },
   perks: {
     type: String,
     maxlength: [500, "Perks should have less than 500 characters"],
