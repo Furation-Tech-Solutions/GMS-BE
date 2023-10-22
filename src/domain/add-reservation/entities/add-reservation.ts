@@ -12,7 +12,8 @@ export class AddReservationModel {
     public reservationNote: string = "",
     public reservationStatus: string,
     public table: string | undefined = undefined,
-    public bookedBy: { _id: string; name: string } | undefined,
+    public bookedBy: string | undefined,
+    public serverName: string | undefined,
     public perks: string = "",
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
@@ -35,7 +36,8 @@ export class AddReservationEntity {
     public reservationNote: string,
     public reservationStatus: string,
     public table: string | undefined,
-    public bookedBy: { _id: string; name: string } | undefined,
+    public bookedBy: string = "",
+    public serverName: string = "",
     public perks: string,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
@@ -106,6 +108,10 @@ export class AddReservationMapper {
           reservationData.bookedBy !== undefined
             ? reservationData.bookedBy
             : existingReservation.bookedBy,
+        serverName:
+          reservationData.serverName !== undefined
+            ? reservationData.serverName
+            : existingReservation.serverName,
         perks:
           reservationData.perks !== undefined
             ? reservationData.perks
@@ -150,6 +156,7 @@ export class AddReservationMapper {
         reservationStatus: reservationData.reservationStatus,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
+        serverName: reservationData.serverName,
         updatedBy: { _id: reservationData.updatedBy },
         createdBy: { _id: reservationData.createdBy },
         perks: reservationData.perks,
@@ -175,6 +182,7 @@ export class AddReservationMapper {
       reservation.reservationStatus,
       reservation.table,
       reservation.bookedBy,
+      reservation.serverName,
       reservation.perks,
       reservation.updatedBy,
       reservation.createdBy,

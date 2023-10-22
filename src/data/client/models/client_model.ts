@@ -130,7 +130,12 @@ const clientSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  reservationCencel: {
+    type: Number,
+    default: 0,
+  },
   // visiteDate: [String],
+
   spends: {
     type: Number,
     default: 0,

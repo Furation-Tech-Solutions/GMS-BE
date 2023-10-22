@@ -150,7 +150,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const existingCheckInCheckOut = await CheckInCheckOut.findOne({
       reservation: id,
     });
-
+    const existClient = await Client.findOne({ _id: existResevation?.client });
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
     const date = new Date(currentDate);
@@ -191,6 +191,12 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         checkOutTime: formattedTime,
       };
 
+      // Increase the visits of the client
+      if (existClient) {
+        existClient.visits = existClient.visits + 1; // Increment visits
+        await existClient.save(); // Save the changes
+      }
+
       const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(
         existingCheckInCheckOut?._id,
         newCheckOutData,
@@ -200,6 +206,16 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       );
     }
 
+    if (
+      existResevation?.reservationStatus !== "cencel" &&
+      addReservation.reservationStatus === "cencel"
+    ) {
+      // Increase the visits of the client
+      if (existClient) {
+        existClient.reservationCencel = existClient.reservationCencel + 1; // Increment visits
+        await existClient.save(); // Save the changes
+      }
+    }
     const updatedAddReservation = await AddReservation.findByIdAndUpdate(
       id,
       addReservation,
@@ -215,19 +231,20 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     tableId: string,
     reservationData: AddReservationModel
   ): Promise<any> {
-    const getAllReservationsByTableID = await AddReservation.find({
+    const getAllReservationsByTableIDAndDate = await AddReservation.find({
       table: tableId,
+      date: reservationData.date,
     });
 
-    console.log("datasource====>", { tableId, reservationData });
-    const bookTbleForDate = getAllReservationsByTableID.filter(
-      (reservation) => {
-        return reservation.date === reservationData.date;
-      }
-    );
+    // console.log("datasource====>", { tableId, reservationData });
+    // const bookTbleForDate = getAllReservationsByTableID.filter(
+    //   (reservation) => {
+    //     return reservation.date === reservationData.date;
+    //   }
+    // );
 
 
-    return getAllReservationsByTableID.map((reservation) =>
+    return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()
     );
   }

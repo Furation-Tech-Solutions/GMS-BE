@@ -26,6 +26,7 @@ interface ClientInput {
   birthDate?: Date;
   anniversaryDate?: Date;
   visits?: number;
+  reservationCencel?: number;
   language?: string;
   spends?: number;
   gender: string;
@@ -113,18 +114,18 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     company: isUpdate
-      ? Joi.string().max(255).optional().trim().messages({
+      ? Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "Company name should have less than 255 characters",
         })
-      : Joi.string().max(255).optional().trim().messages({
+      : Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "Company name should have less than 255 characters",
         }),
 
     profileNotes: isUpdate
-      ? Joi.string().max(500).optional().trim().messages({
+      ? Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Profile notes should have less than 500 characters",
         })
-      : Joi.string().max(500).optional().trim().messages({
+      : Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Profile notes should have less than 500 characters",
         }),
 
@@ -139,10 +140,10 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     privateNotes: isUpdate
-      ? Joi.string().max(500).optional().trim().messages({
+      ? Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Private notes should have less than 500 characters",
         })
-      : Joi.string().max(500).optional().trim().messages({
+      : Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Private notes should have less than 500 characters",
         }),
 
@@ -226,25 +227,25 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
           }),
 
     address: isUpdate
-      ? Joi.string().max(500).optional().trim().messages({
+      ? Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Address should have less than 500 characters",
         })
-      : Joi.string().max(500).optional().trim().messages({
+      : Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "Address should have less than 500 characters",
         }),
     city: isUpdate
-      ? Joi.string().max(255).optional().trim().messages({
+      ? Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "City should have less than 255 characters",
         })
-      : Joi.string().max(255).optional().trim().messages({
+      : Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "City should have less than 255 characters",
         }),
 
     state: isUpdate
-      ? Joi.string().max(255).optional().trim().messages({
+      ? Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "State should have less than 255 characters",
         })
-      : Joi.string().max(500).optional().trim().messages({
+      : Joi.string().max(500).allow("").optional().trim().messages({
           "string.max": "State should have less than 500 characters",
         }),
 
@@ -257,10 +258,10 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     country: isUpdate
-      ? Joi.string().max(255).optional().trim().messages({
+      ? Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "Country should have less than 255 characters",
         })
-      : Joi.string().max(255).optional().trim().messages({
+      : Joi.string().max(255).allow("").optional().trim().messages({
           "string.max": "Country should have less than 255 characters",
         }),
 
@@ -277,6 +278,9 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
       : customDateValidator("anniversaryDate").optional(),
 
     visits: isUpdate
+      ? Joi.number().integer().optional().default(0)
+      : Joi.number().integer().optional().default(0),
+    reservationCencel: isUpdate
       ? Joi.number().integer().optional().default(0)
       : Joi.number().integer().optional().default(0),
     language: isUpdate
