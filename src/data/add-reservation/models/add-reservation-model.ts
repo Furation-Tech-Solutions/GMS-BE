@@ -80,6 +80,16 @@ const addReservationSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  prePayment: {
+    type: Number,
+    required: [false, "Please fill pre payment"],
+    default: 0,
+  },
+  onSitePayment: {
+    type: Number,
+    required: [false, "Please fill onsite payment"],
+    default: 0,
+  },
 
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
