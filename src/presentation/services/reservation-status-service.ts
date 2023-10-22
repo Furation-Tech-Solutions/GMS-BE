@@ -38,6 +38,7 @@ export class ReservationStatusService {
     const user = req.user;
     const newReservattionStatusData = {
       ...req.body,
+      statusName: req.body.statusName.toLowerCase(),
       createdBy: user._id,
       updatedBy: user._id,
     };
