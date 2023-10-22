@@ -13,6 +13,7 @@ import {
 } from "@domain/add-reservation/entities/add-reservation";
 
 import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
+import * as moment from 'moment-timezone';
 
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
@@ -23,6 +24,7 @@ import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasou
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
 import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cron/cron";
+import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 export class AddReservationServices {
@@ -59,6 +61,8 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+
+    
     try {
       const user = req.user;
 
@@ -95,6 +99,7 @@ export class AddReservationServices {
   }
 
   async deleteAddReservation(req: Request, res: Response): Promise<void> {
+
     const addReservationId: string = req.params.addReservationId;
 
     const deletedAddReservation: Either<ErrorClass, void> =
@@ -112,6 +117,7 @@ export class AddReservationServices {
   }
 
   async tableBlockCheck(req: Request, res: Response): Promise<void> {
+
     const user = req.user;
     const tableId: string = req.params.tableId;
 
@@ -137,6 +143,7 @@ export class AddReservationServices {
   }
 
   async getAddReservationById(req: Request, res: Response): Promise<void> {
+
     const addReservationId: string = req.params.addReservationId;
 
     const addReservation: Either<ErrorClass, AddReservationEntity> =
@@ -160,6 +167,7 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+
     const { status, table } = req.query;
     let shift  = req.query.shift as string;
     const date  = req.query.date as string;
@@ -196,6 +204,10 @@ export class AddReservationServices {
       filter.reservationStatus = "unassigned";
     }
 
+    if (table && date && status === "confirmed") {
+      filter.reservationStatus = "confirmed";
+    }
+
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
 
@@ -203,9 +215,12 @@ export class AddReservationServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity[]) => {
+
         const responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
         );
+
+
 
         if (coverflow) {
           const guestsByTimeSlot: { [key: string]: number[] } = {};
@@ -237,8 +252,6 @@ export class AddReservationServices {
           });
         }
 
-      
-
         // sendMailConfirmedReservations()
 
         return res.json(responseData)
@@ -248,6 +261,7 @@ export class AddReservationServices {
   }
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
+
     const addReservationId: string = req.params.addReservationId;
     const user = req.user;
 
@@ -300,4 +314,53 @@ export class AddReservationServices {
       }
     );
   }
+
+
+  async getAllReservationsForTableAndTime(req: Request, res: Response): Promise<void> {
+    try {
+      const date = req.query.date as string;
+      const table = req.query.table as string;
+      const timeSlot = req.query.time as string;
+  
+      const filter: IRFilter = {};
+  
+      if (date) {
+        filter.date = date;
+      }
+      if (table) {
+        filter.table = table;
+      }
+
+  
+      const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
+  
+      addReservations.cata(
+        (error: ErrorClass) =>
+          res.status(error.status).json({ error: error.message }),
+        (result: AddReservationEntity[]):any => {
+          const responseData = result.map((addReservation) =>
+            AddReservationMapper.toEntity(addReservation)
+          );
+
+          // Additional logic to check table availability
+          const requestedTime = moment.tz(`${date}T${timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
+          for (const reservation of responseData) {
+            const reservationStartTime = moment.tz(`${date}T${reservation.timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
+            const reservationEndTime = reservationStartTime.clone().add(reservation.duration, 'minutes');
+
+            if (requestedTime.isBetween(reservationStartTime, reservationEndTime, null, '[]')) {
+              return res.status(400).json({ message: 'Table not available at this time' });
+            }
+          }
+  
+
+         return  res.status(200).json({  message: 'Table is available at this time' });
+        }
+      );
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  
+
 }

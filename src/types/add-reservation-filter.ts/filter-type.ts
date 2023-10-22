@@ -4,6 +4,7 @@ export interface IRFilter {
   shift?: string;
   reservationStatus?: string;
   table?: string;
+  timeSlot?:string;
 }
 
 export type  TReservationCover =  {
