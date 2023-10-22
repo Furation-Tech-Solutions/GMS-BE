@@ -9,7 +9,7 @@ const  addReservationDataSourceImpl = new AddReservationDataSourceImpl(mongoose.
 
 export const sendMailConfirmedReservations = () => {
     try {
-        cron.schedule('*/2 * * * *', async function () { // Scheduled for 12:00 PM IST
+        cron.schedule('0 12 * * *', async function () { // Scheduled for 12:00 PM IST
             try {
                 // Get the formatted date
                 const formattedDate = formattedDateFunc(new Date());
@@ -23,7 +23,7 @@ export const sendMailConfirmedReservations = () => {
                 const reservations =  await addReservationDataSourceImpl.getAll({
                         date: formattedDate,
                         reservationStatus: 'confirmed'
-                    })
+                    });
 
 
                 if (reservations.length > 0) {
@@ -32,16 +32,7 @@ export const sendMailConfirmedReservations = () => {
                     // Iterate over reservations and send emails to each client
                     for (const reservation of reservations) {
                         if (reservation.client && reservation.client.email) {
-
                             await emailService.reminderEmail((reservation._id).toString());
-
-                            // try {
-                            //     // Send the email
-                            //     await emailService.sendEmail(emailOption);
-                            //     console.log(`Email sent to ${reservation.client.email}`);
-                            // } catch (emailError) {
-                            //     console.error(`Error sending email to ${reservation.client.email}:`, emailError);
-                            // }
                         }
                     }
                 }

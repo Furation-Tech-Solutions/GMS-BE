@@ -112,6 +112,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async getAll(filter: IRFilter | Icron): Promise<any[]> {
+
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
@@ -242,40 +243,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     //   }
     // );
 
-    // if (getAllReservationsByTableID) {
-    //   // getAllReservationsByTableID.date,
-    //   // getAllReservationsByTableID.duration,
-    //   // getAllReservationsByTableID.timeSlot,
-    // }
-
-    // if (addReservation.table) {
-    //   const existingTable = await Table.findOne({ _id: addReservation.table });
-
-    //   if (getAllReservationsByTableID) {
-    //     const newReservedTime = {
-    //       reservation_id: reservationData._id,
-    //       startTime: reservationData.timeSlot,
-    //       duration: reservationData.duration,
-    //       // endTime:
-    //     };
-
-    //     // Check for reservation time conflicts
-    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
-    //       return time.startTime === newReservedTime.startTime;
-    //     });
-
-    //     if (hasTimeConflict) {
-    //       throw ApiError.customError(
-    //         409,
-    //         "Table is all ready booked for given time."
-    //       );
-    //     }
-
-    //     // If no time conflict, push the new reservedTime
-    //     existingTable.reservedTimes.push(newReservedTime);
-    //     await existingTable.save();
-    //   }
-    // // }
 
     return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()

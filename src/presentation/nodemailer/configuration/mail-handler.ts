@@ -109,10 +109,11 @@ catch(err){
   }
   async reminderEmail(user:any): Promise<void> {
     try{
-      const emailContent = await reminderEmailTemplate(user);
+      const addReservation = await getAddReservationByIdUsecase.read(user);
+      const emailContent = await reminderEmailTemplate(addReservation);
       const emailOption = {
         // email:addReservation.client.email,
-        email:user.email,
+        email:addReservation.client.email,
         subject: "Reservation Reminder",
         message: emailContent,
       };
