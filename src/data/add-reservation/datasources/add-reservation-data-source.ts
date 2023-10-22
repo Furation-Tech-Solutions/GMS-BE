@@ -112,7 +112,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async getAll(filter: IRFilter | Icron): Promise<any[]> {
-
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
@@ -224,6 +223,27 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       }
     );
 
+    if (addReservation.prePayment !== 0 || addReservation.onSitePayment !== 0) {
+      if (existClient) {
+        // Fetch all reservations for the client
+        const clientReservations = await AddReservation.find({
+          client: existClient._id,
+        });
+        // Calculate the total spends based on prePayment and onSitePayment
+        const totalSpends = clientReservations.reduce((total, reservation) => {
+          return (
+            total +
+            (reservation.prePayment || 0) +
+            (reservation.onSitePayment || 0)
+          );
+        }, 0);
+        // Assuming existClient is an object and spends is a property in it.
+
+        existClient.spends = totalSpends;
+        await existClient.save();
+      }
+    }
+
     return updatedAddReservation ? updatedAddReservation.toObject() : null;
   }
 
@@ -242,7 +262,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     //     return reservation.date === reservationData.date;
     //   }
     // );
-
 
     return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()

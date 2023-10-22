@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import ApiError from '@presentation/error-handling/api-error';
 import * as  Message from '@presentation/error-handling/message-error'
 import { sendMailConfirmedReservations } from '@presentation/middlewares/node-cron/cron';
+import { unblockTableWithCron } from '@presentation/middlewares/node-cron/unblock-table-cron';
 
 const app = setupApp();
 
@@ -29,8 +30,7 @@ async function connectToDatabase() {
 
 
       sendMailConfirmedReservations()
-
-
+      unblockTableWithCron()
   } catch (error) {
 // console.log("error is this-",error,"error")
     if(error instanceof ApiError){
