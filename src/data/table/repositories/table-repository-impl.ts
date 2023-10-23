@@ -61,9 +61,12 @@ export class TableRepositoryImpl implements TableRepository {
     try {
       const response = await this.dataSource.update(id, data);
       return Right<ErrorClass, TableEntity>(response);
-    } catch (e) {
+    } catch (e: any) {
       if (typeof e === typeof ApiError.notFound) {
         return Left<ErrorClass, TableEntity>(ApiError.notFound());
+      }
+      if (e instanceof mongoose.Error.CastError) {
+        return Left<ErrorClass, TableEntity>(ApiError.castError());
       }
       return Left<ErrorClass, TableEntity>(ApiError.internalError());
     }
