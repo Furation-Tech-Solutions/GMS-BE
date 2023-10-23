@@ -16,7 +16,7 @@ const unauthorizedResponse = (res: Response) => {
 };
 const unableToReserved = (res: Response) => {
   const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: "you are not assignable to table" });
+  res.status(unAuthorized.status).json({ message: "Insufficient Privileges" });
 };
 const unableToUpdateReservation=(res:Response)=>{
   const unAuthorized = ApiError.unAuthorized();

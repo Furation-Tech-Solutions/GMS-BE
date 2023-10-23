@@ -163,9 +163,9 @@ export class TableService {
       );
 
       if (updateResult.modifiedCount > 0) {
-        res.status(200).json({ message: "Tables successfully updated" });
+        res.status(200).json({ message: "Tables successfully Blocked" });
       } else {
-        res.status(404).json({ message: "No tables were updated" });
+        res.status(200).json({ message: "Feild To Blocked Tables" });
       }
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
