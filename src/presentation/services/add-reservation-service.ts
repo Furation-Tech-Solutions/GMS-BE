@@ -25,6 +25,7 @@ import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
 import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cron/cron";
 import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
+import { Table } from "@data/table/models/table-model";
 // import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
 
 export class AddReservationServices {
@@ -332,16 +333,29 @@ export class AddReservationServices {
         filter.table = table;
       }
 
+      const tableInfo = await Table.findById({ _id: table });
+
   
       const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
   
       addReservations.cata(
         (error: ErrorClass) =>
           res.status(error.status).json({ error: error.message }),
-        (result: AddReservationEntity[]):any => {
+         (result: AddReservationEntity[]): any => {
           const responseData = result.map((addReservation) =>
             AddReservationMapper.toEntity(addReservation)
           );
+
+     
+
+      if (!tableInfo) {
+        return res.status(404).json({ message: 'Table not found' });
+      }
+  
+      // Check if the table is blocked
+      if (tableInfo.isBlocked) {
+        return res.status(200).json({ message: 'Table blocked' });
+      }
 
           // Additional logic to check table availability
           const requestedTime = moment.tz(`${date}T${timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
@@ -350,12 +364,12 @@ export class AddReservationServices {
             const reservationEndTime = reservationStartTime.clone().add(reservation.duration, 'minutes');
 
             if (requestedTime.isBetween(reservationStartTime, reservationEndTime, null, '[]')) {
-              return res.status(400).json({ message: 'Table not available at this time' });
+              return res.status(200).json({ message: 'unavailable' });
             }
           }
   
 
-         return  res.status(200).json({  message: 'Table is available at this time' });
+         return  res.status(200).json({  message: 'available' });
         }
       );
     } catch (error) {

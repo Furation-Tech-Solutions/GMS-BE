@@ -50,6 +50,7 @@
     "googleapis": "^126.0.1",
     "joi": "^17.9.2",
     "joi-objectid": "^4.0.2",
+    "logform": "^2.6.0",
     "module-alias": "^2.2.3",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
@@ -59,7 +60,8 @@
     "mongoose": "^7.4.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.5",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "winston": "^3.11.0"
   },
   "_moduleAliases": {
     "@domain": "dist/domain",

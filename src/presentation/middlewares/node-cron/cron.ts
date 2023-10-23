@@ -1,5 +1,4 @@
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
-import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { formattedDateFunc } from "@presentation/utils/formatt-date";
 import mongoose from "mongoose";
@@ -13,12 +12,6 @@ export const sendMailConfirmedReservations = () => {
             try {
                 // Get the formatted date
                 const formattedDate = formattedDateFunc(new Date());
-
-                // // Find all confirmed reservations for today
-                // const reservations = await AddReservation.find({
-                //     date: formattedDate,
-                //     reservationStatus: 'confirmed'
-                // }).populate('client');
 
                 const reservations =  await addReservationDataSourceImpl.getAll({
                         date: formattedDate,
