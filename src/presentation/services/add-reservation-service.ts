@@ -308,7 +308,7 @@ export class AddReservationServices {
           async (result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
 
-            if (resData.reservationStatus == "left") {
+            // if (resData.reservationStatus == "isLeft") {
               //called the get reservation by id to send populated data to email template
               const addReservationId: string | undefined = resData._id;
 
@@ -316,7 +316,7 @@ export class AddReservationServices {
                 const emailhandler = new EmailHandler();
                 await emailhandler.handleReservation(addReservationId);
               }
-            }
+            // }
             res.json(resData);
           }
         );

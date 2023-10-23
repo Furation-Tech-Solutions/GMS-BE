@@ -35,18 +35,16 @@ async function readEmailTemplateFromS3(s3Url:string):Promise<string> {
     const response = await axios.get(s3Url);
     return response.data;
   } catch (error) {
-    console.error('Error reading email template from S3:', error);
+    // console.error('Error reading email template from S3:', error);
     return ''; // Return an empty string or handle the error as needed
   }
 }
-
 export async function userAccountTemplate(result: any): Promise<string> {
 const userEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/userRegistration.html`);
   const emailContent = userEmailTemplate
   // .replace("[User's First Name]", result.firstName)
   .replace("[User Email]", result.email)
   .replace("[User Password]", result.randomPassword)
-  
   return emailContent;     
 }
 export async function bookingRequestTemplate(result: any): Promise<string> {
@@ -76,7 +74,7 @@ export async function confirmReservationTemplate(result: any): Promise<string> {
   const startTime =await  formatTime(result.timeSlot);
   
   const emailContent = emailTemplate
-    // .replace("[Client's Full Name]", fullName)
+    .replace("[Client's Full Name]", fullName)
     .replace('[Reservation Date]', date)
     .replace('[Number of Guests]', result.noOfGuests)
     // .replace('[Shift]', result.shift.shiftName)
@@ -105,7 +103,7 @@ export async function cancelReservationTemplate(result: any): Promise<string> {
     // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
     .replace("[Client's Full Name]",fullName)
-    .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+    // .replace('[Seating Area]', result.seatingArea.seatingAreaName)
    
   return emailContent 
 }
@@ -126,6 +124,9 @@ export async function leftReservationTemplate(result: any): Promise<string> {
     // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
     .replace("[Client's Full Name]",fullName)
+    .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+    .replace('[Table Number]', result.table.tableNo)
+    .replace('[Server Name]',result.serverName)
    
   return emailContent 
 }
@@ -134,10 +135,7 @@ export async function reminderEmailTemplate(result: any): Promise<string> {
   // Fetch the email template from S3
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reminder_email.html`);
   
-  // console.log(emailTemplate, "emailTemplate")
   // Replace placeholders with actual data in the email template
-console.log(result)
-  console.log(result.client.firstName, result.client.lastName, "firsName lastName")
   const fullName= result.client.firstName+" "+result.client.lastName
   const date=await formatDate(result.date)
   // const date="12121"
@@ -149,13 +147,10 @@ console.log(result)
     .replace('[Number of Guests]', result.noOfGuests)
     // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
-    .replace("[Client's Name]",fullName)
-    // .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+    .replace("[Client's Full Name]",fullName)
+    .replace('[Seating Area]', result.seatingArea.seatingAreaName)
     .replace('[Table Number]', result.table.tableNo)
    
-
-    // console.log(emailContent, "emailContent");
-
   return emailContent 
 }
 // Read the HTML/CSS email template file
@@ -195,7 +190,7 @@ function readCustomerLeftEmailTemplate(filePath: string): string {
     try {
       return fs.readFileSync(`${filePath}/post-dining-email.html`, 'utf-8');
     } catch (error) {
-      console.error('Error reading email template:', error);
+      // console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -213,7 +208,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     try {
       return fs.readFileSync(`${filePath}/manager-email-template.html`, 'utf-8');
     } catch (error) {
-      console.error('Error reading email template:', error);
+      // console.error('Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -243,7 +238,7 @@ const customerLeftemailTemplate = readCustomerLeftEmailTemplate(filePath);
     try {
       return fs.readFileSync(`${filePath}/user-email-template.html`, 'utf-8');
     } catch (error) {
-      console.error('002 Error reading email template:', error);
+      // console.error('002 Error reading email template:', error);
       return ''; // Return an empty string or handle the error as needed
     }
   }

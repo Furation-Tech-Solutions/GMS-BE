@@ -77,18 +77,18 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       if (permittedUser.accessLevel === AccessLevel.SubManager) {
         // If the user is a Manager, they should not be able to create SuperUsers
         const reservationId=req.params.addReservationId
-        console.log(reservationId,"reservationid",req.method,req.params)
+        // console.log(reservationId,"reservationid",req.method,req.params)
         if (req.body.table ) {
           unableToReserved(res);
           return;
         }
           if(reservationId){
-            console.log("in reservationid")
+            // console.log("in reservationid")
             const reservationData=await AddReservation.findById(reservationId)
-            console.log(reservationData,"reservationData is this")
+            // console.log(reservationData,"reservationData is this")
            
             if(req.method!=="DELETE"){
-              console.log(req.body,"inside req.body")
+              // console.log(req.body,"inside req.body")
               if(reservationData && reservationData.reservationStatus!=="Left" || reservationData && reservationData.reservationStatus!=="unassigned" ){
                 unableToUpdateReservation(res);
                   return;
