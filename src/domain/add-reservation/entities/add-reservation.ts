@@ -101,8 +101,8 @@ export class AddReservationMapper {
             : existingReservation.reservationNote,
         reservationStatus:
           reservationData.reservationStatus !== undefined
-            ? reservationData.reservationStatus
-            : existingReservation.reservationStatus,
+            ? reservationData.reservationStatus.toUpperCase()
+            : existingReservation.reservationStatus.toUpperCase(),
         table:
           reservationData.table !== undefined
             ? reservationData.table
@@ -165,7 +165,7 @@ export class AddReservationMapper {
         // // source: reservationData.source,
         reservationTags: reservationData.reservationTags,
         reservationNote: reservationData.reservationNote,
-        reservationStatus: reservationData.reservationStatus,
+        reservationStatus: reservationData.reservationStatus.toUpperCase(),
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
         serverName: reservationData.serverName,
