@@ -203,8 +203,8 @@ export class AddReservationServices {
       filter.reservationStatus = "unassigned";
     }
 
-    if (table && date && status === "confirmed") {
-      filter.reservationStatus = "confirmed";
+    if (table && date && status === "booked") {
+      filter.reservationStatus = "booked";
     }
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =

@@ -15,7 +15,7 @@ export const sendMailConfirmedReservations = () => {
 
                 const reservations =  await addReservationDataSourceImpl.getAll({
                         date: formattedDate,
-                        reservationStatus: 'confirmed'
+                        reservationStatus: 'booked'
                     });
 
 
