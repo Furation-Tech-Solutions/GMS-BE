@@ -76,7 +76,7 @@ export class ReservationStatusMapper {
             ? reservationStatusData._id.toString()
             : undefined
           : reservationStatusData._id.toString(),
-        statusName: reservationStatusData.statusName,
+        statusName: reservationStatusData.statusName.toUpperCase(),
         iconInitials: reservationStatusData.iconInitials,
         color: reservationStatusData.color,
         classification: reservationStatusData.classification,

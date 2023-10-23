@@ -206,8 +206,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     }
 
     if (
-      existResevation?.reservationStatus !== "cencel" &&
-      addReservation.reservationStatus === "cencel"
+      existResevation?.reservationStatus !== "cancelled and notify" &&
+      addReservation.reservationStatus === "cancelled and notify"
     ) {
       // Increase the visits of the client
       if (existClient) {
