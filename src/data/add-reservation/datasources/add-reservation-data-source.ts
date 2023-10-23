@@ -112,7 +112,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async getAll(filter: IRFilter | Icron): Promise<any[]> {
-
     const addReservations = await AddReservation.find(filter)
       .populate({
         path: "shift",
