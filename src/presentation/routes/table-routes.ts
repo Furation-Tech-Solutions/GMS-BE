@@ -68,12 +68,13 @@ tableRouter.put(
 tableRouter.patch(
   "/blockTable",
   verifyLoggedInUser,
-  checkPermission([109,209]),
+  checkPermission([109, 209]),
   tableService.tableBlock.bind(tableService)
 );
 
 tableRouter.delete(
   "/deleteTable/:tableId",
+  verifyLoggedInUser,
   // checkPermission(["1103"]),
   tableService.deleteTable.bind(tableService)
 );

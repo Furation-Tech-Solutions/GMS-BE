@@ -163,9 +163,15 @@ export class TableService {
       );
 
       if (updateResult.modifiedCount > 0) {
-        res.status(200).json({ message: "Tables successfully Blocked" });
+        const successMessage = isBlocked
+          ? "Tables successfully blocked"
+          : "Tables successfully unblocked";
+        res.status(200).json({ message: successMessage });
       } else {
-        res.status(200).json({ message: "Feild To Blocked Tables" });
+        const errorMessage = isBlocked
+          ? "Failed to block tables"
+          : "Failed to unblock tables";
+        res.status(200).json({ message: errorMessage });
       }
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
