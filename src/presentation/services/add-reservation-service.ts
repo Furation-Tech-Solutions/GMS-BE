@@ -272,10 +272,9 @@ export class AddReservationServices {
   async updateAddReservation(req: Request, res: Response): Promise<void> {
     const addReservationId: string = req.params.addReservationId;
     const user = req.user;
-
     const newReservationData = {
       ...req.body,
-      reservationStatus: req.body.statusName.toLowerCase(),
+      reservationStatus: req.body.reservationStatus.toLowerCase(),
       updatedBy: user._id,
     };
     const addReservationData: AddReservationModel = newReservationData;
