@@ -30,14 +30,14 @@ const verifyLoggedInUser = async (
 
     }
 
-    else {
-      req.user = {
-        _id: "65116a3e13633df078698e90"
-      }; // Set the user in the request object
-      // const unAuthorized = ApiError.unAuthorized();
-      // res.status(unAuthorized.status).json({ message: unAuthorized.message });
-      next()
-    }
+    // else {
+    //   req.user = {
+    //     _id: "65116a3e13633df078698e90"
+    //   }; // Set the user in the request object
+    //   // const unAuthorized = ApiError.unAuthorized();
+    //   // res.status(unAuthorized.status).json({ message: unAuthorized.message });
+    //   next()
+    // }
 
   } catch (error) {
     const internalError = ApiError.internalError();

@@ -223,6 +223,27 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       }
     );
 
+    if (addReservation.prePayment !== 0 || addReservation.onSitePayment !== 0) {
+      if (existClient) {
+        // Fetch all reservations for the client
+        const clientReservations = await AddReservation.find({
+          client: existClient._id,
+        });
+        // Calculate the total spends based on prePayment and onSitePayment
+        const totalSpends = clientReservations.reduce((total, reservation) => {
+          return (
+            total +
+            (reservation.prePayment || 0) +
+            (reservation.onSitePayment || 0)
+          );
+        }, 0);
+        // Assuming existClient is an object and spends is a property in it.
+
+        existClient.spends = totalSpends;
+        await existClient.save();
+      }
+    }
+
     return updatedAddReservation ? updatedAddReservation.toObject() : null;
   }
 
@@ -241,41 +262,6 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     //     return reservation.date === reservationData.date;
     //   }
     // );
-
-    // if (getAllReservationsByTableID) {
-    //   // getAllReservationsByTableID.date,
-    //   // getAllReservationsByTableID.duration,
-    //   // getAllReservationsByTableID.timeSlot,
-    // }
-
-    // if (addReservation.table) {
-    //   const existingTable = await Table.findOne({ _id: addReservation.table });
-
-    //   if (getAllReservationsByTableID) {
-    //     const newReservedTime = {
-    //       reservation_id: reservationData._id,
-    //       startTime: reservationData.timeSlot,
-    //       duration: reservationData.duration,
-    //       // endTime:
-    //     };
-
-    //     // Check for reservation time conflicts
-    //     const hasTimeConflict = existingTable.reservedTimes.some((time) => {
-    //       return time.startTime === newReservedTime.startTime;
-    //     });
-
-    //     if (hasTimeConflict) {
-    //       throw ApiError.customError(
-    //         409,
-    //         "Table is all ready booked for given time."
-    //       );
-    //     }
-
-    //     // If no time conflict, push the new reservedTime
-    //     existingTable.reservedTimes.push(newReservedTime);
-    //     await existingTable.save();
-    //   }
-    // // }
 
     return getAllReservationsByTableIDAndDate.map((reservation) =>
       reservation.toObject()

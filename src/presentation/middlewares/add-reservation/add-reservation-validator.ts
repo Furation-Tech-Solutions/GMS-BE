@@ -15,8 +15,11 @@ interface ReservationInput {
   reservationTags?: string[];
   reservationNote?: string;
   reservationStatus?: string;
-  bookedBy?: { _id: mongoose.Schema.Types.ObjectId; name: string };
+  bookedBy?: string;
+  serverName?: string;
   perks?: string;
+  prePayment?: number;
+  onSitePayment?: number;
   updatedBy?: string | null;
   createdBy?: string | null;
   confirmationMailSending?: boolean;
@@ -175,31 +178,45 @@ const reservationValidator = (
         string: "Please fill Reservtion Status",
       }),
     bookedBy: isUpdate
-      ? Joi.object({
-          _id: Joi.string()
-            .trim()
-            .pattern(objectIdPattern, "MongoDB ObjectId")
-            .optional()
-            .messages({
-              "any.required": "Please specify _id in bookedBy",
-            }),
-          name: Joi.string().trim().optional().messages({
-            "any.required": "Please specify name in bookedBy",
-          }),
+      ? Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in bookedBy",
         })
-      : Joi.object({
-          _id: Joi.string()
-            .trim()
-            .pattern(objectIdPattern, "MongoDB ObjectId")
-            .required()
-            .default("651164b63d20dce2ae531ac5")
-            .messages({
-              "any.required": "Please specify _id in bookedBy",
-            }),
-          name: Joi.string().trim().required().default("Shiva").messages({
-            "any.required": "Please specify name in bookedBy",
-          }),
+      : Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in bookedBy",
         }),
+    serverName: isUpdate
+      ? Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in server name",
+        })
+      : Joi.string().trim().allow("").optional().messages({
+          "any.required": "Please specify name in server name",
+        }),
+    // bookedBy: isUpdate
+    //   ? Joi.object({
+    //       _id: Joi.string()
+    //         .trim()
+    //         .pattern(objectIdPattern, "MongoDB ObjectId")
+    //         .optional()
+    //         .messages({
+    //           "any.required": "Please specify _id in bookedBy",
+    //         }),
+    //       name: Joi.string().trim().optional().messages({
+    //         "any.required": "Please specify name in bookedBy",
+    //       }),
+    //     })
+    //   : Joi.object({
+    //       _id: Joi.string()
+    //         .trim()
+    //         .pattern(objectIdPattern, "MongoDB ObjectId")
+    //         .required()
+    //         .default("651164b63d20dce2ae531ac5")
+    //         .messages({
+    //           "any.required": "Please specify _id in bookedBy",
+    //         }),
+    //       name: Joi.string().trim().required().default("Shiva").messages({
+    //         "any.required": "Please specify name in bookedBy",
+    //       }),
+    //     }),
     perks: Joi.string()
       .max(2000)
       .trim()
@@ -225,6 +242,20 @@ const reservationValidator = (
           .messages({
             "any.required": "Please select the Update By",
           }),
+    prePayment: isUpdate
+      ? Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the Pre Payment",
+        })
+      : Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the Pre Payment",
+        }),
+    onSitePayment: isUpdate
+      ? Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the onsite Payment ",
+        })
+      : Joi.number().optional().default(0).messages({
+          "any.required": "Please fill the onsite Payment",
+        }),
     createdBy: isUpdate
       ? Joi.string()
           .trim()
@@ -267,18 +298,7 @@ export const validateReservationInputMiddleware = (
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Extract the request body
       const { body } = req;
-
-      body.createdBy = body.createdBy || "65116a3e13633df078698e90";
-      body.updatedBy = body.updatedBy || "65116a3e13633df078698e90";
-      body.bookedBy = body.bookedBy || {
-        _id: "651164b63d20dce2ae531ac5",
-        name: "Shiva",
-      };
-
-      req.body = body;
-
       // Validate the reservation input using the reservationValidator
       const validatedInput: ReservationInput = reservationValidator(
         body,

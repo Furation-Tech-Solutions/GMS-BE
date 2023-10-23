@@ -29,8 +29,8 @@ interface ICheckOut extends Document {
   checkInTime: string;
   checkOutTime: string;
   table: mongoose.Types.ObjectId;
-  prePayment: number;
-  onSitePayment: number;
+  // prePayment: number;
+  // onSitePayment: number;
   totalBill: number;
   paymentMethod: string;
   paymentDetails: string;

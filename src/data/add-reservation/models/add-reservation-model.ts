@@ -54,7 +54,7 @@ const addReservationSchema = new mongoose.Schema({
   reservationStatus: {
     type: String,
     trim: true,
-    default: "upcoming",
+    default: "unassigned",
   },
   table: {
     type: mongoose.Schema.Types.ObjectId,
@@ -62,15 +62,12 @@ const addReservationSchema = new mongoose.Schema({
     required: [false, "Please select the Table"],
   },
   bookedBy: {
-    // type: bookedByData,
-    _id: {
-      type: String,
-      default: "",
-    },
-    name: {
-      type: String,
-      default: "",
-    },
+    type: String,
+    default: "",
+  },
+  serverName: {
+    type: String,
+    default: "",
   },
   perks: {
     type: String,
@@ -82,6 +79,16 @@ const addReservationSchema = new mongoose.Schema({
   confirmationMailSending: {
     type: Boolean,
     default: false,
+  },
+  prePayment: {
+    type: Number,
+    required: [false, "Please fill pre payment"],
+    default: 0,
+  },
+  onSitePayment: {
+    type: Number,
+    required: [false, "Please fill onsite payment"],
+    default: 0,
   },
 
   updatedBy: {

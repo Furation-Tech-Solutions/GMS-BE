@@ -12,8 +12,11 @@ export class AddReservationModel {
     public reservationNote: string = "",
     public reservationStatus: string,
     public table: string | undefined = undefined,
-    public bookedBy: { _id: string; name: string } | undefined,
+    public bookedBy: string | undefined,
+    public serverName: string | undefined,
     public perks: string = "",
+    public prePayment: number | undefined = 0,
+    public onSitePayment: number | undefined = 0,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
@@ -35,8 +38,11 @@ export class AddReservationEntity {
     public reservationNote: string,
     public reservationStatus: string,
     public table: string | undefined,
-    public bookedBy: { _id: string; name: string } | undefined,
+    public bookedBy: string = "",
+    public serverName: string = "",
     public perks: string,
+    public prePayment: number = 0,
+    public onSitePayment: number = 0,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
@@ -106,10 +112,22 @@ export class AddReservationMapper {
           reservationData.bookedBy !== undefined
             ? reservationData.bookedBy
             : existingReservation.bookedBy,
+        serverName:
+          reservationData.serverName !== undefined
+            ? reservationData.serverName
+            : existingReservation.serverName,
         perks:
           reservationData.perks !== undefined
             ? reservationData.perks
             : existingReservation.perks,
+        prePayment:
+          reservationData.prePayment !== undefined
+            ? reservationData.prePayment
+            : existingReservation.prePayment,
+        onSitePayment:
+          reservationData.onSitePayment !== undefined
+            ? reservationData.onSitePayment
+            : existingReservation.onSitePayment,
         confirmationMailSending:
           reservationData.confirmationMailSending !== undefined
             ? reservationData.confirmationMailSending
@@ -150,9 +168,12 @@ export class AddReservationMapper {
         reservationStatus: reservationData.reservationStatus,
         table: reservationData.table,
         bookedBy: reservationData.bookedBy,
+        serverName: reservationData.serverName,
         updatedBy: { _id: reservationData.updatedBy },
         createdBy: { _id: reservationData.createdBy },
         perks: reservationData.perks,
+        prePayment: reservationData.prePayment,
+        onSitePayment: reservationData.onSitePayment,
         confirmationMailSending: reservationData.confirmationMailSending,
         createdAt: reservationData.createdAt, // Make sure to create a new Date instance.
       };
@@ -175,7 +196,10 @@ export class AddReservationMapper {
       reservation.reservationStatus,
       reservation.table,
       reservation.bookedBy,
+      reservation.serverName,
       reservation.perks,
+      reservation.prePayment,
+      reservation.onSitePayment,
       reservation.updatedBy,
       reservation.createdBy,
       reservation.confirmationMailSending
