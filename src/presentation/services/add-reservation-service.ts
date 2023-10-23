@@ -13,13 +13,16 @@ import {
 } from "@domain/add-reservation/entities/add-reservation";
 
 import { ShiftRepositoryImpl } from "@data/availibility/repositories/shift-repository-Imp";
-import * as moment from 'moment-timezone';
+import * as moment from "moment-timezone";
 
 import EmailService from "./send-mail";
 import WhatsAppService from "./whatsapp-services";
 import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { TableBlockCheckUsecase } from "@domain/add-reservation/usecases/table-block-check";
-import { IRFilter, TReservationCover } from "types/add-reservation-filter.ts/filter-type";
+import {
+  IRFilter,
+  TReservationCover,
+} from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
 import mongoose from "mongoose";
 import { generateTimeSlots } from "@presentation/utils/get-shift-time-slots";
@@ -63,8 +66,6 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-
-    
     try {
       const user = req.user;
 
@@ -101,7 +102,6 @@ export class AddReservationServices {
   }
 
   async deleteAddReservation(req: Request, res: Response): Promise<void> {
-
     const addReservationId: string = req.params.addReservationId;
 
     const deletedAddReservation: Either<ErrorClass, void> =
@@ -119,7 +119,6 @@ export class AddReservationServices {
   }
 
   async tableBlockCheck(req: Request, res: Response): Promise<void> {
-
     const user = req.user;
     const tableId: string = req.params.tableId;
 
@@ -145,7 +144,6 @@ export class AddReservationServices {
   }
 
   async getAddReservationById(req: Request, res: Response): Promise<void> {
-
     const addReservationId: string = req.params.addReservationId;
 
     const addReservation: Either<ErrorClass, AddReservationEntity> =
@@ -169,13 +167,12 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const { status, table, sort, search } = req.query;
+    let shift = req.query.shift as string;
+    const date = req.query.date as string;
+    const unassign = req.query.unassign as string;
 
-    const { status, table } = req.query;
-    let shift  = req.query.shift as string;
-    const date  = req.query.date as string;
-    const unassign  = req.query.unassign as string;
-
-    const coverflow  = req.query.coverflow as string;
+    const coverflow = req.query.coverflow as string;
 
     const allShifts = await this.shiftDataSourceImpl.getAll();
 
@@ -217,12 +214,25 @@ export class AddReservationServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: AddReservationEntity[]) => {
-
-        const responseData = result.map((addReservation) =>
+        let responseData = result.map((addReservation) =>
           AddReservationMapper.toEntity(addReservation)
         );
 
-
+        if (sort) {
+          sort === "1"
+            ? responseData.sort((a, b) => {
+                return (
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+                );
+              })
+            : responseData.sort((a, b) => {
+                return (
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime()
+                );
+              });
+        }
 
         if (coverflow) {
           const guestsByTimeSlot: { [key: string]: number[] } = {};
@@ -253,23 +263,19 @@ export class AddReservationServices {
             guestsByTimeSlotArray,
           });
         }
-      
-
         // sendMailConfirmedReservations()
-
-        return res.json(responseData)
-      
+       return res.json(responseData);
       }
     );
   }
 
   async updateAddReservation(req: Request, res: Response): Promise<void> {
-
     const addReservationId: string = req.params.addReservationId;
     const user = req.user;
 
     const newReservationData = {
       ...req.body,
+      reservationStatus: req.body.statusName.toLowerCase(),
       updatedBy: user._id,
     };
     const addReservationData: AddReservationModel = newReservationData;
@@ -302,7 +308,7 @@ export class AddReservationServices {
           async (result: AddReservationEntity) => {
             const resData = AddReservationMapper.toEntity(result, true);
 
-            if (resData.reservationStatus == "isLeft") {
+            if (resData.reservationStatus == "left") {
               //called the get reservation by id to send populated data to email template
               const addReservationId: string | undefined = resData._id;
 
@@ -318,15 +324,17 @@ export class AddReservationServices {
     );
   }
 
-
-  async getAllReservationsForTableAndTime(req: Request, res: Response): Promise<void> {
+  async getAllReservationsForTableAndTime(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     try {
       const date = req.query.date as string;
       const table = req.query.table as string;
       const timeSlot = req.query.time as string;
-  
+
       const filter: IRFilter = {};
-  
+
       if (date) {
         filter.date = date;
       }
@@ -359,16 +367,25 @@ export class AddReservationServices {
       }
 
           // Additional logic to check table availability
-          const requestedTime = moment.tz(`${date}T${timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
+          const requestedTime = moment.tz(
+            `${date}T${timeSlot}`,
+            "YYYY-MM-DDTHH:mm:ss",
+            "YourTimeZoneHere"
+          );
           for (const reservation of responseData) {
-            const reservationStartTime = moment.tz(`${date}T${reservation.timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
-            const reservationEndTime = reservationStartTime.clone().add(reservation.duration, 'minutes');
+            const reservationStartTime = moment.tz(
+              `${date}T${reservation.timeSlot}`,
+              "YYYY-MM-DDTHH:mm:ss",
+              "YourTimeZoneHere"
+            );
+            const reservationEndTime = reservationStartTime
+              .clone()
+              .add(reservation.duration, "minutes");
 
             if (requestedTime.isBetween(reservationStartTime, reservationEndTime, null, '[]')) {
               return res.status(200).json({ message: 'unavailable' });
             }
           }
-  
 
          return  res.status(200).json({  message: 'available' });
         }
@@ -377,6 +394,4 @@ export class AddReservationServices {
       res.status(500).json(error);
     }
   }
-  
-
 }
