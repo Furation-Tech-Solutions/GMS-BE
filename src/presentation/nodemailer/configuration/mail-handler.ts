@@ -30,7 +30,7 @@ class EmailHandler {
         if(addReservation.reservationStatus=="unassigned"){
         const emailContent =await bookingRequestTemplate(addReservation);
         const emailOption = {
-          // email:addReservation.client.email,
+          // email:,
           email:addReservation.client.email,
           subject: "Booking Request Confirmation",
           message: emailContent,
