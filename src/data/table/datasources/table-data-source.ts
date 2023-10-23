@@ -92,6 +92,12 @@ export class TableDataSourceImpl implements TableDataSource {
     //   }
     // }
 
+    // Sanitize the tableCombinations field to contain only strings or ObjectIDs.
+    table.tableCombinations = (table.tableCombinations || []).map((item) => {
+      return typeof item === "object" && item._id ? item._id : item.toString();
+    });
+
+    // Update the document in the database.
     const updatedTable = await Table.findByIdAndUpdate(id, table, {
       new: true,
     });
