@@ -31,7 +31,6 @@ import { AddReservation } from "@data/add-reservation/models/add-reservation-mod
 
 import { Table } from "@data/table/models/table-model";
 
-
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
   private readonly deleteAddReservationUsecase: DeleteAddReservationUsecase;
@@ -170,7 +169,6 @@ export class AddReservationServices {
     const { status, table, sort, search } = req.query;
     let shift = req.query.shift as string;
     const date = req.query.date as string;
-    const unassign = req.query.unassign as string;
 
     const coverflow = req.query.coverflow as string;
 
@@ -193,7 +191,7 @@ export class AddReservationServices {
     }
 
     if (status && typeof status === "string") {
-      filter.reservationStatus = status;
+      filter.reservationStatus = status.toLocaleLowerCase();
     }
     if (table && typeof table === "string") {
       filter.table = table;
@@ -264,7 +262,7 @@ export class AddReservationServices {
           });
         }
         // sendMailConfirmedReservations()
-       return res.json(responseData);
+        return res.json(responseData);
       }
     );
   }
@@ -308,13 +306,13 @@ export class AddReservationServices {
             const resData = AddReservationMapper.toEntity(result, true);
 
             // if (resData.reservationStatus == "isLeft") {
-              //called the get reservation by id to send populated data to email template
-              const addReservationId: string | undefined = resData._id;
+            //called the get reservation by id to send populated data to email template
+            const addReservationId: string | undefined = resData._id;
 
-              if (addReservationId) {
-                const emailhandler = new EmailHandler();
-                await emailhandler.handleReservation(addReservationId);
-              }
+            if (addReservationId) {
+              const emailhandler = new EmailHandler();
+              await emailhandler.handleReservation(addReservationId);
+            }
             // }
             res.json(resData);
           }
@@ -343,27 +341,25 @@ export class AddReservationServices {
 
       const tableInfo = await Table.findById({ _id: table });
 
-  
-      const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
-  
+      const addReservations: Either<ErrorClass, AddReservationEntity[]> =
+        await this.getAllAddReservationUsecase.execute(filter);
+
       addReservations.cata(
         (error: ErrorClass) =>
           res.status(error.status).json({ error: error.message }),
-         (result: AddReservationEntity[]): any => {
+        (result: AddReservationEntity[]): any => {
           const responseData = result.map((addReservation) =>
             AddReservationMapper.toEntity(addReservation)
           );
 
-     
+          if (!tableInfo) {
+            return res.status(404).json({ message: "Table not found" });
+          }
 
-      if (!tableInfo) {
-        return res.status(404).json({ message: 'Table not found' });
-      }
-  
-      // Check if the table is blocked
-      if (tableInfo.isBlocked) {
-        return res.status(200).json({ message: 'Table blocked' });
-      }
+          // Check if the table is blocked
+          if (tableInfo.isBlocked) {
+            return res.status(200).json({ message: "Table blocked" });
+          }
 
           // Additional logic to check table availability
           const requestedTime = moment.tz(
@@ -381,12 +377,19 @@ export class AddReservationServices {
               .clone()
               .add(reservation.duration, "minutes");
 
-            if (requestedTime.isBetween(reservationStartTime, reservationEndTime, null, '[]')) {
-              return res.status(200).json({ message: 'unavailable' });
+            if (
+              requestedTime.isBetween(
+                reservationStartTime,
+                reservationEndTime,
+                null,
+                "[]"
+              )
+            ) {
+              return res.status(200).json({ message: "unavailable" });
             }
           }
 
-         return  res.status(200).json({  message: 'available' });
+          return res.status(200).json({ message: "available" });
         }
       );
     } catch (error) {
