@@ -59,7 +59,7 @@ export const bookingRequestRouter = Router();
 bookingRequestRouter.post(
   "/add",
   //   verifyLoggedInUser,
-  // validateBookingRequestInputMiddleware(false),
+  validateBookingRequestInputMiddleware(false),
   bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
 
@@ -84,7 +84,7 @@ bookingRequestRouter.get(
 // Route handling for updating a booking request by ID
 bookingRequestRouter.put(
   "/:bookingRequestId",
-  //   verifyLoggedInUser,
+    verifyLoggedInUser,
   validateBookingRequestInputMiddleware(true),
   bookingRequestService.updateBookingRequest.bind(bookingRequestService)
 );

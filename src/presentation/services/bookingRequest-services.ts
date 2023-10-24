@@ -183,7 +183,6 @@ export class BookingRequestServices {
 
   async updateBookingRequest(req: Request, res: Response): Promise<void> {
     const BookingRequestID: string = req.params.bookingRequestId;
-
     const user = req.user;
     const newBookingRequestData = {
       ...req.body,

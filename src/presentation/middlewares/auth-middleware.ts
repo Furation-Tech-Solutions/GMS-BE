@@ -12,7 +12,7 @@ const verifyLoggedInUser = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void> => {
+): Promise<any> => {
   try {
     const headerEmail = req.headers.email;
     const cookieEmail = req.cookies.email;
@@ -20,28 +20,37 @@ const verifyLoggedInUser = async (
     if (headerEmail || cookieEmail) {
       const emailToCheck = headerEmail || cookieEmail;
       const user = await UserAccount.findOne({ email: emailToCheck });
+
       if (user) {
-        req.user = user
-        next();
+        req.user = user;
+        next(); // User found, proceed to the next middleware or route handler.
       } else {
         const unAuthorized = ApiError.unAuthorized();
-        res.status(unAuthorized.status).json({ message: unAuthorized.message });
+        return res
+          .status(unAuthorized.status)
+          .json({ message: unAuthorized.message });
       }
-
+    } else {
+      // If no email is found in headers or cookies, you can set a default user or proceed without setting req.user.
+      // You can choose one of the following options:
+      
+      // 1. Set a default user:
+      // req.user = {
+      //   _id: "65116a3e13633df078698e90"
+      // };
+      // next();
+      
+      // 2. Send an unauthorized response and don't set req.user:
+      const unAuthorized = ApiError.unAuthorized();
+      return res
+        .status(unAuthorized.status)
+        .json({ message: unAuthorized.message });
     }
-
-    // else {
-    //   req.user = {
-    //     _id: "65116a3e13633df078698e90"
-    //   }; // Set the user in the request object
-    //   // const unAuthorized = ApiError.unAuthorized();
-    //   // res.status(unAuthorized.status).json({ message: unAuthorized.message });
-    //   next()
-    // }
-
   } catch (error) {
     const internalError = ApiError.internalError();
-    res.status(internalError.status).json({ message: internalError.message });
+    return res
+      .status(internalError.status)
+      .json({ message: internalError.message });
   }
 };
 
@@ -79,7 +88,7 @@ const verifyAuthorizationToSuperUser = (
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && req.user.accessLevel === 'Superuser') {
+    if (req.user && req.user.accessLevel === "Superuser") {
       next();
     } else {
       const forbidden = ApiError.forbidden();
@@ -97,7 +106,7 @@ const verifyAuthorizationToManager = (
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && req.user.accessLevel === 'Manager') {
+    if (req.user && req.user.accessLevel === "Manager") {
       next();
     } else {
       const forbidden = ApiError.forbidden();
@@ -115,7 +124,7 @@ const verifyAuthorizationToSubManager = (
   next: NextFunction
 ) => {
   verifyLoggedInUser(req, res, () => {
-    if (req.user && req.user.accessLevel === 'Sub-Manager') {
+    if (req.user && req.user.accessLevel === "Sub-Manager") {
       next();
     } else {
       const forbidden = ApiError.forbidden();
