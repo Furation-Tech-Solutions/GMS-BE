@@ -75,7 +75,7 @@ export class GuestRepositoryImpl implements GuestRepository {
     try {
       const i = await this.guestDataSource.read(id);
       return Right<ErrorClass, GuestEntity>(i);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof mongoose.Error.CastError) {
         return Left<ErrorClass, GuestEntity>(ApiError.castError());
       }

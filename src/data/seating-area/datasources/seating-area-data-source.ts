@@ -35,6 +35,9 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
       path: "tables",
       select: "id tableNo partySizeMini partySizeMax",
     });
+    if (!seatingArea) {
+      throw ApiError.notFound();
+    }
     return seatingArea ? seatingArea.toObject() : null;
   }
 

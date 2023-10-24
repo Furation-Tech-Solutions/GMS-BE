@@ -8,6 +8,7 @@ interface GuestInput {
   lastName: string;
   email: string;
   confirmationMailSending: boolean;
+  date: string;
   bookedBy: { _id: mongoose.Schema.Types.ObjectId; name: string };
   additionalGuest?: string[];
   reservationTags?: mongoose.Schema.Types.ObjectId[];
@@ -16,6 +17,29 @@ interface GuestInput {
   updatedBy?: string;
   createdBy?: string;
 }
+
+const customDateValidator = (fieldName: string) => {
+  return Joi.string()
+    .custom((value, helpers) => {
+      // Check if the date string has the correct length (yyyy-mm-dd)
+      if (value.length === 10) {
+        const parts = value.split("-");
+        const yyyy = parseInt(parts[0], 10);
+        const mm = parseInt(parts[1], 10);
+        const dd = parseInt(parts[2], 10);
+        const currentYear = new Date().getFullYear();
+
+        if (yyyy <= currentYear && mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) {
+          return value;
+        }
+      }
+
+      return helpers.error(`${fieldName}.dateInvalid`);
+    })
+    .messages({
+      [`${fieldName}.dateInvalid`]: `Invalid ${fieldName} format. Please use a valid date (yyyy-mm-dd) with a year not greater than the current year, a month between 1 and 12, and a day between 1 and 31.`,
+    });
+};
 
 const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
   const guestSchema = Joi.object<GuestInput>({
@@ -42,11 +66,11 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
         }),
 
     email: isUpdate
-      ? Joi.string().email().optional().trim().messages({
+      ? Joi.string().email().optional().allow("").trim().messages({
           "string.email": "Invalid email format",
           // "any.required": "Email is required",
         })
-      : Joi.string().email().required().trim().messages({
+      : Joi.string().email().optional().allow("").trim().messages({
           "string.email": "Invalid email format",
           "any.required": "Email is required",
         }),
@@ -57,35 +81,28 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
       : Joi.boolean().optional().default(false).messages({
           "any.required": "Confirmation mail sending status is required",
         }),
-
-    // bookedBy: isUpdate
-    //   ? Joi.object().optional().messages({
-    //       "object.base": "Booking user ID must be a string",
-    //       "object.empty": "Booking user ID is required",
-    //     })
-    //   : Joi.object().required().messages({
-    //       "object.base": "Booking user ID must be a string",
-    //       "object.empty": "Booking user ID is required",
-    //       "any.required": "Booking user ID is required",
-    //     }),
+    date: isUpdate
+      ? customDateValidator("date").optional()
+      : customDateValidator("date").required(),
+      
     bookedBy: isUpdate
       ? Joi.object({
-          _id: Joi.string().trim().optional().messages({
+          _id: Joi.string().trim().optional().allow("").messages({
             "any.required": "Please specify _id in bookedBy",
           }),
-          name: Joi.string().trim().optional().messages({
+          name: Joi.string().trim().optional().allow("").messages({
             "any.required": "Please specify name in bookedBy",
           }),
         })
       : Joi.object({
-          _id: Joi.string().trim().required().messages({
+          _id: Joi.string().trim().required().allow("").default("").messages({
             "any.required": "Please specify _id in bookedBy",
           }),
-          name: Joi.string().trim().required().messages({
+          name: Joi.string().trim().required().allow("").default("").messages({
             "any.required": "Please specify name in bookedBy",
           }),
         })
-          .required()
+          .optional()
           .messages({
             "object.base": "Booked by must be an object with _id and name",
           }),

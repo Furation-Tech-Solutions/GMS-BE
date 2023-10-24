@@ -43,24 +43,28 @@ const guestSchema = new mongoose.Schema(
       type: String,
       // unique: true,
       trim: true,
-      required: true,
+      required: false,
       lowercase: true,
     },
     confirmationMailSending: {
       type: Boolean,
       default: false,
     },
+    date:{
+      type:String,
+      required:[true,"Please Select Date"]
+    },
     bookedBy: {
       // type: bookedByData,
       _id: {
         type: String,
         // required: true,
-        default: null,
+        default: "",
       },
       name: {
         type: String,
         // required: true,
-        default: null,
+        default: "",
       },
     },
     // bookedBy: {
