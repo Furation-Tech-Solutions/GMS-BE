@@ -193,7 +193,7 @@ export class AddReservationMapper {
       // reservation.source,
       reservation.reservationTags,
       reservation.reservationNote,
-      reservation.reservationStatus.toLocaleLowerCase(),
+      reservation.reservationStatus.toLowerCase(),
       reservation.table,
       reservation.bookedBy,
       reservation.serverName,

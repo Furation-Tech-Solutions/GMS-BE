@@ -65,6 +65,8 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+
+    console.log("hitting")
     try {
       const user = req.user;
 
@@ -96,6 +98,9 @@ export class AddReservationServices {
         }
       );
     } catch (err) {
+
+      console.log(err, "err");
+      
       res.status(500).json({ error: "Internal Server Error" });
     }
   }

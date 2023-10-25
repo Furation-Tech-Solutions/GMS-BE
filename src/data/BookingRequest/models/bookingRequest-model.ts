@@ -11,6 +11,13 @@ const logSchema = new mongoose.Schema(
   },
   { _id: true }
 );
+const statusSchema = new mongoose.Schema(
+  {
+    name: String,
+    color: String,
+  },
+  { _id: false }
+);
 
 const bookingRequestSchema = new mongoose.Schema({
   firstName: {
@@ -60,8 +67,8 @@ const bookingRequestSchema = new mongoose.Schema({
   reservationTime: { type: String },
   numberOfGuest: { type: Number },
   duration: String,
-  status: { 
-    type: { name: String, color: String },
+  status: {
+    type: statusSchema,
     enum: [
       { name: "Active", color: "Blue" },
       { name: "Booked", color: "Green" },
