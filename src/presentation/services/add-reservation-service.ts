@@ -190,20 +190,25 @@ export class AddReservationServices {
       filter.shift = shift;
     }
 
+
     if (status && typeof status === "string") {
       filter.reservationStatus = status.toLocaleLowerCase();
     }
     if (table && typeof table === "string") {
       filter.table = table;
     }
-
-    if (date && status === "unassigned") {
-      filter.reservationStatus = "unassigned";
+    if (status && typeof status === "string") {
+      console.log(status.toLocaleLowerCase());
+      filter.reservationStatus = status.toLocaleLowerCase();
     }
 
-    if (table && date && status === "booked") {
-      filter.reservationStatus = "booked";
-    }
+    // if (date && status === "unassigned") {
+    //   filter.reservationStatus = "unassigned";
+    // }
+
+    // if (table && date && status === "booked") {
+    //   filter.reservationStatus = "booked";
+    // }
 
     const addReservations: Either<ErrorClass, AddReservationEntity[]> =
       await this.getAllAddReservationUsecase.execute(filter);
