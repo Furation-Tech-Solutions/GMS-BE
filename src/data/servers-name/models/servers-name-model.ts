@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const serversName = new mongoose.Schema({
   server_name: {
     type: String,
+    unique: [true, "Server Name Should Be Unique"],
     required: true,
   },
   updatedBy: {
