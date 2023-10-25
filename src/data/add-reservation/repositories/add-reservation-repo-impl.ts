@@ -63,9 +63,13 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
     data: AddReservationModel
   ): Promise<Either<ErrorClass, AddReservationEntity>> {
     try {
+      const newData = {
+        ...data,
+        reservationStatus: data.reservationStatus.toLowerCase(),
+      };
       const updatedAddReservation = await this.addReservationDataSource.update(
         id,
-        data
+        newData
       );
       return Right<ErrorClass, AddReservationEntity>(updatedAddReservation);
     } catch (error) {

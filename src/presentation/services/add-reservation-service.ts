@@ -190,10 +190,6 @@ export class AddReservationServices {
       filter.shift = shift;
     }
 
-
-    if (status && typeof status === "string") {
-      filter.reservationStatus = status.toLocaleLowerCase();
-    }
     if (table && typeof table === "string") {
       filter.table = table;
     }
