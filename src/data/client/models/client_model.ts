@@ -60,6 +60,7 @@ const clientSchema = new mongoose.Schema({
     type: String,
     unique: false,
     trim: true,
+    default: "",
     required: false,
     lowercase: true,
   },
