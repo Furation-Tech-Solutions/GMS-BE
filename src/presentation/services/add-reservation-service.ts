@@ -465,7 +465,6 @@ export class AddReservationServices {
 
           const availableTables = allTables.filter((table) => !reservedTableIds.includes(table._id));
 
-
          return  res.status(200).json(availableTables);
          
         }
