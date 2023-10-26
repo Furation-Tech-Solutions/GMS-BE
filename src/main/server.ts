@@ -7,6 +7,8 @@ import * as  Message from '@presentation/error-handling/message-error'
 import { sendMailConfirmedReservations } from '@presentation/middlewares/node-cron/cron';
 import { unblockTableWithCron } from '@presentation/middlewares/node-cron/unblock-table-cron';
 
+
+
 const app = setupApp();
 
 
@@ -14,6 +16,9 @@ const app = setupApp();
 async function connectToDatabase() {
   const dbURL = env.mongoUrl
   const dbOptions = env.dbOptions
+
+
+  
 
   try {
 
@@ -28,9 +33,9 @@ async function connectToDatabase() {
         console.log(`${Message.SERVER_RUNNING} ${env.port}`);
       });
 
-
       sendMailConfirmedReservations()
       unblockTableWithCron()
+
   } catch (error) {
 // console.log("error is this-",error,"error")
     if(error instanceof ApiError){

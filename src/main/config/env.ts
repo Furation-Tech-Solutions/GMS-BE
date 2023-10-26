@@ -9,6 +9,7 @@ export default {
     useUnifiedTopology: true,
     dbName: "ADMINPANEL",
   },
+  mongoUrlWinston: process.env.MONGO_URL_WINSTON,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "XXXXXXXXXXXXXXXXXXXX",
   secretAccessKey:
     process.env.AWS_SECRET_ACCESS_KEY ??

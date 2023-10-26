@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 export interface IShiftProperty extends Document {
   shiftName: string;
-  shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night';
+  shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night' | 'sundown';
   startDate: string;
   endDate: string | null;
   daysToRepeatThisShift: string[];
@@ -41,7 +41,7 @@ export interface IShiftProperty extends Document {
 
 export interface IShift {
   shiftName: string;
-  shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night';
+  shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night' | 'sundown';
   startDate: string;
   endDate: string | null;
   daysToRepeatThisShift: string[];

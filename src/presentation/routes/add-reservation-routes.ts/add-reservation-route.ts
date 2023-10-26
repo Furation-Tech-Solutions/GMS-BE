@@ -113,3 +113,13 @@ addReservationRouter.get(
   "/availibility/one",
   addReservationService.getAllReservationsForTableAndTime.bind(addReservationService)
 );
+
+addReservationRouter.get(
+  "/availibility/logs",
+  addReservationService.getAllLogs.bind(addReservationService)
+);
+
+addReservationRouter.get(
+  "/availibility/tables",
+  addReservationService.getAllAvailbleTables.bind(addReservationService)
+);

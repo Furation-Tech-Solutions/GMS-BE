@@ -7,6 +7,7 @@ import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model
 import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
 import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type";
 import { Table } from "@data/table/models/table-model";
+import logger from "@presentation/logger";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
@@ -207,8 +208,8 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     }
 
     if (
-      existResevation?.reservationStatus !== "cencel" &&
-      addReservation.reservationStatus === "cencel"
+      existResevation?.reservationStatus !== "cancel" &&
+      addReservation.reservationStatus === "cancel"
     ) {
       // Increase the visits of the client
       if (existClient) {
@@ -245,6 +246,9 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       }
     }
 
+    if(existClient) {
+      logger.info(` ${updatedAddReservation?.bookedBy} Updated the Reservation of ${existClient?.firstName + " "  + existClient?.lastName} `)
+    }
     return updatedAddReservation ? updatedAddReservation.toObject() : null;
   }
 
