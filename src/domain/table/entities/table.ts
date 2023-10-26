@@ -1,7 +1,7 @@
 // Table Model
 export class TableModel {
   constructor(
-    public tableNo: number = 0,
+    public tableNo: string = "0",
     public partySizeMini: number = 0,
     public partySizeMax: number = 0,
     public tableCombinations: string[] | undefined = [],
@@ -17,7 +17,7 @@ export class TableModel {
 export class TableEntity {
   constructor(
     public _id: string | undefined = undefined,
-    public tableNo: number,
+    public tableNo: string,
     public partySizeMini: number,
     public partySizeMax: number,
     public tableCombinations: string[] | undefined = [], // Optional field

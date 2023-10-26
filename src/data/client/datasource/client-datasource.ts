@@ -16,7 +16,6 @@ export interface ClientDataSource {
 export class ClientDataSourceImpl implements ClientDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(client: ClientModel): Promise<any> {
-
     const existingClient = await Client.findOne({ email: client.email });
     if (existingClient) {
       throw ApiError.clientExist();
@@ -51,28 +50,26 @@ export class ClientDataSourceImpl implements ClientDataSource {
   }
   async getAllClients(): Promise<any[]> {
     // try {
-      //   const clients = await Client.find().populate("tags");
-      const clients = await Client.find().populate({
-        path: "tags", // Populate the reservationTags field
-        select: "id name categoryNameId", // Adjust the fields you want to select
-        populate: {
-          path: "categoryNameId", // Populate the categoryNameId field in reservationTags
-          select: "id name color",
-          model: "ClientTagCategory", // Reference to the Category model
-        },
-      });
-      return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning
+    //   const clients = await Client.find().populate("tags");
+    const clients = await Client.find({ isClient: true }).populate({
+      path: "tags", // Populate the reservationTags field
+      select: "id name categoryNameId", // Adjust the fields you want to select
+      populate: {
+        path: "categoryNameId", // Populate the categoryNameId field in reservationTags
+        select: "id name color",
+        model: "ClientTagCategory", // Reference to the Category model
+      },
+    });
+    return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning
     // } catch (error) {
     //   throw ApiError.badRequest();
     // }
   }
-  
+
   async update(id: string, client: ClientModel): Promise<any> {
-    
-      const updatedClient = await Client.findByIdAndUpdate(id, client, {
-        new: true,
-      }); // No need for conversion here
-      return updatedClient ? updatedClient.toObject() : null; // Convert to a plain JavaScript object before returning
-  
+    const updatedClient = await Client.findByIdAndUpdate(id, client, {
+      new: true,
+    }); // No need for conversion here
+    return updatedClient ? updatedClient.toObject() : null; // Convert to a plain JavaScript object before returning
   }
 }

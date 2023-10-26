@@ -24,9 +24,9 @@ const clientSchema = new mongoose.Schema({
   lastName: {
     type: String,
     maxlength: [30, "lastName name should have less than 30 charcters"],
-    minLength: [3, "lastName name should have more than 3 character"],
-    required: [true, "please enter last Name"],
+    required: [false, "please enter last Name"],
     // unique: true,
+    default: "",
     trim: true,
   },
   salutation: {
@@ -58,9 +58,10 @@ const clientSchema = new mongoose.Schema({
   ],
   email: {
     type: String,
-    unique: true,
+    unique: false,
     trim: true,
-    required: true,
+    default: "",
+    required: false,
     lowercase: true,
   },
   altEmail: {
@@ -148,6 +149,10 @@ const clientSchema = new mongoose.Schema({
   language: {
     type: String,
     default: "English",
+  },
+  isClient: {
+    type: Boolean,
+    default: false,
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
