@@ -423,30 +423,28 @@ export class AddReservationServices {
 
   async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
     try {
+;
+      const reservtionId = req.query.id as string;
 
-      const date = req.query.date as string;
-      const shift = req.query.shift as string;
-      const timeSlot = req.query.time as string;
-      const duration = req.query.duration as string;
-  
+      const getReservationById = await this.addReservationDataSourceImpl.read(reservtionId);
+
+
       const filter: IRFilter = {};
   
-      if (date) {
-        filter.date = date;
+      if (getReservationById) {
+        filter.date = getReservationById.date;
       }
    
-      if (shift) {
-        filter.shift = shift;
+      if (getReservationById) {
+        filter.shift = getReservationById.shift;
       }
 
-      if (timeSlot) {
-        filter.timeSlot = timeSlot;
+      if (getReservationById) {
+        filter.timeSlot = getReservationById.timeSlot;
       }
-
-      // const tableInfo = await Table.findById({ _id: table });
-
   
       const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
+
       const reservations = await this.addReservationDataSourceImpl.getAll({});
   
       const allTables = await this.tableDataSourceImpl.getAllTables()
@@ -467,49 +465,6 @@ export class AddReservationServices {
 
           const availableTables = allTables.filter((table) => !reservedTableIds.includes(table._id));
 
-          const availableAndSufficientTables = availableTables.filter((table) => {
-            // Check if the requested time and duration do not conflict with any reservation
-            const requestedStartTime = moment.tz(`${date}T${timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
-            const requestedEndTime = requestedStartTime.clone().add(duration);
-
-            // console.log(requestedStartTime, "start", requestedEndTime, "end")
-      
-            // Check if there are no conflicts with any reservation
-            return reservations.every((reservation) => {
-              const reservationStartTime = moment.tz(`${date}T${reservation.timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
-              const reservationEndTime = reservationStartTime.clone().add(reservation.duration);
-
-              return (
-                requestedEndTime.isBefore(reservationStartTime) || requestedStartTime.isAfter(reservationEndTime)
-              );
-            });
-          });
-
-
-     
-
-      // if (!tableInfo) {
-      //   return res.status(404).json({ message: 'Table not found' });
-      // }
-  
-      // // Check if the table is blocked
-      // if (tableInfo.isBlocked) {
-      //   return res.status(200).json({ message: 'Table blocked' });
-      // }
-
-          // Additional logic to check table availability
-          // const requestedTime = moment.tz(`${date}T${timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
-          // for (const reservation of responseData) {
-          //   const reservationStartTime = moment.tz(`${date}T${reservation.timeSlot}`, 'YYYY-MM-DDTHH:mm:ss', 'YourTimeZoneHere');
-          //   const reservationEndTime = reservationStartTime.clone().add(reservation.duration, 'minutes');
-
-          //   if (requestedTime.isBetween(reservationStartTime, reservationEndTime, null, '[]')) {
-          //     return res.status(200).json({ message: 'unavailable' });
-          //   }
-          // }
-  
-
-        //  return  res.status(200).json({  message: 'available' });
          return  res.status(200).json(availableTables);
          
         }
