@@ -65,18 +65,19 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-    console.log("hitting");
     try {
       const user = req.user;
 
       const newReservationData = {
         ...req.body,
+        reservationStatus: req.body.reservationStatus
+          ? req.body.reservationStatus.toLowerCase()
+          : undefined,
         createdBy: user._id,
         updatedBy: user._id,
       };
       const addReservationData: AddReservationModel =
         AddReservationMapper.toModel(newReservationData);
-
       const newAddReservation: Either<ErrorClass, AddReservationEntity> =
         await this.createAddReservationUsecase.execute(addReservationData);
 
@@ -97,8 +98,6 @@ export class AddReservationServices {
         }
       );
     } catch (err) {
-      console.log(err, "err");
-
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -126,6 +125,9 @@ export class AddReservationServices {
 
     const reservationDetails = {
       ...req.body,
+      reservationStatus: req.body.reservationStatus
+        ? req.body.reservationStatus.toLowerCase()
+        : undefined,
       updatedBy: user._id,
     };
 
