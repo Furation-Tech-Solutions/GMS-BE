@@ -11,32 +11,45 @@ import { DeleteBookingRequest } from "@domain/bookingRequest/usecases/delete-boo
 import { validateBookingRequestInputMiddleware } from "@presentation/middlewares/booking req/validation-bookingReq"; // Import the validateBookingRequestInputMiddleware
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import EmailService from "@presentation/services/send-mail";
-import {SentMessageInfo, Transporter} from "nodemailer"
-
+import { SentMessageInfo, Transporter } from "nodemailer";
 
 // const transporter =  createTransporter();
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
-const bookingRequestDataSource = new BookingRequestDataSourceImpl(mongoose.connection);
+const bookingRequestDataSource = new BookingRequestDataSourceImpl(
+  mongoose.connection
+);
 
 // Create an instance of the BookingRequestRepositoryImpl and pass the BookingRequestDataSourceImpl
-const bookingRequestRepository = new BookingRequestRepositoryImpl(bookingRequestDataSource);
+const bookingRequestRepository = new BookingRequestRepositoryImpl(
+  bookingRequestDataSource
+);
 const emailService = new EmailService();
 
 // Create instances of the required use cases and pass the BookingRequestRepositoryImpl
-const createBookingRequestUsecase = new CreateBookingRequest(bookingRequestRepository);
-const deleteBookingRequestUsecase = new DeleteBookingRequest(bookingRequestRepository);
-const getBookingRequestByIdUsecase = new GetBookingRequestById(bookingRequestRepository);
-const getAllBookingRequestsUsecase = new GetAllBookingRequests(bookingRequestRepository);
-const updateBookingRequestUsecase = new UpdateBookingRequest(bookingRequestRepository);
+const createBookingRequestUsecase = new CreateBookingRequest(
+  bookingRequestRepository
+);
+const deleteBookingRequestUsecase = new DeleteBookingRequest(
+  bookingRequestRepository
+);
+const getBookingRequestByIdUsecase = new GetBookingRequestById(
+  bookingRequestRepository
+);
+const getAllBookingRequestsUsecase = new GetAllBookingRequests(
+  bookingRequestRepository
+);
+const updateBookingRequestUsecase = new UpdateBookingRequest(
+  bookingRequestRepository
+);
 
 // Initialize BookingRequestServices and inject required dependencies
 const bookingRequestService = new BookingRequestServices(
-    createBookingRequestUsecase,
-    deleteBookingRequestUsecase,
-    getBookingRequestByIdUsecase,
-    getAllBookingRequestsUsecase,
-    updateBookingRequestUsecase,
-    emailService
+  createBookingRequestUsecase,
+  deleteBookingRequestUsecase,
+  getBookingRequestByIdUsecase,
+  getAllBookingRequestsUsecase,
+  updateBookingRequestUsecase,
+  emailService
 );
 
 // Create an Express router
@@ -44,31 +57,34 @@ export const bookingRequestRouter = Router();
 
 // Route handling for creating a new booking request
 bookingRequestRouter.post(
-    "/add",
-      verifyLoggedInUser,
-    // validateBookingRequestInputMiddleware(false),
-    bookingRequestService.createBookingRequest.bind(bookingRequestService)
+  "/add",
+  //   verifyLoggedInUser,
+  validateBookingRequestInputMiddleware(false),
+  bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
 
 // Route handling for deleting a booking request by ID
 bookingRequestRouter.delete(
-    "/:bookingRequestId",
-    bookingRequestService.deleteBookingRequest.bind(bookingRequestService)
+  "/:bookingRequestId",
+  bookingRequestService.deleteBookingRequest.bind(bookingRequestService)
 );
 
 // Route handling for getting a booking request by ID
 bookingRequestRouter.get(
-    "/:bookingRequestId",
-    bookingRequestService.getBookingRequestById.bind(bookingRequestService)
+  "/:bookingRequestId",
+  bookingRequestService.getBookingRequestById.bind(bookingRequestService)
 );
 
 // Route handling for getting all booking requests
-bookingRequestRouter.get("/", bookingRequestService.getAllBookingRequests.bind(bookingRequestService));
+bookingRequestRouter.get(
+  "/",
+  bookingRequestService.getAllBookingRequests.bind(bookingRequestService)
+);
 
 // Route handling for updating a booking request by ID
 bookingRequestRouter.put(
-    "/:bookingRequestId",
-      verifyLoggedInUser,
-    validateBookingRequestInputMiddleware(true),
-    bookingRequestService.updateBookingRequest.bind(bookingRequestService)
+  "/:bookingRequestId",
+    verifyLoggedInUser,
+  validateBookingRequestInputMiddleware(true),
+  bookingRequestService.updateBookingRequest.bind(bookingRequestService)
 );

@@ -28,12 +28,17 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
 
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
     } catch (error: any) {
+      
+      console.log(error.message, "error.message");
+
       if (error instanceof ApiError) {
         return Left<ErrorClass, AddReservationEntity>(
           ApiError.reservationExits()
         );
       }
       return Left<ErrorClass, AddReservationEntity>(
+    
+        
         ApiError.customError(HttpStatus.BAD_REQUEST, error.message)
       );
     }
@@ -63,12 +68,17 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
     data: AddReservationModel
   ): Promise<Either<ErrorClass, AddReservationEntity>> {
     try {
+      const newData = {
+        ...data,
+        reservationStatus: data.reservationStatus.toLowerCase(),
+      };
       const updatedAddReservation = await this.addReservationDataSource.update(
         id,
-        data
+        newData
       );
       return Right<ErrorClass, AddReservationEntity>(updatedAddReservation);
     } catch (error) {
+      console.log(error);
       if (error instanceof mongoose.Error.CastError) {
         return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }

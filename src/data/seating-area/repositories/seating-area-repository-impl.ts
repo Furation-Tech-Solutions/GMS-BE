@@ -6,6 +6,7 @@ import {
   SeatingAreaEntity,
   SeatingAreaModel,
 } from "@domain/seating-area/entities/seating-area";
+import mongoose from "mongoose";
 
 export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
   private readonly dataSource: SeatingAreaDataSource;
@@ -18,12 +19,10 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
     seatingArea: SeatingAreaModel
   ): Promise<Either<ErrorClass, SeatingAreaEntity>> {
     try {
-
       let i = await this.dataSource.create(seatingArea);
-      
+
       return Right<ErrorClass, SeatingAreaEntity>(i);
     } catch (e) {
-
       if (typeof ApiError.emailExist) {
         return Left<ErrorClass, SeatingAreaEntity>(ApiError.emailExist());
       }
@@ -38,9 +37,11 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
     try {
       let i = await this.dataSource.getById(seatingAreaId);
       return Right<ErrorClass, SeatingAreaEntity>(i);
-    } catch (e) {
-      if (typeof e === typeof ApiError.notFound) {
-        return Left<ErrorClass, SeatingAreaEntity>(ApiError.notFound());
+    } catch (e: any) {
+      if (e instanceof mongoose.Error.CastError || e.name == "notfound") {
+        return Left<ErrorClass, SeatingAreaEntity>(
+          e.name == "notfound" ? ApiError.notFound() : ApiError.castError()
+        );
       }
       return Left<ErrorClass, SeatingAreaEntity>(ApiError.internalError());
     }
@@ -65,9 +66,14 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
     try {
       const response = await this.dataSource.update(id, data);
       return Right<ErrorClass, SeatingAreaEntity>(response);
-    } catch (e) {
-      if (typeof e === typeof ApiError.notFound) {
-        return Left<ErrorClass, SeatingAreaEntity>(ApiError.notFound());
+    } catch (e: any) {
+      // if (typeof e === typeof ApiError.notFound) {
+      //   return Left<ErrorClass, SeatingAreaEntity>(ApiError.notFound());
+      // }
+      if (e instanceof mongoose.Error.CastError || e.name == "notfound") {
+        return Left<ErrorClass, SeatingAreaEntity>(
+          e.name == "notfound" ? ApiError.notFound() : ApiError.castError()
+        );
       }
       return Left<ErrorClass, SeatingAreaEntity>(ApiError.internalError());
     }
@@ -78,6 +84,11 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
       const i = await this.dataSource.delete(id);
       return Right<ErrorClass, void>(i);
     } catch (error) {
+      // if (e instanceof mongoose.Error.CastError || e.name == "notfound") {
+      //   return Left<ErrorClass, SeatingAreaEntity>(
+      //     e.name == "notfound" ? ApiError.notFound() : ApiError.castError()
+      //   );
+      // }
       return Left<ErrorClass, void>(ApiError.badRequest());
     }
   }

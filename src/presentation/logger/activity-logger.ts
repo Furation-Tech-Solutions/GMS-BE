@@ -3,6 +3,9 @@
 import { LogModel } from '@data/logger/models/logger-model';
 import env from '@main/config/env';
 import { createLogger, format, transports } from 'winston'
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const { combine, timestamp, printf } = format;
 
@@ -20,12 +23,12 @@ export const ReservationLogger = (): any => {
             myFormat
           ),
         transports: [
-          new transports.Console(),
+          // new transports.Console(),
           new transports.File({ filename: 'error.log', level: 'error' }), // showing logs in error.log file
           new transports.File({ filename: 'combined.log' }), // showing logs in combined.log file
           new MongoDB({
             level: 'info', 
-            db: 'mongodb+srv://satansharma:satansharma@cluster0.ncc9mtu.mongodb.net/ADMINPANEL?retryWrites=true&w=majority',
+            db: `${process.env.MONGO_URL_WINSTON}`,
             collection: 'logs', 
             options:{
               useNewUrlParser: true,

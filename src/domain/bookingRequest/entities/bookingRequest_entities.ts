@@ -141,7 +141,7 @@ export class BookingRequestMapper {
       duration: bookingreqData.duration,
       status: bookingreqData.status,
       updatedBy: bookingreqData.updatedBy,
-      createBy: bookingreqData.createdBy,
+      createdBy: bookingreqData.createdBy,
       createdAt: bookingreqData.createdAt,
     };
   }

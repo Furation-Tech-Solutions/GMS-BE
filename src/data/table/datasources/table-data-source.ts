@@ -71,27 +71,12 @@ export class TableDataSourceImpl implements TableDataSource {
   }
 
   async update(id: string, table: TableModel): Promise<any> {
-    // // Get the array of table IDs from the provided table object.
-    // const tableArray = table.tableCombinations || [];
+    // // Sanitize the tableCombinations field to contain only strings or ObjectIDs.
+    // table.tableCombinations = (table.tableCombinations || []).map((item) => {
+    //   return typeof item === "object" && item._id ? item._id : item.toString();
+    // });
 
-    // if (tableArray.length > 0) {
-    //   // Add the current table's ID to the array.
-    //   tableArray.push(id);
-    //   // Loop through the table IDs and update their tableCombinations.
-    //   for (const tableId of tableArray) {
-    //     if (tableId !== id) {
-    //       const findTable = await Table.findById(tableId);
-    //       if (findTable) {
-    //         // Update the tableCombinations field for the current table.
-    //         findTable.tableCombinations = tableArray;
-
-    //         // Save the updated table.
-    //         await findTable.save();
-    //       }
-    //     }
-    //   }
-    // }
-
+    // Update the document in the database.
     const updatedTable = await Table.findByIdAndUpdate(id, table, {
       new: true,
     });

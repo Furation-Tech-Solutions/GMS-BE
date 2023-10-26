@@ -93,14 +93,14 @@ const bookingRequestValidator = (
           "string.max":
             "Special instructions should have less than 2000 characters",
         })
-      : Joi.string().max(2000).required().trim().messages({
+      : Joi.string().max(2000).optional().trim().messages({
           "string.max":
             "Special instructions should have less than 2000 characters",
         }),
 
     reservationDate: isUpdate
       ? Joi.string().optional().trim()
-      : Joi.string().optional().trim(),
+      : Joi.string().required().trim(),
 
     reservationTime: isUpdate
       ? Joi.string().optional().trim()
@@ -180,7 +180,7 @@ const bookingRequestValidator = (
       : Joi.string()
           .regex(/^\d{2}:\d{2}:\d{2}$/)
           .trim()
-          .required()
+          .optional()
           .default("02:00:00")
           .messages({
             "any.required": "Duration is required",

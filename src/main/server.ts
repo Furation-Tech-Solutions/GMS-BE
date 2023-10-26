@@ -6,6 +6,7 @@ import ApiError from '@presentation/error-handling/api-error';
 import * as  Message from '@presentation/error-handling/message-error'
 import { sendMailConfirmedReservations } from '@presentation/middlewares/node-cron/cron';
 import { unblockTableWithCron } from '@presentation/middlewares/node-cron/unblock-table-cron';
+import logger from '@presentation/logger';
 
 
 

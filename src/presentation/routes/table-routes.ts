@@ -11,6 +11,7 @@ import { DeleteTable } from "@domain/table/usecases/delete-table";
 import { UpdateTable } from "@domain/table/usecases/update-table";
 import { validateTableInputMiddleware } from "@presentation/middlewares/table/table-validation";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -67,11 +68,13 @@ tableRouter.put(
 tableRouter.patch(
   "/blockTable",
   verifyLoggedInUser,
+  checkPermission([109, 209]),
   tableService.tableBlock.bind(tableService)
 );
 
 tableRouter.delete(
   "/deleteTable/:tableId",
+  verifyLoggedInUser,
   // checkPermission(["1103"]),
   tableService.deleteTable.bind(tableService)
 );

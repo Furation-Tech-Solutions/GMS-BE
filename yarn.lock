@@ -7437,6 +7437,7 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
+<<<<<<< HEAD
 winston-mongodb@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/winston-mongodb/-/winston-mongodb-5.1.1.tgz#711c502b29a03f95ef7e26eb191db21c16541029"
@@ -7446,6 +7447,9 @@ winston-mongodb@^5.1.1:
     winston-transport "^4.4.0"
 
 winston-transport@^4.4.0, winston-transport@^4.5.0:
+=======
+winston-transport@^4.5.0:
+>>>>>>> 2c518865b1f64f87ffd6d9ef7a7bb842be69cbeb
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.6.0.tgz#f1c1a665ad1b366df72199e27892721832a19e1b"
   integrity sha512-wbBA9PbPAHxKiygo7ub7BYRiKxms0tpfU2ljtWzb3SjRjv5yl6Ozuy/TkXf00HTAt+Uylo3gSkNwzc4ME0wiIg==
