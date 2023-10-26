@@ -1,16 +1,12 @@
+// import { logger as ProductionItemsLogger } from './exmple-logger';
 
-// import { Logger as ProductionItemsLogger } from './productionItemsLogger';
+import { ReservationLogger } from "./activity-logger"
 
-import { itemsLogger } from "./exmple-logger";
-
-let logger = null;
-
+let logger: any | null = null;
 
 if (process.env.NODE_ENV !== 'production') {
-    logger =  itemsLogger();
+    logger = ReservationLogger();
 }
-
-
 
 // if (process.env.NODE_ENV === 'production') {
 //     logger = new ProductionItemsLogger();

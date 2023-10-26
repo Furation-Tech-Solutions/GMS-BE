@@ -25,7 +25,7 @@ const shiftValidator = function (input: IShift): IShift {
       }),
   
     shiftCategory: Joi.string()
-      .valid('breakfast', 'brunch', 'lunch', 'day', 'dinner', 'night')
+      .valid('breakfast', 'brunch', 'lunch', 'day', 'dinner', 'night' , 'sundown')
       .required()
       .label('Shift Category')
       .messages({

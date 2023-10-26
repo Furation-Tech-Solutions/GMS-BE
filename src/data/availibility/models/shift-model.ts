@@ -46,7 +46,7 @@ const shiftPropertySchema = new Schema<IShiftProperty>({
   },
   shiftCategory: {
     type: String,
-    enum: ['breakfast', 'brunch', 'lunch', 'day', 'dinner', 'night'],
+    enum: ['breakfast', 'brunch', 'lunch', 'day', 'dinner', 'night', 'sundown'],
     required: true,
   },
   startDate: {
