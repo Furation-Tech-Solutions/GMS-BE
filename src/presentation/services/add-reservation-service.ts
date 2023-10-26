@@ -30,6 +30,13 @@ import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cr
 import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
 
 import { Table } from "@data/table/models/table-model";
+import logger from "@presentation/logger";
+import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
+import { LogModel } from "@data/logger/models/logger-model";
+import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
+import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
+
+
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -40,8 +47,10 @@ export class AddReservationServices {
   private readonly tableBlockCheckUsecase: TableBlockCheckUsecase;
   private readonly emailService: EmailService;
   private readonly whatsAppService: WhatsAppService;
+  private readonly tableDataSourceImpl: TableDataSourceImpl;
 
   private readonly shiftDataSourceImpl: ShiftDataSourceImpl;
+  private readonly addReservationDataSourceImpl: AddReservationDataSourceImpl;
 
   constructor(
     createAddReservationUsecase: CreateAddReservationUsecase,
@@ -62,9 +71,12 @@ export class AddReservationServices {
     this.emailService = emailService;
     this.whatsAppService = whatsAppService;
     this.shiftDataSourceImpl = new ShiftDataSourceImpl(mongoose.connection);
+    this.tableDataSourceImpl = new TableDataSourceImpl(mongoose.connection);
+    this.addReservationDataSourceImpl = new AddReservationDataSourceImpl(mongoose.connection);
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
+    
     try {
       const user = req.user;
 
@@ -94,6 +106,9 @@ export class AddReservationServices {
             await emailhandler.handleReservation(addReservationId);
           }
 
+          const time = formatTimeAmPm(resData.timeSlot)
+      
+          logger.info(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`)
           return res.json(resData);
         }
       );
@@ -404,4 +419,69 @@ export class AddReservationServices {
       res.status(500).json(error);
     }
   }
+
+
+  async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
+    try {
+;
+      const reservtionId = req.query.id as string;
+
+      const getReservationById = await this.addReservationDataSourceImpl.read(reservtionId);
+
+
+      const filter: IRFilter = {};
+  
+      if (getReservationById) {
+        filter.date = getReservationById.date;
+      }
+   
+      if (getReservationById) {
+        filter.shift = getReservationById.shift;
+      }
+
+      if (getReservationById) {
+        filter.timeSlot = getReservationById.timeSlot;
+      }
+  
+      const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
+
+      const reservations = await this.addReservationDataSourceImpl.getAll({});
+  
+      const allTables = await this.tableDataSourceImpl.getAllTables()
+
+      addReservations.cata(
+        (error: ErrorClass) =>
+          res.status(error.status).json({ error: error.message }),
+         (result: AddReservationEntity[]): any => {
+          const responseData = result.map((addReservation) =>
+            AddReservationMapper.toEntity(addReservation)
+          );
+
+          if (responseData.length <= 0 ) {
+            return res.status(404).json({ message: 'not found any reservations ' });
+          }
+
+          const reservedTableIds = responseData.map((reservation) => reservation.table);
+
+          const availableTables = allTables.filter((table) => !reservedTableIds.includes(table._id));
+
+         return  res.status(200).json(availableTables);
+         
+        }
+      );
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  
+
+  async getAllLogs(req: Request, res: Response): Promise<void> {
+    try {
+      const logs = await LogModel.find();
+      res.json(logs);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  
 }

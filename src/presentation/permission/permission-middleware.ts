@@ -89,12 +89,12 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
            
             if(req.method!=="DELETE"){
               // console.log(req.body,"inside req.body")
-              if(reservationData && reservationData.reservationStatus!=="Left" || reservationData && reservationData.reservationStatus!=="unassigned" ){
+              if(reservationData && reservationData.reservationStatus!=="left" || reservationData && reservationData.reservationStatus!=="unassigned" ){
                 unableToUpdateReservation(res);
                   return;
               }
               else{
-              if(reservationData && reservationData.reservationStatus==="Left"){
+              if(reservationData && reservationData.reservationStatus==="left"){
                     if(!req.body.prepayment ){
                       unableToUpdateReservation(res);
                       return;

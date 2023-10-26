@@ -3,7 +3,7 @@ import { IShift } from "types/availibility/schema-type";
 export class ShiftModel implements IShift {
   constructor(
     public shiftName: string = "",
-    public shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night' = 'breakfast',
+    public shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night' | 'sundown' = 'sundown' ,
     public startDate: string = '',
     public endDate: string | null = null,
     public daysToRepeatThisShift: string[] = [],
@@ -42,7 +42,7 @@ export class ShiftModel implements IShift {
     constructor(
       public _id: string | undefined = undefined,
       public shiftName: string,
-      public shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night',
+      public shiftCategory: 'breakfast' | 'brunch' | 'lunch' | 'day' | 'dinner' | 'night' | 'sundown',
       public startDate: string,
       public endDate: string | null,
       public daysToRepeatThisShift: string[],

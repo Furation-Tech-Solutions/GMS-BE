@@ -27,6 +27,7 @@ export class ClientModel {
     public spends: number = 0,
     public language: string,
     public gender: string,
+    public isClient: boolean = false,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined // public createdAt: Date
   ) {}
@@ -62,6 +63,7 @@ export class ClientEntity {
     public spends: number,
     public language: string,
     public gender: string,
+    public isClient: boolean,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public createdAt: Date
@@ -178,6 +180,10 @@ export class ClientMapper {
           clientData.gender !== undefined
             ? clientData.gender
             : existingClient.gender,
+        isClient:
+          clientData.isClient !== undefined
+            ? clientData.isClient
+            : existingClient.isClient,
         updatedBy:
           clientData.updatedBy !== undefined
             ? { _id: clientData.updatedBy }
@@ -225,6 +231,7 @@ export class ClientMapper {
         spends: clientData.spends,
         language: clientData.language,
         gender: clientData.gender,
+        isClient: clientData.isClient,
         updatedBy: { _id: clientData.updatedBy },
         createdBy: { _id: clientData.createdBy },
         createdAt: clientData.createdAt,
@@ -262,6 +269,7 @@ export class ClientMapper {
       spends: client.spends,
       language: client.language,
       gender: client.gender,
+      isClient: client.isClient,
       updatedBy: client.updatedBy,
       createdBy: client.createdBy,
       createdAt: client.createdAt,

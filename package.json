@@ -61,7 +61,8 @@
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "winston-mongodb": "^5.1.1"
   },
   "_moduleAliases": {
     "@domain": "dist/domain",
