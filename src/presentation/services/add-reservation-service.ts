@@ -37,8 +37,6 @@ import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
 
-
-
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
   private readonly deleteAddReservationUsecase: DeleteAddReservationUsecase;
@@ -73,11 +71,12 @@ export class AddReservationServices {
     this.whatsAppService = whatsAppService;
     this.shiftDataSourceImpl = new ShiftDataSourceImpl(mongoose.connection);
     this.tableDataSourceImpl = new TableDataSourceImpl(mongoose.connection);
-    this.addReservationDataSourceImpl = new AddReservationDataSourceImpl(mongoose.connection);
+    this.addReservationDataSourceImpl = new AddReservationDataSourceImpl(
+      mongoose.connection
+    );
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-
     try {
       const user = req.user;
 
@@ -107,9 +106,11 @@ export class AddReservationServices {
             await emailhandler.handleReservation(addReservationId);
           }
 
-          const time = formatTimeAmPm(resData.timeSlot)
+          const time = formatTimeAmPm(resData.timeSlot);
 
-          logger.info(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`)
+          logger.info(
+            `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
+          );
           return res.json(resData);
         }
       );
@@ -283,6 +284,19 @@ export class AddReservationServices {
             guestsByTimeSlotArray,
           });
         }
+
+        // Split responseData into two arrays based on reservationStatus
+        const cancelAndNotifyReservations = responseData.filter(
+          (reservation) => reservation.reservationStatus === "cancelled and notify"
+        );
+
+        const otherReservations = responseData.filter(
+          (reservation) => reservation.reservationStatus !== "cancelled and notify"
+        );
+
+        // Concatenate otherReservations and cancelAndNotifyReservations
+        responseData = otherReservations.concat(cancelAndNotifyReservations);
+
         // sendMailConfirmedReservations()
         return res.json(responseData);
       }
@@ -423,13 +437,13 @@ export class AddReservationServices {
     }
   }
 
-
   async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
     try {
       const reservtionId = req.query.id as string;
 
-      const getReservationById = await this.addReservationDataSourceImpl.read(reservtionId);
-
+      const getReservationById = await this.addReservationDataSourceImpl.read(
+        reservtionId
+      );
 
       const filter: IRFilter = {};
 
@@ -502,7 +516,6 @@ export class AddReservationServices {
               "YourTimeZoneHere"
             );
 
-
             if (
               requestedTime.isBetween(
                 reservationStartTime,
@@ -530,7 +543,6 @@ export class AddReservationServices {
                   break;
                 }
               }
-
             }
             if (!isConflict) {
               updatedAvailableTables.push(table);
@@ -547,7 +559,6 @@ export class AddReservationServices {
     }
   }
 
-
   async getAllLogs(req: Request, res: Response): Promise<void> {
     try {
       const logs = await LogModel.find();
@@ -556,5 +567,4 @@ export class AddReservationServices {
       res.status(500).json(error);
     }
   }
-
 }
