@@ -20,3 +20,10 @@ export interface Icron {
   date: string,
   reservationStatus:string
 }
+
+export interface ReservedTable {
+  _id: string; // Adjust the data type of _id as needed
+  tableNo: number,
+  partySizeMini: number,
+  partySizeMax: number
+}

@@ -21,6 +21,7 @@ import EmailHandler from "@presentation/nodemailer/configuration/mail-handler";
 import { TableBlockCheckUsecase } from "@domain/add-reservation/usecases/table-block-check";
 import {
   IRFilter,
+  ReservedTable,
   TReservationCover,
 } from "types/add-reservation-filter.ts/filter-type";
 import { ShiftDataSourceImpl } from "@data/availibility/datasource/shift-datasource";
@@ -76,7 +77,7 @@ export class AddReservationServices {
   }
 
   async createAddReservation(req: Request, res: Response): Promise<void> {
-    
+
     try {
       const user = req.user;
 
@@ -107,7 +108,7 @@ export class AddReservationServices {
           }
 
           const time = formatTimeAmPm(resData.timeSlot)
-      
+
           logger.info(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`)
           return res.json(resData);
         }
@@ -240,17 +241,17 @@ export class AddReservationServices {
         if (sort) {
           sort === "1"
             ? responseData.sort((a, b) => {
-                return (
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-                );
-              })
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              );
+            })
             : responseData.sort((a, b) => {
-                return (
-                  new Date(a.createdAt).getTime() -
-                  new Date(b.createdAt).getTime()
-                );
-              });
+              return (
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+              );
+            });
         }
 
         if (coverflow) {
@@ -390,12 +391,14 @@ export class AddReservationServices {
             "YYYY-MM-DDTHH:mm:ss",
             "YourTimeZoneHere"
           );
+
           for (const reservation of responseData) {
             const reservationStartTime = moment.tz(
               `${date}T${reservation.timeSlot}`,
               "YYYY-MM-DDTHH:mm:ss",
               "YourTimeZoneHere"
             );
+
             const reservationEndTime = reservationStartTime
               .clone()
               .add(reservation.duration, "minutes");
@@ -423,57 +426,127 @@ export class AddReservationServices {
 
   async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
     try {
-;
       const reservtionId = req.query.id as string;
 
       const getReservationById = await this.addReservationDataSourceImpl.read(reservtionId);
 
 
       const filter: IRFilter = {};
-  
+
       if (getReservationById) {
         filter.date = getReservationById.date;
       }
-   
+
       if (getReservationById) {
-        filter.shift = getReservationById.shift;
+        filter.shift = getReservationById.shift._id;
       }
 
       if (getReservationById) {
         filter.timeSlot = getReservationById.timeSlot;
       }
-  
+
       const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
 
-      const reservations = await this.addReservationDataSourceImpl.getAll({});
-  
+      const particularDateReservations = await this.addReservationDataSourceImpl.getAll({ date: getReservationById.date });
+
+
+      // const reservations = await this.addReservationDataSourceImpl.getAll({});
+
       const allTables = await this.tableDataSourceImpl.getAllTables()
 
       addReservations.cata(
         (error: ErrorClass) =>
           res.status(error.status).json({ error: error.message }),
-         (result: AddReservationEntity[]): any => {
+        (result: AddReservationEntity[]): any => {
           const responseData = result.map((addReservation) =>
             AddReservationMapper.toEntity(addReservation)
           );
 
-          if (responseData.length <= 0 ) {
+          if (responseData.length <= 0) {
             return res.status(404).json({ message: 'not found any reservations ' });
           }
 
-          const reservedTableIds = responseData.map((reservation) => reservation.table);
 
-          const availableTables = allTables.filter((table) => !reservedTableIds.includes(table._id));
 
-         return  res.status(200).json(availableTables);
-         
+          const reservedTableIds: any[] = responseData
+            .map((reservation) => reservation.table)
+            .filter((tableId) => tableId !== undefined);
+
+          const availableTables = allTables.filter((table) => {
+
+            const matchingReservedTable = reservedTableIds.find((reservedTable) => (reservedTable._id).toString() === (table._id).toString());
+            return !matchingReservedTable;
+          });
+
+          const reservationStartTime = moment.tz(
+            `${getReservationById.date}T${getReservationById.timeSlot}`,
+            "YYYY-MM-DDTHH:mm:ss",
+            "YourTimeZoneHere"
+          );
+
+
+
+          const reservationEndTime = reservationStartTime
+            .clone()
+            .add(getReservationById.duration, "minutes");
+
+
+          const conflictTables = [];
+
+
+          for (const reservation of particularDateReservations) {
+
+            const requestedTime = moment.tz(
+              `${reservation.date}T${reservation.timeSlot}`,
+              "YYYY-MM-DDTHH:mm:ss",
+              "YourTimeZoneHere"
+            );
+
+
+            if (
+              requestedTime.isBetween(
+                reservationStartTime,
+                reservationEndTime,
+                null,
+                "[]"
+              )
+            ) {
+              if (reservation.table !== undefined) {
+                conflictTables.push(reservation.table)
+              }
+            }
+
+          }
+
+
+          const updatedAvailableTables = [];
+
+          for (const table of availableTables) {
+            let isConflict = false;
+            for (const conflictTableId of conflictTables) {
+              if (conflictTableId !== undefined) {
+                if ((table._id).toString() == (conflictTableId._id).toString()) {
+                  isConflict = true;
+                  break;
+                }
+              }
+
+            }
+            if (!isConflict) {
+              updatedAvailableTables.push(table);
+            }
+          }
+
+
+          return res.status(200).json(updatedAvailableTables);
+
         }
       );
-    } catch (error) {
-      res.status(500).json(error);
+    } catch (error: any) {
+      res.status(500).json({ messsage: error.message });
     }
   }
-  
+
 
   async getAllLogs(req: Request, res: Response): Promise<void> {
     try {
@@ -483,5 +556,5 @@ export class AddReservationServices {
       res.status(500).json(error);
     }
   }
-  
+
 }
