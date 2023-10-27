@@ -17,9 +17,9 @@ export class ClientDataSourceImpl implements ClientDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(client: ClientModel): Promise<any> {
     const existingClient = await Client.findOne();
-    if (existingClient) {
-      throw ApiError.clientExist();
-    }
+    // if (existingClient) {
+    //   throw ApiError.clientExist();
+    // }
     const clientData = new Client(client);
     const createdClient = await clientData.save();
     return createdClient.toObject();
