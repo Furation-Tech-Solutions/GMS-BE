@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 
 const tableSchema = new mongoose.Schema({
   tableNo: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

@@ -30,6 +30,7 @@ interface ClientInput {
   language?: string;
   spends?: number;
   gender: string;
+  isClient?: boolean;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -78,13 +79,11 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     lastName: isUpdate
-      ? Joi.string().max(30).min(3).optional().trim().messages({
-          "string.max": "Last name should have less than 30 characters",
-          "string.min": "Last name should have more than 3 characters",
+      ? Joi.string().trim().max(30).optional().allow("").default("").messages({
+          "string.max": "Last name should have at most 30 characters",
         })
-      : Joi.string().max(30).min(3).required().trim().messages({
-          "string.max": "Last name should have less than 30 characters",
-          "string.min": "Last name should have more than 3 characters",
+      : Joi.string().trim().max(30).optional().allow("").default("").messages({
+          "string.max": "Last name should have at most 30 characters",
           "any.required": "Last name is required",
         }),
     salutation: isUpdate
@@ -156,11 +155,11 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         }),
 
     email: isUpdate
-      ? Joi.string().email().optional().trim().messages({
+      ? Joi.string().email().optional().allow("").trim().messages({
           "string.email": "Invalid email format",
           "any.required": "Email is required",
         })
-      : Joi.string().email().required().trim().messages({
+      : Joi.string().email().optional().allow("").trim().messages({
           "string.email": "Invalid email format",
           "any.required": "Email is required",
         }),
@@ -311,6 +310,9 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
             "any.only": "Invalid gender value",
             "any.required": "Gender is required",
           }),
+    isClient: isUpdate
+      ? Joi.boolean().optional().default(false)
+      : Joi.boolean().optional().default(false),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 
 interface TableInput {
-  tableNo: number;
+  tableNo: string;
   partySizeMini: number;
   partySizeMax: number;
   tableCombinations?: mongoose.Schema.Types.ObjectId[];
@@ -17,15 +17,11 @@ interface TableInput {
 const tableValidator = (input: TableInput, isUpdate: boolean = false) => {
   const tableSchema = Joi.object<TableInput>({
     tableNo: isUpdate
-      ? Joi.number().min(1).integer().optional().messages({
-          "number.min": "Table number should be a positive integer",
-          "number.integer": "Table number should be a positive integer",
+      ? Joi.string().optional().empty("").default("0").messages({
+          "string.empty": "Table number should not be empty",
         })
-      : Joi.number().min(1).integer().required().messages({
-          "number.base": "Table number must be a number",
-          "number.min": "Table number should be a positive integer",
-          "number.integer": "Table number should be a positive integer",
-          "any.required": "Table number is required",
+      : Joi.string().required().empty("").default("0").messages({
+          "string.empty": "Table number is required",
         }),
     partySizeMini: isUpdate
       ? Joi.number().min(1).integer().optional().messages({
