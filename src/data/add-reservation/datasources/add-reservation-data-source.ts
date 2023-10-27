@@ -122,7 +122,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "client",
-        select: "id firstName lastName phone email isClient",
+        select: "id salutation firstName lastName phone email gender isClient",
       })
       .populate({
         path: "table",
