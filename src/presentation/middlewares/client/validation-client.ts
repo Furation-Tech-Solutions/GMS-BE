@@ -33,6 +33,7 @@ interface ClientInput {
   isClient?: boolean;
   updatedBy?: string;
   createdBy?: string;
+  activityLogs?: string[];
 }
 
 const customDateValidator = (fieldName: string) =>
@@ -326,6 +327,13 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
         })
       : Joi.string().trim().optional().messages({
           "any.required": "Please select the Created By",
+        }),
+    activityLogs: isUpdate
+      ? Joi.array().items(Joi.string().max(255).trim()).optional().messages({
+          "array.base": "logs must be an array of strings",
+        })
+      : Joi.array().items(Joi.string().max(255).trim()).optional().messages({
+          "array.base": "logs must be an array of strings",
         }),
   });
 
