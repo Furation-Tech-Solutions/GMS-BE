@@ -15,6 +15,9 @@ const myFormat = printf(({ level, message, timestamp }: {level:string, message:s
     return ` [${level}] ${timestamp} : ${message}`;
 });
 
+
+
+
 export const ReservationLogger = (): any => {
     return createLogger({
         level: 'info',
@@ -36,7 +39,7 @@ export const ReservationLogger = (): any => {
             },
         }),
         ],
-      });
+      }); 
 }
 
 

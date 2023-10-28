@@ -164,6 +164,13 @@ const clientSchema = new mongoose.Schema({
     ref: "UserAccount",
     default: null,
   },
+  activityLogs: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Log",
+    default: null,
+  }
+],
   createdAt: {
     type: Date,
     default: Date.now,

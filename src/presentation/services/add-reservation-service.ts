@@ -36,6 +36,8 @@ import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
 import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
+import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
+import { sendNotification } from "@presentation/middlewares/notification/notification-middleware-backend";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -108,12 +110,14 @@ export class AddReservationServices {
 
           const time = formatTimeAmPm(resData.timeSlot);
 
-          logger.info(
-            `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
-          );
+        const title = logger.info(
+          `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
+      );
+      
           return res.json(resData);
         }
       );
+
     } catch (err) {
       res.status(500).json({ error: "Internal Server Error" });
     }

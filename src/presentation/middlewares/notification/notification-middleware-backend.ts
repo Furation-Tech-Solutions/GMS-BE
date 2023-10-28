@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+
+
 import admin from '@main/config/firebase-sdk/firebase-config';
 import { UserAccount } from '@data/user-account/models/user-account-model';
 
@@ -7,22 +8,17 @@ const notificationOptions = {
   timeToLive: 60 * 60 * 24,
 };
 
-export const sendPushNotification = async (req: Request, res: Response) => {
+export async function sendNotification(title: string) {
   try {
-    // Validate the request body
-    const { title } = req.body;
-    if (!title) {
-      return res.status(400).json({ error: 'Missing title' });
-    }
-
     // Fetch users with isLogin === true
     const loggedInUsers = await UserAccount.find({ isLogin: true });
 
     if (loggedInUsers.length === 0) {
-      return res.status(400).json({ error: 'No logged-in users found' });
+      return { error: 'No logged-in users found' };
     }
 
     const results: { messageId: string; deviceId: string }[] = [];
+
     const failureResults: { messageId: string; deviceId: string }[] = [];
 
     for (const user of loggedInUsers) {
@@ -35,6 +31,7 @@ export const sendPushNotification = async (req: Request, res: Response) => {
         };
 
         const tokens = user.firebaseDeviceToken;
+
 
         try {
           const response = await admin.messaging().sendMulticast({
@@ -67,17 +64,26 @@ export const sendPushNotification = async (req: Request, res: Response) => {
     }
 
     if (results.length > 0) {
-      res.status(200).json({
+      return {
         message: 'Notifications sent successfully',
         results: results,
         failedResults: failureResults,
-      });
+      };
     } else {
-      res.status(400).json({ error: 'No valid tokens found for sending notifications' });
+      return { error: 'No valid tokens found for sending notifications' };
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return { error: 'Internal server error' };
   }
-};
+}
 
+// Example of how to call the sendNotification function
+// async function sendNotificationExample() {
+//   const title = 'Your Notification Title';
+//   const notificationResult = await sendNotification(title);
+//   console.log(notificationResult);
+// }
+
+// Call this function to send a notification
+// sendNotificationExample();

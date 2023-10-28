@@ -29,7 +29,9 @@ export class ClientModel {
     public gender: string,
     public isClient: boolean = false,
     public updatedBy: string | { _id: string } | undefined,
-    public createdBy: string | { _id: string } | undefined // public createdAt: Date
+    public createdBy: string | { _id: string } | undefined, // public createdAt: Date
+    public activityLogs: string[] = [] // public createdAt: Date
+
   ) {}
 }
 
@@ -66,6 +68,7 @@ export class ClientEntity {
     public isClient: boolean,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
+    public activityLogs: string[],
     public createdAt: Date
   ) {}
 }
@@ -192,6 +195,10 @@ export class ClientMapper {
           clientData.createdBy !== undefined
             ? { _id: clientData.createdBy }
             : existingClient.createdBy,
+            activityLogs:
+          clientData.activityLogs !== undefined
+              ? clientData.activityLogs
+              : existingClient.activityLogs,
         createdAt:
           clientData.createdAt !== undefined
             ? clientData.createdAt
@@ -234,6 +241,7 @@ export class ClientMapper {
         isClient: clientData.isClient,
         updatedBy: { _id: clientData.updatedBy },
         createdBy: { _id: clientData.createdBy },
+        activityLogs: clientData.activityLogs,
         createdAt: clientData.createdAt,
       };
       return clientEntity;
@@ -271,6 +279,7 @@ export class ClientMapper {
       gender: client.gender,
       isClient: client.isClient,
       updatedBy: client.updatedBy,
+      activityLogs: client.activityLogs,
       createdBy: client.createdBy,
       createdAt: client.createdAt,
     };
