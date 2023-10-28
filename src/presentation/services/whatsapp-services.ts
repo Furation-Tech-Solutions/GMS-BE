@@ -15,7 +15,7 @@ class WhatsAppService {
 
 //   }
  
-  async sendWhatsAppMessage(recipient: string, message: string): Promise<any> {
+  async sendWhatsAppMessage(recipient: string, message: any): Promise<any> {
     const accesstoken=env.accessToken
     const headers = {
       Authorization: `Bearer EAAIjVZA1T21gBOyxqFTDaFmE2cyDYZCnZAMt7ofZBvajNgnMWsHjfcNJcQdt9dp0MX3jdO0zNZCuL8yF9JCqOVDrEM4FU4i1CO8fuT0lwecun4vvchFUCJWu984nfyPZBgpR6ki0FKsyIDx6BzVNv8dpEG9nfoO49MRZBPecJVIHjtrehb5EZAcPljQZBY8f8gRybQMUhI68fxbF8kWIZCZAT7ZCSWVYLwW68UFCV1TaErAZD`,
@@ -24,15 +24,12 @@ class WhatsAppService {
     const apiurl:string=env.apiUrl??"https://graph.facebook.com/v17.0/121686631017880/messages"
 
     const whatsappData = {
-      "messaging_product": 'whatsapp',
-      "recipient_type": 'individual',
-      // "to": `${recipient}`,
-      "to": "919881239491",
-      "type": 'text',
-      "text": {
-        "preview_url": false,
-        "body": `${message}`
-      }
+      "messaging_product": "whatsapp",
+      "recipient_type": "individual",
+      "to": `${recipient}`,
+      // "to": "919881239491",
+      "type": "template",
+      "template": message
     }
 
     try {
