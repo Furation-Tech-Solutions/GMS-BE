@@ -141,8 +141,8 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
           }),
 
     notes: isUpdate
-      ? Joi.string().optional().trim()
-      : Joi.string().optional().trim(),
+      ? Joi.string().optional().allow("").trim()
+      : Joi.string().optional().allow("").trim(),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",
