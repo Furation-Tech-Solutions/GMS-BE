@@ -50,9 +50,9 @@ const guestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    date:{
-      type:String,
-      required:[true,"Please Select Date"]
+    date: {
+      type: String,
+      required: [true, "Please Select Date"],
     },
     bookedBy: {
       // type: bookedByData,
@@ -88,6 +88,7 @@ const guestSchema = new mongoose.Schema(
     },
     notes: {
       type: String,
+      default: "",
     },
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
