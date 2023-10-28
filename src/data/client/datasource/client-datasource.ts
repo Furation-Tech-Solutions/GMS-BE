@@ -19,7 +19,6 @@ export class ClientDataSourceImpl implements ClientDataSource {
 
 
     const existingClient = await Client.findOne();
-
     // if (existingClient) {
     //   throw ApiError.clientExist();
     // }

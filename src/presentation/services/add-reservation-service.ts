@@ -291,11 +291,11 @@ export class AddReservationServices {
 
         // Split responseData into two arrays based on reservationStatus
         const cancelAndNotifyReservations = responseData.filter(
-          (reservation) => reservation.reservationStatus === "cancelled and notify"
+          (reservation) => reservation.reservationStatus === ("CANCELLED AND NOTIFY"||"CANCEL")
         );
 
         const otherReservations = responseData.filter(
-          (reservation) => reservation.reservationStatus !== "cancelled and notify"
+          (reservation) => reservation.reservationStatus !== ("CANCELLED AND NOTIFY"||"CANCEL")
         );
 
         // Concatenate otherReservations and cancelAndNotifyReservations
