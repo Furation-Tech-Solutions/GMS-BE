@@ -16,6 +16,8 @@ export interface ClientDataSource {
 export class ClientDataSourceImpl implements ClientDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(client: ClientModel): Promise<any> {
+
+
     const existingClient = await Client.findOne();
     // if (existingClient) {
     //   throw ApiError.clientExist();
@@ -42,9 +44,14 @@ export class ClientDataSourceImpl implements ClientDataSource {
           select: "id name color",
           model: "ClientTagCategory", // Reference to the Category model
         },
+      }).populate({
+        path: "activityLogs",
+        select:"timestamp message",
       });
+
       return client ? client.toObject() : null;
     } catch (error) {
+      console.log(error)
       throw ApiError.badRequest();
     } // Convert to a plain JavaScript object before returning
   }
@@ -59,7 +66,13 @@ export class ClientDataSourceImpl implements ClientDataSource {
         select: "id name color",
         model: "ClientTagCategory", // Reference to the Category model
       },
+    }).populate({
+      path: "activityLogs",
+      select:"timestamp message",
+      model: "LogModel"
     });
+
+
     return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning
     // } catch (error) {
     //   throw ApiError.badRequest();
