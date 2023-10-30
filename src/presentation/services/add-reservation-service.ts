@@ -37,7 +37,7 @@ import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
 import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
-import { sendNotification } from "@presentation/middlewares/notification/notification-middleware-backend";
+import { sendNotification, sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -108,12 +108,15 @@ export class AddReservationServices {
             await emailhandler.handleReservation(addReservationId);
           }
 
+
           const time = formatTimeAmPm(resData.timeSlot);
 
         const title = logger.info(
           `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
       );
-      
+
+      await sendNotificationExample(`${title}`);
+
           return res.json(resData);
         }
       );

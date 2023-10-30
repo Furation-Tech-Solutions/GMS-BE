@@ -7,6 +7,7 @@ const notificationOptions = {
   priority: 'high',
   timeToLive: 60 * 60 * 24,
 };
+ 
 
 export async function sendNotification(title: string) {
   try {
@@ -22,46 +23,53 @@ export async function sendNotification(title: string) {
     const failureResults: { messageId: string; deviceId: string }[] = [];
 
     for (const user of loggedInUsers) {
-      if (user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
-        const payload = {
-          notification: {
-            title: title,
-            body: `Hello! This is a broadcasted notification.`,
-          },
-        };
+        if (user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
+          const payload = {
+            notification: {
+              title: title,
+              body: `Hello! This is a broadcasted notification.`,
+            },
+          };
 
-        const tokens = user.firebaseDeviceToken;
+          const tokens = user.firebaseDeviceToken;
+  
+          try {
 
-
-        try {
-          const response = await admin.messaging().sendMulticast({
-            tokens: tokens,
-            notification: payload.notification,
-            options: notificationOptions,
-          });
-
-          const successResults = response.responses.filter((result: any) => result.success);
-
-          successResults.forEach((result: any) => {
-            results.push({
-              messageId: result.messageId,
-              deviceId: result.canonicalRegistrationToken || result.token,
+            console.log(tokens, "tokens")
+            const response = await admin.messaging().sendMulticast({
+              tokens: tokens,
+              notification: payload.notification,
+              options: notificationOptions,
             });
-          });
 
-          const failures = response.responses.filter((result: any) => !result.success);
 
-          failures.forEach((result: any) => {
-            failureResults.push({
-              messageId: result.messageId,
-              deviceId: result.canonicalRegistrationToken || result.token,
+            console.log(response, "response");
+
+            const successResults = response.responses.filter((result: any) => result.success);
+
+
+            successResults.forEach((result: any) => {
+
+              results.push({
+                messageId: result.messageId,
+                deviceId: result.canonicalRegistrationToken || result.token,
+              });
+
             });
-          });
-        } catch (error) {
-          console.error('Error sending multicast message:', error);
+  
+            const failures = response.responses.filter((result: any) => !result.success);
+  
+            failures.forEach((result: any) => {
+              failureResults.push({
+                messageId: result.messageId,
+                deviceId: result.canonicalRegistrationToken || result.token,
+              });
+            });
+          } catch (error) {
+            console.error('Error sending multicast message:', error);
+          }
         }
       }
-    }
 
     if (results.length > 0) {
       return {
@@ -78,12 +86,16 @@ export async function sendNotification(title: string) {
   }
 }
 
+
 // Example of how to call the sendNotification function
-// async function sendNotificationExample() {
-//   const title = 'Your Notification Title';
-//   const notificationResult = await sendNotification(title);
-//   console.log(notificationResult);
-// }
+
+ export async function sendNotificationExample(newtitle: string) {
+  const title = newtitle;
+
+  console.log(title, newtitle, "title")
+  const notificationResult = await sendNotification(title);
+  console.log(notificationResult);
+}
 
 // Call this function to send a notification
 // sendNotificationExample();

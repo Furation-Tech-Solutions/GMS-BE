@@ -66,11 +66,7 @@ export class ClientDataSourceImpl implements ClientDataSource {
         select: "id name color",
         model: "ClientTagCategory", // Reference to the Category model
       },
-    }).populate({
-      path: "activityLogs",
-      select:"timestamp message",
-      model: "LogModel"
-    });
+    })
 
 
     return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning

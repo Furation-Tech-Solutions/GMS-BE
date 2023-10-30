@@ -15,6 +15,7 @@ import { verifyAuthorizationToManager, verifyAuthorizationToSuperUser, verifyLog
 import { LogoutUser } from "@domain/user-account/usecases/logout-user";
 import { authorizedUserMiddleware } from "@presentation/middlewares/auth-permission";
 import { checkPermission } from "@presentation/permission/permission-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { SendEmail } from "@domain/user-account/usecases/send-email-with-password";
 
 const mongooseConnection = mongoose.connection;

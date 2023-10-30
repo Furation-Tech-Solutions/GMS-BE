@@ -128,7 +128,6 @@ const shiftPropertySchema = new Schema<IShiftProperty>({
   timeBeforeCutOff: {
     type: timeCutOffSchema,
   }, 
-
   bookingPolicy: {
     type: String,
     enum: ['Default Booking Policy', 'Custom Policy'],

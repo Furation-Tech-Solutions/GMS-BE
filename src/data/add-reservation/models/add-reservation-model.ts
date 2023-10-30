@@ -90,7 +90,6 @@ const addReservationSchema = new mongoose.Schema({
     required: [false, "Please fill onsite payment"],
     default: 0,
   },
-
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
