@@ -13,6 +13,7 @@ export default (): Express => {
       origin: "*",
     })
   );
+
   app.use(cookieParser());
 
   app.use(express.urlencoded({ extended: true }));

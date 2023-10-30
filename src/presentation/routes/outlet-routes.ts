@@ -61,8 +61,7 @@ outletRouter.get(
 );
 
 outletRouter.put(
-  "/updateOutlet/:outletId",
-  validateOutletInputMiddleware,outletService.updateOutlet.bind(outletService)
+  "/updateOutlet/:outletId", outletService.updateOutlet.bind(outletService)
 );
 
 outletRouter.delete(
