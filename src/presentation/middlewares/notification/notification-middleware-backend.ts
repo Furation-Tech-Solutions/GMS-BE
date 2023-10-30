@@ -7,7 +7,7 @@ const notificationOptions = {
   priority: 'high',
   timeToLive: 60 * 60 * 24,
 };
- 
+
 
 export async function sendNotification(title: string) {
   try {

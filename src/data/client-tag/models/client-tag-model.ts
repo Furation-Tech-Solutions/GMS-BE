@@ -16,6 +16,11 @@ const clientTagSchema = new mongoose.Schema({
     ref: "ClientTagCategory",
     required: [true, "Please enter a category name"],
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

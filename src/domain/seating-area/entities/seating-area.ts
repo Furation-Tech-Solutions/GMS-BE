@@ -5,6 +5,7 @@ export class SeatingAreaModel {
     public seatingAreaName: string = "",
     public tables: string[] = [],
     public listOrder: number = 0,
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -18,6 +19,7 @@ export class SeatingAreaEntity {
     public seatingAreaName: string,
     public tables: string[] = [],
     public listOrder: number,
+    public outletId: string,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -48,6 +50,10 @@ export class SeatingAreaMapper {
           seatingAreaData.listOrder !== undefined
             ? seatingAreaData.listOrder
             : existingSeatingArea.listOrder,
+        outletId:
+          seatingAreaData.outletId !== undefined
+            ? seatingAreaData.outletId
+            : existingSeatingArea.outletId,
         updatedBy:
           seatingAreaData.updatedBy !== undefined
             ? { _id: seatingAreaData.updatedBy }
@@ -68,6 +74,7 @@ export class SeatingAreaMapper {
         seatingAreaName: seatingAreaData.seatingAreaName,
         tables: seatingAreaData.tables,
         listOrder: seatingAreaData.listOrder,
+        outletId: seatingAreaData.outletId,
         updatedBy: { _id: seatingAreaData.updatedBy },
         createdBy: { _id: seatingAreaData.createdBy },
       };
@@ -81,6 +88,7 @@ export class SeatingAreaMapper {
       seatingAreaName: seatingArea.seatingAreaName,
       tables: seatingArea.tables,
       listOrder: seatingArea.listOrder,
+      outletId: seatingArea.outletId,
       createdBy: seatingArea.updatedBy,
       updatedBy: seatingArea.createdBy,
     };

@@ -35,6 +35,11 @@ const tableSchema = new mongoose.Schema({
     required: true,
   },
   // reservedTimes: [reservationTime],
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

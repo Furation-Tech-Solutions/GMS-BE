@@ -15,10 +15,10 @@ export class BookingRequestModel {
     public status: string = "",
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
+    public outletId: string | undefined,
     public createdAt: Date
   ) {}
 }
-
 
 // BookingRequest Entity provided by BookingRequest Repository is converted to Express API Response
 export class BookingRequestEntity {
@@ -33,9 +33,10 @@ export class BookingRequestEntity {
     public reservationTime: string = "",
     public numberOfGuest: number = 0,
     public duration: string = "",
-    public status: IBookingRequestStatus  = { name:"", color:""} ,
+    public status: IBookingRequestStatus = { name: "", color: "" },
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
+    public outletId: string ,
     public createdAt: Date
   ) {}
 }
@@ -90,6 +91,10 @@ export class BookingRequestMapper {
           bookingreqData.status !== undefined
             ? bookingreqData.status
             : existingbookingreq.status,
+        outletId:
+          bookingreqData.outletId !== undefined
+            ? bookingreqData.outletId
+            : existingbookingreq.outletId,
         updatedBy:
           bookingreqData.updatedBy !== undefined
             ? { _id: bookingreqData.updatedBy }
@@ -120,6 +125,7 @@ export class BookingRequestMapper {
         numberOfGuest: bookingreqData.numberOfGuest,
         duration: bookingreqData.duration,
         status: bookingreqData.status,
+        outletId: bookingreqData.outletId,
         updatedBy: { _id: bookingreqData.updatedBy },
         createdBy: { _id: bookingreqData.createdBy },
         createdAt: bookingreqData.createdAt,
@@ -140,6 +146,7 @@ export class BookingRequestMapper {
       numberOfGuest: bookingreqData.numberOfGuest,
       duration: bookingreqData.duration,
       status: bookingreqData.status,
+      outletId: bookingreqData.outletId,
       updatedBy: bookingreqData.updatedBy,
       createdBy: bookingreqData.createdBy,
       createdAt: bookingreqData.createdAt,

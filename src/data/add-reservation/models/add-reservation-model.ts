@@ -90,6 +90,11 @@ const addReservationSchema = new mongoose.Schema({
     required: [false, "Please fill onsite payment"],
     default: 0,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

@@ -90,6 +90,13 @@ const guestSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    outletId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Outlet",
+      default: null,
+    },
+
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserAccount",

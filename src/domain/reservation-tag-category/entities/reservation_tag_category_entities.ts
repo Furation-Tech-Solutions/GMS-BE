@@ -8,6 +8,7 @@ export class ReservationTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -25,6 +26,7 @@ export class ReservationTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public outletId: string,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -69,6 +71,10 @@ export class ReservationTagCategoryMapper {
           reservationTagCategoryData.tags !== undefined
             ? reservationTagCategoryData.tags
             : existingReservationTagCategory.tags,
+        outletId:
+          reservationTagCategoryData.outletId !== undefined
+            ? reservationTagCategoryData.outletId
+            : existingReservationTagCategory.outletId,
         updatedBy:
           reservationTagCategoryData.updatedBy !== undefined
             ? { _id: reservationTagCategoryData.updatedBy }
@@ -96,6 +102,7 @@ export class ReservationTagCategoryMapper {
         display: reservationTagCategoryData.display,
         followers: reservationTagCategoryData.followers,
         tags: reservationTagCategoryData.tags,
+        outletId: reservationTagCategoryData.outletId,
         updatedBy: { _id: reservationTagCategoryData.updatedBy },
         createdBy: { _id: reservationTagCategoryData.createdBy },
         createdAt: reservationTagCategoryData.createdAt,
@@ -113,6 +120,7 @@ export class ReservationTagCategoryMapper {
       display: reservationTagCategory.display,
       followers: reservationTagCategory.followers,
       tags: reservationTagCategory.tags,
+      outletId: reservationTagCategory.outletId,
       updatedBy: reservationTagCategory.updatedBy,
       createdBy: reservationTagCategory.createdBy,
       createdAt: reservationTagCategory.createdAt,
