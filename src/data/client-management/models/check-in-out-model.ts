@@ -27,7 +27,12 @@ const checkInCheckOutSchema: Schema<ICheckOut> = new Schema<ICheckOut>({
     default: "Pending",
   },
 
-  notes: String,
+  notes: { type: String, default: "" },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
 
   feedback: {
     rating: Number,

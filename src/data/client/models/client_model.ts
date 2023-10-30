@@ -154,6 +154,11 @@ const clientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

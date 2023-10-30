@@ -39,6 +39,12 @@ const reservationStatusSchema = new mongoose.Schema({
   durationHolds: {
     type: Number,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
+  
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
