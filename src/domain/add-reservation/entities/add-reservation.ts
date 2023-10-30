@@ -17,6 +17,7 @@ export class AddReservationModel {
     public perks: string = "",
     public prePayment: number | undefined = 0,
     public onSitePayment: number | undefined = 0,
+    public outletId: string | undefined = undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public confirmationMailSending: boolean = false
@@ -43,6 +44,7 @@ export class AddReservationEntity {
     public perks: string,
     public prePayment: number = 0,
     public onSitePayment: number = 0,
+    public outletId: string ,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public confirmationMailSending: boolean,
@@ -132,6 +134,10 @@ export class AddReservationMapper {
           reservationData.confirmationMailSending !== undefined
             ? reservationData.confirmationMailSending
             : existingReservation.confirmationMailSending,
+        outletId:
+          reservationData.outletId !== undefined
+            ? reservationData.outletId
+            : existingReservation.outletId,
         updatedBy:
           reservationData.updatedBy !== undefined
             ? { _id: reservationData.updatedBy }
@@ -175,6 +181,7 @@ export class AddReservationMapper {
         prePayment: reservationData.prePayment,
         onSitePayment: reservationData.onSitePayment,
         confirmationMailSending: reservationData.confirmationMailSending,
+        outletId: reservationData.outletId,
         createdAt: reservationData.createdAt, // Make sure to create a new Date instance.
       };
       return reservationEntity;
@@ -200,6 +207,7 @@ export class AddReservationMapper {
       reservation.perks,
       reservation.prePayment,
       reservation.onSitePayment,
+      reservation.outletId,
       reservation.updatedBy,
       reservation.createdBy,
       reservation.confirmationMailSending

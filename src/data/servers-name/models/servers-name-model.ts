@@ -6,6 +6,11 @@ const serversName = new mongoose.Schema({
     unique: [true, "Server name should be unique"],
     required: [true, "Please fill server name"],
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

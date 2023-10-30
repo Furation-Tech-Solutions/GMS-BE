@@ -40,6 +40,7 @@ interface ICheckOut extends Document {
     rating: number;
     comments: string;
   };
+  outletId: mongoose.Types.ObjectId;
   billingAddress: {
     street: string;
     city: string;

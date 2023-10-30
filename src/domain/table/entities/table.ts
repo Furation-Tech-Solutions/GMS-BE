@@ -8,6 +8,7 @@ export class TableModel {
     public reservedTimes: string[] | undefined = [],
     public seatingArea: string = "",
     public isBlocked: boolean = false,
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -24,6 +25,7 @@ export class TableEntity {
     public reservedTimes: string[] | undefined = [], // Optional field
     public seatingArea: string, // Assuming seatingArea is an ObjectId string
     public isBlocked: boolean = false,
+    public outletId: string,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -67,6 +69,10 @@ export class TableMapper {
           tableData.isBlocked !== undefined
             ? tableData.isBlocked
             : existingTable.isBlocked,
+        outletId:
+          tableData.outletId !== undefined
+            ? tableData.outletId
+            : existingTable.outletId,
         updatedBy:
           tableData.updatedBy !== undefined
             ? { _id: tableData.updatedBy }
@@ -90,6 +96,7 @@ export class TableMapper {
         reservedTimes: tableData.reservedTimes,
         seatingArea: tableData.seatingArea, // Convert ObjectId to string
         isBlocked: tableData.isBlocked,
+        outletId: tableData.outletId,
         updatedBy: { _id: tableData.updatedBy },
         createdBy: { _id: tableData.createdBy },
       };
@@ -106,6 +113,7 @@ export class TableMapper {
       table.reservedTimes,
       table.seatingArea,
       table.isBlocked,
+      table.outletId,
       table.updatedBy,
       table.createdBy
     );

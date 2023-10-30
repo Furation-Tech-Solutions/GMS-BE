@@ -34,6 +34,11 @@ const seatingAreaSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",
