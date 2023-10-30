@@ -11,6 +11,7 @@ export class CheckInCheckOutModel {
     public paymentDetails: string = "",
     public paymentStatus: "Pending" | "Paid" = "Pending",
     public notes: string = "",
+    public outletId: string | undefined,
     public feedback: { rating: number; comments: string } = {
       rating: 0,
       comments: "",
@@ -44,6 +45,7 @@ export class CheckInCheckOutEntity {
     public paymentStatus: "Pending" | "Paid",
     public notes: string,
     public feedback: { rating: number; comments: string },
+    public outletId: string,
     public billingAddress: {
       street: string;
       city: string;
@@ -110,6 +112,10 @@ export class CheckInCheckOutMapper {
           checkOutData.feedback !== undefined
             ? checkOutData.feedback
             : existingCheckOutData.feedback,
+        outletId:
+          checkOutData.outletId !== undefined
+            ? checkOutData.outletId
+            : existingCheckOutData.outletId,
         billingAddress:
           checkOutData.billingAddress !== undefined
             ? checkOutData.billingAddress
@@ -134,6 +140,7 @@ export class CheckInCheckOutMapper {
         paymentStatus: checkOutData.paymentStatus,
         notes: checkOutData.notes,
         feedback: checkOutData.feedback,
+        outletId: checkOutData.outletId,
         billingAddress: checkOutData.billingAddress,
       };
       return checkOutEntity;
@@ -154,6 +161,7 @@ export class CheckInCheckOutMapper {
       paymentStatus: checkOutData.paymentStatus,
       notes: checkOutData.notes,
       feedback: checkOutData.feedback,
+      outletId: checkOutData.outletId,
       billingAddress: checkOutData.billingAddress,
     };
   }

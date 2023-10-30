@@ -8,6 +8,7 @@ export class ClientTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -25,6 +26,7 @@ export class ClientTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
+    public outletId: string ,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -69,6 +71,10 @@ export class ClientTagCategoryMapper {
           clientTagCategoryData.tags !== undefined
             ? clientTagCategoryData.tags
             : existingClientTagCategory.tags,
+        outletId:
+          clientTagCategoryData.outletId !== undefined
+            ? clientTagCategoryData.outletId
+            : existingClientTagCategory.outletId,
         updatedBy:
           clientTagCategoryData.updatedBy !== undefined
             ? { _id: clientTagCategoryData.updatedBy }
@@ -96,6 +102,7 @@ export class ClientTagCategoryMapper {
         display: clientTagCategoryData.display,
         followers: clientTagCategoryData.followers,
         tags: clientTagCategoryData.tags,
+        outletId: clientTagCategoryData.outletId,
         updatedBy: { _id: clientTagCategoryData.updatedBy },
         createdBy: { _id: clientTagCategoryData.createdBy },
         createdAt: clientTagCategoryData.createdAt,
@@ -113,6 +120,7 @@ export class ClientTagCategoryMapper {
       display: clientTagCategory.display,
       followers: clientTagCategory.followers,
       tags: clientTagCategory.tags,
+      outletId: clientTagCategory.outletId,
       updatedBy: clientTagCategory.updatedBy,
       createdBy: clientTagCategory.createdBy,
       createdAt: clientTagCategory.createdAt,

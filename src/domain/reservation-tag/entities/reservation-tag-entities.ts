@@ -3,6 +3,7 @@ export class ReservationTagModel {
   constructor(
     public name: string = "",
     public categoryNameId: string = "",
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -15,6 +16,7 @@ export class ReservationTagEntity {
     public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public categoryNameId: string = "",
+    public outletId: string ,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -39,6 +41,10 @@ export class ReservationTagMapper {
           reservationTagData.categoryNameId !== undefined
             ? reservationTagData.categoryNameId
             : existingReservationTag.categoryNameId,
+        outletId:
+          reservationTagData.outletId !== undefined
+            ? reservationTagData.outletId
+            : existingReservationTag.outletId,
         updatedBy:
           reservationTagData.updatedBy !== undefined
             ? { _id: reservationTagData.updatedBy }
@@ -61,6 +67,7 @@ export class ReservationTagMapper {
           : reservationTagData._id.toString(),
         name: reservationTagData.name,
         categoryNameId: reservationTagData.categoryNameId,
+        outletId: reservationTagData.outletId,
         updatedBy: { _id: reservationTagData.updatedBy },
         createdBy: { _id: reservationTagData.createdBy },
         createdAt: reservationTagData.createdAt,
@@ -73,6 +80,7 @@ export class ReservationTagMapper {
     return {
       name: reservationTag.name,
       categoryNameId: reservationTag.categoryNameId,
+      outletId: reservationTag.outletId,
       updatedBy: reservationTag.updatedBy,
       createdBy: reservationTag.createdBy,
       createdAt: reservationTag.createdAt,

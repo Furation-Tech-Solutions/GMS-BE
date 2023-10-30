@@ -4,9 +4,10 @@ export class RoomModel {
     public abbreviation: string = "",
     public roomName: string = "",
     public listOrder: number = 0,
+    public outletId: string | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 // Room Entity provided by Outlet Repository is converted to Express API Response
@@ -16,9 +17,10 @@ export class RoomEntity {
     public abbreviation: string,
     public roomName: string,
     public listOrder: number,
+    public outletId: string,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
-  ) { }
+  ) {}
 }
 
 export class RoomMapper {
@@ -42,6 +44,10 @@ export class RoomMapper {
           roomData.listOrder !== undefined
             ? roomData.listOrder
             : existingRoom.listOrder,
+        outletId:
+          roomData.outletId !== undefined
+            ? roomData.outletId
+            : existingRoom.outletId,
         updatedBy:
           roomData.updatedBy !== undefined
             ? { _id: roomData.updatedBy }
@@ -61,6 +67,7 @@ export class RoomMapper {
         abbreviation: roomData.abbreviation,
         roomName: roomData.roomName,
         listOrder: roomData.listOrder,
+        outletId: roomData.outletId,
         updatedBy: { _id: roomData.updatedBy },
         createdBy: { _id: roomData.createdBy },
       };
@@ -73,6 +80,7 @@ export class RoomMapper {
       abbreviation: room.abbreviation,
       roomName: room.roomName,
       listOrder: room.listOrder,
+      outletId: room.outletId,
       updatedBy: room.updatedBy,
       createdBy: room.createdBy,
     };
