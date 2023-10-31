@@ -7,12 +7,14 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-const { combine, timestamp, printf } = format;
+const { combine, timestamp, printf, json } = format;
 
 import { MongoDB } from 'winston-mongodb'
 
-const myFormat = printf(({ level, message, timestamp }: {level:string, message:string, timestamp:string}) => {
-    return ` [${level}] ${timestamp} : ${message}`;
+const myFormat = printf(({ level, message, timestamp, sessionId }: {level:string, message:string, timestamp:string, sessionId?: string}) => {
+  const sessionIdInfo = sessionId ? `Session ID: ${sessionId}` : '';
+  console.log('Session ID:', sessionId);
+    return ` [${level}] ${timestamp} : ${message} ${sessionId}`;
 });
 
 
@@ -21,12 +23,13 @@ const myFormat = printf(({ level, message, timestamp }: {level:string, message:s
 export const ReservationLogger = (): any => {
     return createLogger({
         level: 'info',
+        defaultMeta: { component: 'user-service' },
         format: combine(
             timestamp({format: "HH:mm:ss"}),
             myFormat
           ),
         transports: [
-          // new transports.Console(),
+          new transports.Console(),
           new transports.File({ filename: 'error.log', level: 'error' }), // showing logs in error.log file
           new transports.File({ filename: 'combined.log' }), // showing logs in combined.log file
           new MongoDB({

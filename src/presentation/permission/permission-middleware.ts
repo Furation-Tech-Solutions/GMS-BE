@@ -32,13 +32,13 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
     try {
       const cookieEmail = req.cookies.email;
       const headerEmail=req.headers.email
-      const outletId = req.headers.outletid as string;
+      // const outletId = req.headers.outletid as string;
       // console.log(email,req.cookies,"in permission array")
 
       const emailToCheck = headerEmail || cookieEmail;
         // console.log(emailToCheck,"email to check")
 
-      if (!emailToCheck && !outletId) {
+      if (!emailToCheck) {
         // Handle the case when email is not present in headers or cookies
         unauthorizedResponse(res);
         // console.log("inside if block 29")
@@ -46,7 +46,7 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       }
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
 
-      const verifyBelongsToOutlet = permittedUser?.outlet.includes(outletId)
+      // const verifyBelongsToOutlet = permittedUser?.outlet.includes(outletId)
 
 
       if (!permittedUser) {
@@ -54,10 +54,10 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
         return;
       }
 
-      if(!verifyBelongsToOutlet) {
-        unauthorizedResponse(res);
-        return 
-      }
+      // if(!verifyBelongsToOutlet) {
+      //   unauthorizedResponse(res);
+      //   return 
+      // }
     
       const isSuperuser = permittedUser.accessLevel === AccessLevel.SuperUser;
       let hasRequiredPermission = false;
