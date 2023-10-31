@@ -5,7 +5,7 @@ export class SeatingAreaModel {
     public seatingAreaName: string = "",
     public tables: string[] = [],
     public listOrder: number = 0,
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -19,7 +19,7 @@ export class SeatingAreaEntity {
     public seatingAreaName: string,
     public tables: string[] = [],
     public listOrder: number,
-    public outletId: string,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -52,7 +52,7 @@ export class SeatingAreaMapper {
             : existingSeatingArea.listOrder,
         outletId:
           seatingAreaData.outletId !== undefined
-            ? seatingAreaData.outletId
+            ? { _id: seatingAreaData.outletId }
             : existingSeatingArea.outletId,
         updatedBy:
           seatingAreaData.updatedBy !== undefined
@@ -74,7 +74,7 @@ export class SeatingAreaMapper {
         seatingAreaName: seatingAreaData.seatingAreaName,
         tables: seatingAreaData.tables,
         listOrder: seatingAreaData.listOrder,
-        outletId: seatingAreaData.outletId,
+        outletId: { _id: seatingAreaData.outletId },
         updatedBy: { _id: seatingAreaData.updatedBy },
         createdBy: { _id: seatingAreaData.createdBy },
       };

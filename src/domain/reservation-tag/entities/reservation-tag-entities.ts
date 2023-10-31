@@ -3,7 +3,7 @@ export class ReservationTagModel {
   constructor(
     public name: string = "",
     public categoryNameId: string = "",
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -16,7 +16,7 @@ export class ReservationTagEntity {
     public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public categoryNameId: string = "",
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -43,7 +43,7 @@ export class ReservationTagMapper {
             : existingReservationTag.categoryNameId,
         outletId:
           reservationTagData.outletId !== undefined
-            ? reservationTagData.outletId
+            ? { _id: reservationTagData.outletId }
             : existingReservationTag.outletId,
         updatedBy:
           reservationTagData.updatedBy !== undefined
@@ -67,7 +67,7 @@ export class ReservationTagMapper {
           : reservationTagData._id.toString(),
         name: reservationTagData.name,
         categoryNameId: reservationTagData.categoryNameId,
-        outletId: reservationTagData.outletId,
+        outletId: { _id: reservationTagData.outletId },
         updatedBy: { _id: reservationTagData.updatedBy },
         createdBy: { _id: reservationTagData.createdBy },
         createdAt: reservationTagData.createdAt,

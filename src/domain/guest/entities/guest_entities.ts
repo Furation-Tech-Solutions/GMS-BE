@@ -11,7 +11,7 @@ export class GuestModel {
     public notes: string = "",
     public bookedBy: { _id: string; name: string } | undefined,
     public status: string = "",
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: string
@@ -32,7 +32,7 @@ export class GuestEntity {
     public notes: string = "",
     public bookedBy: { _id: string; name: string } | undefined,
     public status: string = "",
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: string
@@ -86,7 +86,7 @@ export class GuestMapper {
             : existingGuest.status,
         outletId:
           guestData.outletId !== undefined
-            ? guestData.outletId
+            ? { _id: guestData.outletId }
             : existingGuest.outletId,
         updatedBy:
           guestData.updatedBy !== undefined
@@ -118,7 +118,7 @@ export class GuestMapper {
         reservationTags: guestData.reservationTags,
         notes: guestData.notes,
         status: guestData.status,
-        outletId: guestData.outletId,
+        outletId: { _id: guestData.outletId },
         updatedBy: { _id: guestData.updatedBy },
         createdBy: { _id: guestData.createdBy },
         createdAt: guestData.createdAt,

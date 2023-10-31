@@ -7,7 +7,7 @@ export class ReservationStatusModel {
     public classification: string,
     public active: boolean | undefined,
     public durationHolds: number | undefined,
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -23,7 +23,7 @@ export class ReservationStatusEntity {
     public classification: string,
     public active: boolean,
     public durationHolds: number | undefined,
-    public outletId: string,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -64,7 +64,7 @@ export class ReservationStatusMapper {
             : existingReservationStatus.durationHolds,
         outletId:
           reservationStatusData.outletId !== undefined
-            ? reservationStatusData.outletId
+            ? { _id: reservationStatusData.outletId }
             : existingReservationStatus.outletId,
         updatedBy:
           reservationStatusData.updatedBy !== undefined
@@ -88,7 +88,7 @@ export class ReservationStatusMapper {
         classification: reservationStatusData.classification,
         active: reservationStatusData.active,
         durationHolds: reservationStatusData.durationHolds,
-        outletId: reservationStatusData.outletId,
+        outletId: { _id: reservationStatusData.outletId },
         updatedBy: { _id: reservationStatusData.updatedBy },
         createdBy: { _id: reservationStatusData.createdBy },
       };

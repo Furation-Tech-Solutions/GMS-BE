@@ -28,7 +28,7 @@ export class ClientModel {
     public language: string,
     public gender: string,
     public isClient: boolean = false,
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined, // public createdAt: Date
     public activityLogs: string[] = [] // public createdAt: Date
@@ -244,7 +244,7 @@ export class ClientMapper {
         language: clientData.language,
         gender: clientData.gender,
         isClient: clientData.isClient,
-        outletId: {_id:clientData.outletId},
+        outletId: { _id: clientData.outletId },
         updatedBy: { _id: clientData.updatedBy },
         createdBy: { _id: clientData.createdBy },
         activityLogs: clientData.activityLogs,

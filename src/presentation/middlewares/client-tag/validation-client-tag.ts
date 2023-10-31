@@ -2,10 +2,12 @@ import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 interface ClientTagInput {
   name: string;
   categoryNameId: mongoose.Schema.Types.ObjectId;
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -29,6 +31,22 @@ const clientTagValidator = (
     categoryNameId: Joi.string().trim().required().messages({
       "any.required": "Category name ID is required",
     }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",
