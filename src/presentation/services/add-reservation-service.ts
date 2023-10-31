@@ -456,13 +456,14 @@ export class AddReservationServices {
 
   async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
     try {
+      const outletId = req.outletId as string;
       const reservtionId = req.query.id as string;
-
       const getReservationById = await this.addReservationDataSourceImpl.read(
         reservtionId
       );
 
       const filter: IRFilter = {};
+      filter.outletId = outletId;
 
       if (getReservationById) {
         filter.date = getReservationById.date;
@@ -486,7 +487,7 @@ export class AddReservationServices {
 
       // const reservations = await this.addReservationDataSourceImpl.getAll({});
 
-      const allTables = await this.tableDataSourceImpl.getAllTables();
+      const allTables = await this.tableDataSourceImpl.getAllTables(outletId);
 
       addReservations.cata(
         (error: ErrorClass) =>
