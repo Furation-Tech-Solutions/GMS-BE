@@ -32,12 +32,13 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
     try {
       const cookieEmail = req.cookies.email;
       const headerEmail=req.headers.email
+      const outletId = req.headers.outletid as string;
       // console.log(email,req.cookies,"in permission array")
 
       const emailToCheck = headerEmail || cookieEmail;
         // console.log(emailToCheck,"email to check")
 
-      if (!emailToCheck) {
+      if (!emailToCheck && !outletId) {
         // Handle the case when email is not present in headers or cookies
         unauthorizedResponse(res);
         // console.log("inside if block 29")
@@ -45,10 +46,17 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       }
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
 
+      const verifyBelongsToOutlet = permittedUser?.outlet.includes(outletId)
+
+
       if (!permittedUser) {
         unauthorizedResponse(res);
-        // console.log("line 35")
         return;
+      }
+
+      if(!verifyBelongsToOutlet) {
+        unauthorizedResponse(res);
+        return 
       }
     
       const isSuperuser = permittedUser.accessLevel === AccessLevel.SuperUser;
@@ -57,13 +65,11 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       permittedUser.permissions.forEach((permission:any)=>{
         if(requiredPermission.includes(permission)){
           hasRequiredPermission = true;
-        // console.log("line 45")
-
         }
       })
 
       if (isSuperuser && hasRequiredPermission) {
-        // console.log("line 51"
+        // console.log("line 51")
         next();
         return;
       }
@@ -74,6 +80,7 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
           return;
         }
       }
+
       if (permittedUser.accessLevel === AccessLevel.SubManager) {
         // If the user is a Manager, they should not be able to create SuperUsers
         const reservationId=req.params.addReservationId

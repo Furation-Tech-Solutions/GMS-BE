@@ -12,7 +12,7 @@ const verifyOutlet = async (
   ): Promise<any> => {
     try {
 
-      const outletIdHeader = req.headers.email2 as string;
+      const outletIdHeader = req.headers.outletid as string;
 
   
       if (outletIdHeader ) {
