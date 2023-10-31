@@ -38,9 +38,9 @@ const userSchema = new mongoose.Schema({
       "Sub-Manager"
     ],
   },
-  profileImage:{
-    type:String,
-    default:false
+  profileImage: {
+    type: String,
+    default: false
   },
   managerSettings: {
     emailAlertsEnabled: {
@@ -70,7 +70,7 @@ const userSchema = new mongoose.Schema({
   },
   permissions: {
     type: [],
-    default:false
+    default: false
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -83,9 +83,15 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   firebaseDeviceToken: {
-   type:[String],
-   default:[]
-  }
+    type: [String],
+    default: []
+  },
+  outlet: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Outlet",
+    }
+  ]
 });
 
 export const UserAccount = mongoose.model("UserAccount", userSchema);

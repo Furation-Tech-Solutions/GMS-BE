@@ -27,6 +27,7 @@ import { notificationRouter } from "@presentation/routes/notification/notificati
 import { userRouter } from "@presentation/routes/user-route";
 import { superAdminRouter } from "@presentation/routes/super-admin-routes";
 import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
+import { sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
 
 
 
@@ -34,6 +35,7 @@ export default (app: Express): void => {
   const router = Router();
 
   app.get("/health", (req, res) => {
+    sendNotificationExample('new title')
     res.status(200).json({ message: "ok" });
   });
   app.use("/api/v1/shift", shiftRouter);
