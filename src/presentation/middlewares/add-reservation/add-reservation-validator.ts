@@ -20,13 +20,14 @@ interface ReservationInput {
   perks?: string;
   prePayment?: number;
   onSitePayment?: number;
+  outletId?: string;
   updatedBy?: string | null;
   createdBy?: string | null;
   confirmationMailSending?: boolean;
 }
 
 // Define a pattern for MongoDB ObjectId (24 hexadecimal characters)
-const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+export const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
 const reservationValidator = (
   input: ReservationInput,
@@ -226,6 +227,22 @@ const reservationValidator = (
       .messages({
         "string.max": "Perks should have less than 2000 characters",
       }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string()
           .trim()

@@ -8,7 +8,7 @@ export class ReservationTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -26,7 +26,7 @@ export class ReservationTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public outletId: string,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -73,7 +73,7 @@ export class ReservationTagCategoryMapper {
             : existingReservationTagCategory.tags,
         outletId:
           reservationTagCategoryData.outletId !== undefined
-            ? reservationTagCategoryData.outletId
+            ? { _id: reservationTagCategoryData.outletId }
             : existingReservationTagCategory.outletId,
         updatedBy:
           reservationTagCategoryData.updatedBy !== undefined
@@ -102,7 +102,7 @@ export class ReservationTagCategoryMapper {
         display: reservationTagCategoryData.display,
         followers: reservationTagCategoryData.followers,
         tags: reservationTagCategoryData.tags,
-        outletId: reservationTagCategoryData.outletId,
+        outletId: { _id: reservationTagCategoryData.outletId },
         updatedBy: { _id: reservationTagCategoryData.updatedBy },
         createdBy: { _id: reservationTagCategoryData.createdBy },
         createdAt: reservationTagCategoryData.createdAt,

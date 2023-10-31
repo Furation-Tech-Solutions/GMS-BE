@@ -1,6 +1,7 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 // Define the input interface for ReservationStatus
 interface ReservationStatusInput {
@@ -10,6 +11,7 @@ interface ReservationStatusInput {
   classification: string;
   active: boolean;
   durationHolds?: number;
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -81,6 +83,22 @@ const reservationStatusValidator = (
       : Joi.number().optional().messages({
           "number.base": "Duration in holds must be a number",
         }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

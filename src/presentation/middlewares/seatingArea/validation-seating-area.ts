@@ -1,12 +1,14 @@
 import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 // Define the input interface for SeatingArea
 interface SeatingAreaInput {
   abbreviation: string;
   seatingAreaName: string;
   listOrder: number;
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -67,6 +69,22 @@ const seatingAreaValidator = function (
           "number.empty": "List order is required",
           "any.required": "List order is required",
         }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

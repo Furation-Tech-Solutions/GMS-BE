@@ -3,7 +3,7 @@ export class ClientTagModel {
   constructor(
     public name: string = "",
     public categoryNameId: string = "",
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -16,7 +16,7 @@ export class ClientTagEntity {
     public _id: string | undefined = undefined, // Set a default value for id
     public name: string = "",
     public categoryNameId: string = "",
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public createdAt: Date
@@ -43,7 +43,7 @@ export class ClientTagMapper {
             : existingClientTag.categoryNameId,
         outletId:
           clientTagData.outletId !== undefined
-            ? clientTagData.outletId
+            ? { _id: clientTagData.outletId }
             : existingClientTag.outletId,
         updatedBy:
           clientTagData.updatedBy !== undefined
@@ -67,7 +67,7 @@ export class ClientTagMapper {
           : clientTagData._id.toString(),
         name: clientTagData.name,
         categoryNameId: clientTagData.categoryNameId,
-        outletId: clientTagData.outletId,
+        outletId: { _id: clientTagData.outletId },
         updatedBy: { _id: clientTagData.updatedBy },
         createdBy: { _id: clientTagData.createdBy },
         createdAt: clientTagData.createdAt,

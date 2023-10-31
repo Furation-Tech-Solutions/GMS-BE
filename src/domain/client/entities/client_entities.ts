@@ -28,11 +28,10 @@ export class ClientModel {
     public language: string,
     public gender: string,
     public isClient: boolean = false,
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined, // public createdAt: Date
     public activityLogs: string[] = [] // public createdAt: Date
-
   ) {}
 }
 
@@ -67,7 +66,7 @@ export class ClientEntity {
     public language: string,
     public gender: string,
     public isClient: boolean,
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
     public activityLogs: string[],
@@ -191,7 +190,7 @@ export class ClientMapper {
             : existingClient.isClient,
         outletId:
           clientData.outletId !== undefined
-            ? clientData.outletId
+            ? { _id: clientData.outletId }
             : existingClient.outletId,
         updatedBy:
           clientData.updatedBy !== undefined
@@ -201,10 +200,10 @@ export class ClientMapper {
           clientData.createdBy !== undefined
             ? { _id: clientData.createdBy }
             : existingClient.createdBy,
-            activityLogs:
+        activityLogs:
           clientData.activityLogs !== undefined
-              ? clientData.activityLogs
-              : existingClient.activityLogs,
+            ? clientData.activityLogs
+            : existingClient.activityLogs,
         createdAt:
           clientData.createdAt !== undefined
             ? clientData.createdAt
@@ -245,7 +244,7 @@ export class ClientMapper {
         language: clientData.language,
         gender: clientData.gender,
         isClient: clientData.isClient,
-        outletId: clientData.outletId,
+        outletId: { _id: clientData.outletId },
         updatedBy: { _id: clientData.updatedBy },
         createdBy: { _id: clientData.createdBy },
         activityLogs: clientData.activityLogs,

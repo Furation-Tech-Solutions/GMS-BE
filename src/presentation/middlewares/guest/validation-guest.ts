@@ -2,6 +2,7 @@ import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 interface GuestInput {
   firstName: string;
@@ -14,6 +15,7 @@ interface GuestInput {
   reservationTags?: mongoose.Schema.Types.ObjectId[];
   status?: string;
   notes?: string;
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -84,7 +86,7 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
     date: isUpdate
       ? customDateValidator("date").optional()
       : customDateValidator("date").required(),
-      
+
     bookedBy: isUpdate
       ? Joi.object({
           _id: Joi.string().trim().optional().allow("").messages({
@@ -143,6 +145,22 @@ const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
     notes: isUpdate
       ? Joi.string().optional().allow("").trim()
       : Joi.string().optional().allow("").trim(),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",
