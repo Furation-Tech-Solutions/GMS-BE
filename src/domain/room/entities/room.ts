@@ -4,7 +4,7 @@ export class RoomModel {
     public abbreviation: string = "",
     public roomName: string = "",
     public listOrder: number = 0,
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -17,7 +17,7 @@ export class RoomEntity {
     public abbreviation: string,
     public roomName: string,
     public listOrder: number,
-    public outletId: string,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined
   ) {}
@@ -46,7 +46,7 @@ export class RoomMapper {
             : existingRoom.listOrder,
         outletId:
           roomData.outletId !== undefined
-            ? roomData.outletId
+            ? { _id: roomData.outletId }
             : existingRoom.outletId,
         updatedBy:
           roomData.updatedBy !== undefined
@@ -67,7 +67,7 @@ export class RoomMapper {
         abbreviation: roomData.abbreviation,
         roomName: roomData.roomName,
         listOrder: roomData.listOrder,
-        outletId: roomData.outletId,
+        outletId: { _id: roomData.outletId },
         updatedBy: { _id: roomData.updatedBy },
         createdBy: { _id: roomData.createdBy },
       };

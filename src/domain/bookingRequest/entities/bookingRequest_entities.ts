@@ -36,7 +36,7 @@ export class BookingRequestEntity {
     public status: IBookingRequestStatus = { name: "", color: "" },
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined,
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public createdAt: Date
   ) {}
 }
@@ -93,7 +93,7 @@ export class BookingRequestMapper {
             : existingbookingreq.status,
         outletId:
           bookingreqData.outletId !== undefined
-            ? bookingreqData.outletId
+            ? { _id: bookingreqData.outletId }
             : existingbookingreq.outletId,
         updatedBy:
           bookingreqData.updatedBy !== undefined
@@ -125,7 +125,7 @@ export class BookingRequestMapper {
         numberOfGuest: bookingreqData.numberOfGuest,
         duration: bookingreqData.duration,
         status: bookingreqData.status,
-        outletId: bookingreqData.outletId,
+        outletId: { _id: bookingreqData.outletId },
         updatedBy: { _id: bookingreqData.updatedBy },
         createdBy: { _id: bookingreqData.createdBy },
         createdAt: bookingreqData.createdAt,

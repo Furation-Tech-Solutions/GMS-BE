@@ -2,6 +2,7 @@ import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 interface BookingRequestInput {
   firstName: string;
@@ -12,11 +13,15 @@ interface BookingRequestInput {
   reservationDate?: string;
   reservationTime?: string;
   numberOfGuest?: number;
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
   duration?: string;
   status?: { name: string; color: string };
 }
+
+// Define a pattern for MongoDB ObjectId (24 hexadecimal characters)
+// const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
 const statusNameToColor = {
   Active: "Blue",
@@ -158,6 +163,22 @@ const bookingRequestValidator = (
               then: Joi.required(),
             }),
         }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

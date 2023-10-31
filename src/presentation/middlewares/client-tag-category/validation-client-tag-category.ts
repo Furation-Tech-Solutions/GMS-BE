@@ -2,6 +2,7 @@ import Joi, { ValidationErrorItem } from "joi";
 import ApiError from "@presentation/error-handling/api-error";
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
+import { objectIdPattern } from "../add-reservation/add-reservation-validator";
 
 interface ClientTagCategoryInput {
   name: string;
@@ -18,6 +19,7 @@ interface ClientTagCategoryInput {
   };
   followers?: mongoose.Schema.Types.ObjectId[];
   tags?: { name: string }[];
+  outletId?: string;
   updatedBy?: string;
   createdBy?: string;
 }
@@ -82,6 +84,22 @@ const clientTagCategoryValidator = (
       .messages({
         "array.base": "Tags must be an array of objects",
       }),
+    outletId: isUpdate
+      ? Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .messages({
+            "any.required": "Please select the outlet Id",
+          })
+      : Joi.string()
+          .trim()
+          .pattern(objectIdPattern, "MongoDB ObjectId")
+          .optional()
+          .allow("")
+          .messages({
+            "any.required": "Please select the outlet id",
+          }),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().messages({
           "any.required": "Please select the Updated By",

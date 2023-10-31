@@ -8,7 +8,7 @@ export class ClientTagCategoryModel {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public outletId: string | undefined,
+    public outletId: string | { _id: string } | undefined,
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -26,7 +26,7 @@ export class ClientTagCategoryEntity {
     public display: object = {},
     public followers: string[] = [],
     public tags: string[] = [],
-    public outletId: string ,
+    public outletId: string | { _id: string },
     public updatedBy: string | { _id: string } | undefined = undefined,
     public createdBy: string | { _id: string } | undefined = undefined,
     public createdAt: Date
@@ -73,7 +73,7 @@ export class ClientTagCategoryMapper {
             : existingClientTagCategory.tags,
         outletId:
           clientTagCategoryData.outletId !== undefined
-            ? clientTagCategoryData.outletId
+            ? { _id: clientTagCategoryData.outletId }
             : existingClientTagCategory.outletId,
         updatedBy:
           clientTagCategoryData.updatedBy !== undefined
@@ -102,7 +102,7 @@ export class ClientTagCategoryMapper {
         display: clientTagCategoryData.display,
         followers: clientTagCategoryData.followers,
         tags: clientTagCategoryData.tags,
-        outletId: clientTagCategoryData.outletId,
+        outletId: { _id: clientTagCategoryData.outletId },
         updatedBy: { _id: clientTagCategoryData.updatedBy },
         createdBy: { _id: clientTagCategoryData.createdBy },
         createdAt: clientTagCategoryData.createdAt,
