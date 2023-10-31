@@ -51,7 +51,8 @@ export class UserService{
 
 async createUser(req: Request, res: Response): Promise<void> {
     
-    const user=req.user
+    const user=req.user;
+    const outletId = req.outletId;
     let permissions: number[]=[]
     if (req.body.accessLevel === 'Superuser') {
       permissions = [101,102,103,104,105,106,107,108,109]
@@ -59,14 +60,16 @@ async createUser(req: Request, res: Response): Promise<void> {
       permissions = [201,202,203,204,205,206,207,208,209]
     } else if (req.body.accessLevel  === 'Sub-Manager') {
       permissions = [301,302,303,304,305,306]
-      
     }
+    
     const newUserData={
         ...req.body,
         permissions,
+        outlet:[outletId],
         createdBy: user._id,
         updatedBy:user._id
     }
+
     const { randomPassword, ...userDataWithoutPassword } = newUserData;
     const userData: UserModel = UserMapper.toModel(userDataWithoutPassword);
 

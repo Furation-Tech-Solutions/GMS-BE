@@ -44,7 +44,6 @@ const addReservationSchema = new mongoose.Schema({
       ref: "ReservationTag",
     },
   ],
-
   reservationNote: {
     type: String,
     maxlength: [2000, "Last name should have less than 2000 characters"],
