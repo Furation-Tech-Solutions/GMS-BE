@@ -14,19 +14,15 @@ const verifyOutlet = async (
 
       const outletIdHeader = req.headers.email2 as string;
 
-
-      console.log( outletIdHeader, "outletIdHeader")
   
       if (outletIdHeader ) {
         const outletToCheck = outletIdHeader;
         const outlet = await Outlet.findOne({ _id: outletToCheck });
 
-        console.log(outlet)
 
         if (outlet) {
           req.outletId = outletIdHeader;
 
-          console.log(outlet, "outlet");
           next(); // User found, proceed to the next middleware or route handler.
         } else {
           const unAuthorized = ApiError.unAuthorized();

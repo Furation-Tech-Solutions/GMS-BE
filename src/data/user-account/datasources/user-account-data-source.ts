@@ -31,7 +31,7 @@ async create(user: UserModel): Promise<any> {
     }
 
     const userData = new UserAccount(user);
-    
+
     const createdUser = await userData.save();
 
     return createdUser.toObject();
@@ -39,8 +39,8 @@ async create(user: UserModel): Promise<any> {
   }
 
   async getAllUsers(): Promise<any[]> {
-    //change by jatin
     try{
+    
     const users = await UserAccount.find();
 
     return users.map((user) => user.toObject());

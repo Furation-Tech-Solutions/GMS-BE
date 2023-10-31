@@ -52,6 +52,7 @@ userRouter.post(
     validateUserAccountInputMiddleware(false),
     verifyLoggedInUser,
     checkPermission([101,201]),
+    verifyOutlet,
     userService.createUser.bind(userService)
 )
 userRouter.get(
