@@ -46,9 +46,9 @@ export class ClientTagCategoryRepositoryImpl implements ClientTagCategoryReposit
         }
     }
 
-    async getAllClientTagCategories(): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>> {
+    async getAllClientTagCategories(outletId:string): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>> {
         try {
-            const tagCategories = await this.clientTagCategoryDataSource.getAll(); // Use the tag category data source
+            const tagCategories = await this.clientTagCategoryDataSource.getAll(outletId); // Use the tag category data source
             return Right<ErrorClass, ClientTagCategoryEntity[]>(tagCategories);
         } catch (e) {
             if (e instanceof ApiError && e.name === "notfound") {

@@ -35,8 +35,10 @@ export class ClientTagServices {
 
     async createClientTag(req: Request, res: Response): Promise<void> {
         const user=req.user
+        const outletId=req.outletId
         const newClientTagData={
             ...req.body,
+            outletId:outletId,
             createdBy:user._id,
             updatedBy:user._id
         }
@@ -94,8 +96,9 @@ export class ClientTagServices {
         res: Response,
         next: NextFunction
     ): Promise<void> {
+        const outletId=req.outletId as string
         const clientTags: Either<ErrorClass, ClientTagEntity[]> =
-            await this.getAllClienttagUsecase.execute();
+            await this.getAllClienttagUsecase.execute(outletId);
 
         clientTags.cata(
             (error: ErrorClass) =>

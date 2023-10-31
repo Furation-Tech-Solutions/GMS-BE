@@ -14,6 +14,7 @@ import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import EmailService from "@presentation/services/send-mail";
 import WhatsAppService from "@presentation/services/whatsapp-services";
 import { TableBlockCheck } from "@domain/add-reservation/usecases/table-block-check";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 // Create an instance of the AddReservationDataSourceImpl and pass the mongoose connection
@@ -66,6 +67,7 @@ export const addReservationRouter = Router();
 addReservationRouter.post(
   "/create",
   verifyLoggedInUser,
+  verifyOutlet,
   checkPermission([102,202,301]),
   validateReservationInputMiddleware(false),
   addReservationService.createAddReservation.bind(addReservationService)
@@ -88,6 +90,7 @@ addReservationRouter.get(
 // Route handling for getting all Add Reservation
 addReservationRouter.get(
   "/",
+  verifyOutlet,
   // checkPermission(["1101"]),
   addReservationService.getAllAddReservation.bind(addReservationService)
 );

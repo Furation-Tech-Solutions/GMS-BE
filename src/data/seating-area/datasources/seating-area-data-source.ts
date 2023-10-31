@@ -6,7 +6,7 @@ import { SeatingArea } from "../models/seating-area-model";
 export interface SeatingAreaDataSource {
   create(seatingArea: SeatingAreaModel): Promise<any>;
   getById(id: string): Promise<any | null>;
-  getAllSeatingAreas(): Promise<any[]>;
+  getAllSeatingAreas(outletId:string): Promise<any[]>;
   update(id: string, seatingArea: SeatingAreaModel): Promise<any>;
   delete(id: string): Promise<void>;
 }
@@ -41,8 +41,8 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
     return seatingArea ? seatingArea.toObject() : null;
   }
 
-  async getAllSeatingAreas(): Promise<any[]> {
-    const seatingAreas = await SeatingArea.find().populate({
+  async getAllSeatingAreas(outletId:string): Promise<any[]> {
+    const seatingAreas = await SeatingArea.find({outletId:outletId}).populate({
       path: "tables",
       select: "id tableNo partySizeMini partySizeMax",
     });

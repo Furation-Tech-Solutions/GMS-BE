@@ -42,9 +42,9 @@ export class TableRepositoryImpl implements TableRepository {
     }
   }
 
-  async getTables(): Promise<Either<ErrorClass, TableEntity[]>> {
+  async getTables(outletId:string): Promise<Either<ErrorClass, TableEntity[]>> {
     try {
-      const response = await this.dataSource.getAllTables();
+      const response = await this.dataSource.getAllTables(outletId);
       return Right<ErrorClass, TableEntity[]>(response);
     } catch (error) {
       if (typeof error === typeof ApiError.notFound) {

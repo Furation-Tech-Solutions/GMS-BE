@@ -4,7 +4,7 @@ import { ReservationTagRepository } from "../repositories/reservation-tag-repo";
 import { Either, Right, Left } from "monet";
 
 export interface GetAllReservationtagUsecase {
-  execute: () => Promise<Either<ErrorClass, ReservationTagEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ReservationTagEntity[]>>;
 }
 
 export class GetAllReservationTag implements GetAllReservationtagUsecase {
@@ -14,7 +14,7 @@ export class GetAllReservationTag implements GetAllReservationtagUsecase {
     this.reservationTagRepository = reservationTagRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ReservationTagEntity[]>> {
-    return await this.reservationTagRepository.getAllReservationTag();
+  async execute(outletId:string): Promise<Either<ErrorClass, ReservationTagEntity[]>> {
+    return await this.reservationTagRepository.getAllReservationTag(outletId);
   }
 }

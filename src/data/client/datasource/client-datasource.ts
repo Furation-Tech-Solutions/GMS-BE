@@ -9,15 +9,13 @@ export interface ClientDataSource {
   update(id: String, client: ClientModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAllClients(): Promise<any[]>;
+  getAllClients(outletId: string): Promise<any[]>;
 }
 
 // Client Data Source communicates with the database
 export class ClientDataSourceImpl implements ClientDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(client: ClientModel): Promise<any> {
-
-
     const existingClient = await Client.findOne();
     // if (existingClient) {
     //   throw ApiError.clientExist();
@@ -36,29 +34,34 @@ export class ClientDataSourceImpl implements ClientDataSource {
 
   async read(id: string): Promise<any | null> {
     try {
-      const client = await Client.findById(id).populate({
-        path: "tags", // Populate the reservationTags field
-        select: "id name categoryNameId", // Adjust the fields you want to select
-        populate: {
-          path: "categoryNameId", // Populate the categoryNameId field in reservationTags
-          select: "id name color",
-          model: "ClientTagCategory", // Reference to the Category model
-        },
-      }).populate({
-        path: "activityLogs",
-        select:"timestamp message",
-      });
+      const client = await Client.findById(id)
+        .populate({
+          path: "tags", // Populate the reservationTags field
+          select: "id name categoryNameId", // Adjust the fields you want to select
+          populate: {
+            path: "categoryNameId", // Populate the categoryNameId field in reservationTags
+            select: "id name color",
+            model: "ClientTagCategory", // Reference to the Category model
+          },
+        })
+        .populate({
+          path: "activityLogs",
+          select: "timestamp message",
+        });
 
       return client ? client.toObject() : null;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw ApiError.badRequest();
     } // Convert to a plain JavaScript object before returning
   }
-  async getAllClients(): Promise<any[]> {
+  async getAllClients(outletId: string): Promise<any[]> {
     // try {
     //   const clients = await Client.find().populate("tags");
-    const clients = await Client.find({ isClient: true }).populate({
+    const clients = await Client.find({
+      outletId: outletId,
+      isClient: true,
+    }).populate({
       path: "tags", // Populate the reservationTags field
       select: "id name categoryNameId", // Adjust the fields you want to select
       populate: {
@@ -66,8 +69,7 @@ export class ClientDataSourceImpl implements ClientDataSource {
         select: "id name color",
         model: "ClientTagCategory", // Reference to the Category model
       },
-    })
-
+    });
 
     return clients.map((client) => client.toObject()); // Convert to plain JavaScript objects before returning
     // } catch (error) {

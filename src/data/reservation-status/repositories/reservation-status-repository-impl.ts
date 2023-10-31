@@ -46,11 +46,11 @@ export class ReservationStatusRepositoryImpl
     }
   }
 
-  async getReservationStatus(): Promise<
+  async getReservationStatus(outletId:string): Promise<
     Either<ErrorClass, ReservationStatusEntity[]>
   > {
     try {
-      const response = await this.dataSource.getAllReservationStauts();
+      const response = await this.dataSource.getAllReservationStauts(outletId);
       return Right<ErrorClass, ReservationStatusEntity[]>(response);
     } catch (error) {
       if (typeof error === typeof ApiError.notFound) {

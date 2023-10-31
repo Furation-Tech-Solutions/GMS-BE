@@ -3,7 +3,7 @@ import { Either } from "monet";
 import { RoomEntity } from "../entities/room";
 import { RoomRepository } from "../repositories/room-repository";
 export interface GetAllRoomsUsecase {
-  execute: () => Promise<Either<ErrorClass, RoomEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, RoomEntity[]>>;
 }
 
 export class GetAllRooms implements GetAllRoomsUsecase {
@@ -13,7 +13,7 @@ export class GetAllRooms implements GetAllRoomsUsecase {
     this.roomRepository = roomRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, RoomEntity[]>> {
-    return await this.roomRepository.getRooms();
+  async execute(outletId:string): Promise<Either<ErrorClass, RoomEntity[]>> {
+    return await this.roomRepository.getRooms(outletId);
   }
 }

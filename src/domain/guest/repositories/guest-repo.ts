@@ -12,5 +12,5 @@ export interface GuestRepository {
         id: string,
         data: GuestModel
     ): Promise<Either<ErrorClass, GuestEntity>>;
-    getAllGuests(): Promise<Either<ErrorClass, GuestEntity[]>>;
+    getAllGuests(outletId:string): Promise<Either<ErrorClass, GuestEntity[]>>;
 }

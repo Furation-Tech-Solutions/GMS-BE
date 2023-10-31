@@ -7,7 +7,7 @@ import { SeatingArea } from "@data/seating-area/models/seating-area-model";
 export interface TableDataSource {
   create(table: TableModel): Promise<any>;
   getById(id: string): Promise<any | null>;
-  getAllTables(): Promise<any[]>;
+  getAllTables(outletId: string): Promise<any[]>;
   update(id: string, table: TableModel): Promise<any>;
   delete(id: string): Promise<void>;
 }
@@ -56,8 +56,8 @@ export class TableDataSourceImpl implements TableDataSource {
     return table ? table.toObject() : null;
   }
 
-  async getAllTables(): Promise<any[]> {
-    const tables = await Table.find()
+  async getAllTables(outletId: string): Promise<any[]> {
+    const tables = await Table.find({ outletId: outletId })
       .populate({
         path: "tableCombinations", // The field to populate
         model: "Table", // The reference model for tableCombinations

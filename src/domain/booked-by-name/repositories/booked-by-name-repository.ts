@@ -5,7 +5,7 @@ import { BookedByNameEntity, BookedByNameModel } from "../entities/booked-by-nam
 
 export interface BookedByNameRepository {
     createBookedByName(bookedByName: BookedByNameModel): Promise<Either<ErrorClass, BookedByNameEntity>>;
-    getAllBookedByName(): Promise<Either<ErrorClass, BookedByNameEntity[]>>;
+    getAllBookedByName(outletId: string): Promise<Either<ErrorClass, BookedByNameEntity[]>>;
     getNameById(id: string):Promise<Either<ErrorClass, BookedByNameEntity>>;
     updateName(id: string, data: BookedByNameModel ): Promise<Either<ErrorClass, BookedByNameEntity>> 
     deleteBookedByName(id: string): Promise<Either<ErrorClass, void>>;

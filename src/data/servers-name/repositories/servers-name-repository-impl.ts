@@ -27,9 +27,9 @@ export class ServersNameRepositoryImpl implements ServerNameRepository {
           return Left<ErrorClass, ServersNameEntity>(ApiError.badRequest());
         }
       }
-    async getAllServersName(): Promise<Either<ErrorClass, ServersNameEntity[]>> {
+    async getAllServersName(outletId:string): Promise<Either<ErrorClass, ServersNameEntity[]>> {
         try {
-          const response = await this.serverNameDataSource.getAllServersName();
+          const response = await this.serverNameDataSource.getAllServersName(outletId);
           return Right<ErrorClass, ServersNameEntity[]>(response);
         } catch (error) {
          

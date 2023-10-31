@@ -46,9 +46,9 @@ export class ClientTagRepositoryImpl implements ClientTagRepository {
         }
     }
 
-    async getAllClientTag(): Promise<Either<ErrorClass, ClientTagEntity[]>> {
+    async getAllClientTag(outletId:string): Promise<Either<ErrorClass, ClientTagEntity[]>> {
         try {
-            const clientTags= await this.clientTagDataSource.getAll();
+            const clientTags= await this.clientTagDataSource.getAll(outletId);
             return Right<ErrorClass, ClientTagEntity[]>(clientTags);
         } catch (error) {
             if (error instanceof ApiError && error.name === "notfound") {

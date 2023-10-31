@@ -4,7 +4,7 @@ import { ClientRepository } from "../repositories/client-repo"; // Import the Cl
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
 export interface GetAllClientsUsecase {
-  execute: () => Promise<Either<ErrorClass, ClientEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ClientEntity[]>>;
 }
 
 export class GetAllClients implements GetAllClientsUsecase {
@@ -13,7 +13,7 @@ export class GetAllClients implements GetAllClientsUsecase {
     this.clientRepository = clientRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ClientEntity[]>> {
-    return await this.clientRepository.getAllClients();
+  async execute(outletId:string): Promise<Either<ErrorClass, ClientEntity[]>> {
+    return await this.clientRepository.getAllClients(outletId);
   }
 }

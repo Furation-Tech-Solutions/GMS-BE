@@ -47,9 +47,9 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
     }
   }
 
-  async getSeatingAreas(): Promise<Either<ErrorClass, SeatingAreaEntity[]>> {
+  async getSeatingAreas(outletId:string): Promise<Either<ErrorClass, SeatingAreaEntity[]>> {
     try {
-      const response = await this.dataSource.getAllSeatingAreas();
+      const response = await this.dataSource.getAllSeatingAreas(outletId);
       return Right<ErrorClass, SeatingAreaEntity[]>(response);
     } catch (error) {
       if (typeof error === typeof ApiError.notFound) {

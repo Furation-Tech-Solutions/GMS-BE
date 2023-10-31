@@ -4,7 +4,7 @@ import { TableEntity } from "../entities/table";
 import { TableRepository } from "../repositories/table-repository";
 
 export interface GetAllTablesUsecase {
-  execute: () => Promise<Either<ErrorClass, TableEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, TableEntity[]>>;
 }
 
 export class GetAllTables implements GetAllTablesUsecase {
@@ -14,7 +14,7 @@ export class GetAllTables implements GetAllTablesUsecase {
     this.tableRepository = tableRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, TableEntity[]>> {
-    return await this.tableRepository.getTables();
+  async execute(outletId:string): Promise<Either<ErrorClass, TableEntity[]>> {
+    return await this.tableRepository.getTables(outletId);
   }
 }

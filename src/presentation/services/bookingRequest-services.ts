@@ -41,8 +41,10 @@ export class BookingRequestServices {
 
   async createBookingRequest(req: Request, res: Response): Promise<void> {
     // const user=req.user;
+    const outletId = req.outletId;
     const newBookingRequestData = {
       ...req.body,
+      outletId: outletId,
       createdBy: "653226faa29436d12aa3fba5",
       updatedBy: "653226faa29436d12aa3fba5",
     };
@@ -111,8 +113,9 @@ export class BookingRequestServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId=req.outletId as string
     const bookingRequests: Either<ErrorClass, BookingRequestEntity[]> =
-      await this.getAllBookingRequestsUsecases.execute();
+      await this.getAllBookingRequestsUsecases.execute(outletId);
 
     bookingRequests.cata(
       (error: ErrorClass) =>

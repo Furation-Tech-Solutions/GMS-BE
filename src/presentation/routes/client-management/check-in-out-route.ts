@@ -14,6 +14,7 @@ import { UpdateCheckInCheckOut } from "@domain/client-management/usecases/update
 import { GetAllCheckInCheckOut } from "@domain/client-management/usecases/get-all-check-in-out-usecase";
 import { CheckInCheckOutSourceImpl } from "@data/client-management/datasource/check-in-out-datasource";
 import { CheckInCheckOutRepositoryImpl } from "@data/client-management/repository/check-in-out-repository-Iml";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 
 
 const mongooseConnection = mongoose.connection;
@@ -45,12 +46,14 @@ export const checkInCheckOutRouter = Router();
 // Route handling for creating a new admin
 checkInCheckOutRouter.post(
   "/create/:reservationId",
+  verifyOutlet,
   checkInCheckOutService.createCheckInCheckOut.bind(checkInCheckOutService)
 );
 
 // Route handling for getting an admin by ID
 checkInCheckOutRouter.get(
   "/getById/:checkId",
+  verifyOutlet,
   checkInCheckOutService.getCheckInCheckOutById.bind(checkInCheckOutService)
 );
 

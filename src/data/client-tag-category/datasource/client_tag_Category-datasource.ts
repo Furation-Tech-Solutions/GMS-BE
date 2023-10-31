@@ -9,7 +9,7 @@ export interface ClientTagCategoryDataSource {
   update(id: string, tagCategory: ClientTagCategoryModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(): Promise<any[]>;
+  getAll(outletId: string): Promise<any[]>;
 }
 
 // TagCategory Data Source communicates with the database
@@ -43,8 +43,10 @@ export class ClientTagCategoryDataSourceImpl
     return clientTagCategory ? clientTagCategory.toObject() : null; // Convert to a plain JavaScript object before returning
   }
 
-  async getAll(): Promise<any[]> {
-    const clientTagCategories = await ClientTagCategory.find().populate({
+  async getAll(outletId: string): Promise<any[]> {
+    const clientTagCategories = await ClientTagCategory.find({
+      outletId: outletId,
+    }).populate({
       path: "tags",
       select: "id name",
     });

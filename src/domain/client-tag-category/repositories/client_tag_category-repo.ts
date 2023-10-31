@@ -12,5 +12,5 @@ export interface ClientTagCategoryRepository {
         id: string,
         data: ClientTagCategoryModel
     ): Promise<Either<ErrorClass, ClientTagCategoryEntity>>;
-    getAllClientTagCategories(): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>>;
+    getAllClientTagCategories(outletId:string): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>>;
 }

@@ -38,8 +38,10 @@ export class SeatingAreaService {
 
   async createSeatingArea(req: Request, res: Response): Promise<void> {
     const user=req.user
+    const outletId=req.outletId
     const newSeatingAreaData={
         ...req.body,
+        outletId:outletId,
         createdBy:user._id,
         updatedBy:user._id
     }
@@ -81,9 +83,10 @@ export class SeatingAreaService {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId=req.outletId as string
     // Call the GetAllOutletsUsecase to get all outlets
     const seatingAreas: Either<ErrorClass, SeatingAreaEntity[]> =
-      await this.getAllSeatingAreasUsecase.execute();
+      await this.getAllSeatingAreasUsecase.execute(outletId);
     // console.log(seatingAreas);
     seatingAreas.cata(
       (error: ErrorClass) =>

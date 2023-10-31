@@ -46,9 +46,9 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
         }
     }
 
-    async getAllBookingRequests(): Promise<Either<ErrorClass, BookingRequestEntity[]>> {
+    async getAllBookingRequests(outletId:string): Promise<Either<ErrorClass, BookingRequestEntity[]>> {
         try {
-            const requests = await this.bookingRequestDataSource.getAllBookingRequests(); // Use the booking request data source
+            const requests = await this.bookingRequestDataSource.getAllBookingRequests(outletId); // Use the booking request data source
             return Right<ErrorClass, BookingRequestEntity[]>(requests);
         } catch (e) {
             if (e instanceof ApiError && e.name === "notfound") {
