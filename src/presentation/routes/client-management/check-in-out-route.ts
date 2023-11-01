@@ -15,6 +15,7 @@ import { GetAllCheckInCheckOut } from "@domain/client-management/usecases/get-al
 import { CheckInCheckOutSourceImpl } from "@data/client-management/datasource/check-in-out-datasource";
 import { CheckInCheckOutRepositoryImpl } from "@data/client-management/repository/check-in-out-repository-Iml";
 import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 
 const mongooseConnection = mongoose.connection;
@@ -46,6 +47,7 @@ export const checkInCheckOutRouter = Router();
 // Route handling for creating a new admin
 checkInCheckOutRouter.post(
   "/create/:reservationId",
+  verifyLoggedInUser,
   verifyOutlet,
   checkInCheckOutService.createCheckInCheckOut.bind(checkInCheckOutService)
 );
@@ -53,6 +55,7 @@ checkInCheckOutRouter.post(
 // Route handling for getting an admin by ID
 checkInCheckOutRouter.get(
   "/getById/:checkId",
+  verifyLoggedInUser,
   verifyOutlet,
   checkInCheckOutService.getCheckInCheckOutById.bind(checkInCheckOutService)
 );
@@ -60,14 +63,17 @@ checkInCheckOutRouter.get(
 // Route handling for updating an admin by ID
 checkInCheckOutRouter.put(
   "/update/:reservationId",
+  verifyLoggedInUser,
   checkInCheckOutService.updateCheckInCheckOut.bind(checkInCheckOutService)
 );
 
 // Route handling for deleting an admin by ID
 checkInCheckOutRouter.delete(
   "/delete/:reservationId",
+  verifyLoggedInUser,
   checkInCheckOutService.deleteCheckInCheckOut.bind(checkInCheckOutService)
 );
 
 // Route handling for getting all admins
-checkInCheckOutRouter.get("/getAll", checkInCheckOutService.getAllCheckInCheckOuts.bind(checkInCheckOutService));
+checkInCheckOutRouter.get("/getAll", verifyLoggedInUser,
+verifyOutlet, checkInCheckOutService.getAllCheckInCheckOuts.bind(checkInCheckOutService));

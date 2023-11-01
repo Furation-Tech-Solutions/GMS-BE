@@ -14,7 +14,6 @@ import { checkPermission } from "@presentation/permission/permission-middleware"
 import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
-
 // Create an instance of the ClientDataSourceImpl and pass the mongoose connection
 const clientDataSource = new ClientDataSourceImpl(mongoose.connection);
 
@@ -30,11 +29,11 @@ const updateClientUsecase = new UpdateClient(clientRepository);
 
 // Initialize ClientService and inject required dependencies
 const clientService = new ClientServices(
-    createClientUsecase,
-    deleteClientUsecase,
-    getClientByIdUsecase,
-    getAllClientsUsecase,
-    updateClientUsecase
+  createClientUsecase,
+  deleteClientUsecase,
+  getClientByIdUsecase,
+  getAllClientsUsecase,
+  updateClientUsecase
 );
 
 // Create an Express router
@@ -42,44 +41,49 @@ export const clientRouter = Router();
 
 // Route handling for creating a new client
 clientRouter.post(
-    "/add",
-    verifyLoggedInUser,
-    verifyOutlet,
-    validateClientInputMiddleware(false),
-    checkPermission([106,206,306]),
-    clientService.createClient.bind(clientService)
+  "/add",
+  verifyLoggedInUser,
+  verifyOutlet,
+  validateClientInputMiddleware(false),
+  checkPermission([106, 206, 306]),
+  clientService.createClient.bind(clientService)
 );
 
 // Route handling for deleting a client by ID
 clientRouter.delete(
-    "/:clientId",
-    checkPermission([106,206]),
-    clientService.deleteClient.bind(clientService)
+  "/:clientId",
+  verifyLoggedInUser,
+  checkPermission([106, 206]),
+  clientService.deleteClient.bind(clientService)
 );
 
 // Route handling for getting a client by ID
 clientRouter.get(
-    "/:clientId",
-    // checkPermission(["1102","5102"]),
-    checkPermission([106,206,306]),
+  "/:clientId",
+  verifyLoggedInUser,
+  // checkPermission(["1102","5102"]),
+  checkPermission([106, 206, 306]),
 
-    clientService.getClientById.bind(clientService)
+  clientService.getClientById.bind(clientService)
 );
 
 // Route handling for getting all clients
-clientRouter.get("/",
-    // checkPermission(["1102"]),
-    verifyOutlet,
-    checkPermission([106,206,306]),
+clientRouter.get(
+  "/",
+  // checkPermission(["1102"]),
+  verifyLoggedInUser,
+  verifyOutlet,
+  checkPermission([106, 206, 306]),
 
-    clientService.getAllClients.bind(clientService));
+  clientService.getAllClients.bind(clientService)
+);
 
 // Route handling for updating a client by ID
 clientRouter.put(
-    "/:clientId",
-    verifyLoggedInUser,
-    validateClientInputMiddleware(true),
-    checkPermission([106,206,306]),
+  "/:clientId",
+  verifyLoggedInUser,
+  validateClientInputMiddleware(true),
+  checkPermission([106, 206, 306]),
 
-    clientService.updateClient.bind(clientService)
+  clientService.updateClient.bind(clientService)
 );

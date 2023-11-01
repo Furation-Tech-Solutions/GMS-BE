@@ -49,6 +49,7 @@ bookedByNameRouter.post(
 
 bookedByNameRouter.get(
   "/getName",
+  verifyLoggedInUser,
   verifyOutlet,
   bookedByNameService.getAllBookedByName.bind(bookedByNameService)
 );
@@ -62,5 +63,6 @@ bookedByNameRouter.patch(
 
 bookedByNameRouter.delete(
   "/delete/:nameId",
+  verifyLoggedInUser,
   bookedByNameService.deleteBookedByName.bind(bookedByNameService)
 );

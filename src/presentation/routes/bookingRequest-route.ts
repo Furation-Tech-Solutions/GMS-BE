@@ -68,18 +68,21 @@ bookingRequestRouter.post(
 // Route handling for deleting a booking request by ID
 bookingRequestRouter.delete(
   "/:bookingRequestId",
+  verifyLoggedInUser,
   bookingRequestService.deleteBookingRequest.bind(bookingRequestService)
 );
 
 // Route handling for getting a booking request by ID
 bookingRequestRouter.get(
   "/:bookingRequestId",
+  verifyLoggedInUser,
   bookingRequestService.getBookingRequestById.bind(bookingRequestService)
 );
 
 // Route handling for getting all booking requests
 bookingRequestRouter.get(
   "/",
+  verifyLoggedInUser,
   verifyOutlet,
   bookingRequestService.getAllBookingRequests.bind(bookingRequestService)
 );
@@ -87,7 +90,7 @@ bookingRequestRouter.get(
 // Route handling for updating a booking request by ID
 bookingRequestRouter.put(
   "/:bookingRequestId",
-    verifyLoggedInUser,
+  verifyLoggedInUser,
   validateBookingRequestInputMiddleware(true),
   bookingRequestService.updateBookingRequest.bind(bookingRequestService)
 );

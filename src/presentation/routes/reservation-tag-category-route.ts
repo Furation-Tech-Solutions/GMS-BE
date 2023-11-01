@@ -46,18 +46,18 @@ reservationTagCategoryRouter.post(
 
 // Route handling for deleting a tag category by ID
 reservationTagCategoryRouter.delete(
-    "/:ReservationTagCategoryId",
+    "/:ReservationTagCategoryId",verifyLoggedInUser,
     reservationTagCategoryService.deleteReservationTagCategory.bind(reservationTagCategoryService)
 );
 
 // Route handling for getting a tag category by ID
 reservationTagCategoryRouter.get(
-    "/:ReservationTagCategoryId",
+    "/:ReservationTagCategoryId",verifyLoggedInUser,
     reservationTagCategoryService.getReservationTagCategoryById.bind(reservationTagCategoryService)
 );
 
 // Route handling for getting all tag categories
-reservationTagCategoryRouter.get("/",verifyOutlet, reservationTagCategoryService.getAllReservationTagCategories.bind(reservationTagCategoryService));
+reservationTagCategoryRouter.get("/",verifyLoggedInUser,verifyOutlet, reservationTagCategoryService.getAllReservationTagCategories.bind(reservationTagCategoryService));
 
 // Route handling for updating a tag category by ID
 reservationTagCategoryRouter.put(

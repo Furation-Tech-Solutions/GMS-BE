@@ -54,11 +54,12 @@ tableRouter.post(
 //Route handling for getTableById
 tableRouter.get(
   "/getById/:tableId",
+  verifyLoggedInUser,
   tableService.getTableById.bind(tableService)
 );
 
 //Route hanndling for getTables
-tableRouter.get("/getAllTables",verifyOutlet, tableService.getAllTables.bind(tableService));
+tableRouter.get("/getAllTables",verifyLoggedInUser,verifyOutlet, tableService.getAllTables.bind(tableService));
 
 tableRouter.put(
   "/updateTable/:tableId",

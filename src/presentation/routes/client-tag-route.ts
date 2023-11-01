@@ -50,6 +50,7 @@ validateClientTagInputMiddleware(false),
 // Route handling for deleting a tag by ID
 clientTagRouter.delete(
     "/:ClientTagId",
+    verifyLoggedInUser,
 // checkPermission(["1108"]),
 
     clientTagService.deleteClientTag.bind(clientTagService)
@@ -58,11 +59,13 @@ clientTagRouter.delete(
 // Route handling for getting a tag by ID
 clientTagRouter.get(
     "/:ClientTagId",
+    verifyLoggedInUser,
     clientTagService.getClientTagById.bind(clientTagService)
 );
 
 // Route handling for getting all tag
-clientTagRouter.get("/",verifyOutlet, clientTagService.getAllClientTags.bind(clientTagService));
+clientTagRouter.get("/",verifyLoggedInUser,
+verifyOutlet, clientTagService.getAllClientTags.bind(clientTagService));
 
 // Route handling for updating a tag by ID
 clientTagRouter.put(

@@ -42,7 +42,7 @@ serverNameRouter.post(
     serverNameService.createServerName.bind(serverNameService)
 )
 serverNameRouter.get(
-    "/getAllServerNames",verifyOutlet, serverNameService.getAllServersName.bind(serverNameService)
+    "/getAllServerNames",verifyLoggedInUser,verifyOutlet, serverNameService.getAllServersName.bind(serverNameService)
 )
 serverNameRouter.patch(
     "/update/:serverNameId",
@@ -52,5 +52,6 @@ serverNameRouter.patch(
 )
 serverNameRouter.delete(
     "/delete/:serverNameId",
+    verifyLoggedInUser,
     serverNameService.deleteServerName.bind(serverNameService)
 );
