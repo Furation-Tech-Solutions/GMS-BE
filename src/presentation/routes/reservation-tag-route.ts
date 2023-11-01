@@ -48,18 +48,18 @@ reservationTagRouter.post(
 
 // Route handling for deleting a tag by ID
 reservationTagRouter.delete(
-    "/:ReservationTagId",
+    "/:ReservationTagId",verifyLoggedInUser,
     reservationTagService.deleteReservationTag.bind(reservationTagService)
 );
 
 // Route handling for getting a tag by ID
 reservationTagRouter.get(
-    "/:ReservationTagId",
+    "/:ReservationTagId",verifyLoggedInUser,
     reservationTagService.getReservationTagById.bind(reservationTagService)
 );
 
 // Route handling for getting all tag
-reservationTagRouter.get("/",verifyOutlet, reservationTagService.getAllReservationTags.bind(reservationTagService));
+reservationTagRouter.get("/",verifyLoggedInUser,verifyOutlet, reservationTagService.getAllReservationTags.bind(reservationTagService));
 
 // Route handling for updating a tag by ID
 reservationTagRouter.put(

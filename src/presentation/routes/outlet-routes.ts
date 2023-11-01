@@ -12,6 +12,7 @@ import { DeleteOutlet } from "@domain/outlet/usecases/delete-outlet";
 import { SuspendOutlet } from "@domain/outlet/usecases/suspend-outlet";
 import { ReactivateOutlet } from "@domain/outlet/usecases/reactivate-outlet";
 import { validateOutletInputMiddleware } from "@presentation/middlewares/outlet/validation-outlet";
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 
 // import { OutletMediaService } from "@presentation/services/mediadata-services";
 
@@ -47,33 +48,35 @@ export const outletRouter = Router();
 // Route handling for creating a new outlet
 outletRouter.post(
   "/create",
+  verifyLoggedInUser,
   validateOutletInputMiddleware,outletService.createOutlet.bind(outletService)
 );
 
 //Route handling for getOutletById
 outletRouter.get(
-  "/getById/:outletId",outletService.getOutletById.bind(outletService)
+  "/getById/:outletId",verifyLoggedInUser,
+  outletService.getOutletById.bind(outletService)
 );
 
 //Route hanndling for getOutlets
 outletRouter.get(
-  "/getAllOutlets",outletService.getAllOutlets.bind(outletService)
+  "/getAllOutlets",verifyLoggedInUser,outletService.getAllOutlets.bind(outletService)
 );
 
 outletRouter.put(
-  "/updateOutlet/:outletId", outletService.updateOutlet.bind(outletService)
+  "/updateOutlet/:outletId",verifyLoggedInUser, outletService.updateOutlet.bind(outletService)
 );
 
 outletRouter.delete(
-  "/deleteOutlet/:outletId",outletService.deleteOutlet.bind(outletService)
+  "/deleteOutlet/:outletId",verifyLoggedInUser,outletService.deleteOutlet.bind(outletService)
 );
 
 outletRouter.patch(
-  "/suspendOutlet/:outletId",outletService.suspendOutlet.bind(outletService)
+  "/suspendOutlet/:outletId",verifyLoggedInUser,outletService.suspendOutlet.bind(outletService)
 );
 
 outletRouter.patch(
-  "/reactivateOutlet/:outletId",outletService.reactivateOutlet.bind(
+  "/reactivateOutlet/:outletId",verifyLoggedInUser,outletService.reactivateOutlet.bind(
     outletService
   )
 );
