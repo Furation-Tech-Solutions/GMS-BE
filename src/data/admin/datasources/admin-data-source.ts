@@ -28,7 +28,7 @@ export class AdminDataSourceImpl implements AdminDataSource {
 
     if (outletId === null) {
       throw ApiError.notFound();
-    }
+}
 
  const outlet = await Outlet.findById(outletId).populate("admins");
 

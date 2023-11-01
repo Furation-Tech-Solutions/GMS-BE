@@ -4,7 +4,7 @@ const outletSchema = new mongoose.Schema({
   brandLogo: {
     type: String,
     default:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwjMMn47-RwsiJ19C6Kzifjv7BZL12EQ7yhj_hPBdFZw&s",
+      "https://gms-media-assets.s3.ap-south-1.amazonaws.com/outletImage/1698736353747_coconutLog.coconutLogo",
   },
 
   outletName: {
