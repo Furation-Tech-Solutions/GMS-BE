@@ -57,10 +57,10 @@ export class GuestRepositoryImpl implements GuestRepository {
     // return await this.dataSource.update(id, data);
   }
 
-  async getAllGuests(): Promise<Either<ErrorClass, GuestEntity[]>> {
+  async getAllGuests(outletId:string): Promise<Either<ErrorClass, GuestEntity[]>> {
     // return await this.dataSource.getAllCompany();
     try {
-      const i = await this.guestDataSource.getAllGuests();
+      const i = await this.guestDataSource.getAllGuests(outletId);
       return Right<ErrorClass, GuestEntity[]>(i);
     } catch (e) {
       if (e instanceof ApiError && e.name === "notfound") {

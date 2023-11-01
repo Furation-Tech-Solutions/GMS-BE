@@ -8,6 +8,6 @@ export interface ShiftRepository {
   updateShift( id: string , shiftData: ShiftModel ): Promise<Either<ErrorClass, ShiftEntity>>
   getShiftById( id: string ): Promise<Either<ErrorClass, ShiftEntity>>
   deleteShift(id: string): Promise<Either<ErrorClass, void>>;
-  getAllShifts(): Promise<Either<ErrorClass, ShiftEntity[]>>;
+  getAllShifts(outletId:string): Promise<Either<ErrorClass, ShiftEntity[]>>;
 }
  

@@ -11,6 +11,7 @@ import { UpdateReservationStatus } from "@domain/reservation-status/usecases/upd
 import { DeleteReservationStatus } from "@domain/reservation-status/usecases/delete-reservation-status";
 import { validateReservationStatusInputMiddleware } from "@presentation/middlewares/reservationStatus/validation-reservation-status";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -57,8 +58,9 @@ export const reservationStatusRouter = Router();
 reservationStatusRouter.post(
   "/create",
   // checkPermission("1103"),
-  validateReservationStatusInputMiddleware(false),
   verifyLoggedInUser,
+  verifyOutlet,
+  validateReservationStatusInputMiddleware(false),
   reservationStatusService.createReservationStatus.bind(
     reservationStatusService
   )
@@ -75,6 +77,7 @@ reservationStatusRouter.get(
 //Route hanndling for getRooms
 reservationStatusRouter.get(
   "/getAllReservationStatus",
+  verifyOutlet,
   // checkPermission("1103"),
   reservationStatusService.getAllReservationStatus.bind(
     reservationStatusService

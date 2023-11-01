@@ -8,7 +8,7 @@ export interface SeatingAreaRepository {
   // ): Promise<Either<ErrorClass, SeatingAreaEntity>>;
   createSeatingArea(seatingArea: SeatingAreaModel): Promise<Either<ErrorClass, SeatingAreaEntity>>;
   getSeatingAreaById(id: string): Promise<Either<ErrorClass, SeatingAreaEntity>>;
-  getSeatingAreas(): Promise<Either<ErrorClass, SeatingAreaEntity[]>>;
+  getSeatingAreas(outletId:string): Promise<Either<ErrorClass, SeatingAreaEntity[]>>;
   updateSeatingArea(
     id: string,
     seatingArea: SeatingAreaModel

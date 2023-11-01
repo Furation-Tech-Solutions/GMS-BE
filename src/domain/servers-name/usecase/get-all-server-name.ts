@@ -8,7 +8,7 @@ import { ServerNameRepository } from "../repositories/server-name-repository";
 import { ServersNameEntity } from "../entities/servers-name";
 
 export interface GetAllServersNameUseCase {
-  execute: () => Promise<Either<ErrorClass,ServersNameEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass,ServersNameEntity[]>>;
 }
 
 export class GetAllServersName implements GetAllServersNameUseCase {
@@ -18,7 +18,7 @@ export class GetAllServersName implements GetAllServersNameUseCase {
     this.serverNameRepository = serverNameRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ServersNameEntity[]>> {
-    return await this.serverNameRepository.getAllServersName();
+  async execute(outletId:string): Promise<Either<ErrorClass, ServersNameEntity[]>> {
+    return await this.serverNameRepository.getAllServersName(outletId);
   }
 }

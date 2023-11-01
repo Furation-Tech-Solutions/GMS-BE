@@ -7,6 +7,7 @@ import { GetNameById } from "@domain/booked-by-name/usecase/get-booked-by-name-b
 import { UpdateBookedByName } from "@domain/booked-by-name/usecase/update-booked-by-name";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { validateBookedByNameInputMiddleware } from "@presentation/middlewares/book-by-name/book-by-name-validation";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 import { checkPermission } from "@presentation/permission/permission-middleware";
 import { BookedByNameService } from "@presentation/services/booked-by-name-services";
 import { Router } from "express"; // Correctly import Request and Response
@@ -40,6 +41,7 @@ export const bookedByNameRouter = Router();
 bookedByNameRouter.post(
   "/addName",
   verifyLoggedInUser,
+  verifyOutlet,
   // checkPermission(["1101"]),
   validateBookedByNameInputMiddleware(false),
   bookedByNameService.createBookedByName.bind(bookedByNameService)
@@ -47,6 +49,7 @@ bookedByNameRouter.post(
 
 bookedByNameRouter.get(
   "/getName",
+  verifyOutlet,
   bookedByNameService.getAllBookedByName.bind(bookedByNameService)
 );
 

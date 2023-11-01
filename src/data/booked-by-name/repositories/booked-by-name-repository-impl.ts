@@ -25,9 +25,9 @@ export class BookedByNameRepositoryImpl implements BookedByNameRepository {
           return Left<ErrorClass, BookedByNameEntity>(ApiError.badRequest());
         }
       }
-    async getAllBookedByName(): Promise<Either<ErrorClass, BookedByNameEntity[]>> {
+    async getAllBookedByName(outletId: string): Promise<Either<ErrorClass, BookedByNameEntity[]>> {
         try {
-          const response = await this.bookedByNameDataSource.getAllBookedByName();
+          const response = await this.bookedByNameDataSource.getAllBookedByName(outletId);
           return Right<ErrorClass, BookedByNameEntity[]>(response);
         } catch (error) {
          

@@ -42,9 +42,10 @@ export class BookedByNameService {
     }
     async createBookedByName(req: Request, res: Response): Promise<void> {
          const user = req.user
-
+         const outletId = req.outletId
          const newCreatedBookedByName = {
           ...req.body,
+          outletId:outletId,
           createdBy:user._id,
           updatedBy:user._id
          }
@@ -69,8 +70,9 @@ export class BookedByNameService {
         next: NextFunction
       ): Promise<void> {
         // Call the GetAllAdminsUsecase to get all admins
+        const outletId=req.outletId as string
         const admins: Either<ErrorClass, BookedByNameEntity[]> =
-          await this.getAllBookedByNameUsecase.execute();
+          await this.getAllBookedByNameUsecase.execute(outletId);
     
         admins.cata(
           (error: ErrorClass) =>

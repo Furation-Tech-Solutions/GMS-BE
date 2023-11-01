@@ -12,5 +12,5 @@ export interface ReservationTagRepository {
         id: string,
         data: ReservationTagModel
     ): Promise<Either<ErrorClass, ReservationTagEntity>>;
-    getAllReservationTag(): Promise<Either<ErrorClass, ReservationTagEntity[]>>;
+    getAllReservationTag(outletId:string): Promise<Either<ErrorClass, ReservationTagEntity[]>>;
 }

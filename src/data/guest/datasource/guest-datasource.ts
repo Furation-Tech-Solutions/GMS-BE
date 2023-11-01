@@ -8,7 +8,7 @@ export interface GuestDataSource {
   update(id: string, guest: GuestModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAllGuests(): Promise<any[]>;
+  getAllGuests(outletId: string): Promise<any[]>;
 }
 
 export class GuestDataSourceImpl implements GuestDataSource {
@@ -57,9 +57,9 @@ export class GuestDataSourceImpl implements GuestDataSource {
     // }
   }
 
-  async getAllGuests(): Promise<any[]> {
+  async getAllGuests(outletId: string): Promise<any[]> {
     try {
-      const guests = await Guest.find()
+      const guests = await Guest.find({ outletId: outletId })
         .populate({
           path: "reservationTags", // Populate the reservationTags field
           select: "id name categoryNameId", // Adjust the fields you want to select

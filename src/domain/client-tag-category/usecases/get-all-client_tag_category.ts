@@ -4,7 +4,7 @@ import { ClientTagCategoryRepository } from "../repositories/client_tag_category
 import { Either, Right, Left } from "monet";
 
 export interface GetAllClientagCategoriesUsecase {
-  execute: () => Promise<Either<ErrorClass, ClientTagCategoryEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ClientTagCategoryEntity[]>>;
 }
 
 export class GetAllClientTagCategories implements GetAllClientagCategoriesUsecase {
@@ -14,7 +14,7 @@ export class GetAllClientTagCategories implements GetAllClientagCategoriesUsecas
     this.clientTagCategoryRepository = clientTagCategoryRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>> {
-    return await this.clientTagCategoryRepository.getAllClientTagCategories();
+  async execute(outletId:string): Promise<Either<ErrorClass, ClientTagCategoryEntity[]>> {
+    return await this.clientTagCategoryRepository.getAllClientTagCategories(outletId);
   }
 }

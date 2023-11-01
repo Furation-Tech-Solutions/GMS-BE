@@ -5,7 +5,7 @@ import { TableEntity, TableModel } from "../entities/table";
 export interface TableRepository {
   createTable(table: TableModel): Promise<Either<ErrorClass, TableEntity>>;
   getTableById(id: string): Promise<Either<ErrorClass, TableEntity>>;
-  getTables(): Promise<Either<ErrorClass, TableEntity[]>>;
+  getTables(outletId:string): Promise<Either<ErrorClass, TableEntity[]>>;
   updateTable(
     id: string,
     table: TableModel

@@ -7,6 +7,7 @@ import { GetServerNameById } from "@domain/servers-name/usecase/get-server-name-
 import { UpdateServerName } from "@domain/servers-name/usecase/update-server-name";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { validateServersNameInputMiddleware } from "@presentation/middlewares/servers-name/servers-name-validation";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 import { ServerNameService } from "@presentation/services/servers-name-services"
 import { Router } from "express"
 import mongoose from "mongoose";
@@ -35,12 +36,13 @@ export const serverNameRouter = Router()
 
 serverNameRouter.post(
     "/addServerName",
-    validateServersNameInputMiddleware(false),
     verifyLoggedInUser,
+    verifyOutlet,
+    validateServersNameInputMiddleware(false),
     serverNameService.createServerName.bind(serverNameService)
 )
 serverNameRouter.get(
-    "/getAllServerNames", serverNameService.getAllServersName.bind(serverNameService)
+    "/getAllServerNames",verifyOutlet, serverNameService.getAllServersName.bind(serverNameService)
 )
 serverNameRouter.patch(
     "/update/:serverNameId",

@@ -12,6 +12,7 @@ import { validateBookingRequestInputMiddleware } from "@presentation/middlewares
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import EmailService from "@presentation/services/send-mail";
 import { SentMessageInfo, Transporter } from "nodemailer";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 
 // const transporter =  createTransporter();
 // Create an instance of the BookingRequestDataSourceImpl and pass the mongoose connection
@@ -59,6 +60,7 @@ export const bookingRequestRouter = Router();
 bookingRequestRouter.post(
   "/add",
   //   verifyLoggedInUser,
+  verifyOutlet,
   validateBookingRequestInputMiddleware(false),
   bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
@@ -78,6 +80,7 @@ bookingRequestRouter.get(
 // Route handling for getting all booking requests
 bookingRequestRouter.get(
   "/",
+  verifyOutlet,
   bookingRequestService.getAllBookingRequests.bind(bookingRequestService)
 );
 

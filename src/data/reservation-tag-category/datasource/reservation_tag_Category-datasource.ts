@@ -11,7 +11,7 @@ export interface ReservationTagCategoryDataSource {
   ): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(): Promise<any[]>;
+  getAll(outletId:string): Promise<any[]>;
 }
 
 export class ReservationTagCategoryDataSourceImpl
@@ -66,10 +66,10 @@ export class ReservationTagCategoryDataSourceImpl
     }
   }
 
-  async getAll(): Promise<any[]> {
+  async getAll(outletId:string): Promise<any[]> {
     try {
       const reservationTagCategories =
-        await ReservationTagCategory.find().populate({
+        await ReservationTagCategory.find({outletId:outletId}).populate({
           path: "tags",
           select: "id name",
         });

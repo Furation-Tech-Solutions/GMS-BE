@@ -12,6 +12,6 @@ export interface BookingRequestRepository {
         id: string,
         data: BookingRequestEntity
     ): Promise<Either<ErrorClass, BookingRequestEntity>>;
-    getAllBookingRequests(): Promise<Either<ErrorClass, BookingRequestEntity[]>>;
+    getAllBookingRequests(outletId:string): Promise<Either<ErrorClass, BookingRequestEntity[]>>;
 }
 

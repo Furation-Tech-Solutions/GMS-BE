@@ -140,6 +140,21 @@ const shiftPropertySchema = new Schema<IShiftProperty>({
     type: Boolean,
     default: false,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet",
+    default: null,
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: "",
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserAccount",
+    default: "",
+  },
 });
 
 

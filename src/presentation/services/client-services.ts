@@ -35,8 +35,10 @@ export class ClientServices {
 
   async createClient(req: Request, res: Response): Promise<void> {
     const user = req.user;
+    const outletId=req.outletId
     const newClientData = {
       ...req.body,
+      outletId:outletId,
       createdBy: user._id,
       updatedBy: user._id,
     };
@@ -92,8 +94,9 @@ export class ClientServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId=req.outletId as string
     const clients: Either<ErrorClass, ClientEntity[]> =
-      await this.getAllClientsUsecases.execute();
+      await this.getAllClientsUsecases.execute(outletId);
 
     clients.cata(
       (error: ErrorClass) =>

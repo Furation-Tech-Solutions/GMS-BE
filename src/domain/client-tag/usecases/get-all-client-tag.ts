@@ -4,7 +4,7 @@ import { ClientTagRepository } from "../repositories/client-tag-repo"; // Import
 import { Either, Right, Left } from "monet";
 
 export interface GetAllClienttagUsecase {
-  execute: () => Promise<Either<ErrorClass, ClientTagEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ClientTagEntity[]>>;
 }
 
 export class GetAllClientTag implements GetAllClienttagUsecase {
@@ -14,7 +14,7 @@ export class GetAllClientTag implements GetAllClienttagUsecase {
     this.clientTagRepository = clientTagRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ClientTagEntity[]>> {
-    return await this.clientTagRepository.getAllClientTag();
+  async execute(outletId:string): Promise<Either<ErrorClass, ClientTagEntity[]>> {
+    return await this.clientTagRepository.getAllClientTag(outletId);
   }
 }

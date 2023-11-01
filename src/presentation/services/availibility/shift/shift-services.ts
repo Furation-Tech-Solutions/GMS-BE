@@ -3,7 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { Either } from "monet";
 import { CreateShiftUsecase } from "@domain/availibility/usecases/shift-usecase/create-usecase";
-import { ShiftEntity, ShiftMapper, ShiftModel } from "@domain/availibility/entities/shift-entity";
+import {
+  ShiftEntity,
+  ShiftMapper,
+  ShiftModel,
+} from "@domain/availibility/entities/shift-entity";
 import { UpdateShiftUsecase } from "@domain/availibility/usecases/shift-usecase/update-usecase";
 import { GetShiftByIdUsecase } from "@domain/availibility/usecases/shift-usecase/get-shift-by-id.usecase";
 import { DeleteShiftUsecase } from "@domain/availibility/usecases/shift-usecase/delete-usecase";
@@ -18,13 +22,13 @@ export class ShiftService {
   private readonly getAllShiftUsecase: GetAllShiftsUsecase;
 
   constructor(
-      createShiftUsecase: CreateShiftUsecase,
-      updateShiftUsecase: UpdateShiftUsecase,
-      getShiftByIdUsecase: GetShiftByIdUsecase,
-      deleteShiftUsecase: DeleteShiftUsecase,
-      getAllShiftUsecase: GetAllShiftsUsecase
+    createShiftUsecase: CreateShiftUsecase,
+    updateShiftUsecase: UpdateShiftUsecase,
+    getShiftByIdUsecase: GetShiftByIdUsecase,
+    deleteShiftUsecase: DeleteShiftUsecase,
+    getAllShiftUsecase: GetAllShiftsUsecase
   ) {
-    this.createShiftUsecase = createShiftUsecase; 
+    this.createShiftUsecase = createShiftUsecase;
     this.updateShiftUsecase = updateShiftUsecase;
     this.getShiftByIdUsecase = getShiftByIdUsecase;
     this.deleteShiftUsecase = deleteShiftUsecase;
@@ -32,13 +36,21 @@ export class ShiftService {
   }
 
   async createShift(req: Request, res: Response): Promise<void> {
-  
-    const shiftData: ShiftModel = ShiftMapper.toModel(req.body);
+    const outletId = req.outletId as string;
+    const user = req.user;
+    const newShiftData = {
+      ...req.body,
+      outletId: outletId,
+      createdBy: user._id,
+      updatedBy: user._id,
+    };
+
+    const shiftData: ShiftModel = ShiftMapper.toModel(newShiftData);
 
     const newShift: Either<ErrorClass, ShiftEntity> =
       await this.createShiftUsecase.execute(shiftData);
 
-      newShift.cata(
+    newShift.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: ShiftEntity) => {
@@ -48,53 +60,60 @@ export class ShiftService {
     );
   }
 
-
   async updateShift(req: Request, res: Response): Promise<void> {
     const shiftId: string = req.params.shiftId;
     const action: string = req.params.action;
     const shiftData = req.body;
 
-    
     // Get the existing shift by ID
 
+    let query = {};
 
-      let query = {};
+    if (action === "override") {
+      // For "override just this day"
+      query = { _id: shiftId /* Add a date filter as needed */ };
 
-      if (action === 'override') {
-        // For "override just this day"
-        query = { _id: shiftId /* Add a date filter as needed */ };
+      const specificDate: Date = new Date(shiftData.startDate);
 
-        const specificDate: Date = new Date(shiftData.startDate);
-
-        const existingShift: Either<ErrorClass, ShiftEntity> =
+      const existingShift: Either<ErrorClass, ShiftEntity> =
         await this.getShiftByIdUsecase.execute(shiftId);
 
-         
       existingShift.cata(
         (error: ErrorClass) => {
           res.status(error.status).json({ error: error.message });
         },
         async (result: ShiftEntity) => {
-
           const startDate: Date = new Date(result.startDate);
 
-          const endDate: Date | null = result.endDate ? new Date(result.endDate) : null;
-          if (!endDate || (specificDate >= startDate && specificDate <= endDate)) {
+          const endDate: Date | null = result.endDate
+            ? new Date(result.endDate)
+            : null;
+          if (
+            !endDate ||
+            (specificDate >= startDate && specificDate <= endDate)
+          ) {
             // Calculate the day of the week for the specific date
-            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const daysOfWeek = [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ];
             const specificDayOfWeek: string = daysOfWeek[specificDate.getDay()];
 
-    
             // Check if the specific day matches the expected day for the override
             if (result.daysToRepeatThisShift.includes(specificDayOfWeek)) {
               // Update the shift for the specific date
               const updatedShiftEntity: any = {
                 ...result,
-                ...shiftData
+                ...shiftData,
               };
 
               const responseData = ShiftMapper.toModel(updatedShiftEntity);
-    
+
               // Save the updated shift
               // const updatedShift: any = await this.updateShiftUsecase.execute(shiftId, responseData);
               // console.log(updatedShift);
@@ -103,7 +122,7 @@ export class ShiftService {
               res.json(responseData);
               return;
             }
-            res.status(400).json({ error: 'Invalid date or day for override' });
+            res.status(400).json({ error: "Invalid date or day for override" });
             return;
           }
           // const resData = ShiftMapper.toEntity(result, true);
@@ -112,12 +131,12 @@ export class ShiftService {
           //   true,
           //   resData
           // );
-  
+
           // res.json(updatedShiftEntity);
-         
+
           // const updatedShift: Either<ErrorClass, ShiftEntity> =
           //   await this.updateShiftUsecase.execute(shiftId, updatedShiftEntity);
-  
+
           // updatedShift.cata(
           //   (error: ErrorClass) => {
           //     res.status(error.status).json({ error: error.message });
@@ -125,34 +144,28 @@ export class ShiftService {
           //   (response: ShiftEntity) => {
           //     // Convert updatedShift from AdminEntity to plain JSON object using AdminMapper
           //     const responseData = ShiftMapper.toModel(response);
-  
+
           //     // Send the updated admin as a JSON response
           //     res.json(responseData);
           //   }
           // );
         }
       );
-
-
-      } else if (action === 'edit-following') {
-        // For "edit following days"
-        query = { 
-          _id: shiftId,
-          startDate: { $gte: new Date() } // Filter for future dates
-        };
-      } else if (action === 'edit-all') {
-        // For "edit all days"
-        query = { _id: shiftId };
-      } else {
-         res.status(400).json({ error: 'Invalid action' });
-      }
-  
-
+    } else if (action === "edit-following") {
+      // For "edit following days"
+      query = {
+        _id: shiftId,
+        startDate: { $gte: new Date() }, // Filter for future dates
+      };
+    } else if (action === "edit-all") {
+      // For "edit all days"
+      query = { _id: shiftId };
+    } else {
+      res.status(400).json({ error: "Invalid action" });
+    }
   }
 
-
-    async getShiftById(req: Request, res: Response): Promise<void> {
-
+  async getShiftById(req: Request, res: Response): Promise<void> {
     const shiftId: string = req.params.shiftId;
 
     // Call the GetAdminByIdUsecase to get the admin by ID
@@ -169,7 +182,7 @@ export class ShiftService {
     );
   }
 
-    async deleteShift(req: Request, res: Response): Promise<void> {
+  async deleteShift(req: Request, res: Response): Promise<void> {
     const shiftId: string = req.params.shiftId;
 
     // Call the DeleteAdminUsecase to delete the admin
@@ -185,17 +198,17 @@ export class ShiftService {
     );
   }
 
-
   async getAllShifts(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId = req.outletId as string;
     // Call the GetAllAdminsUsecase to get all admins
     const shifts: Either<ErrorClass, ShiftEntity[]> =
-      await this.getAllShiftUsecase.execute();
+      await this.getAllShiftUsecase.execute(outletId);
 
-      shifts.cata(
+    shifts.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (shifts: ShiftEntity[]) => {
@@ -205,45 +218,58 @@ export class ShiftService {
     );
   }
 
-
-  
-
-  async  getAllFilterShifts(req: Request, res: Response): Promise<void> {
+  async getAllFilterShifts(req: Request, res: Response): Promise<void> {
     try {
-      const shifts: Either<ErrorClass, ShiftEntity[]> = await this.getAllShiftUsecase.execute();
+      const outletId = req.outletId as string;
+      const shifts: Either<ErrorClass, ShiftEntity[]> =
+        await this.getAllShiftUsecase.execute(outletId);
       const { date, shift } = req.query;
       const selectedDate = new Date(`${date}`);
-  
+
       shifts.cata(
-        (error: ErrorClass) => res.status(error.status).json({ error: error.message }),
-         (shifts: ShiftEntity[]) => {
+        (error: ErrorClass) =>
+          res.status(error.status).json({ error: error.message }),
+        (shifts: ShiftEntity[]) => {
           const filteredShifts = shifts.filter((newShift) => {
             const shiftStartDate = new Date(newShift.startDate);
-  
+
             if (newShift.endDate && new Date(newShift.endDate) < selectedDate) {
               return false;
             }
-  
-            if (selectedDate >= shiftStartDate && newShift.shiftCategory === shift) {
+
+            if (
+              selectedDate >= shiftStartDate &&
+              newShift.shiftCategory === shift
+            ) {
               return true;
             }
-  
+
             return false;
           });
-  
+
           if (filteredShifts && filteredShifts.length > 0) {
             const results: ShiftWithTimeSlots[] = [];
-  
+
             for (const shift of filteredShifts) {
               const timeSlots: string[] = [];
-              const firstSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.firstSeating}`);
-              const lastSeatingTime = new Date(`${selectedDate.toISOString().slice(0, 10)}T${shift.lastSeating}`);
+              const firstSeatingTime = new Date(
+                `${selectedDate.toISOString().slice(0, 10)}T${
+                  shift.firstSeating
+                }`
+              );
+              const lastSeatingTime = new Date(
+                `${selectedDate.toISOString().slice(0, 10)}T${
+                  shift.lastSeating
+                }`
+              );
               const timeInterval = shift.timeInterval;
-              
+
               while (firstSeatingTime <= lastSeatingTime) {
                 timeSlots.push(firstSeatingTime.toTimeString().slice(0, 8)); // Format as HH:mm
-  
-                firstSeatingTime.setMinutes(firstSeatingTime.getMinutes() + timeInterval);
+
+                firstSeatingTime.setMinutes(
+                  firstSeatingTime.getMinutes() + timeInterval
+                );
               }
 
               results.push({
@@ -255,17 +281,17 @@ export class ShiftService {
             }
 
             return res.json(results);
-
           } else {
-            res.status(400).json({ message: `Shift of ${shift} category not found on a particular date` });
+            res.status(400).json({
+              message: `Shift of ${shift} category not found on a particular date`,
+            });
           }
         }
       );
     } catch (error) {
-      res.status(500).json({ error: "An error occurred while processing the request." });
+      res
+        .status(500)
+        .json({ error: "An error occurred while processing the request." });
     }
   }
-
 }
-
-

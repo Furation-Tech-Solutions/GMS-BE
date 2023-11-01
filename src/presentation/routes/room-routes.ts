@@ -11,6 +11,7 @@ import { CreateRoom } from "@domain/room/usecases/create-room";
 import { validateRoomInputMiddleware } from "@presentation/middlewares/room/validation-room";
 import { RoomService } from "@presentation/services/room-service";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -43,8 +44,9 @@ export const roomRouter = Router();
 roomRouter.post(
   "/create",
   //  checkPermission(["1103"]),
-  validateRoomInputMiddleware(false),
   verifyLoggedInUser,
+  verifyOutlet,
+  validateRoomInputMiddleware(false),
   roomService.createRoom.bind(roomService)
 );
 
@@ -54,7 +56,7 @@ roomRouter.get("/getById/:roomId",
   roomService.getRoomById.bind(roomService));
 
 //Route hanndling for getRooms
-roomRouter.get("/getAllRooms",
+roomRouter.get("/getAllRooms",verifyOutlet,
   roomService.getAllRooms.bind(roomService));
 
 roomRouter.put(

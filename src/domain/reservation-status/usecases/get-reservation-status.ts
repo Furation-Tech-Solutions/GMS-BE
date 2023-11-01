@@ -4,7 +4,7 @@ import { ReservationStatusEntity } from "../entities/reservation-status";
 import { ReservationStatusRepository } from "../repositories/reservation-status-repository";
 
 export interface GetAllReservationStatusUsecase {
-  execute: () => Promise<Either<ErrorClass, ReservationStatusEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ReservationStatusEntity[]>>;
 }
 
 export class GetAllReservationStatus implements GetAllReservationStatusUsecase {
@@ -14,7 +14,7 @@ export class GetAllReservationStatus implements GetAllReservationStatusUsecase {
     this.reservationStatusRepository = reservationStatusRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ReservationStatusEntity[]>> {
-    return await this.reservationStatusRepository.getReservationStatus();
+  async execute(outletId:string): Promise<Either<ErrorClass, ReservationStatusEntity[]>> {
+    return await this.reservationStatusRepository.getReservationStatus(outletId);
   }
 }

@@ -37,8 +37,10 @@ export class TableService {
 
   async createTable(req: Request, res: Response): Promise<void> {
     const user = req.user;
+    const outletId = req.outletId;
     const newTableData = {
       ...req.body,
+      outletId: outletId,
       createdBy: user._id,
       updatedBy: user._id,
     };
@@ -78,9 +80,10 @@ export class TableService {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId = req.outletId as string
     // Call the GetAllTablesUsecase to get all outlets
     const tables: Either<ErrorClass, TableEntity[]> =
-      await this.getAllTablesUsecase.execute();
+      await this.getAllTablesUsecase.execute(outletId);
     tables.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),

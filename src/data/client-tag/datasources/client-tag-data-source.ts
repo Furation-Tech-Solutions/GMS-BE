@@ -11,7 +11,7 @@ export interface ClientTagDataSource {
   update(id: string, tagCategory: ClientTagModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(): Promise<any[]>;
+  getAll(outletId: string): Promise<any[]>;
 }
 
 // Tag Data Source communicates with the database
@@ -60,9 +60,9 @@ export class ClientTagDataSourceImpl implements ClientTagDataSource {
     return clientTag ? clientTag.toObject() : null; // Convert to a plain JavaScript object before returning
   }
 
-  async getAll(): Promise<any[]> {
+  async getAll(outletId: string): Promise<any[]> {
     try {
-      const clientTag = await ClientTag.find().populate({
+      const clientTag = await ClientTag.find({ outletId: outletId }).populate({
         path: "categoryNameId",
         select: "id name color",
       });

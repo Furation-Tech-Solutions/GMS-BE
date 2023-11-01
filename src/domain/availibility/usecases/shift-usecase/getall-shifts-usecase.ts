@@ -5,7 +5,7 @@ import { ErrorClass } from "@presentation/error-handling/api-error";
 import { Either } from "monet";
 
 export interface GetAllShiftsUsecase {
-  execute: () => Promise<Either<ErrorClass, ShiftEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, ShiftEntity[]>>;
 }
 
 export class GetAllShifts implements GetAllShiftsUsecase {
@@ -15,7 +15,7 @@ export class GetAllShifts implements GetAllShiftsUsecase {
     this.shiftRepository = shiftRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, ShiftEntity[]>> {
-    return await this.shiftRepository.getAllShifts();
+  async execute(outletId:string): Promise<Either<ErrorClass, ShiftEntity[]>> {
+    return await this.shiftRepository.getAllShifts(outletId);
   }
 }

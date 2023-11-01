@@ -12,6 +12,7 @@ import { UpdateTable } from "@domain/table/usecases/update-table";
 import { validateTableInputMiddleware } from "@presentation/middlewares/table/table-validation";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { checkPermission } from "@presentation/permission/permission-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 const mongooseConnection = mongoose.connection;
@@ -43,8 +44,9 @@ export const tableRouter = Router();
 // Route handling for creating a new Room
 tableRouter.post(
   "/create",
-  validateTableInputMiddleware(false),
   verifyLoggedInUser,
+  verifyOutlet,
+  validateTableInputMiddleware(false),
   // checkPermission(["1103"]),
   tableService.createTable.bind(tableService)
 );
@@ -56,7 +58,7 @@ tableRouter.get(
 );
 
 //Route hanndling for getTables
-tableRouter.get("/getAllTables", tableService.getAllTables.bind(tableService));
+tableRouter.get("/getAllTables",verifyOutlet, tableService.getAllTables.bind(tableService));
 
 tableRouter.put(
   "/updateTable/:tableId",

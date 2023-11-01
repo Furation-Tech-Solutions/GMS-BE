@@ -5,7 +5,7 @@ import { SeatingAreaRepository } from "../repositories/seating-area-repository";
 
 
 export interface GetAllSeatingAreasUsecase {
-  execute: () => Promise<Either<ErrorClass, SeatingAreaEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, SeatingAreaEntity[]>>;
 }
 
 export class GetAllSeatingAreas implements GetAllSeatingAreasUsecase {
@@ -15,7 +15,7 @@ export class GetAllSeatingAreas implements GetAllSeatingAreasUsecase {
     this.seatingAreaRepository = seatingAreaRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, SeatingAreaEntity[]>> {
-    return await this.seatingAreaRepository.getSeatingAreas();
+  async execute(outletId:string): Promise<Either<ErrorClass, SeatingAreaEntity[]>> {
+    return await this.seatingAreaRepository.getSeatingAreas(outletId);
   }
 }
