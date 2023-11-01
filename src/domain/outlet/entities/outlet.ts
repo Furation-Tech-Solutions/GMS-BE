@@ -100,7 +100,7 @@ export class OutletMapper {
           ? outletData._id
             ? outletData._id.toString()
             : undefined
-          : undefined,
+          : outletData._id.toString(),
         brandLogo: outletData.brandLogo,
         outletName: outletData.outletName,
         email: outletData.email,

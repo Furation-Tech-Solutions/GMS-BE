@@ -119,7 +119,8 @@ export class AddReservationServices {
             `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
           );
 
-          await sendNotificationExample(`${title}`);
+      
+      await sendNotificationExample(`${title}`);
 
           return res.json(resData);
         }
@@ -477,15 +478,16 @@ export class AddReservationServices {
         filter.timeSlot = getReservationById.timeSlot;
       }
 
+
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
+
 
       const particularDateReservations =
         await this.addReservationDataSourceImpl.getAll({
           date: getReservationById.date,
         });
 
-      // const reservations = await this.addReservationDataSourceImpl.getAll({});
 
       const allTables = await this.tableDataSourceImpl.getAllTables(outletId);
 

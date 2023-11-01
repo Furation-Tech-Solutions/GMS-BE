@@ -28,6 +28,7 @@ import { userRouter } from "@presentation/routes/user-route";
 import { superAdminRouter } from "@presentation/routes/super-admin-routes";
 import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
 import { sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
+import logger from "@presentation/logger";
 
 
 
@@ -35,9 +36,12 @@ export default (app: Express): void => {
   const router = Router();
 
   app.get("/health", (req, res) => {
-    sendNotificationExample('new title')
+    
+    const sessionId = "1234";
+    logger.info('This is an info message', { sessionId } )
     res.status(200).json({ message: "ok" });
   });
+
   app.use("/api/v1/shift", shiftRouter);
   app.use("/api/v1/accessrule", accessRuleRouter);
   app.use("/api/v1/blackoutday", blackoutDayRouter);

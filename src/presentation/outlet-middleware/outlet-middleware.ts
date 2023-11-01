@@ -17,7 +17,7 @@ const verifyOutlet = async (
     } else {
       outletIdHeader = req.user.outlet[0];
     }
-    console.log(outletIdHeader,"outletIdHeader")
+
 
     if (outletIdHeader) {
       const outletToCheck = outletIdHeader;
