@@ -38,7 +38,7 @@ export default (app: Express): void => {
   app.get("/health", (req, res) => {
     
     const sessionId = "1234";
-    logger.info('This is an info message', { sessionId: 'test-session-id' } )
+    logger.info('This is an info message', { sessionId } )
     res.status(200).json({ message: "ok" });
   });
 

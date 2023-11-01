@@ -51,8 +51,8 @@ userRouter.post(
     "/create",
     validateUserAccountInputMiddleware(false),
     verifyLoggedInUser,
-    checkPermission([101,201]),
     verifyOutlet,
+    checkPermission([101,201]),
     userService.createUser.bind(userService)
 )
 userRouter.get(

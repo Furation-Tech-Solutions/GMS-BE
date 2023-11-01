@@ -19,7 +19,6 @@ const myFormat = printf(({ level, message, timestamp, sessionId }: {level:string
 
 
 
-
 export const ReservationLogger = (): any => {
     return createLogger({
         level: 'info',
