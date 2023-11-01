@@ -90,6 +90,7 @@ addReservationRouter.get(
 // Route handling for getting all Add Reservation
 addReservationRouter.get(
   "/",
+  verifyLoggedInUser,
   verifyOutlet,
   // checkPermission(["1101"]),
   addReservationService.getAllAddReservation.bind(addReservationService)

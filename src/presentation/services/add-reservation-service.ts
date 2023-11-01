@@ -205,7 +205,7 @@ export class AddReservationServices {
 
     const coverflow = req.query.coverflow as string;
 
-    const allShifts = await this.shiftDataSourceImpl.getAll();
+    const allShifts = await this.shiftDataSourceImpl.getAll(outletId);
 
     const timeSlots = generateTimeSlots(shift, date, allShifts);
 

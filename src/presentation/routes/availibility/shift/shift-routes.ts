@@ -10,8 +10,8 @@ import { GetShiftById } from "@domain/availibility/usecases/shift-usecase/get-sh
 import { DeleteShift } from "@domain/availibility/usecases/shift-usecase/delete-usecase";
 import { GetAllShifts } from "@domain/availibility/usecases/shift-usecase/getall-shifts-usecase";
 import { validateShiftInputMiddleware } from "@presentation/middlewares/avaibility/shift/shift-validation";
-
-
+import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 
 const mongooseConnection = mongoose.connection;
 
@@ -29,34 +29,54 @@ const getAllShiftsUsecase = new GetAllShifts(shiftRepository);
 
 // Initialize AdminService and inject required dependencies
 const shiftService = new ShiftService(
-    createShiftUsecase,
-    updateShiftUsecase,
-    getShiftByIdUsecase,
-    deleteShiftUsecase,
-    getAllShiftsUsecase
+  createShiftUsecase,
+  updateShiftUsecase,
+  getShiftByIdUsecase,
+  deleteShiftUsecase,
+  getAllShiftsUsecase
 );
 
 // Create an Express router
 export const shiftRouter = Router();
 
 // Route handling for creating a new admin
-shiftRouter.post("/create", 
-// checkPermission(["1103"]),
-validateShiftInputMiddleware,
-shiftService.createShift.bind(shiftService));
+shiftRouter.post(
+  "/create",
+  // checkPermission(["1103"]),
+  verifyLoggedInUser,
+  verifyOutlet,
+  validateShiftInputMiddleware,
+  shiftService.createShift.bind(shiftService)
+);
 
 // Route handling for updating an shift by ID
-shiftRouter.put("/update/:shiftId", 
-// checkPermission(["1103"]),
-shiftService.updateShift.bind(shiftService));
+shiftRouter.put(
+  "/update/:shiftId",
+  verifyLoggedInUser,
+  // checkPermission(["1103"]),
+  shiftService.updateShift.bind(shiftService)
+);
 
 // Route handling for getting an shift by ID
-shiftRouter.get("/getbyid/:shiftId",shiftService.getShiftById.bind(shiftService));
+shiftRouter.get(
+  "/getbyid/:shiftId",
+  verifyLoggedInUser,
+  shiftService.getShiftById.bind(shiftService)
+);
 
 // Route handling for deleting an admin by ID
-shiftRouter.delete("/delete/:shiftId", shiftService.deleteShift.bind(shiftService));
+shiftRouter.delete(
+  "/delete/:shiftId",
+  verifyLoggedInUser,
+  shiftService.deleteShift.bind(shiftService)
+);
 
 // Route handling for getting all shifts
-shiftRouter.get("/getAll", shiftService.getAllShifts.bind(shiftService));
+shiftRouter.get(
+  "/getAll",
+  verifyLoggedInUser,
+  verifyOutlet,
+  shiftService.getAllShifts.bind(shiftService)
+);
 
 shiftRouter.get("/filter", shiftService.getAllFilterShifts.bind(shiftService));
