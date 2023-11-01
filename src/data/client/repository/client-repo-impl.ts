@@ -74,9 +74,9 @@ export class ClientRepositoryImpl implements ClientRepository {
     }
   }
 
-  async getAllClients(): Promise<Either<ErrorClass, ClientEntity[]>> {
+  async getAllClients(outletId:string): Promise<Either<ErrorClass, ClientEntity[]>> {
     try {
-      const clients = await this.clientDataSource.getAllClients(); // Use the client data source
+      const clients = await this.clientDataSource.getAllClients(outletId); // Use the client data source
       return Right<ErrorClass, ClientEntity[]>(clients);
     } catch (e: any) {
       if (e instanceof ApiError && e.name === "notfound") {

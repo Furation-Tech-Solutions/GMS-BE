@@ -40,8 +40,10 @@ export class GuestServices {
         // Extract guest data from the request body and convert it to Guest Model
         // console.log(req.body);
         const user = req.user
+        const outletId=req.outletId
         const newGuestData = {
             ...req.body,
+            outletId:outletId,
             createdBy: user._id,
             updatedBy: user._id
         }
@@ -108,8 +110,9 @@ export class GuestServices {
     ): Promise<void> {
         try {
             // Call the getAllGuestsUsecases to get all Guests
+            const outletId=req.outletId as string
             const guests: Either<ErrorClass, GuestEntity[]> =
-                await this.getAllGuestsUsecases.execute();
+                await this.getAllGuestsUsecases.execute(outletId);
             guests.cata(
                 (error: ErrorClass) =>
                     res.status(error.status).json({ error: error.message }),
@@ -247,12 +250,10 @@ export class GuestServices {
         req: Request,
         res: Response,
     ): Promise<void> {
-        console.log("firstName", "lastName", "email")
+        const outletId=req.outletId as string
         const { firstName, lastName, email } = req.query;
-        console.log(firstName, lastName, email)
         // Call the getAllGuestsUsecases to get all Guests
-        const guests: Either<ErrorClass, GuestEntity[]> = await this.getAllGuestsUsecases.execute();
-        console.log(guests)
+        const guests: Either<ErrorClass, GuestEntity[]> = await this.getAllGuestsUsecases.execute(outletId);
         guests.cata(
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),

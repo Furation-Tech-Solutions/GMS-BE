@@ -35,8 +35,10 @@ export class ClientTagCategoryServices {
 
     async createClientTagCategory(req: Request, res: Response): Promise<void> {
         const user=req.user
+        const outletId=req.outletId
         const newClientTagCategoryData={
             ...req.body,
+            outletId:outletId,
             createdBy:user._id,
             updatedBy:user._id
         }
@@ -94,8 +96,9 @@ export class ClientTagCategoryServices {
         res: Response,
         next: NextFunction
     ): Promise<void> {
+        const outletId=req.outletId as string
         const clientTagCategories: Either<ErrorClass, ClientTagCategoryEntity[]> =
-            await this.getAllClientTagCategoriesUsecases.execute();
+            await this.getAllClientTagCategoriesUsecases.execute(outletId);
 
         clientTagCategories.cata(
             (error: ErrorClass) =>

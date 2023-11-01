@@ -46,9 +46,9 @@ export class ReservationTagRepositoryImpl implements ReservationTagRepository {
         }
     }
 
-    async getAllReservationTag(): Promise<Either<ErrorClass, ReservationTagEntity[]>> {
+    async getAllReservationTag(outletId:string): Promise<Either<ErrorClass, ReservationTagEntity[]>> {
         try {
-            const reservationTags = await this.reservationTagDataSource.getAll();
+            const reservationTags = await this.reservationTagDataSource.getAll(outletId);
             return Right<ErrorClass, ReservationTagEntity[]>(reservationTags);
         } catch (error) {
             if (error instanceof ApiError && error.name === "notfound") {

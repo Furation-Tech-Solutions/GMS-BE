@@ -12,5 +12,5 @@ export interface ClientTagRepository {
         id: string,
         data: ClientTagModel
     ): Promise<Either<ErrorClass, ClientTagEntity>>;
-    getAllClientTag(): Promise<Either<ErrorClass, ClientTagEntity[]>>;
+    getAllClientTag(outletId:string): Promise<Either<ErrorClass, ClientTagEntity[]>>;
 }

@@ -4,7 +4,7 @@ import { GuestRepository } from "../repositories/guest-repo";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 
 export interface GetAllGuestsUsecase {
-  execute: () => Promise<Either<ErrorClass, GuestEntity[]>>;
+  execute: (outletId:string) => Promise<Either<ErrorClass, GuestEntity[]>>;
 }
 
 export class GetAllGuests implements GetAllGuestsUsecase {
@@ -13,7 +13,7 @@ export class GetAllGuests implements GetAllGuestsUsecase {
     this.guestRepository = guestRepository;
   }
 
-  async execute(): Promise<Either<ErrorClass, GuestEntity[]>> {
-    return await this.guestRepository.getAllGuests();
+  async execute(outletId:string): Promise<Either<ErrorClass, GuestEntity[]>> {
+    return await this.guestRepository.getAllGuests(outletId);
   }
 }

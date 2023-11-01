@@ -7,7 +7,7 @@ import { ServersName } from "../models/servers-name-model";
 
 export interface ServersNameDataSource{
     createServerName(serverName: ServersNameModel): Promise<any>; 
-    getAllServersName(): Promise<any[]>;
+    getAllServersName(outletId:string): Promise<any[]>;
     getServerNameById(id:string):Promise<ServersNameEntity>;
     updateServerName(id: string, name: ServersNameModel): Promise<any>; // Return type should be Promise of AdminEntity
     deleteServerName(id: string): Promise<void>;
@@ -29,9 +29,9 @@ export class ServersNameDataSourceImpl implements ServersNameDataSource {
     
         return createdServerName.toObject();
       }
-    async getAllServersName(): Promise<any[]> {
+    async getAllServersName(outletId:string): Promise<any[]> {
         try {
-          const serverNames = await ServersName.find();
+          const serverNames = await ServersName.find({outletId:outletId});
         //   below line check sernername is correct
           return serverNames.map((servername) => servername.toObject()); // Convert to plain JavaScript objects before returning
         } catch (error) {

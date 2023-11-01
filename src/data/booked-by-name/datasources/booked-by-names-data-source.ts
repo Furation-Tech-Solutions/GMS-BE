@@ -6,7 +6,7 @@ import { BookedByNameEntity, BookedByNameModel } from "@domain/booked-by-name/en
 
 export interface BookedByNameDataSource{
     createBookedByName(bookedByName: BookedByNameModel): Promise<any>; 
-    getAllBookedByName(): Promise<any[]>;
+    getAllBookedByName(outletId: string): Promise<any[]>;
     read(id:string):Promise<BookedByNameEntity>;
     updateName(id: string, name: BookedByNameModel): Promise<any>; // Return type should be Promise of AdminEntity
     delete(id: string): Promise<void>;
@@ -28,9 +28,9 @@ export class BookedByNameDataSourceImpl implements BookedByNameDataSource {
     
         return createdBookedByName.toObject();
       }
-    async getAllBookedByName(): Promise<any[]> {
+    async getAllBookedByName(outletId:string): Promise<any[]> {
         try {
-          const bookedByNames = await BookedByName.find();
+          const bookedByNames = await BookedByName.find({outletId:outletId});
           return bookedByNames.map((name) => name.toObject()); // Convert to plain JavaScript objects before returning
         } catch (error) {
           throw ApiError.notFound();

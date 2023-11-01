@@ -47,9 +47,9 @@ export class ReservationTagCategoryRepositoryImpl implements ReservationTagCateg
         }
     }
 
-    async getAllReservationTagCategories(): Promise<Either<ErrorClass, ReservationTagCategoryEntity[]>> {
+    async getAllReservationTagCategories(outletId:string): Promise<Either<ErrorClass, ReservationTagCategoryEntity[]>> {
         try {
-            const reservationTagCategories = await this.reservationTagCategoryDataSource.getAll();
+            const reservationTagCategories = await this.reservationTagCategoryDataSource.getAll(outletId);
             return Right<ErrorClass, ReservationTagCategoryEntity[]>(reservationTagCategories);
         } catch (error) {
             if (error instanceof ApiError && error.name === "notfound") {

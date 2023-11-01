@@ -10,7 +10,7 @@ export interface BookingRequestDataSource {
     update(id: string, bookingRequest: BookingRequestEntity): Promise<any>;
     delete(id: string): Promise<void>;
     read(id: string): Promise<any | null>;
-    getAllBookingRequests(): Promise<any[]>;
+    getAllBookingRequests(outletId:string): Promise<any[]>;
 }
 
 // BookingRequest Data Source communicates with the database
@@ -48,9 +48,9 @@ export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
             throw ApiError.badRequest();
         } // Convert to a plain JavaScript object before returning
     }
-    async getAllBookingRequests(): Promise<any[]> {
+    async getAllBookingRequests(outletId:string): Promise<any[]> {
         try {
-            const bookingRequests = await BookingRequest.find();
+            const bookingRequests = await BookingRequest.find({outletId:outletId});
             return bookingRequests.map((request) => request.toObject()); // Convert to plain JavaScript objects before returning
         } catch (error) {
             throw ApiError.badRequest();

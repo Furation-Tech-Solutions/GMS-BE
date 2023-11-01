@@ -67,9 +67,9 @@ async deleteShift(id: string): Promise<Either<ErrorClass, void>> {
     }
   }
 
-    async getAllShifts(): Promise<Either<ErrorClass, ShiftEntity[]>> {
+    async getAllShifts(outletId:string): Promise<Either<ErrorClass, ShiftEntity[]>> {
     try {
-      const response = await this.dataSource.getAll();
+      const response = await this.dataSource.getAll(outletId);
       return Right<ErrorClass, ShiftEntity[]>(response);
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {

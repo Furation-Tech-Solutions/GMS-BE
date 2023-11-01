@@ -12,7 +12,7 @@ export interface ReservationStatusRepository {
   getReservationStatusById(
     id: string
   ): Promise<Either<ErrorClass, ReservationStatusEntity>>;
-  getReservationStatus(): Promise<
+  getReservationStatus(outletId:string): Promise<
     Either<ErrorClass, ReservationStatusEntity[]>
   >;
   updateReservationStatus(

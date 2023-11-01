@@ -32,8 +32,10 @@ export class RoomService {
 
   async createRoom(req: Request, res: Response): Promise<void> {
     const user = req.user;
+    const outletId=req.outletId
     const newRoomData = {
       ...req.body,
+      outletId:outletId,
       createdBy: user._id,
       updatedBy: user._id,
     };
@@ -74,8 +76,9 @@ export class RoomService {
     next: NextFunction
   ): Promise<void> {
     // Call the GetAllOutletsUsecase to get all outlets
+    const outletId=req.outletId as string
     const rooms: Either<ErrorClass, RoomEntity[]> =
-      await this.getAllRoomsUsecase.execute();
+      await this.getAllRoomsUsecase.execute(outletId);
 
     rooms.cata(
       (error: ErrorClass) =>

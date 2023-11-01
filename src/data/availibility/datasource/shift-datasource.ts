@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { ShiftModel } from "@domain/availibility/entities/shift-entity";
@@ -11,15 +10,13 @@ export interface ShiftDataSource {
   update(id: string, shiftData: ShiftModel): Promise<any>;
   read(id: string): Promise<any>;
   delete(id: string): Promise<void>;
-  getAll() : Promise<any[]>;
+  getAll(outletId: string): Promise<any[]>;
 }
 
 export class ShiftDataSourceImpl implements ShiftDataSource {
   constructor(private db: mongoose.Connection) {}
 
-
   async create(shift: ShiftModel): Promise<any> {
-
     const overlappingShift = await Shift.findOne({
       $and: [
         {
@@ -28,7 +25,7 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
         },
         {
           startDate: { $lte: shift.endDate }, // New shift's end date is after or equal to the existing shift's start date
-          endDate: { $gte: shift.startDate },   // New shift's start date is before or equal to the existing shift's end date
+          endDate: { $gte: shift.startDate }, // New shift's start date is before or equal to the existing shift's end date
         },
       ],
     });
@@ -41,8 +38,6 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
     const savedShift: mongoose.Document = await shiftData.save();
     return savedShift.toObject();
   }
-
-
 
   async update(id: string, shiftData: ShiftModel): Promise<any> {
     try {
@@ -68,23 +63,21 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
   }
 
   async delete(id: string): Promise<void> {
-   const deletedShift =  await Shift.findByIdAndDelete(id);
+    const deletedShift = await Shift.findByIdAndDelete(id);
 
-  //   if (deletedShift) {
-  //     await AddReservation.updateMany({ shift: id }, { $unset: { shift: 1 } });
-  // } else {
-  //     throw ApiError.notFound();
-  // }
- 
-  }
-
-  async getAll(): Promise<any[]> {
-    // try {
-      const shifts = await Shift.find();
-      return shifts.map((shift) => shift.toObject()); // Convert to plain JavaScript objects before returning
-    // } catch (error) {
-      // throw ApiError.notFound();
+    //   if (deletedShift) {
+    //     await AddReservation.updateMany({ shift: id }, { $unset: { shift: 1 } });
+    // } else {
+    //     throw ApiError.notFound();
     // }
   }
 
+  async getAll(outletId: string): Promise<any[]> {
+    // try {
+    const shifts = await Shift.find({ outletId: outletId });
+    return shifts.map((shift) => shift.toObject()); // Convert to plain JavaScript objects before returning
+    // } catch (error) {
+    // throw ApiError.notFound();
+    // }
+  }
 }

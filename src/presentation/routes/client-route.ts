@@ -11,6 +11,7 @@ import { DeleteClient } from "@domain/client/usecases/delete-client"; // Import 
 import { validateClientInputMiddleware } from "@presentation/middlewares/client/validation-client"; // Import the DeleteClient use case
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { checkPermission } from "@presentation/permission/permission-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 // import { checkPermission } from "@presentation/permission/permission-middleware";
 
 
@@ -43,6 +44,7 @@ export const clientRouter = Router();
 clientRouter.post(
     "/add",
     verifyLoggedInUser,
+    verifyOutlet,
     validateClientInputMiddleware(false),
     checkPermission([106,206,306]),
     clientService.createClient.bind(clientService)
@@ -67,6 +69,7 @@ clientRouter.get(
 // Route handling for getting all clients
 clientRouter.get("/",
     // checkPermission(["1102"]),
+    verifyOutlet,
     checkPermission([106,206,306]),
 
     clientService.getAllClients.bind(clientService));

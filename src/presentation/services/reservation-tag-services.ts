@@ -35,8 +35,10 @@ export class ReservationTagServices {
 
     async createReservationTag(req: Request, res: Response): Promise<void> {
         const user=req.user
+        const outletId=req.outletId
         const newReservationTagData={
             ...req.body,
+            outletId:outletId,
             createdBy:user._id,
             updatedBy:user._id
         }
@@ -94,8 +96,9 @@ export class ReservationTagServices {
         res: Response,
         next: NextFunction
     ): Promise<void> {
+        const outletId=req.outletId as string
         const reservationTags: Either<ErrorClass, ReservationTagEntity[]> =
-            await this.getAllReservationtagUsecase.execute();
+            await this.getAllReservationtagUsecase.execute(outletId);
 
         reservationTags.cata(
             (error: ErrorClass) =>

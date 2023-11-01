@@ -12,5 +12,5 @@ export interface ClientRepository {
         id: string,
         data: ClientModel
     ): Promise<Either<ErrorClass, ClientEntity>>; 
-    getAllClients(): Promise<Either<ErrorClass, ClientEntity[]>>; 
+    getAllClients(outletId:string): Promise<Either<ErrorClass, ClientEntity[]>>; 
 }

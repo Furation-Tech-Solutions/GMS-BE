@@ -7,7 +7,7 @@ import { Room } from "../models/room-model";
 export interface RoomDataSource {
   create(room: RoomModel): Promise<any>;
   getById(id: string): Promise<any | null>;
-  getAllRooms(): Promise<any[]>;
+  getAllRooms(outletId: string): Promise<any[]>;
   update(id: string, room: RoomModel): Promise<any>;
   delete(id: string): Promise<void>;
 }
@@ -33,8 +33,8 @@ export class RoomDataSourceImpl implements RoomDataSource {
     return room ? room.toObject() : null;
   }
 
-  async getAllRooms(): Promise<any[]> {
-    const rooms = await Room.find();
+  async getAllRooms(outletId: string): Promise<any[]> {
+    const rooms = await Room.find({ outletId: outletId });
     return rooms.map((room) => room.toObject());
   }
 

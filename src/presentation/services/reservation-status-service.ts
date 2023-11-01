@@ -36,9 +36,11 @@ export class ReservationStatusService {
 
   async createReservationStatus(req: Request, res: Response): Promise<void> {
     const user = req.user;
+    const outletId=req.outletId
     const newReservattionStatusData = {
       ...req.body,
       statusName: req.body.statusName.toLowerCase(),
+      outletId:outletId,
       createdBy: user._id,
       updatedBy: user._id,
     };
@@ -81,8 +83,9 @@ export class ReservationStatusService {
     next: NextFunction
   ): Promise<void> {
     // Call the GetAllOutletsUsecase to get all outlets
+    const outletId=req.outletId as string
     const allReservationStatus: Either<ErrorClass, ReservationStatusEntity[]> =
-      await this.getAllReservationStatusUsecase.execute();
+      await this.getAllReservationStatusUsecase.execute(outletId);
     // console.log(allReservationStatus);
     allReservationStatus.cata(
       (error: ErrorClass) =>

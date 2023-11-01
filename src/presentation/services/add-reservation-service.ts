@@ -37,7 +37,10 @@ import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
 import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
-import { sendNotification, sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
+import {
+  sendNotification,
+  sendNotificationExample,
+} from "@presentation/middlewares/notification/notification-middleware-backend";
 
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
@@ -81,12 +84,14 @@ export class AddReservationServices {
   async createAddReservation(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
+      const outletId = req.outletId;
 
       const newReservationData = {
         ...req.body,
         reservationStatus: req.body.reservationStatus
           ? req.body.reservationStatus.toLowerCase()
           : undefined,
+        outletId: outletId,
         createdBy: user._id,
         updatedBy: user._id,
       };
@@ -108,19 +113,17 @@ export class AddReservationServices {
             await emailhandler.handleReservation(addReservationId);
           }
 
-
           const time = formatTimeAmPm(resData.timeSlot);
 
-        const title = logger.info(
-          `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
-      );
+          const title = logger.info(
+            `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
+          );
 
-      await sendNotificationExample(`${title}`);
+          await sendNotificationExample(`${title}`);
 
           return res.json(resData);
         }
       );
-
     } catch (err) {
       res.status(500).json({ error: "Internal Server Error" });
     }
@@ -195,17 +198,20 @@ export class AddReservationServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const outletId = req.outletId as string;
     const { status, table, sort, search } = req.query;
     let shift = req.query.shift as string;
     const date = req.query.date as string;
 
     const coverflow = req.query.coverflow as string;
 
-    const allShifts = await this.shiftDataSourceImpl.getAll();
+    const allShifts = await this.shiftDataSourceImpl.getAll(outletId);
 
     const timeSlots = generateTimeSlots(shift, date, allShifts);
 
     const filter: IRFilter = {};
+
+    filter.outletId = outletId;
 
     if (timeSlots?.filteredShifts && coverflow) {
       shift = timeSlots?.filteredShifts[0]._id;
@@ -249,17 +255,17 @@ export class AddReservationServices {
         if (sort) {
           sort === "1"
             ? responseData.sort((a, b) => {
-              return (
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-              );
-            })
+                return (
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+                );
+              })
             : responseData.sort((a, b) => {
-              return (
-                new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime()
-              );
-            });
+                return (
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime()
+                );
+              });
         }
 
         if (coverflow) {
@@ -294,11 +300,15 @@ export class AddReservationServices {
 
         // Split responseData into two arrays based on reservationStatus
         const cancelAndNotifyReservations = responseData.filter(
-          (reservation) => reservation.reservationStatus === ("CANCELLED AND NOTIFY"||"CANCEL")
+          (reservation) =>
+            reservation.reservationStatus ===
+            ("CANCELLED AND NOTIFY" || "CANCEL")
         );
 
         const otherReservations = responseData.filter(
-          (reservation) => reservation.reservationStatus !== ("CANCELLED AND NOTIFY"||"CANCEL")
+          (reservation) =>
+            reservation.reservationStatus !==
+            ("CANCELLED AND NOTIFY" || "CANCEL")
         );
 
         // Concatenate otherReservations and cancelAndNotifyReservations
@@ -446,13 +456,14 @@ export class AddReservationServices {
 
   async getAllAvailbleTables(req: Request, res: Response): Promise<void> {
     try {
+      const outletId = req.outletId as string;
       const reservtionId = req.query.id as string;
-
       const getReservationById = await this.addReservationDataSourceImpl.read(
         reservtionId
       );
 
       const filter: IRFilter = {};
+      filter.outletId = outletId;
 
       if (getReservationById) {
         filter.date = getReservationById.date;
@@ -466,14 +477,17 @@ export class AddReservationServices {
         filter.timeSlot = getReservationById.timeSlot;
       }
 
-      const addReservations: Either<ErrorClass, AddReservationEntity[]> = await this.getAllAddReservationUsecase.execute(filter);
+      const addReservations: Either<ErrorClass, AddReservationEntity[]> =
+        await this.getAllAddReservationUsecase.execute(filter);
 
-      const particularDateReservations = await this.addReservationDataSourceImpl.getAll({ date: getReservationById.date });
-
+      const particularDateReservations =
+        await this.addReservationDataSourceImpl.getAll({
+          date: getReservationById.date,
+        });
 
       // const reservations = await this.addReservationDataSourceImpl.getAll({});
 
-      const allTables = await this.tableDataSourceImpl.getAllTables()
+      const allTables = await this.tableDataSourceImpl.getAllTables(outletId);
 
       addReservations.cata(
         (error: ErrorClass) =>
@@ -484,18 +498,20 @@ export class AddReservationServices {
           );
 
           if (responseData.length <= 0) {
-            return res.status(404).json({ message: 'not found any reservations ' });
+            return res
+              .status(404)
+              .json({ message: "not found any reservations " });
           }
-
-
 
           const reservedTableIds: any[] = responseData
             .map((reservation) => reservation.table)
             .filter((tableId) => tableId !== undefined);
 
           const availableTables = allTables.filter((table) => {
-
-            const matchingReservedTable = reservedTableIds.find((reservedTable) => (reservedTable._id).toString() === (table._id).toString());
+            const matchingReservedTable = reservedTableIds.find(
+              (reservedTable) =>
+                reservedTable._id.toString() === table._id.toString()
+            );
             return !matchingReservedTable;
           });
 
@@ -505,18 +521,13 @@ export class AddReservationServices {
             "YourTimeZoneHere"
           );
 
-
-
           const reservationEndTime = reservationStartTime
             .clone()
             .add(getReservationById.duration, "minutes");
 
-
           const conflictTables = [];
 
-
           for (const reservation of particularDateReservations) {
-
             const requestedTime = moment.tz(
               `${reservation.date}T${reservation.timeSlot}`,
               "YYYY-MM-DDTHH:mm:ss",
@@ -532,12 +543,10 @@ export class AddReservationServices {
               )
             ) {
               if (reservation.table !== undefined) {
-                conflictTables.push(reservation.table)
+                conflictTables.push(reservation.table);
               }
             }
-
           }
-
 
           const updatedAvailableTables = [];
 
@@ -545,7 +554,7 @@ export class AddReservationServices {
             let isConflict = false;
             for (const conflictTableId of conflictTables) {
               if (conflictTableId !== undefined) {
-                if ((table._id).toString() == (conflictTableId._id).toString()) {
+                if (table._id.toString() == conflictTableId._id.toString()) {
                   isConflict = true;
                   break;
                 }
@@ -556,9 +565,7 @@ export class AddReservationServices {
             }
           }
 
-
           return res.status(200).json(updatedAvailableTables);
-
         }
       );
     } catch (error: any) {

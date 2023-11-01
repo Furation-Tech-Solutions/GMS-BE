@@ -12,6 +12,7 @@ import { DeleteGuest } from "@domain/guest/usecases/delete-guest";
 import { validateGuestInputMiddleware } from "@presentation/middlewares/guest/validation-guest";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { checkPermission } from "@presentation/permission/permission-middleware";
+import { verifyOutlet } from "@presentation/outlet-middleware/outlet-middleware";
 
 // Create an instance of the GuestDataSourceImpl and pass the mongoose connection
 const guestDataSource = new GuestDataSourceImpl(mongoose.connection);
@@ -42,9 +43,10 @@ export const guestRouter = Router();
 // Route handling for creating a new guest
 guestRouter.post(
     "/add",
-    validateGuestInputMiddleware(false),
     verifyLoggedInUser,
+    verifyOutlet,
     checkPermission([107,207,305]),
+    validateGuestInputMiddleware(false),
     guestService.createGuest.bind(guestService)
 );
 // Route handling for deleting an guest by ID
@@ -57,6 +59,7 @@ guestRouter.delete(
 // Route handling for getting an guest by ID
 guestRouter.get(
     "/:guestId",
+    verifyOutlet,
     checkPermission([107,207,305]),
 
     guestService.getGuestById.bind(guestService)

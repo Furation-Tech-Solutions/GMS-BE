@@ -33,8 +33,10 @@ export class ServerNameService{
 
     async createServerName(req:Request, res:Response):Promise<void>{
       const user=req.user
+      const outletId=req.outletId
       const newServerNameData={
           ...req.body,
+          outletId:outletId,
           createdBy:user._id,
           updatedBy:user._id
       }
@@ -57,10 +59,11 @@ export class ServerNameService{
         res: Response,
         next: NextFunction
       ): Promise<void> {
+        const outletId=req.outletId as string
         // Call the GetAllAdminsUsecase to get all admins
         // console.log("inside service")
         const serverName: Either<ErrorClass, ServersNameEntity[]> =
-          await this.getAllServerNameUseCase.execute();
+          await this.getAllServerNameUseCase.execute(outletId);
           // console.log(serverName,"serverName","service")
     
           serverName.cata(
