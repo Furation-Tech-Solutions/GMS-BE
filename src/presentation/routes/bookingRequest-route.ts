@@ -59,8 +59,8 @@ export const bookingRequestRouter = Router();
 // Route handling for creating a new booking request
 bookingRequestRouter.post(
   "/add",
-  //   verifyLoggedInUser,
-  verifyOutlet,
+  // verifyLoggedInUser,
+  // verifyOutlet,
   validateBookingRequestInputMiddleware(false),
   bookingRequestService.createBookingRequest.bind(bookingRequestService)
 );
