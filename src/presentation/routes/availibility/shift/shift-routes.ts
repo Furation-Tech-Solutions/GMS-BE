@@ -79,4 +79,4 @@ shiftRouter.get(
   shiftService.getAllShifts.bind(shiftService)
 );
 
-shiftRouter.get("/filter", verifyLoggedInUser, shiftService.getAllFilterShifts.bind(shiftService));
+shiftRouter.get("/filter", verifyLoggedInUser,verifyOutlet, shiftService.getAllFilterShifts.bind(shiftService));
