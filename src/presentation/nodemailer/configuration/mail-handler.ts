@@ -48,7 +48,7 @@ class EmailHandler {
     try {
       // Your reservation creation logic here..
         const addReservation = await getAddReservationByIdUsecase.read(id);
-      console.log(addReservation,"addReservation")
+      // console.log(addReservation,"addReservation")
 
 
         if(addReservation.reservationStatus=="unassigned|| UNASSIGNED"){
@@ -104,7 +104,7 @@ class EmailHandler {
                 ]
               }
             ]}
-            console.log(whatsappMessage,'message inside handler')
+            // console.log(whatsappMessage,'message inside handler')
             try {
                  const whatsappResponse = await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
                 
@@ -240,7 +240,7 @@ class EmailHandler {
                     ]
                   }
                 ]}
-                console.log(whatsappMessage,'message inside handler')
+                // console.log(whatsappMessage,'message inside handler')
                 try {
                   const whatsappResponse = await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
                   
@@ -249,11 +249,11 @@ class EmailHandler {
                    }
             }
             if(addReservation.reservationStatus=="left" || 'LEFT' || "Left"){
-             console.log("in template calling")
+            //  console.log("in template calling")
 
               const date= formatDate(addReservation.date)
               const startTime =  formatTime(addReservation.timeSlot);
-             console.log("beforre template calling")
+            //  console.log("beforre template calling")
               const emailContent =await leftReservationTemplate(addReservation,date,startTime);
               const emailOption = {
                 // email:addReservation.client.email,
@@ -261,7 +261,7 @@ class EmailHandler {
                 subject: "Thank You for Dining with Us ",
                 message: emailContent,
               };
-              console.log("emailService")
+              // console.log("emailService")
               try{
 
                 await emailService.sendEmail(emailOption);
@@ -317,7 +317,7 @@ class EmailHandler {
                       ]
                     }
                   ]}
-                  console.log(whatsappMessage,'message inside handler')
+                  // console.log(whatsappMessage,'message inside handler')
                   try {
                     const whatsappResponse = await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
                      } catch (whatsappError) {

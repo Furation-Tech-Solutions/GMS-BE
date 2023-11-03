@@ -22,7 +22,7 @@ export class ClientRepositoryImpl implements ClientRepository {
       const createdClient = await this.clientDataSource.create(client); // Use the client data source
       return Right<ErrorClass, ClientEntity>(createdClient);
     } catch (error: any) {
-      console.log(error)
+      // console.log(error)
       if (error instanceof ApiError && error.name === "conflict") {
         return Left<ErrorClass, ClientEntity>(ApiError.clientExist());
       }
