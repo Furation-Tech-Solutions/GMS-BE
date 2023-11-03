@@ -85,3 +85,4 @@ shiftRouter.get(
   verifyOutlet,
   shiftService.getAllFilterShifts.bind(shiftService)
 );
+
