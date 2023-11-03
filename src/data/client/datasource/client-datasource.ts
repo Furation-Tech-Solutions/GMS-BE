@@ -51,7 +51,7 @@ export class ClientDataSourceImpl implements ClientDataSource {
 
       return client ? client.toObject() : null;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       throw ApiError.badRequest();
     } // Convert to a plain JavaScript object before returning
   }

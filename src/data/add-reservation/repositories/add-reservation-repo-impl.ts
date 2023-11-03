@@ -78,7 +78,7 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       );
       return Right<ErrorClass, AddReservationEntity>(updatedAddReservation);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error instanceof mongoose.Error.CastError) {
         return Left<ErrorClass, AddReservationEntity>(ApiError.castError());
       }
@@ -130,7 +130,7 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
       );
       return Right<ErrorClass, AddReservationEntity[]>(result);
     } catch (error: any) {
-      console.log("reservation datatsource===>", { error: error });
+      // console.log("reservation datatsource===>", { error: error });
       if (
         error instanceof mongoose.Error.CastError ||
         error.name == "notfound"
