@@ -58,7 +58,7 @@ export async function confirmReservationTemplate(result: any,date:any,startTime:
     .replace('[Time Slot]', startTime)
     .replace("[Client's First Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
-    .replace('[Table Number]', result.table.tableNo)
+    // .replace('[Table Number]', result.table.tableNo)
    
   return emailContent 
 }
@@ -102,7 +102,7 @@ export async function leftReservationTemplate(result: any,date:any,startTime:any
     .replace('[Time Slot]', startTime)
     .replace("[Client's Full Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
-    .replace('[Table Number]', result.table.tableNo)
+    .replace('[Table Number]', result.table.tableNo ? " " : " ")
     .replace('[Server Name]',result.serverName)
    
   return emailContent 
@@ -126,7 +126,7 @@ export async function reminderEmailTemplate(result: any,date:any,startTime:any):
     .replace('[Time Slot]', startTime)
     .replace("[Client's Full Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
-    .replace('[Table Number]', result.table.tableNo)
+    .replace('[Table Number]', result.table.tableNo ? " " :" ")
    
   return emailContent 
 }

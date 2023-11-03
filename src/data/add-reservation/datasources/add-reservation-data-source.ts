@@ -95,7 +95,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "table",
-        select: "id tableNo partySizeMini partySizeMax",
+        select: "id tableNo partySizeMini partySizeMax tableCombinations",
       })
       .populate({
         path: "seatingArea",
@@ -116,6 +116,9 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async getAll(filter: IRFilter | Icron): Promise<any[]> {
+
+
+    console.log(filter, "filterr");
 
     const addReservations = await AddReservation.find(filter)
       .populate({

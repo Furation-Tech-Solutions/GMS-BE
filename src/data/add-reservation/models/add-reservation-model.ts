@@ -7,32 +7,38 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please select the Date"],
   },
+
   noOfGuests: {
     type: Number,
     required: [true, "Please select the Date"],
     default: 1,
   },
+
   shift: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shift",
     required: [true, "Please select the Shift"],
   },
+
   duration: {
     type: String,
     trim: true,
     default: "2:00:00",
     required: [true, "Please select the Duration"],
   },
+
   seatingArea: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "SeatingArea",
     required: [true, "Please select the Seating Area"],
   },
+
   timeSlot: {
     type: String,
     trim: true,
     required: [true, "Please select the Time Slot"],
   },
+
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
@@ -55,15 +61,19 @@ const addReservationSchema = new mongoose.Schema({
     trim: true,
     default: "unassigned",
   },
-  table: {
+
+  table: [
+    {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Table",
     required: [false, "Please select the Table"],
-  },
+  }
+],
   bookedBy: {
     type: String,
     default: "",
   },
+
   serverName: {
     type: String,
     default: "",

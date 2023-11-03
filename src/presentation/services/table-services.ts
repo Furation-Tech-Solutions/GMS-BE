@@ -127,6 +127,7 @@ export class TableService {
       },
       async (result: TableEntity) => {
         const resData = TableMapper.toEntity(result, true);
+        
         const updatedTableEntity: TableEntity = TableMapper.toEntity(
           tableData,
           true,

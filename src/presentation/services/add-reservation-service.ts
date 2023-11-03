@@ -118,9 +118,8 @@ export class AddReservationServices {
           const title = logger.info(
             `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
           );
-
       
-      await sendNotificationExample(`${title}`);
+      // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
 
           return res.json(resData);
         }
@@ -354,6 +353,7 @@ export class AddReservationServices {
             addReservationId,
             updatedAddReservationEntity
           );
+
         updatedAddReservation.cata(
           async (error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });
@@ -382,6 +382,7 @@ export class AddReservationServices {
     res: Response
   ): Promise<void> {
     try {
+
       const date = req.query.date as string;
       const table = req.query.table as string;
       const timeSlot = req.query.time as string;
@@ -391,6 +392,7 @@ export class AddReservationServices {
       if (date) {
         filter.date = date;
       }
+
       if (table) {
         filter.table = table;
       }
@@ -399,6 +401,8 @@ export class AddReservationServices {
 
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
+
+        console.log(addReservations, "addReservations");
 
       addReservations.cata(
         (error: ErrorClass) =>
@@ -479,9 +483,9 @@ export class AddReservationServices {
       }
 
 
+
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
-
 
       const particularDateReservations =
         await this.addReservationDataSourceImpl.getAll({
@@ -499,6 +503,7 @@ export class AddReservationServices {
             AddReservationMapper.toEntity(addReservation)
           );
 
+          console.log(responseData, "responseData");
           if (responseData.length <= 0) {
             return res
               .status(404)
@@ -508,6 +513,7 @@ export class AddReservationServices {
           const reservedTableIds: any[] = responseData
             .map((reservation) => reservation.table)
             .filter((tableId) => tableId !== undefined);
+
 
           const availableTables = allTables.filter((table) => {
             const matchingReservedTable = reservedTableIds.find(
