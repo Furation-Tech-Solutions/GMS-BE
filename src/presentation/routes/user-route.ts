@@ -57,14 +57,17 @@ userRouter.post(
 )
 userRouter.get(
     "/getAll",
+    verifyLoggedInUser,
     userService.getAllUsers.bind(userService)
 )
 userRouter.delete(
     "/delete/:userId",
+    verifyLoggedInUser,
     userService.deleteUser.bind(userService)
 )
 userRouter.get(
     "/get/:userId",
+    verifyLoggedInUser,
     userService.getUserById.bind(userService)
 )
 userRouter.patch(

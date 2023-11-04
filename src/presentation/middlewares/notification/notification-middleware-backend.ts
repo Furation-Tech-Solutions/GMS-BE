@@ -35,7 +35,7 @@ export async function sendNotification(title: string) {
   
           try {
 
-            console.log(tokens, "tokens")
+            // console.log(tokens, "tokens")
             const response = await admin.messaging().sendMulticast({
               tokens: tokens,
               notification: payload.notification,
@@ -43,7 +43,7 @@ export async function sendNotification(title: string) {
             });
 
 
-            console.log(response, "response");
+            // console.log(response, "response");
 
             const successResults = response.responses.filter((result: any) => result.success);
 
@@ -92,9 +92,9 @@ export async function sendNotification(title: string) {
  export async function sendNotificationExample(newtitle: string) {
   const title = newtitle;
 
-  console.log(title, newtitle, "title")
+  // console.log(title, newtitle, "title")
   const notificationResult = await sendNotification(title);
-  console.log(notificationResult);
+  // console.log(notificationResult);
 }
 
 // Call this function to send a notification

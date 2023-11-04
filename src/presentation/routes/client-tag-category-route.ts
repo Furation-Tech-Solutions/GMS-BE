@@ -49,23 +49,26 @@ clientTagCategoryRouter.post(
 // Route handling for deleting a tag category by ID
 clientTagCategoryRouter.delete(
     "/:ClientTagCategoryId",
+    verifyLoggedInUser,
     clientTagCategoryService.deleteClientTagCategory.bind(clientTagCategoryService)
 );
 
 // Route handling for getting a tag category by ID
 clientTagCategoryRouter.get(
     "/:ClientTagCategoryId",
+    verifyLoggedInUser,
     clientTagCategoryService.getClientTagCategoryById.bind(clientTagCategoryService)
 );
 
 // Route handling for getting all tag categories
-clientTagCategoryRouter.get("/", verifyOutlet,clientTagCategoryService.getAllClientTagCategories.bind(clientTagCategoryService));
+clientTagCategoryRouter.get("/",verifyLoggedInUser,
+verifyOutlet, clientTagCategoryService.getAllClientTagCategories.bind(clientTagCategoryService));
 
 // Route handling for updating a tag category by ID
 clientTagCategoryRouter.put(
     "/:ClientTagCategoryId",
-    validateClientTagCategoryInputMiddleware(true),
     verifyLoggedInUser,
+    validateClientTagCategoryInputMiddleware(true),
     clientTagCategoryService.updateClientTagCategory.bind(clientTagCategoryService)
 );
 

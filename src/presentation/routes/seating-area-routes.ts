@@ -54,26 +54,27 @@ seatingAreaRouter.post(
 
 //Route handling for getRoomById
 seatingAreaRouter.get(
-  "/getById/:seatingAreaId",
+  "/getById/:seatingAreaId",verifyLoggedInUser,
   seatingAreaService.getSeatingAreaById.bind(seatingAreaService)
 );
 
 //Route hanndling for getRooms
 seatingAreaRouter.get(
-  "/getAllseatingAreas",verifyOutlet,
+  "/getAllseatingAreas",verifyLoggedInUser,verifyOutlet,
   seatingAreaService.getAllSeatingAreas.bind(seatingAreaService)
 );
 
 seatingAreaRouter.put(
   "/updateSeatingArea/:seatingAreaId",
   // checkPermission(["1103"]),
-  validateSeatingAreaInputMiddleware(true),
   verifyLoggedInUser,
+  validateSeatingAreaInputMiddleware(true),
   seatingAreaService.updateSeatingArea.bind(seatingAreaService)
 );
 
 seatingAreaRouter.delete(
   "/deleteSeatingArea/:seatingAreaId",
+  verifyLoggedInUser,
   // checkPermission(["1103"]),
   seatingAreaService.deleteSeatingArea.bind(seatingAreaService)
 );

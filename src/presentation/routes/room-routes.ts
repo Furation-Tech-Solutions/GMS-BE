@@ -52,11 +52,12 @@ roomRouter.post(
 
 //Route handling for getRoomById
 roomRouter.get("/getById/:roomId",
+verifyLoggedInUser,
   // checkPermission("1103"),
   roomService.getRoomById.bind(roomService));
 
 //Route hanndling for getRooms
-roomRouter.get("/getAllRooms",verifyOutlet,
+roomRouter.get("/getAllRooms",verifyLoggedInUser,verifyOutlet,
   roomService.getAllRooms.bind(roomService));
 
 roomRouter.put(
@@ -69,6 +70,7 @@ roomRouter.put(
 
 roomRouter.delete(
   "/deleteRoom/:roomId",
+  verifyLoggedInUser,
   // checkPermission(["1103"]),
   roomService.deleteRoom.bind(roomService)
 );

@@ -229,7 +229,7 @@ export class AddReservationServices {
       filter.table = table;
     }
     if (status && typeof status === "string") {
-      console.log(status.toLocaleLowerCase());
+      // console.log(status.toLocaleLowerCase());
       filter.reservationStatus = status.toLocaleLowerCase();
     }
 
@@ -474,6 +474,7 @@ export class AddReservationServices {
         shift: getReservationById?.shift._id,
         timeSlot: getReservationById?.timeSlot,
       };
+
 
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);

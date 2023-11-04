@@ -77,6 +77,7 @@ reservationStatusRouter.get(
 //Route hanndling for getRooms
 reservationStatusRouter.get(
   "/getAllReservationStatus",
+  verifyLoggedInUser,
   verifyOutlet,
   // checkPermission("1103"),
   reservationStatusService.getAllReservationStatus.bind(
@@ -86,8 +87,8 @@ reservationStatusRouter.get(
 
 reservationStatusRouter.put(
   "/updateReservationStatus/:reservationStatusId",
-  validateReservationStatusInputMiddleware(true),
   verifyLoggedInUser,
+  validateReservationStatusInputMiddleware(true),
   // checkPermission("1103"),
   reservationStatusService.updateReservationStatus.bind(
     reservationStatusService
@@ -96,6 +97,7 @@ reservationStatusRouter.put(
 
 reservationStatusRouter.delete(
   "/deleteReservationStatus/:reservationStatusId",
+  verifyLoggedInUser,
   reservationStatusService.deleteReservationStatus.bind(
     reservationStatusService
   )

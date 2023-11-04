@@ -76,6 +76,7 @@ addReservationRouter.post(
 // Route handling for deleting a Add Reservation by ID
 addReservationRouter.delete(
   "/:addReservationId",
+  verifyLoggedInUser,
   checkPermission([104,204,302]),
   addReservationService.deleteAddReservation.bind(addReservationService)
 );
@@ -83,6 +84,7 @@ addReservationRouter.delete(
 // // Route handling for getting a Add Reservation by ID
 addReservationRouter.get(
   "/:addReservationId",
+  verifyLoggedInUser,
   // checkPermission(["1101","5101"]),
   addReservationService.getAddReservationById.bind(addReservationService)
 );
@@ -115,11 +117,13 @@ addReservationRouter.get(
 
 addReservationRouter.get(
   "/availibility/one",
+  verifyLoggedInUser,
   addReservationService.getAllReservationsForTableAndTime.bind(addReservationService)
 );
 
 addReservationRouter.get(
   "/availibility/logs",
+  verifyLoggedInUser,
   addReservationService.getAllLogs.bind(addReservationService)
 );
 

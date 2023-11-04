@@ -27,14 +27,13 @@ const getGuestByIdUsecase = new GetGuestById(guestRepository);
 const getAllGuestsUsecase = new GetAllGuests(guestRepository);
 const updateGuestUsecase = new UpdateGuest(guestRepository);
 
-
 // Initialize GuestService and inject required dependencies
 const guestService = new GuestServices(
-    createGuestUsecase,
-    deleteGuestUsecase,
-    getGuestByIdUsecase,
-    getAllGuestsUsecase,
-    updateGuestUsecase
+  createGuestUsecase,
+  deleteGuestUsecase,
+  getGuestByIdUsecase,
+  getAllGuestsUsecase,
+  updateGuestUsecase
 );
 
 // Create an Express router
@@ -42,46 +41,52 @@ export const guestRouter = Router();
 
 // Route handling for creating a new guest
 guestRouter.post(
-    "/add",
-    verifyLoggedInUser,
-    verifyOutlet,
-    checkPermission([107,207,305]),
-    validateGuestInputMiddleware(false),
-    guestService.createGuest.bind(guestService)
+  "/add",
+  verifyLoggedInUser,
+  verifyOutlet,
+  checkPermission([107, 207, 305]),
+  validateGuestInputMiddleware(false),
+  guestService.createGuest.bind(guestService)
 );
 // Route handling for deleting an guest by ID
 guestRouter.delete(
-    "/:guestId",
-    checkPermission([107,207,305]),
-    guestService.deleteGuest.bind(guestService)
+  "/:guestId",
+  verifyLoggedInUser,
+  checkPermission([107, 207, 305]),
+  guestService.deleteGuest.bind(guestService)
 );
 
 // Route handling for getting an guest by ID
 guestRouter.get(
-    "/:guestId",
-    verifyOutlet,
-    checkPermission([107,207,305]),
+  "/:guestId",
+  verifyLoggedInUser,
+  verifyOutlet,
+  checkPermission([107, 207, 305]),
 
-    guestService.getGuestById.bind(guestService)
+  guestService.getGuestById.bind(guestService)
 );
 
 // Route handling for getting all companies
-guestRouter.get("/",
-checkPermission([107,207,305]),
+guestRouter.get(
+  "/",
+  verifyLoggedInUser,
+  checkPermission([107, 207, 305]),
 
- guestService.getAllGuests.bind(guestService));
-
-
+  guestService.getAllGuests.bind(guestService)
+);
 
 // Route handling for updating an compnay by ID
 guestRouter.put(
-    "/:guestId",
-    validateGuestInputMiddleware(true),
-    verifyLoggedInUser,
-    checkPermission([107,207,305]),
-    guestService.updateGuest.bind(guestService)
+  "/:guestId",
+  validateGuestInputMiddleware(true),
+  verifyLoggedInUser,
+  checkPermission([107, 207, 305]),
+  guestService.updateGuest.bind(guestService)
 );
 
-guestRouter.get("/search", 
-checkPermission([107,207,305]),
-guestService.getAllSearchedGuests.bind(guestService));
+guestRouter.get(
+  "/search",
+  verifyLoggedInUser,
+  checkPermission([107, 207, 305]),
+  guestService.getAllSearchedGuests.bind(guestService)
+);
