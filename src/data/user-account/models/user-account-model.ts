@@ -87,7 +87,7 @@ const userSchema = new mongoose.Schema({
     default: []
   },
   outlet: [
-    {
+    { 
       type: mongoose.Schema.Types.ObjectId,
       ref: "Outlet",
     }

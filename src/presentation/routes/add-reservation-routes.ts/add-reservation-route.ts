@@ -130,5 +130,6 @@ addReservationRouter.get(
 addReservationRouter.get(
   "/availibility/tables",
   verifyLoggedInUser,
+  verifyOutlet,
   addReservationService.getAllAvailbleTables.bind(addReservationService)
 );

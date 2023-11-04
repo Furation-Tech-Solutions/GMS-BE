@@ -3,7 +3,7 @@ export interface IRFilter {
   date?: string;
   shift?: string;
   reservationStatus?: string;
-  table?: string;
+  table?: string | string[] | any;
   timeSlot?: string;
   outletId?: string;
 }
