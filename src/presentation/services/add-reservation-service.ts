@@ -463,37 +463,31 @@ export class AddReservationServices {
     try {
       const outletId = req.outletId as string;
       const reservtionId = req.query.id as string;
+
       const getReservationById = await this.addReservationDataSourceImpl.read(
         reservtionId
       );
 
-      const filter: IRFilter = {};
-      filter.outletId = outletId;
-
-      if (getReservationById) {
-        filter.date = getReservationById.date;
-      }
-
-      if (getReservationById) {
-        filter.shift = getReservationById.shift._id;
-      }
-
-      if (getReservationById) {
-        filter.timeSlot = getReservationById.timeSlot;
-      }
-
-
+      const filter: IRFilter = {
+        outletId,
+        date: getReservationById?.date,
+        shift: getReservationById?.shift._id,
+        timeSlot: getReservationById?.timeSlot,
+      };
 
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
 
+
       const particularDateReservations =
         await this.addReservationDataSourceImpl.getAll({
           date: getReservationById.date,
+          outletId: outletId,
         });
 
 
       const allTables = await this.tableDataSourceImpl.getAllTables(outletId);
+
 
       addReservations.cata(
         (error: ErrorClass) =>
@@ -503,25 +497,32 @@ export class AddReservationServices {
             AddReservationMapper.toEntity(addReservation)
           );
 
-          console.log(responseData, "responseData");
+
           if (responseData.length <= 0) {
             return res
               .status(404)
               .json({ message: "not found any reservations " });
           }
 
+          // const reservedTableIds: any[] = responseData
+          //   .map((reservation) => reservation.table)
+          //   .filter((tableId) => tableId !== undefined);
+
           const reservedTableIds: any[] = responseData
             .map((reservation) => reservation.table)
-            .filter((tableId) => tableId !== undefined);
+            .flat();
 
 
-          const availableTables = allTables.filter((table) => {
+
+          const availableTables = allTables.filter((table: any) => {
             const matchingReservedTable = reservedTableIds.find(
               (reservedTable) =>
                 reservedTable._id.toString() === table._id.toString()
             );
             return !matchingReservedTable;
           });
+
+
 
           const reservationStartTime = moment.tz(
             `${getReservationById.date}T${getReservationById.timeSlot}`,
@@ -533,6 +534,7 @@ export class AddReservationServices {
             .clone()
             .add(getReservationById.duration, "minutes");
 
+
           const conflictTables = [];
 
           for (const reservation of particularDateReservations) {
@@ -542,19 +544,33 @@ export class AddReservationServices {
               "YourTimeZoneHere"
             );
 
+            const requestedEndTime = requestedTime
+              .clone()
+              .add(reservation.duration, "minutes");
+
             if (
               requestedTime.isBetween(
                 reservationStartTime,
                 reservationEndTime,
                 null,
-                "[]"
+                "[)" // Use `[)` for inclusive start and exclusive end
+              ) ||
+              requestedEndTime.isBetween(
+                reservationStartTime,
+                reservationEndTime,
+                null,
+                "[)" // Check if requested time ends within reservation duration
               )
             ) {
-              if (reservation.table !== undefined) {
-                conflictTables.push(reservation.table);
+              if (reservation.table.length > 0) {
+                for (let i = 0; i <= reservation.table.length; i++) {
+                  if (reservation.table[i] !== undefined)
+                    conflictTables.push(reservation.table[i])
+                }
               }
             }
           }
+
 
           const updatedAvailableTables = [];
 
@@ -568,7 +584,7 @@ export class AddReservationServices {
                 }
               }
             }
-            if (!isConflict) {
+            if (!isConflict && !table.isBlocked) {
               updatedAvailableTables.push(table);
             }
           }
@@ -577,7 +593,7 @@ export class AddReservationServices {
         }
       );
     } catch (error: any) {
-      res.status(500).json({ messsage: error.message });
+      res.status(500).json({ messsage: error.message })
     }
   }
 
