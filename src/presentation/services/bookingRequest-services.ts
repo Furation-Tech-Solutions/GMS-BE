@@ -41,13 +41,14 @@ export class BookingRequestServices {
 
   async createBookingRequest(req: Request, res: Response): Promise<void> {
     // const user=req.user;
-    const outletId = req.outletId;
+    // const outletId = req.outletId;
     const newBookingRequestData = {
       ...req.body,
-      outletId: outletId,
+      // outletId: outletId,
       createdBy: "653226faa29436d12aa3fba5",
       updatedBy: "653226faa29436d12aa3fba5",
     };
+
 
     const bookingrequestData: BookingRequestModel =
       BookingRequestMapper.toModel(newBookingRequestData);

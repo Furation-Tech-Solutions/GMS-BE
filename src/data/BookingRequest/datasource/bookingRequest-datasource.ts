@@ -17,6 +17,7 @@ export interface BookingRequestDataSource {
 export class BookingRequestDataSourceImpl implements BookingRequestDataSource {
     constructor(private db: mongoose.Connection) { }
     async create(bookingRequest: BookingRequestModel): Promise<any> {
+        
         const bookingRequestData = new BookingRequest(bookingRequest);
         const createdBookingRequest = await bookingRequestData.save();
         // const emailService = new EmailService();

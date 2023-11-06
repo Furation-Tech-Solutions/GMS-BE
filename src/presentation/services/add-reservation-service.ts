@@ -120,7 +120,6 @@ export class AddReservationServices {
           );
       
       // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
-
           return res.json(resData);
         }
       );
@@ -383,21 +382,25 @@ export class AddReservationServices {
   ): Promise<void> {
     try {
 
+      const outletId = req.outletId
       const date = req.query.date as string;
-      const table = req.query.table as string;
+      const tables = Array.isArray(req.query.table) ? req.query.table : [req.query.table];
       const timeSlot = req.query.time as string;
 
       const filter: IRFilter = {};
 
-      if (date) {
+      filter.outletId = outletId;
+
+      if (date) {   
         filter.date = date;
       }
 
-      if (table) {
-        filter.table = table;
+      if (tables && tables.length > 0) {
+        filter.table = { $in: tables }; // Use $in operator to match any of the specified tables
       }
 
-      const tableInfo = await Table.findById({ _id: table });
+      const tableInfo = await Table.findById({ _id: tables[0] });
+
 
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);

@@ -118,6 +118,7 @@ addReservationRouter.get(
 addReservationRouter.get(
   "/availibility/one",
   verifyLoggedInUser,
+  verifyOutlet,
   addReservationService.getAllReservationsForTableAndTime.bind(addReservationService)
 );
 
