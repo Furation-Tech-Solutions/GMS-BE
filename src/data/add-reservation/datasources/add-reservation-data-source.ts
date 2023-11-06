@@ -95,7 +95,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "table",
-        select: "id tableNo partySizeMini partySizeMax",
+        select: "id tableNo partySizeMini partySizeMax tableCombinations",
       })
       .populate({
         path: "seatingArea",

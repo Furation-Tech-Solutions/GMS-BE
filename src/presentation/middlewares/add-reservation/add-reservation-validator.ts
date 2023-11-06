@@ -10,7 +10,7 @@ interface ReservationInput {
   seatingArea: string;
   timeSlot: string;
   client: string;
-  table: string;
+  table: string[];
   duration: string;
   reservationTags?: string[];
   reservationNote?: string;
@@ -114,20 +114,24 @@ const reservationValidator = (
             "any.required": "Please select the Client",
           }),
     table: isUpdate
-      ? Joi.string()
+      ?  Joi.array().items(
+        Joi.string()
           .trim()
           .pattern(objectIdPattern, "MongoDB ObjectId")
           .optional()
           .messages({
-            "any.required": "Please select the Table",
+            "string.pattern.base": "Please select a Table",
           })
-      : Joi.string()
+      )
+      :  Joi.array().items(
+        Joi.string()
           .trim()
           .pattern(objectIdPattern, "MongoDB ObjectId")
           .optional()
           .messages({
-            "any.required": "Please select the Table",
-          }),
+            "string.pattern.base": "Please select a Table",
+          })
+      ),
     duration: isUpdate
       ? Joi.string()
           .regex(/^\d{2}:\d{2}:\d{2}$/)
