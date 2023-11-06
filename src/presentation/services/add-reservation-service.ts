@@ -120,9 +120,6 @@ export class AddReservationServices {
           );
       
       // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
-
-
-
           return res.json(resData);
         }
       );
@@ -407,6 +404,8 @@ export class AddReservationServices {
 
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
+
+        console.log(addReservations, "addReservations");
 
       addReservations.cata(
         (error: ErrorClass) =>

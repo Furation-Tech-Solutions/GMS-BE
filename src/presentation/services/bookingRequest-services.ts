@@ -118,8 +118,6 @@ export class BookingRequestServices {
     const bookingRequests: Either<ErrorClass, BookingRequestEntity[]> =
       await this.getAllBookingRequestsUsecases.execute(outletId);
 
-      console.log(bookingRequests, "bookingRequests");
-
     bookingRequests.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
