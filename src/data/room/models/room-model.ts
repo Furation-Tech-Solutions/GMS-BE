@@ -13,7 +13,7 @@ const roomSchema = new mongoose.Schema({
     required: true,
     maxLength: [30, "Room name should be under 30 Characters"],
     trim: true,
-    unique: true,
+    // unique: true,
   },
   listOrder: {
     type: Number,

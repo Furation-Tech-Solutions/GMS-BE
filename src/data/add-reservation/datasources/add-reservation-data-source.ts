@@ -44,6 +44,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       date: addReservation.date,
       shift: addReservation.shift,
       client: addReservation.client,
+      outletId:addReservation.outletId
     });
 
     if (existingAddReservation) throw ApiError.reservationExits();
@@ -60,6 +61,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
     const checkInCheckOutObject = {
       reservation: createdAddReservation._id,
       client: createdAddReservation.client,
+      outletId:createdAddReservation.outletId
     };
 
     const checkInCheckOutData = new CheckInCheckOut(checkInCheckOutObject);

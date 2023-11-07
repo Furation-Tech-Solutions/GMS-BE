@@ -19,7 +19,10 @@ export class ClientTagDataSourceImpl implements ClientTagDataSource {
   constructor(private db: mongoose.Connection) {}
 
   async create(clientTag: ClientTagModel): Promise<any> {
-    const existingClientTag = await ClientTag.findOne({ name: clientTag.name });
+    const existingClientTag = await ClientTag.findOne({
+      name: clientTag.name,
+      outletId: clientTag.outletId,
+    });
     if (existingClientTag) {
       throw ApiError.emailExist();
     }
