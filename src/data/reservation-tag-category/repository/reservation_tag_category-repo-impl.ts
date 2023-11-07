@@ -16,8 +16,9 @@ export class ReservationTagCategoryRepositoryImpl implements ReservationTagCateg
             const createdReservationTagCategory = await this.reservationTagCategoryDataSource.create(reservationTagCategory);
             return Right<ErrorClass, ReservationTagCategoryEntity>(createdReservationTagCategory);
         } catch (error) {
+            console.log(error)
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.dataExists());
             }
             return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.badRequest());
         }
@@ -41,7 +42,7 @@ export class ReservationTagCategoryRepositoryImpl implements ReservationTagCateg
             return Right<ErrorClass, ReservationTagCategoryEntity>(updatedReservationTagCategory);
         } catch (error) {
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.dataExists());
             }
             return Left<ErrorClass, ReservationTagCategoryEntity>(ApiError.badRequest());
         }

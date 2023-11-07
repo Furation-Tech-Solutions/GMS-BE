@@ -23,7 +23,7 @@ export class ReservationStatusDataSourceImpl
     });
 
     if (existingReservationStatus) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
 
     const reservationStatusData = new ReservationStatus(reservationStatus);

@@ -23,8 +23,8 @@ export class ReservationStatusRepositoryImpl
       let i = await this.dataSource.create(reservationStatus);
       return Right<ErrorClass, ReservationStatusEntity>(i);
     } catch (e) {
-      if (typeof ApiError.emailExist) {
-        return Left<ErrorClass, ReservationStatusEntity>(ApiError.emailExist());
+      if (typeof ApiError.dataExists) {
+        return Left<ErrorClass, ReservationStatusEntity>(ApiError.dataExists());
       }
       return Left<ErrorClass, ReservationStatusEntity>(ApiError.badRequest());
     }

@@ -16,7 +16,7 @@ export class ClientTagRepositoryImpl implements ClientTagRepository {
             return Right<ErrorClass, ClientTagEntity>(createdTag);
         } catch (error) {
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ClientTagEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ClientTagEntity>(ApiError.dataExists());
             }
             return Left<ErrorClass, ClientTagEntity>(ApiError.badRequest());
         }

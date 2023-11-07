@@ -24,7 +24,7 @@ export class ClientTagCategoryDataSourceImpl
       outletId: clientTagCategory.outletId,
     });
     if (existingClientTagCategory) {
-      throw ApiError.emailExist();
+      throw ApiError.clienttagExist();
     }
     const clientTagCategoryData = new ClientTagCategory(clientTagCategory);
     const createdClientTagCategory = await clientTagCategoryData.save();
