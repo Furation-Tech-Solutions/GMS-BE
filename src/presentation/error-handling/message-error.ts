@@ -20,6 +20,8 @@ export const SERVICE_UNAVAILABLE = "service unavailable";
 
 export const CONFLICT = "email already exist";
 
+export const DATA_CONFLICT = "data already exist";
+
 export const INTERNAL_SERVER_ERROR = "something went wrong";
 
 export const UNDEFINE_MESSAGE = "mongourl or mongooptions are undefined";

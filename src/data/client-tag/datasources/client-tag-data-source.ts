@@ -24,7 +24,7 @@ export class ClientTagDataSourceImpl implements ClientTagDataSource {
       outletId: clientTag.outletId,
     });
     if (existingClientTag) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
     const clientTagData = new ClientTag(clientTag);
 

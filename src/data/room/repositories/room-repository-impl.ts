@@ -16,8 +16,8 @@ export class RoomRepositoryImpl implements RoomRepository {
       let i = await this.dataSource.create(room);
       return Right<ErrorClass, RoomEntity>(i);
     } catch (e) {
-      if (typeof ApiError.emailExist) {
-        return Left<ErrorClass, RoomEntity>(ApiError.emailExist());
+      if (typeof ApiError.dataExists) {
+        return Left<ErrorClass, RoomEntity>(ApiError.dataExists());
       }
       return Left<ErrorClass, RoomEntity>(ApiError.badRequest());
     }

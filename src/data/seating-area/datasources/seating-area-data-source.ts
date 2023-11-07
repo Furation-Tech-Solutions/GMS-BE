@@ -20,7 +20,7 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
     });
 
     if (existingSeatingArea) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
 
     const seatingAreaData = new SeatingArea(seatingArea);
