@@ -5,7 +5,7 @@ const reservationStatusSchema = new mongoose.Schema({
   statusName: {
     type: String,
     maxLength: [30, "Reservation status name should be under 30 characters"],
-    unique: true,
+    // unique: true,
     trim: true,
     required: [true, "Reservation status name is required"],
   },

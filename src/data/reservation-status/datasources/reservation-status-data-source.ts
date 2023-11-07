@@ -6,7 +6,7 @@ import { ReservationStatus } from "../models/reservation-status-model";
 export interface ReservationStatusDataSource {
   create(reservationStatus: ReservationStatusModel): Promise<any>;
   getById(id: string): Promise<any | null>;
-  getAllReservationStauts(outletId:string): Promise<any[]>;
+  getAllReservationStauts(outletId: string): Promise<any[]>;
   update(id: string, reservationStatus: ReservationStatusModel): Promise<any>;
   delete(id: string): Promise<void>;
 }
@@ -19,6 +19,7 @@ export class ReservationStatusDataSourceImpl
   async create(reservationStatus: ReservationStatusModel): Promise<any> {
     const existingReservationStatus = await ReservationStatus.findOne({
       statusName: reservationStatus.statusName,
+      outletId: reservationStatus.outletId,
     });
 
     if (existingReservationStatus) {
@@ -37,18 +38,29 @@ export class ReservationStatusDataSourceImpl
     return reservationStatus ? reservationStatus.toObject() : null;
   }
 
-  async getAllReservationStauts(outletId:string): Promise<any[]> {
-    const allReservationStatus = await ReservationStatus.find({outletId:outletId});
+  async getAllReservationStauts(outletId: string): Promise<any[]> {
+    const allReservationStatus = await ReservationStatus.find({
+      outletId: outletId,
+    });
     return allReservationStatus.map((reservationStatus) =>
       reservationStatus.toObject()
     );
   }
 
-  async update(id: string, reservationStatus: ReservationStatusModel): Promise<any> {
-    const updatedReservationStatus = await ReservationStatus.findByIdAndUpdate(id, reservationStatus, {
-      new: true,
-    });
-    return updatedReservationStatus ? updatedReservationStatus.toObject() : null;
+  async update(
+    id: string,
+    reservationStatus: ReservationStatusModel
+  ): Promise<any> {
+    const updatedReservationStatus = await ReservationStatus.findByIdAndUpdate(
+      id,
+      reservationStatus,
+      {
+        new: true,
+      }
+    );
+    return updatedReservationStatus
+      ? updatedReservationStatus.toObject()
+      : null;
   }
 
   async delete(id: string): Promise<void> {

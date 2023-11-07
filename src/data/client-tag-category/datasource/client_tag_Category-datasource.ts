@@ -21,6 +21,7 @@ export class ClientTagCategoryDataSourceImpl
   async create(clientTagCategory: ClientTagCategoryModel): Promise<any> {
     const existingClientTagCategory = await ClientTagCategory.findOne({
       name: clientTagCategory.name,
+      outletId: clientTagCategory.outletId,
     });
     if (existingClientTagCategory) {
       throw ApiError.emailExist();

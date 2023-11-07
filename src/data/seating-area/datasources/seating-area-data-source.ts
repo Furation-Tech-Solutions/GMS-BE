@@ -16,7 +16,7 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
 
   async create(seatingArea: SeatingAreaModel): Promise<any> {
     const existingSeatingArea = await SeatingArea.findOne({
-      seatingAreaName: seatingArea.seatingAreaName,
+      seatingAreaName: seatingArea.seatingAreaName,outletId:seatingArea.outletId
     });
 
     if (existingSeatingArea) {

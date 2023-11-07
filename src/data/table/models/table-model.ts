@@ -14,7 +14,7 @@ const tableSchema = new mongoose.Schema({
   tableNo: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   partySizeMini: {
     type: Number,

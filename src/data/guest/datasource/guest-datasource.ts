@@ -18,6 +18,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
     // try {
     const existingGuest = await Guest.findOne({
       email: guest.email,
+      outletId: guest.outletId,
     }).populate("bookedBy");
     if (existingGuest) {
       throw ApiError.guestExist();
