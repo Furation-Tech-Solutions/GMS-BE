@@ -22,7 +22,7 @@ export class ReservationTagCategoryDataSourceImpl
   async create(
     reservationTagCategory: ReservationTagCategoryModel
   ): Promise<any> {
-    try {
+    // try {
       const existingReservationTagCategory =
         await ReservationTagCategory.findOne({
           name: reservationTagCategory.name,
@@ -32,7 +32,7 @@ export class ReservationTagCategoryDataSourceImpl
           select: "id name",
         });
       if (existingReservationTagCategory) {
-        throw ApiError.emailExist();
+        throw ApiError.dataExists();
       }
       const reservationTagCategoryData = new ReservationTagCategory(
         reservationTagCategory
@@ -40,9 +40,9 @@ export class ReservationTagCategoryDataSourceImpl
       const createdReservationTagCategory =
         await reservationTagCategoryData.save();
       return createdReservationTagCategory.toObject();
-    } catch (error) {
-      throw ApiError.badRequest();
-    }
+    // } catch (error) {
+    //   throw ApiError.badRequest();
+    // }
   }
 
   async delete(id: string): Promise<void> {

@@ -21,7 +21,7 @@ export class RoomDataSourceImpl implements RoomDataSource {
       outletId: room.outletId,
     });
     if (existingRoom) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
 
     const roomData = new Room(room);

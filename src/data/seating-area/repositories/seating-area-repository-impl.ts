@@ -23,8 +23,8 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
 
       return Right<ErrorClass, SeatingAreaEntity>(i);
     } catch (e) {
-      if (typeof ApiError.emailExist) {
-        return Left<ErrorClass, SeatingAreaEntity>(ApiError.emailExist());
+      if (typeof ApiError.dataExists) {
+        return Left<ErrorClass, SeatingAreaEntity>(ApiError.dataExists());
       }
 
       return Left<ErrorClass, SeatingAreaEntity>(ApiError.badRequest());

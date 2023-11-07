@@ -24,7 +24,7 @@ export class ReservationTagDataSourceImpl implements ReservationTagDataSource {
       outletId: reservationTag.outletId,
     });
     if (existingReservationTag) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
     const reservationTagData = new ReservationTag(reservationTag);
 
