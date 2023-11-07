@@ -20,6 +20,7 @@ export default {
   from: process.env.FROM,
   password: process.env.PASSWORD,
   apiUrl:process.env.APIURL,
-accessToken:process.env.ACCESS_TOKEN
+accessToken:process.env.ACCESS_TOKEN,
+ phoneNumberId:process.env.PHONE_NUMBER_ID
 };
 
