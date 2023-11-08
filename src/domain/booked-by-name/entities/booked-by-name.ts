@@ -34,7 +34,7 @@ export class BookedByNameMapper {
             : existingBookedByName.name,
         outletId:
           bookedByNameData.outletId !== undefined
-            ? bookedByNameData.outletId
+            ? { _id: bookedByNameData.outletId }
             : existingBookedByName.outletId,
         updatedBy:
           bookedByNameData.updatedBy !== undefined
@@ -53,7 +53,7 @@ export class BookedByNameMapper {
             : undefined
           : bookedByNameData._id.toString(),
         name: bookedByNameData.name,
-        outletId: bookedByNameData.outletId,
+        outletId: {_id: bookedByNameData.outletId},
         updatedBy: { _id: bookedByNameData.updatedBy },
         createdBy: { _id: bookedByNameData.createdBy },
       };
