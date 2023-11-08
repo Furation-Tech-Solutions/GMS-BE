@@ -49,6 +49,8 @@ export class BookedByNameService {
           createdBy:user._id,
           updatedBy:user._id
          }
+
+         
         const bookedByNameData: BookedByNameModel = BookedByNameMapper.toModel(newCreatedBookedByName);
     
         const newBookedByName: Either<ErrorClass, BookedByNameEntity> =
