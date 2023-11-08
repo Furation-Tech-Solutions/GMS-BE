@@ -25,7 +25,7 @@ class EmailService {
     async sendEmail(emailOption:EmailOptions): Promise<void> {
         
         const mailOptions = {
-            from: env.user,
+            from: "reserfirst",
             to: emailOption.email,
             subject: emailOption.subject,
             html:emailOption.message || "",
@@ -34,7 +34,7 @@ class EmailService {
         try {
             // console.log(mailOptions,"mailoption")
             await this.transporter.sendMail(mailOptions);
-            // console.log("Email sent successfully");
+            console.log("Email sent successfully",mailOptions);
         } catch (error) {
             console.error("Error sending email:", error);
             throw error;

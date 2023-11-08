@@ -17,11 +17,13 @@ class WhatsAppService {
  
   async sendWhatsAppMessage(recipient: string, message: any): Promise<any> {
     const accesstoken=env.accessToken
+    const phoneNumberId=env.phoneNumberId
     const headers = {
-      Authorization: `Bearer EAAIjVZA1T21gBOyxqFTDaFmE2cyDYZCnZAMt7ofZBvajNgnMWsHjfcNJcQdt9dp0MX3jdO0zNZCuL8yF9JCqOVDrEM4FU4i1CO8fuT0lwecun4vvchFUCJWu984nfyPZBgpR6ki0FKsyIDx6BzVNv8dpEG9nfoO49MRZBPecJVIHjtrehb5EZAcPljQZBY8f8gRybQMUhI68fxbF8kWIZCZAT7ZCSWVYLwW68UFCV1TaErAZD`,
+      Authorization: `Bearer ${accesstoken}`,
       'Content-Type': 'application/json',
     };
-    const apiurl:string=env.apiUrl??"https://graph.facebook.com/v17.0/121686631017880/messages"
+    // const apiurl:string=env.apiUrl??"https://graph.facebook.com/v17.0/121686631017880/messages"
+     const apiurl:string=`https://graph.facebook.com/v17.0/${phoneNumberId}/messages`??"https://graph.facebook.com/v17.0/151367741389078/messages"
 
     const whatsappData = {
       "messaging_product": "whatsapp",
@@ -33,8 +35,7 @@ class WhatsAppService {
     }
 
     try {
-      const response= await axios.post("https://graph.facebook.com/v17.0/151367741389078/messages", whatsappData, { headers });
-      // console.log(response,"response of whatsapp data")
+      const response= await axios.post(apiurl, whatsappData, { headers });
       return response.data;
     } catch (error) {
       throw error;
