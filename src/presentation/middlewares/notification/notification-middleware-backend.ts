@@ -56,7 +56,7 @@ export async function sendNotification(title: string) {
               });
 
             });
-  
+    
             const failures = response.responses.filter((result: any) => !result.success);
   
             failures.forEach((result: any) => {
