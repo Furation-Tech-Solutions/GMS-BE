@@ -16,7 +16,7 @@ export class ReservationTagRepositoryImpl implements ReservationTagRepository {
             return Right<ErrorClass, ReservationTagEntity>(createdTag);
         } catch (error) {
             if (error instanceof ApiError && error.name === "conflict") {
-                return Left<ErrorClass, ReservationTagEntity>(ApiError.emailExist());
+                return Left<ErrorClass, ReservationTagEntity>(ApiError.dataExists());
             }
             return Left<ErrorClass, ReservationTagEntity>(ApiError.badRequest());
         }

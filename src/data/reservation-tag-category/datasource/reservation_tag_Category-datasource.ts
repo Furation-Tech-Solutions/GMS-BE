@@ -11,7 +11,7 @@ export interface ReservationTagCategoryDataSource {
   ): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(outletId:string): Promise<any[]>;
+  getAll(outletId: string): Promise<any[]>;
 }
 
 export class ReservationTagCategoryDataSourceImpl
@@ -22,16 +22,17 @@ export class ReservationTagCategoryDataSourceImpl
   async create(
     reservationTagCategory: ReservationTagCategoryModel
   ): Promise<any> {
-    try {
+    // try {
       const existingReservationTagCategory =
         await ReservationTagCategory.findOne({
           name: reservationTagCategory.name,
+          outletId: reservationTagCategory.outletId,
         }).populate({
           path: "tags",
           select: "id name",
         });
       if (existingReservationTagCategory) {
-        throw ApiError.emailExist();
+        throw ApiError.dataExists();
       }
       const reservationTagCategoryData = new ReservationTagCategory(
         reservationTagCategory
@@ -39,9 +40,9 @@ export class ReservationTagCategoryDataSourceImpl
       const createdReservationTagCategory =
         await reservationTagCategoryData.save();
       return createdReservationTagCategory.toObject();
-    } catch (error) {
-      throw ApiError.badRequest();
-    }
+    // } catch (error) {
+    //   throw ApiError.badRequest();
+    // }
   }
 
   async delete(id: string): Promise<void> {
@@ -66,13 +67,14 @@ export class ReservationTagCategoryDataSourceImpl
     }
   }
 
-  async getAll(outletId:string): Promise<any[]> {
+  async getAll(outletId: string): Promise<any[]> {
     try {
-      const reservationTagCategories =
-        await ReservationTagCategory.find({outletId:outletId}).populate({
-          path: "tags",
-          select: "id name",
-        });
+      const reservationTagCategories = await ReservationTagCategory.find({
+        outletId: outletId,
+      }).populate({
+        path: "tags",
+        select: "id name",
+      });
       return reservationTagCategories.map((reservationTagCategory) =>
         reservationTagCategory.toObject()
       );

@@ -21,7 +21,7 @@ const seatingAreaSchema = new mongoose.Schema({
     required: true,
     maxLength: [30, "Sating area name should be under 30 Characters"],
     trim: true,
-    unique: true,
+    // unique: true,
   },
   tables: [
     {

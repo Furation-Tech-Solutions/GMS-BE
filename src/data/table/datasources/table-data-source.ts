@@ -16,7 +16,10 @@ export class TableDataSourceImpl implements TableDataSource {
   constructor(private db: mongoose.Connection) {}
 
   async create(table: TableModel): Promise<any> {
-    const existingTable = await Table.findOne({ tableNo: table.tableNo });
+    const existingTable = await Table.findOne({
+      tableNo: table.tableNo,
+      outletId: table.outletId,
+    });
 
     if (existingTable) {
       throw ApiError.customError(409, "table already exist");

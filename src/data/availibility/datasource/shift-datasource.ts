@@ -27,6 +27,9 @@ export class ShiftDataSourceImpl implements ShiftDataSource {
           startDate: { $lte: shift.endDate }, // New shift's end date is after or equal to the existing shift's start date
           endDate: { $gte: shift.startDate }, // New shift's start date is before or equal to the existing shift's end date
         },
+        {
+          outletId: shift.outletId,
+        },
       ],
     });
 

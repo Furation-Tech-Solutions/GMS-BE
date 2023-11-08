@@ -11,7 +11,7 @@ export interface ReservationTagDataSource {
   update(id: string, tagCategory: ReservationTagModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
-  getAll(outletId:string): Promise<any[]>;
+  getAll(outletId: string): Promise<any[]>;
 }
 
 // Tag Data Source communicates with the database
@@ -21,9 +21,10 @@ export class ReservationTagDataSourceImpl implements ReservationTagDataSource {
   async create(reservationTag: ReservationTagModel): Promise<any> {
     const existingReservationTag = await ReservationTag.findOne({
       name: reservationTag.name,
+      outletId: reservationTag.outletId,
     });
     if (existingReservationTag) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
     const reservationTagData = new ReservationTag(reservationTag);
 
@@ -67,9 +68,11 @@ export class ReservationTagDataSourceImpl implements ReservationTagDataSource {
     return reservationTag ? reservationTag.toObject() : null; // Convert to a plain JavaScript object before returning
   }
 
-  async getAll(outletId:string): Promise<any[]> {
+  async getAll(outletId: string): Promise<any[]> {
     try {
-      const reservationTag = await ReservationTag.find({outletId:outletId}).populate({
+      const reservationTag = await ReservationTag.find({
+        outletId: outletId,
+      }).populate({
         path: "categoryNameId", // Populate the categoryNameId field in reservationTags
         select: "id name color",
       });

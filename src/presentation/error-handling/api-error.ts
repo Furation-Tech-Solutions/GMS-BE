@@ -170,8 +170,11 @@ class ApiError extends ErrorClass {
   static clientExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
   }
+  static dataExists(): ApiError {
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.DATA_CONFLICT, "conflict");
+  }
   static clienttagExist(): ApiError {
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.DATA_CONFLICT, "conflict");
   }
   static guestExist(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");

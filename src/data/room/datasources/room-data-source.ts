@@ -16,9 +16,12 @@ export class RoomDataSourceImpl implements RoomDataSource {
   constructor(private db: mongoose.Connection) {}
 
   async create(room: RoomModel): Promise<any> {
-    const existingRoom = await Room.findOne({ roomName: room.roomName });
+    const existingRoom = await Room.findOne({
+      roomName: room.roomName,
+      outletId: room.outletId,
+    });
     if (existingRoom) {
-      throw ApiError.emailExist();
+      throw ApiError.dataExists();
     }
 
     const roomData = new Room(room);

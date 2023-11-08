@@ -8,7 +8,7 @@ const reservationTagSchema = new mongoose.Schema({
     minlength: [3, "Name should have at least 3 characters"],
     maxlength: [30, "Name should have less than 30 characters"],
     required: [true, "Please enter a name"],
-    unique: true,
+    // unique: true,
     trim: true,
   },
   categoryNameId: {
