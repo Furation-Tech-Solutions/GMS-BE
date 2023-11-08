@@ -50,7 +50,7 @@ export class BookedByNameService {
           updatedBy:user._id
          }
 
-         
+
         const bookedByNameData: BookedByNameModel = BookedByNameMapper.toModel(newCreatedBookedByName);
     
         const newBookedByName: Either<ErrorClass, BookedByNameEntity> =
@@ -73,10 +73,10 @@ export class BookedByNameService {
       ): Promise<void> {
         // Call the GetAllAdminsUsecase to get all admins
         const outletId=req.outletId as string
-        const admins: Either<ErrorClass, BookedByNameEntity[]> =
+        const boookbyName: Either<ErrorClass, BookedByNameEntity[]> =
           await this.getAllBookedByNameUsecase.execute(outletId);
     
-        admins.cata(
+          boookbyName.cata(
           (error: ErrorClass) =>
             res.status(error.status).json({ error: error.message }),
           (bookedByNameList: BookedByNameEntity[]) => {
@@ -85,6 +85,8 @@ export class BookedByNameService {
           }
         );
       }
+
+      
       async updateName(req: Request, res: Response): Promise<void> {
         
           const nameId: string = req.params.nameId;
