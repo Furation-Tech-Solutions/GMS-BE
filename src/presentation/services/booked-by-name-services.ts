@@ -49,8 +49,6 @@ export class BookedByNameService {
           createdBy:user._id,
           updatedBy:user._id
          }
-
-
         const bookedByNameData: BookedByNameModel = BookedByNameMapper.toModel(newCreatedBookedByName);
     
         const newBookedByName: Either<ErrorClass, BookedByNameEntity> =
@@ -86,7 +84,7 @@ export class BookedByNameService {
         );
       }
 
-      
+
       async updateName(req: Request, res: Response): Promise<void> {
         
           const nameId: string = req.params.nameId;
