@@ -967,6 +967,7 @@
             "107": "Ability to view, edit, create, and delete guestlist",
             "108": "Ability to convert requests to reservation",
             "109": "Block table",
+            "110": "Ability to edit user",
             "201": "Ability to create sub-manager",
             "202": "Ability to add a reservation along with table no, reservation tags",
             "203": "Ability to update a reservation along with table no, reservation tags",
@@ -976,12 +977,15 @@
             "207": "Ability to view, edit, create, and delete guestlist",
             "208": "Ability to convert requests to reservation",
             "209": "Block table",
+            "210": "Ability to edit user",
             "301": "Ability to add a reservation",
             "302": "Ability to delete a reservation with unassigned status",
             "303": "Ability to update a reservation with unassigned status",
             "304": "Ability to update a reservation with left status for pre-payment and on-site spend",
             "305": "Ability to view, edit, create, and delete guestlist",
-            "306": "Ability to view, edit, and create clients"
+            "306": "Ability to view, edit, and create clients",
+            "307": "Ability to edit user"
+
      
     }
 ]

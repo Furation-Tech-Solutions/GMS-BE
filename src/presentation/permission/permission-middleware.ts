@@ -27,6 +27,10 @@ const unableToDelete=(res:Response)=>{
   res.status(unAuthorized.status).json({ message: "you are not assignable to delete reservation" });
 
 }
+const suspendedUser = (res: Response) => {
+  const unAuthorized = ApiError.unAuthorized();
+  res.status(unAuthorized.status).json({ message: "you are not assignable to suspend user"});
+};
 export const checkPermission = (requiredPermission: number[]=[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -79,6 +83,14 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
           unauthorizedResponse(res);
           return;
         }
+        console.log("in manager if")
+        if(req.body.managerSettings?.suspended){
+        
+          console.log("unauthorized in permision")
+          suspendedUser(res);
+          return;
+        }
+        
       }
 
       if (permittedUser.accessLevel === AccessLevel.SubManager) {
@@ -123,6 +135,12 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
                  }
             }
         }
+        console.log(req.body,"req.body is this")
+        if(req.body.managerSettings?.suspended){
+          console.log("unauthorized in permision")
+          suspendedUser(res);
+          return;
+        }
 
           }
           
@@ -152,6 +170,7 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
       }
     
     } catch (error) {
+      console.log(error)
       const internalError = ApiError.internalError();
       res.status(internalError.status).json({ message: internalError.message });
     }

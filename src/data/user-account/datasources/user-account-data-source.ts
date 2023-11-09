@@ -91,6 +91,7 @@ async update(id: string, user_account: UserModel): Promise<any> {
       }); // No need for conversion here
       return updatedUserAccount ? updatedUserAccount.toObject() : null; // Convert to a plain JavaScript object before returning
   } catch (error) {
+    console.log(error)
       throw ApiError.badRequest();
   }
 }
