@@ -2,6 +2,7 @@
 export class BookedByNameModel {
   constructor(
     public name: string = "",
+    public outletId: string | { _id: string } | undefined = "",
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined
   ) {}
@@ -12,6 +13,7 @@ export class BookedByNameEntity {
   constructor(
     public _id: string | undefined = undefined,
     public name: string,
+    public outletId: string | { _id: string } | undefined ,
     public updatedBy: string | { _id: string } | undefined,
     public createdBy: string | { _id: string } | undefined
   ) {}
@@ -30,6 +32,10 @@ export class BookedByNameMapper {
           bookedByNameData.name !== undefined
             ? bookedByNameData.name
             : existingBookedByName.name,
+        outletId:
+          bookedByNameData.outletId !== undefined
+            ? { _id: bookedByNameData.outletId }
+            : existingBookedByName.outletId,
         updatedBy:
           bookedByNameData.updatedBy !== undefined
             ? { _id: bookedByNameData.updatedBy }
@@ -47,6 +53,7 @@ export class BookedByNameMapper {
             : undefined
           : bookedByNameData._id.toString(),
         name: bookedByNameData.name,
+        outletId: {_id: bookedByNameData.outletId},
         updatedBy: { _id: bookedByNameData.updatedBy },
         createdBy: { _id: bookedByNameData.createdBy },
       };
@@ -57,6 +64,7 @@ export class BookedByNameMapper {
   static toModel(bookedByName: BookedByNameEntity): BookedByNameModel {
     return {
       name: bookedByName.name,
+      outletId: bookedByName.outletId,
       updatedBy: bookedByName.updatedBy,
       createdBy: bookedByName.createdBy,
     };

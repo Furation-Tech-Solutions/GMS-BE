@@ -60,7 +60,7 @@ outletRouter.get(
 
 //Route hanndling for getOutlets
 outletRouter.get(
-  "/getAllOutlets",verifyLoggedInUser,outletService.getAllOutlets.bind(outletService)
+  "/getAllOutlets", outletService.getAllOutlets.bind(outletService)
 );
 
 outletRouter.put(

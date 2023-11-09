@@ -13,10 +13,9 @@ import { MongoDB } from 'winston-mongodb'
 
 const myFormat = printf(({ level, message, timestamp, sessionId }: {level:string, message:string, timestamp:string, sessionId?: string}) => {
   const sessionIdInfo = sessionId ? `Session ID: ${sessionId}` : '';
-  console.log('Session ID:', sessionId);
+  // console.log('Session ID:', sessionId);
     return ` [${level}] ${timestamp} : ${message} ${sessionId}`;
 });
-
 
 
 export const ReservationLogger = (): any => {
@@ -39,6 +38,10 @@ export const ReservationLogger = (): any => {
               useNewUrlParser: true,
               useUnifiedTopology: true,
             },
+            format: combine( // Define a separate format for MongoDB
+            timestamp(),
+            json() // This will include additional fields as JSON in the log entry
+          ),
         }),
         ],
       }); 

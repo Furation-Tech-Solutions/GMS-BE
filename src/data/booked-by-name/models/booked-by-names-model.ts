@@ -5,6 +5,10 @@ const bookedByNameSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  outletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Outlet"
+  },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserAccount",

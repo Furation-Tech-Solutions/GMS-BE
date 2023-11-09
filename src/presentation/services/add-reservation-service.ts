@@ -192,6 +192,7 @@ export class AddReservationServices {
     );
   }
 
+
   async getAllAddReservation(
     req: Request,
     res: Response,
@@ -466,6 +467,9 @@ export class AddReservationServices {
     try {
       const outletId = req.outletId as string;
       const reservtionId = req.query.id as string;
+      // const date = req.query.date as string
+      // const shift = req.query.shift as string
+      // const time = req.query.time as string
 
       const getReservationById = await this.addReservationDataSourceImpl.read(
         reservtionId
@@ -511,11 +515,10 @@ export class AddReservationServices {
           // const reservedTableIds: any[] = responseData
           //   .map((reservation) => reservation.table)
           //   .filter((tableId) => tableId !== undefined);
-
+  
           const reservedTableIds: any[] = responseData
             .map((reservation) => reservation.table)
-            .flat();
-
+            .flat(); 
 
 
           const availableTables = allTables.filter((table: any) => {
