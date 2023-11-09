@@ -174,11 +174,11 @@ export class BookingRequestServices {
             );
           });
         }
-        if (!responseData || responseData.length === 0) {
-          return res
-            .status(HttpStatus.NOT_FOUND)
-            .json({ message: ErrorMessage.NOT_FOUND });
-        }
+        // if (!responseData || responseData.length === 0) {
+        //   return res
+        //     .status(HttpStatus.NOT_FOUND)
+        //     .json({ message: ErrorMessage.NOT_FOUND });
+        // }
 
         return res.json(responseData);
       }
