@@ -29,6 +29,8 @@ import { superAdminRouter } from "@presentation/routes/super-admin-routes";
 import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
 import { sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
 import logger from "@presentation/logger";
+import { logTime } from "@presentation/utils/logs-time-format";
+import { loggerService, loggsRoute } from "@presentation/routes/logger-routes";
 
 
 
@@ -36,7 +38,10 @@ export default (app: Express): void => {
   const router = Router();
 
   app.get("/health", (req, res) => {
-    
+
+    const log = loggerService.createLogs({level: 'info', timestamp: `${logTime()}`, message: 'Reservations '})
+    console.log(log);
+
     const sessionId = "1234";
     logger.info('This is an info message', { sessionId } )
     res.status(200).json({ message: "ok" });
@@ -74,6 +79,7 @@ export default (app: Express): void => {
   app.use("/api/v1/reservation/tag", reservationTagRouter);
   app.use("/api/v1", notificationRouter);
   app.use("/api/v1/check", checkInCheckOutRouter);
+  app.use("/api/v1", loggsRoute);
 
   app.use(router);
 };

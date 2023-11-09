@@ -9,6 +9,8 @@ import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type";
 import { Table } from "@data/table/models/table-model";
 import logger from "@presentation/logger";
 import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
+import { logTime } from "@presentation/utils/logs-time-format";
+import { loggerService } from "@presentation/routes/logger-routes";
 
 export interface AddReservationDataSource {
   create(addReservation: AddReservationModel): Promise<any>;
@@ -229,6 +231,23 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         new: true,
       }
     );
+
+    /*  Logger to log the updation on reservation */
+
+    if(existResevation?.reservationStatus !== updatedAddReservation?.reservationStatus) {
+
+      const log = loggerService.createLogs(
+        {
+         level: 'info',
+         timestamp: `${logTime()}`, 
+         message: `Reservation status changed from ${existResevation?.reservationStatus} to  ${updatedAddReservation?.reservationStatus}`,
+         reservation:id
+        }
+        )
+
+    }
+
+      /** End of */
 
     if (addReservation.prePayment !== 0 || addReservation.onSitePayment !== 0) {
       if (existClient) {
