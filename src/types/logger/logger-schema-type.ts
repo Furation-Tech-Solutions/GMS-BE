@@ -8,3 +8,16 @@ export interface ILogger {
     client: mongoose.Schema.Types.ObjectId;
     reservation: mongoose.Schema.Types.ObjectId;
 }
+
+export interface ILoggerData {
+    level: string;
+    timestamp: string;
+    message: string;
+    client?: string;
+    reservation?:string;
+}
+
+export interface IlogsFilter {
+    client?: string;
+    reservation?: string;
+}
