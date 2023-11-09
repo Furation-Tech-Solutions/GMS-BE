@@ -24,12 +24,13 @@ const userEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTem
   .replace("[User Password]", result.randomPassword)
   return emailContent;     
 }
-export async function bookingRequestTemplate(result: any,date:any,startTime:any): Promise<string> {
+export async function bookingRequestTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
   const fullName=result.client.firstName+" "+result.client.lastName
   // const date=await formatDate(result.date)
   // const date="12121"
   // const startTime =await  formatTime(result.timeSlot);
-  const bookingRequestEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/under_process_reservation.html`);
+  console.log(outlet,"outletName")
+  const bookingRequestEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/under_process_reservation.html`);
     const emailContent = bookingRequestEmailTemplate
     // .replace("[User's First Name]", result.firstName)
     .replace("[Client's Full Name]", result.client.firstName)
@@ -40,9 +41,10 @@ export async function bookingRequestTemplate(result: any,date:any,startTime:any)
     return emailContent;     
   }
 
-export async function confirmReservationTemplate(result: any,date:any,startTime:any): Promise<string> {
+export async function confirmReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/confirm_reservation.html`);
+  console.log("outlet",outlet)
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/confirm_reservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
@@ -63,9 +65,9 @@ export async function confirmReservationTemplate(result: any,date:any,startTime:
   return emailContent 
 }
 
-export async function cancelReservationTemplate(result: any,date:any,startTime:any): Promise<string> {
+export async function cancelReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/cancelReservation.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/cancelReservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
@@ -84,9 +86,9 @@ export async function cancelReservationTemplate(result: any,date:any,startTime:a
    
   return emailContent 
 }
-export async function leftReservationTemplate(result: any,date:any,startTime:any): Promise<string> {
+export async function leftReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/leftReservation.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/leftReservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName=result.client.firstName+" "+result.client.lastName
@@ -108,9 +110,9 @@ export async function leftReservationTemplate(result: any,date:any,startTime:any
   return emailContent 
 }
 
-export async function reminderEmailTemplate(result: any,date:any,startTime:any): Promise<string> {
+export async function reminderEmailTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reminder_email.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/reminder_email.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName

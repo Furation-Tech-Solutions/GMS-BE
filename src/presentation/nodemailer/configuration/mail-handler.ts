@@ -55,16 +55,16 @@ class EmailHandler {
       const addReservation = await getAddReservationByIdUsecase.read(id);
 
       const outlet = await outletDataSourceImpl.getById(addReservation.outletId._id)
+      const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
 
 
       if (addReservation.reservationStatus === "unassigned" || addReservation.reservationStatus === "UNASSIGNED") {
-        console.log('unassigned 1')
         const date = formatDate(addReservation.date)
         const startTime = formatTime(addReservation.timeSlot);
-        const emailContent = await bookingRequestTemplate(addReservation, date, startTime);
+        const emailContent = await bookingRequestTemplate(addReservation, date, startTime,outletName);
+
 
         const emailOption = {
-          // email:,
           email: addReservation.client.email,
           subject: "Booking Request Confirmation",
           message: emailContent,
@@ -124,12 +124,12 @@ class EmailHandler {
         }
       }
       else if (addReservation.reservationStatus === "confirmed" || addReservation.reservationStatus === "CONFIRMED") {
-        console.log('confirmed 2')
         const date = await formatDate(addReservation.date)
 
         const startTime = await formatTime(addReservation.timeSlot);
 
-        const emailContent = await confirmReservationTemplate(addReservation, date, startTime);
+        const emailContent = await confirmReservationTemplate(addReservation, date, startTime,outletName);
+        
         const emailOption = {
           // email:addReservation.client.email,
           email: addReservation.client.email,
@@ -200,7 +200,7 @@ class EmailHandler {
         const date = await formatDate(addReservation.date)
         // const date="12121"
         const startTime = await formatTime(addReservation.timeSlot);
-        const emailContent = await cancelReservationTemplate(addReservation, date, startTime);
+        const emailContent = await cancelReservationTemplate(addReservation, date, startTime,outletName);
         const emailOption = {
           // email:addReservation.client.email,
           email: addReservation.client.email,
@@ -261,11 +261,10 @@ class EmailHandler {
         }
       }
       else if (addReservation.reservationStatus === "left" || addReservation.reservationStatus === 'LEFT' || addReservation.reservationStatus === "Left") {
-        console.log("left 4")
 
         const date = formatDate(addReservation.date)
         const startTime = formatTime(addReservation.timeSlot);
-        const emailContent = await leftReservationTemplate(addReservation, date, startTime);
+        const emailContent = await leftReservationTemplate(addReservation, date, startTime,outletName);
         const emailOption = {
           // email:addReservation.client.email,
           email: addReservation.client.email,
@@ -308,10 +307,7 @@ class EmailHandler {
                   "type": "text",
                   "text": `${addReservation.seatingArea.seatingAreaName}`
                 },
-                {
-                  "type": "text",
-                  "text": `${addReservation.serverName}`
-                }, {
+                 {
                   "type": "text",
                   "text": `+91 ${outlet.phone}`
                 }, {
@@ -343,11 +339,13 @@ class EmailHandler {
     try {
       const addReservation = await getAddReservationByIdUsecase.read(user);
       const outlet = await outletDataSourceImpl.getById(addReservation.outletId._id)
+      const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
+
 
       const date = await formatDate(addReservation.date)
       // const date="12121"
       const startTime = await formatTime(addReservation.timeSlot);
-      const emailContent = await reminderEmailTemplate(addReservation, date, startTime);
+      const emailContent = await reminderEmailTemplate(addReservation, date, startTime,outletName);
       const emailOption = {
         // email:addReservation.client.email,
         email: addReservation.client.email,
