@@ -55,11 +55,11 @@ async createUser(req: Request, res: Response): Promise<void> {
     const outletId = req.outletId;
     let permissions: number[]=[]
     if (req.body.accessLevel === 'Superuser') {
-      permissions = [101,102,103,104,105,106,107,108,109]
+      permissions = [101,102,103,104,105,106,107,108,109,110]
     } else if (req.body.accessLevel === 'Manager') {
-      permissions = [201,202,203,204,205,206,207,208,209]
+      permissions = [201,202,203,204,205,206,207,208,209,210]
     } else if (req.body.accessLevel  === 'Sub-Manager') {
-      permissions = [301,302,303,304,305,306]
+      permissions = [301,302,303,304,305,306,307]
     }
     
     const newUserData={

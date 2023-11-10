@@ -17,11 +17,13 @@ const logSchema: Schema<ILogger> = new mongoose.Schema({
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
-    default: null
+    required: false,
+    default: null,
   },
   reservation: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "AddReservation",
+    required: false,
     default: null
   }
 

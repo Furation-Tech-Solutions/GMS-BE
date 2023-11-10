@@ -42,6 +42,9 @@ import {
   sendNotificationExample,
 } from "@presentation/middlewares/notification/notification-middleware-backend";
 
+import { logTime } from "@presentation/utils/logs-time-format";
+import { loggerService } from "@presentation/routes/logger-routes";
+
 export class AddReservationServices {
   private readonly createAddReservationUsecase: CreateAddReservationUsecase;
   private readonly deleteAddReservationUsecase: DeleteAddReservationUsecase;
@@ -115,9 +118,18 @@ export class AddReservationServices {
 
           const time = formatTimeAmPm(resData.timeSlot);
 
-          const title = logger.info(
-            `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
-          );
+          // const title = logger.info(
+          //   `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
+          // );
+
+          const log = loggerService.createLogs(
+            {
+             level: 'info',
+             timestamp: `${logTime()}`, 
+             message: `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`,
+             reservation: resData._id
+            }
+            )
       
       // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
           return res.json(resData);
