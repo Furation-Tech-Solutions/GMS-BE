@@ -6,7 +6,7 @@ import { SeatingArea } from "../models/seating-area-model";
 export interface SeatingAreaDataSource {
   create(seatingArea: SeatingAreaModel): Promise<any>;
   getById(id: string): Promise<any | null>;
-  getAllSeatingAreas(outletId:string): Promise<any[]>;
+  getAllSeatingAreas(outletId: string): Promise<any[]>;
   update(id: string, seatingArea: SeatingAreaModel): Promise<any>;
   delete(id: string): Promise<void>;
 }
@@ -16,7 +16,9 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
 
   async create(seatingArea: SeatingAreaModel): Promise<any> {
     const existingSeatingArea = await SeatingArea.findOne({
-      seatingAreaName: seatingArea.seatingAreaName,outletId:seatingArea.outletId
+      seatingAreaName: seatingArea.seatingAreaName,
+      outletId: seatingArea.outletId,
+      listOrder: seatingArea.listOrder,
     });
 
     if (existingSeatingArea) {
@@ -41,8 +43,10 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
     return seatingArea ? seatingArea.toObject() : null;
   }
 
-  async getAllSeatingAreas(outletId:string): Promise<any[]> {
-    const seatingAreas = await SeatingArea.find({outletId:outletId}).populate({
+  async getAllSeatingAreas(outletId: string): Promise<any[]> {
+    const seatingAreas = await SeatingArea.find({
+      outletId: outletId,
+    }).populate({
       path: "tables",
       select: "id tableNo partySizeMini partySizeMax",
     });
