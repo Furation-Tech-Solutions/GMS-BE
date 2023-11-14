@@ -19,6 +19,7 @@ export class RoomDataSourceImpl implements RoomDataSource {
     const existingRoom = await Room.findOne({
       roomName: room.roomName,
       outletId: room.outletId,
+      listOrder:room.listOrder
     });
     if (existingRoom) {
       throw ApiError.dataExists();
