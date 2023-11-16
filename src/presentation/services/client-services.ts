@@ -179,7 +179,7 @@ export class ClientServices {
 
           return sort === "1" ? dateB - dateA : dateA - dateB;
         });
-
+ 
         // Search
         if (search && typeof search === "string") {
           const regex = new RegExp(search, "i");
