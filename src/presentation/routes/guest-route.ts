@@ -70,6 +70,7 @@ guestRouter.get(
 guestRouter.get(
   "/",
   verifyLoggedInUser,
+  verifyOutlet,
   checkPermission([107, 207, 305]),
 
   guestService.getAllGuests.bind(guestService)

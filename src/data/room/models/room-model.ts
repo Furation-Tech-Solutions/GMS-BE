@@ -18,7 +18,7 @@ const roomSchema = new mongoose.Schema({
   listOrder: {
     type: Number,
     required: true,
-    unique: true,
+    // unique: true,
   },
   outletId: {
     type: mongoose.Schema.Types.ObjectId,

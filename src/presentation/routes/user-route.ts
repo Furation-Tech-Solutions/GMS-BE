@@ -73,6 +73,7 @@ userRouter.get(
 userRouter.patch(
     "/update/:userId",
     // validateUserAccountInputMiddleware(true),
+    checkPermission([110]),
     verifyLoggedInUser,
     userService.updateUser.bind(userService)
 );
