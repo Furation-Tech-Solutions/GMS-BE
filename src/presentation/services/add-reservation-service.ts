@@ -342,6 +342,7 @@ export class AddReservationServices {
         : undefined,
       updatedBy: user._id,
     };
+
     const addReservationData: AddReservationModel = newReservationData;
 
     const existingAddReservation: Either<ErrorClass, AddReservationEntity> =
@@ -382,6 +383,15 @@ export class AddReservationServices {
               await emailhandler.handleReservation(addReservationId);
             }
             // }
+
+            const log = loggerService.createLogs(
+              {
+               level: 'info',
+               timestamp: `${logTime()}`, 
+               message: `${user.firstName} updated the Reservation`,
+               reservation: resData._id
+              }
+              )
             res.json(resData);
           }
         );
