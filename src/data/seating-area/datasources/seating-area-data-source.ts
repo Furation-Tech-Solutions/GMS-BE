@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import { SeatingAreaModel } from "@domain/seating-area/entities/seating-area";
 import { SeatingArea } from "../models/seating-area-model";
+import * as HttpStatus from "@presentation/error-handling/http-status";
 
 export interface SeatingAreaDataSource {
   create(seatingArea: SeatingAreaModel): Promise<any>;
@@ -16,13 +17,29 @@ export class SeatingAreaDataSourceImpl implements SeatingAreaDataSource {
 
   async create(seatingArea: SeatingAreaModel): Promise<any> {
     const existingSeatingArea = await SeatingArea.findOne({
-      seatingAreaName: seatingArea.seatingAreaName,
       outletId: seatingArea.outletId,
-      listOrder: seatingArea.listOrder,
+      $or: [
+        { seatingAreaName: seatingArea.seatingAreaName },
+        { listOrder: seatingArea.listOrder },
+      ],
     });
 
+    // if (existingSeatingArea) {
+    //   throw ApiError.dataExists();
+    // }
+    
     if (existingSeatingArea) {
-      throw ApiError.dataExists();
+      if (existingSeatingArea.seatingAreaName === seatingArea.seatingAreaName) {
+        throw ApiError.customError(
+          HttpStatus.CONFLICT,
+          "Seating Area with the same name already exists"
+        );
+      } else {
+        throw ApiError.customError(
+          HttpStatus.CONFLICT,
+          "Seatirng Area with the same list order already exists"
+        );
+      }
     }
 
     const seatingAreaData = new SeatingArea(seatingArea);
