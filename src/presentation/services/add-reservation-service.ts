@@ -132,7 +132,7 @@ export class AddReservationServices {
             )
       
       // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
-          return res.json(resData);
+          return res.status(201).json(resData);
         }
       );
     } catch (err) {
@@ -150,7 +150,7 @@ export class AddReservationServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({
+        return res.status(204).json({
           message: "Reservation deleted successfully.",
         });
       }
@@ -353,7 +353,7 @@ export class AddReservationServices {
       },
       async (existingAddReservationData: AddReservationEntity) => {
         if (existingAddReservationData === null) {
-          return res.json({ message: "Reservation not found." });
+          return res.status(404).json({ message: "Reservation not found." });
         }
         const updatedAddReservationEntity: AddReservationEntity =
           AddReservationMapper.toEntity(
@@ -428,7 +428,7 @@ export class AddReservationServices {
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
 
-        console.log(addReservations, "addReservations");
+        // console.log(addReservations, "addReservations");
 
       addReservations.cata(
         (error: ErrorClass) =>
