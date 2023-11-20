@@ -93,84 +93,83 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async delete(id: string): Promise<void> {
-  // Find and delete the CheckInCheckOut record associated with the given reservation ID
-  await CheckInCheckOut.findOneAndDelete({
-    reservation: id,
-  });
+    // Find and delete the CheckInCheckOut record associated with the given reservation ID
+    await CheckInCheckOut.findOneAndDelete({
+      reservation: id,
+    });
 
-  // Find and delete the reservation using the provided ID
-  await AddReservation.findByIdAndDelete(id);
-}
+    // Find and delete the reservation using the provided ID
+    await AddReservation.findByIdAndDelete(id);
+  }
 
-async read(id: string): Promise<any | null> {
-  // Find a reservation document by its unique ID and populate its related fields
-  const addReservation = await AddReservation.findById(id)
-    .populate({
-      path: "shift", // Populate the 'shift' field
-      select: "id shiftName shiftCategory", // Select specific fields
-    })
-    .populate({
-      path: "client", // Populate the 'client' field
-      select: "id firstName lastName phone email", // Select specific fields
-    })
-    .populate({
-      path: "table", // Populate the 'table' field
-      select: "id tableNo partySizeMini partySizeMax tableCombinations", // Select specific fields
-    })
-    .populate({
-      path: "seatingArea", // Populate the 'seatingArea' field
-      select: "id abbreviation seatingAreaName", // Select specific fields
-    })
-    .populate({
-      path: "reservationTags", // Populate the 'reservationTags' field
-      select: "id name categoryNameId", // Select specific fields
-      populate: {
-        path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
-        select: "id name color", // Select specific fields
-        model: "ReservationTagCategory", // Reference to the Category model
-      },
-    })
-    .exec(); // Execute the query
+  async read(id: string): Promise<any | null> {
+    // Find a reservation document by its unique ID and populate its related fields
+    const addReservation = await AddReservation.findById(id)
+      .populate({
+        path: "shift", // Populate the 'shift' field
+        select: "id shiftName shiftCategory", // Select specific fields
+      })
+      .populate({
+        path: "client", // Populate the 'client' field
+        select: "id firstName lastName phone email", // Select specific fields
+      })
+      .populate({
+        path: "table", // Populate the 'table' field
+        select: "id tableNo partySizeMini partySizeMax tableCombinations", // Select specific fields
+      })
+      .populate({
+        path: "seatingArea", // Populate the 'seatingArea' field
+        select: "id abbreviation seatingAreaName", // Select specific fields
+      })
+      .populate({
+        path: "reservationTags", // Populate the 'reservationTags' field
+        select: "id name categoryNameId", // Select specific fields
+        populate: {
+          path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
+          select: "id name color", // Select specific fields
+          model: "ReservationTagCategory", // Reference to the Category model
+        },
+      })
+      .exec(); // Execute the query
 
-  // Check if a reservation document was found, if so, convert it to a plain JavaScript object, otherwise return null
-  return addReservation ? addReservation.toObject() : null;
-}
+    // Check if a reservation document was found, if so, convert it to a plain JavaScript object, otherwise return null
+    return addReservation ? addReservation.toObject() : null;
+  }
 
+  async getAll(filter: IRFilter | Icron): Promise<any[]> {
+    // Find all reservation documents based on the provided filter and populate their related fields
+    const addReservations = await AddReservation.find(filter)
+      .populate({
+        path: "shift", // Populate the 'shift' field
+        select:
+          "id shiftName shiftCategory startDate endDate firstSeating lastSeating timeInterval", // Select specific fields
+      })
+      .populate({
+        path: "client", // Populate the 'client' field
+        select: "id salutation firstName lastName phone email gender isClient", // Select specific fields
+      })
+      .populate({
+        path: "table", // Populate the 'table' field
+        select: "id tableNo partySizeMini partySizeMax", // Select specific fields
+      })
+      .populate({
+        path: "seatingArea", // Populate the 'seatingArea' field
+        select: "id abbreviation seatingAreaName", // Select specific fields
+      })
+      .populate({
+        path: "reservationTags", // Populate the 'reservationTags' field
+        select: "id name categoryNameId", // Select specific fields
+        populate: {
+          path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
+          select: "id name color", // Select specific fields
+          model: "ReservationTagCategory", // Reference to the Category model
+        },
+      })
+      .exec(); // Execute the query
 
-async getAll(filter: IRFilter | Icron): Promise<any[]> {
-  // Find all reservation documents based on the provided filter and populate their related fields
-  const addReservations = await AddReservation.find(filter)
-    .populate({
-      path: "shift", // Populate the 'shift' field
-      select: "id shiftName shiftCategory startDate endDate firstSeating lastSeating timeInterval", // Select specific fields
-    })
-    .populate({
-      path: "client", // Populate the 'client' field
-      select: "id salutation firstName lastName phone email gender isClient", // Select specific fields
-    })
-    .populate({
-      path: "table", // Populate the 'table' field
-      select: "id tableNo partySizeMini partySizeMax", // Select specific fields
-    })
-    .populate({
-      path: "seatingArea", // Populate the 'seatingArea' field
-      select: "id abbreviation seatingAreaName", // Select specific fields
-    })
-    .populate({
-      path: "reservationTags", // Populate the 'reservationTags' field
-      select: "id name categoryNameId", // Select specific fields
-      populate: {
-        path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
-        select: "id name color", // Select specific fields
-        model: "ReservationTagCategory", // Reference to the Category model
-      },
-    })
-    .exec(); // Execute the query
-
-  // Convert all reservation documents found to plain JavaScript objects and return as an array
-  return addReservations.map((addReservation) => addReservation.toObject());
-}
-
+    // Convert all reservation documents found to plain JavaScript objects and return as an array
+    return addReservations.map((addReservation) => addReservation.toObject());
+  }
 
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
     const existResevation = await AddReservation.findById(id);
@@ -252,7 +251,29 @@ async getAll(filter: IRFilter | Icron): Promise<any[]> {
       {
         new: true,
       }
-    );
+    )
+      .populate({
+        path: "client", // Populate the 'client' field
+        select: "id salutation firstName lastName phone email gender isClient", // Select specific fields
+      })
+      .populate({
+        path: "table", // Populate the 'table' field
+        select: "id tableNo partySizeMini partySizeMax", // Select specific fields
+      })
+      .populate({
+        path: "seatingArea", // Populate the 'seatingArea' field
+        select: "id abbreviation seatingAreaName", // Select specific fields
+      })
+      .populate({
+        path: "reservationTags", // Populate the 'reservationTags' field
+        select: "id name categoryNameId", // Select specific fields
+        populate: {
+          path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
+          select: "id name color", // Select specific fields
+          model: "ReservationTagCategory", // Reference to the Category model
+        },
+      })
+      .exec();
 
     /*  Logger to log the updation on reservation */
 
