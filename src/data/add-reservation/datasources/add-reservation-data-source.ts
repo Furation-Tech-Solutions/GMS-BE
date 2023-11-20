@@ -208,7 +208,10 @@ async getAll(filter: IRFilter | Icron): Promise<any[]> {
         {
           new: true,
         }
-      );
+      ).populate({
+        path: "client",
+        select: "id salutation firstName lastName phone email gender isClient",
+      });
     }
     if (
       existResevation?.reservationStatus !== "left" &&
