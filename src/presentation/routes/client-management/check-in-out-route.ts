@@ -5,7 +5,6 @@ import { Router } from "express"; // Correctly import Request and Response
 
 
 import { validateAdminInputMiddleware } from "@presentation/middlewares/admin/validation-admin";
-import adminView from "@presentation/Auth/admin-auth";
 import { CheckInCheckOutService } from "@presentation/services/client-management/check-in-out-service";
 import { CreateCheckInCheckOut } from "@domain/client-management/usecases/create-check-in-out-usecase";
 import { DeleteCheckInCheckOut } from "@domain/client-management/usecases/delete-check-in-out-usecase";

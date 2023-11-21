@@ -1,6 +1,5 @@
 import * as HttpStatus from "./http-status";
 
-import { executionAsyncId } from "async_hooks";
 import * as ErrorMessage from "./message-error";
 
 export class ErrorClass extends Error {
