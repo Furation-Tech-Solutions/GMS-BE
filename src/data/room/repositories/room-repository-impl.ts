@@ -3,6 +3,7 @@ import { RoomDataSource } from "../datasources/room-data-source";
 import { RoomEntity, RoomModel } from "@domain/room/entities/room";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
 import { Either, Left, Right } from "monet";
+import * as HttpStatus from "@presentation/error-handling/http-status";
 
 export class RoomRepositoryImpl implements RoomRepository {
   private readonly dataSource: RoomDataSource;
@@ -16,8 +17,10 @@ export class RoomRepositoryImpl implements RoomRepository {
       let i = await this.dataSource.create(room);
       return Right<ErrorClass, RoomEntity>(i);
     } catch (e) {
-      if (typeof ApiError.dataExists) {
-        return Left<ErrorClass, RoomEntity>(ApiError.dataExists());
+      if (e instanceof ApiError && e.status === 409) {
+        return Left<ErrorClass, RoomEntity>(
+          ApiError.customError(HttpStatus.CONFLICT, e.message)
+        );
       }
       return Left<ErrorClass, RoomEntity>(ApiError.badRequest());
     }
@@ -34,8 +37,8 @@ export class RoomRepositoryImpl implements RoomRepository {
       return Left<ErrorClass, RoomEntity>(ApiError.internalError());
     }
   }
-  
-  async getRooms(outletId:string): Promise<Either<ErrorClass, RoomEntity[]>> {
+
+  async getRooms(outletId: string): Promise<Either<ErrorClass, RoomEntity[]>> {
     try {
       const response = await this.dataSource.getAllRooms(outletId);
       return Right<ErrorClass, RoomEntity[]>(response);

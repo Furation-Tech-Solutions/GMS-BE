@@ -58,7 +58,7 @@ export class LoggerServices {
 //       (error: ErrorClass) =>
 //         res.status(error.status).json({ error: error.message }),
 //       (result: void) => {
-//         return res.json({ message: "Client deleted successfully." });
+//         return res.status(200).json({ message: "Client deleted successfully." });
 //       }
 //     );
 //   }
@@ -74,10 +74,10 @@ export class LoggerServices {
 //         res.status(error.status).json({ error: error.message }),
 //       (result: ClientEntity) => {
 //         if (result == undefined) {
-//           return res.json({ message: "Data Not Found" });
+//           return res.status(404).json({ message: "Data Not Found" });
 //         }
 //         const resData = ClientMapper.toEntity(result);
-//         return res.json(resData);
+//         return res.status(200).json(resData);
 //       }
 //     );
 //   }
@@ -185,7 +185,7 @@ export class LoggerServices {
 //           });
 //         }
 
-//         return res.json(responseData);
+//         return res.status(200).json(responseData);
 //       }
 //     );
 //   }
@@ -222,7 +222,7 @@ export class LoggerServices {
 //           },
 //           (result: ClientEntity) => {
 //             const resData = ClientMapper.toEntity(result, true);
-//             res.json(resData);
+//             res.status(200).json(resData);
 //           }
 //         );
 //       }
@@ -258,7 +258,7 @@ async getAlllogs(
         res.status(error.status).json({ error: error.message }),
       (logs: LoggerEntity[]) => {
         const resData = logs.map((log) => LoggerMapper.toEntity(log));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }

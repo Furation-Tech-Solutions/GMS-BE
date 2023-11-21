@@ -7,6 +7,7 @@ import {
   SeatingAreaModel,
 } from "@domain/seating-area/entities/seating-area";
 import mongoose from "mongoose";
+import * as HttpStatus from "@presentation/error-handling/http-status";
 
 export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
   private readonly dataSource: SeatingAreaDataSource;
@@ -23,9 +24,14 @@ export class SeatingAreaRepositoryImpl implements SeatingAreaRepository {
 
       return Right<ErrorClass, SeatingAreaEntity>(i);
     } catch (e) {
-      if (typeof ApiError.dataExists) {
-        return Left<ErrorClass, SeatingAreaEntity>(ApiError.dataExists());
+      if (e instanceof ApiError && e.status === 409) {
+        return Left<ErrorClass, SeatingAreaEntity>(
+          ApiError.customError(HttpStatus.CONFLICT, e.message)
+        );
       }
+      // if (typeof ApiError.dataExists) {
+      //   return Left<ErrorClass, SeatingAreaEntity>(ApiError.dataExists());
+      // }
 
       return Left<ErrorClass, SeatingAreaEntity>(ApiError.badRequest());
     }

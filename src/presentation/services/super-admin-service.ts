@@ -52,7 +52,7 @@ export class SuperAdminService {
             res.status(error.status).json({ error: error.message }),
             (result: SuperAdminEntity) => {
                 const resData = SuperAdminMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(201).json(resData);
             }
         )
 
@@ -70,7 +70,7 @@ export class SuperAdminService {
             res.status(error.status).json({ error: error.message }),
             (result: void) => {
                 const resData = this.deleteSuccess
-                return res.json(resData);
+                return res.status(204).json(resData);
             }
         )
 
@@ -89,7 +89,7 @@ export class SuperAdminService {
             res.status(error.status).json({ error: error.message }),
             (result: SuperAdminEntity) => {
                 const resData = SuperAdminMapper.toModel(result)
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         )
 
@@ -126,7 +126,7 @@ export class SuperAdminService {
                     (response: SuperAdminEntity) => {
                         const resData = SuperAdminMapper.toModel(response);
 
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 )
             }
@@ -146,7 +146,7 @@ export class SuperAdminService {
                 },
                 (superAdmins: SuperAdminEntity[]) => {
                     const responseData = superAdmins.map((superAdmin) => SuperAdminMapper.toModel(superAdmin));
-                    res.json(responseData);
+                    res.status(200).json(responseData);
                 }
             );
     }
