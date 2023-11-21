@@ -58,7 +58,7 @@ export class GuestServices {
                 res.status(error.status).json({ error: error.message }),
             (result: GuestEntity) => {
                 const resData = GuestMapper.toEntity(result, true);
-                return res.status(201).json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -79,7 +79,7 @@ export class GuestServices {
                 // if (result == undefined) {
                 //     return res.status(404).json({ message: "Data Not Found" });
                 // }
-                return res.status(204).json({ message: "Guest deleted successfully." });
+                return res.status(200).json({ message: "Guest deleted successfully." });
             }
         );
     }

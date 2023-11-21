@@ -50,7 +50,7 @@ export class ServerNameService{
             res.status(error.status).json({ error: error.message }),
           (result: ServersNameEntity) => {
             const resData = ServersNameMapper.toEntity(result, true);
-            return res.status(201).json(resData);
+            return res.status(200).json(resData);
           }
         );
     }
@@ -135,7 +135,7 @@ export class ServerNameService{
           (result: void) => {
             const resData = "Deleted successfully";
             // console.log(resData)
-            return res.status(204).json(resData);
+            return res.status(200).json(resData);
           }
         );
 
