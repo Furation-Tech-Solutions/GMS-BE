@@ -40,7 +40,6 @@ export class LoggerServices {
           console.error(error);
         },
         (result: LoggerEntity) => {
-          console.log(result); 
           return result;
         }
       );

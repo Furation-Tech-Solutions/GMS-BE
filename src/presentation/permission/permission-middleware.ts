@@ -1,8 +1,17 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
-import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
+import { Request, Response, NextFunction } from "express";
+import ApiError from "@presentation/error-handling/api-error";
 import { UserAccount } from "@data/user-account/models/user-account-model";
 import { UserEntity } from "@domain/user-account/entities/user-account";
 import { AddReservation } from "@data/add-reservation/models/add-reservation-model";
+import {
+  suspendedUser,
+  unableToDelete,
+  unableToReserved,
+  unableToUpdateReservation,
+  unauthorizedResponse
+} from "@presentation/utils/unauthorized_response/response";
+
+
 // Define constants or enums for access levels
 enum AccessLevel {
   SuperUser = "Superuser",
@@ -10,151 +19,125 @@ enum AccessLevel {
   SubManager = "Sub-Manager"
 }
 
-const unauthorizedResponse = (res: Response) => {
-  const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: unAuthorized.message });
-};
-const unableToReserved = (res: Response) => {
-  const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: "Insufficient Privileges" });
-};
-const unableToUpdateReservation=(res:Response)=>{
-  const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: "you are not assignable to update reservation" });
-}
-const unableToDelete=(res:Response)=>{
-  const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: "you are not assignable to delete reservation" });
+/**
+ * Middleware to check user permissions
+ * @param requiredPermission Array of required permissions
+ */
 
-}
-const suspendedUser = (res: Response) => {
-  const unAuthorized = ApiError.unAuthorized();
-  res.status(unAuthorized.status).json({ message: "you are not assignable to suspend user"});
-};
-export const checkPermission = (requiredPermission: number[]=[]) => {
+export const checkPermission = (requiredPermission: number[] = []) => {
+
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+
+      // Extract email from cookies or headers
       const cookieEmail = req.cookies.email;
-      const headerEmail=req.headers.email
-      // const outletId = req.headers.outletid as string;
-      // console.log(email,req.cookies,"in permission array")
-
+      const headerEmail = req.headers.email;
       const emailToCheck = headerEmail || cookieEmail;
-        // console.log(emailToCheck,"email to check")
 
+
+      // Check if email is present
       if (!emailToCheck) {
-        // Handle the case when email is not present in headers or cookies
         unauthorizedResponse(res);
-        // console.log("inside if block 29")
         return;
       }
+
+
+      // Find the user based on the email
       const permittedUser: UserEntity | null = await UserAccount.findOne({ email: emailToCheck });
 
-      // const verifyBelongsToOutlet = permittedUser?.outlet.includes(outletId)
-
-
+      // If user not found, send unauthorized response
       if (!permittedUser) {
         unauthorizedResponse(res);
         return;
       }
 
-      // if(!verifyBelongsToOutlet) {
-      //   unauthorizedResponse(res);
-      //   return 
-      // }
-    
+
+      // Check if the user is a superuser and has required permissions
       const isSuperuser = permittedUser.accessLevel === AccessLevel.SuperUser;
       let hasRequiredPermission = false;
 
-      permittedUser.permissions.forEach((permission:any)=>{
-        if(requiredPermission.includes(permission)){
+      permittedUser.permissions.forEach((permission: any) => {
+        if (requiredPermission.includes(permission)) {
           hasRequiredPermission = true;
         }
       })
 
       if (isSuperuser && hasRequiredPermission) {
-        // console.log("line 51")
         next();
         return;
       }
+
+
+      // check the permissions for the Manager
       if (permittedUser.accessLevel === AccessLevel.Manager) {
-        // If the user is a Manager, they should not be able to create SuperUsers
-        if (req.body.accessLevel=="Superuser" || req.body.accessLevel=="Manager"  ) {
+        if (req.body.accessLevel == "Superuser" || req.body.accessLevel == "Manager") {
           unauthorizedResponse(res);
           return;
         }
-        console.log("in manager if")
-        if(req.body.managerSettings?.suspended){
-        
-          console.log("unauthorized in permision")
+
+        if (req.body.managerSettings?.suspended) {
           suspendedUser(res);
           return;
         }
-        
       }
 
+      // check the permissions for the Sub-Manager
       if (permittedUser.accessLevel === AccessLevel.SubManager) {
-        // If the user is a Manager, they should not be able to create SuperUsers
-        const reservationId=req.params.addReservationId
-        // console.log(reservationId,"reservationid",req.method,req.params)
-        if (req.body.table ) {
+
+        const reservationId = req.params.addReservationId
+
+
+        if (req.body.table.length > 0) {
           unableToReserved(res);
           return;
         }
-          if(reservationId){
-            // console.log("in reservationid")
-            const reservationData=await AddReservation.findById(reservationId)
-            // console.log(reservationData,"reservationData is this")
-           
-            if(req.method!=="DELETE"){
-              // console.log(req.body,"inside req.body")
-              if(reservationData && reservationData.reservationStatus!=="left" || reservationData && reservationData.reservationStatus!=="unassigned" ){
-                unableToUpdateReservation(res);
+
+        if (reservationId) {
+          const reservationData = await AddReservation.findById(reservationId)
+
+          if (req.method !== "DELETE") {
+            if (reservationData && reservationData.reservationStatus !== "left" || reservationData && reservationData.reservationStatus !== "unassigned") {
+              unableToUpdateReservation(res);
+              return;
+            }
+            else {
+              if (reservationData && reservationData.reservationStatus === "left") {
+                if (!req.body.prepayment) {
+                  unableToUpdateReservation(res);
                   return;
-              }
-              else{
-              if(reservationData && reservationData.reservationStatus==="left"){
-                    if(!req.body.prepayment ){
-                      unableToUpdateReservation(res);
-                      return;
-  
-                    }
-              }if(reservationData && reservationData.reservationStatus==="unassigned"){
-                if(req.body.reservationStatus || req.body.table ){
+
+                }
+              } if (reservationData && reservationData.reservationStatus === "unassigned") {
+                if (req.body.reservationStatus || req.body.table) {
                   unableToUpdateReservation(res);
                 }
               }
             }
-                  
+
+          }
+          else {
+
+            if (reservationData && reservationData.reservationStatus !== "unassigned") {
+              unableToDelete(res)
+              return
             }
-            else{
-              
-                 if(reservationData && reservationData.reservationStatus!=="unassigned"){
-                  unableToDelete(res)
-                  return
-                 }
-            }
+          }
         }
-        console.log(req.body,"req.body is this")
-        if(req.body.managerSettings?.suspended){
-          console.log("unauthorized in permision")
+
+        if (req.body.managerSettings?.suspended) {
           suspendedUser(res);
           return;
         }
 
-          }
-          
-      
-      
-      // }
-      
-      // Handle other access levels
+      }
+
+      // Check permissions for other access levels
       switch (permittedUser.accessLevel) {
         case AccessLevel.SuperUser:
         case AccessLevel.Manager:
         case AccessLevel.SubManager:
-          permittedUser.permissions.forEach((permission:any)=>{
-            if(requiredPermission.includes(permission)){
+          permittedUser.permissions.forEach((permission: any) => {
+            if (requiredPermission.includes(permission)) {
               hasRequiredPermission = true;
             }
           })
@@ -163,14 +146,13 @@ export const checkPermission = (requiredPermission: number[]=[]) => {
           hasRequiredPermission = false;
       }
       if (hasRequiredPermission) {
-        
+
         next();
       } else {
         unauthorizedResponse(res);
       }
-    
+
     } catch (error) {
-      console.log(error)
       const internalError = ApiError.internalError();
       res.status(internalError.status).json({ message: internalError.message });
     }

@@ -48,4 +48,6 @@ export const RESERVATION_EXITS ="reservation with specific date,shifta & client"
 
 export const BLACKOUTDAY_EXITS =" Black out day already exits ";
 
+export const INSUFFICIENT_PRIVILEGES = "Insufficient Privileges"
+
 
