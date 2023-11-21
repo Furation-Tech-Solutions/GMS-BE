@@ -72,7 +72,7 @@ export class BookedByNameService {
             res.status(error.status).json({ error: error.message }),
           (bookedByNameList: BookedByNameEntity[]) => {
             const resData = bookedByNameList.map((bookedByName) => BookedByNameMapper.toEntity(bookedByName));
-            return res.json(resData);
+            return res.status(200).json(resData);
           }
         );
       }
@@ -120,7 +120,7 @@ export class BookedByNameService {
               const responseData = BookedByNameMapper.toEntity(response);
   
               // Send the updated admin as a JSON response
-              res.json(responseData);
+              res.status(200).json(responseData);
             }
           );
         }

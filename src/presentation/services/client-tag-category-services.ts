@@ -52,7 +52,7 @@ export class ClientTagCategoryServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagCategoryEntity) => {
                 const resData = ClientTagCategoryMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(201).json(resData);
             }
         );
     }
@@ -67,7 +67,7 @@ export class ClientTagCategoryServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
-                return res.json({ message: "Client Tag category deleted successfully." });
+                return res.status(204).json({ message: "Client Tag category deleted successfully." });
             }
         );
     }
@@ -83,10 +83,10 @@ export class ClientTagCategoryServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagCategoryEntity) => {
                 if (!result) {
-                    return res.json({ message: "Client Tag category not found." });
+                    return res.status(404).json({ message: "Client Tag category not found." });
                 }
                 const resData = ClientTagCategoryMapper.toEntity(result);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -107,7 +107,7 @@ export class ClientTagCategoryServices {
                 const responseData = result.map((tagCategory) =>
                     ClientTagCategoryMapper.toEntity(tagCategory)
                 );
-                return res.json(responseData);
+                return res.status(200).json(responseData);
             }
         );
     }
@@ -147,7 +147,7 @@ export class ClientTagCategoryServices {
                     },
                     (result: ClientTagCategoryEntity) => {
                         const resData = ClientTagCategoryMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }

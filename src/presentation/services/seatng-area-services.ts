@@ -57,7 +57,7 @@ export class SeatingAreaService {
         res.status(error.status).json({ error: error.message }),
       (result: SeatingAreaEntity) => {
         const resData = SeatingAreaMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(201).json(resData);
       }
     );
   }
@@ -73,7 +73,7 @@ export class SeatingAreaService {
       },
       (result: SeatingAreaEntity) => {
         const resData = SeatingAreaMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -95,7 +95,7 @@ export class SeatingAreaService {
         const resData = seatingAreas.map((seatingArea) =>
           SeatingAreaMapper.toEntity(seatingArea)
         );
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -112,7 +112,7 @@ export class SeatingAreaService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.json(resData);
+        return res.status(204).json(resData);
       }
     );
   }
@@ -154,7 +154,7 @@ export class SeatingAreaService {
             const responseData = SeatingAreaMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }

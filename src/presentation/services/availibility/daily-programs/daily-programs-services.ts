@@ -42,7 +42,7 @@ export class ProgramScheduleService {
         res.status(error.status).json({ error: error.message }),
       (result: ProgramScheduleEntity) => {
         const resData = ProgramScheduleMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(201).json(resData);
       }
     );
   }
@@ -58,7 +58,7 @@ export class ProgramScheduleService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "ProgramSchedule deleted successfully." });
+        return res.status(204).json({ message: "ProgramSchedule deleted successfully." });
       }
     );
   }
@@ -75,7 +75,7 @@ export class ProgramScheduleService {
         res.status(error.status).json({ error: error.message }),
       (result: ProgramScheduleEntity) => {
         const resData = ProgramScheduleMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -111,7 +111,7 @@ export class ProgramScheduleService {
             const responseData = ProgramScheduleMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }
@@ -132,7 +132,7 @@ export class ProgramScheduleService {
         res.status(error.status).json({ error: error.message }),
       (programSchedules: ProgramScheduleEntity[]) => {
         const resData = programSchedules.map((programSchedule) => ProgramScheduleMapper.toEntity(programSchedule));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
