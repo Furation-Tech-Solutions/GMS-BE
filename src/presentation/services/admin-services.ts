@@ -45,7 +45,7 @@ export class AdminService {
         res.status(error.status).json({ error: error.message }),
       (result: AdminEntity) => {
         const resData = AdminMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(201).json(resData);
       }
     );
   }
@@ -62,7 +62,7 @@ export class AdminService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Admin deleted successfully." });
+        return res.status(204).json({ message: "Admin deleted successfully." });
       }
     );
   }
@@ -81,7 +81,7 @@ export class AdminService {
         res.status(error.status).json({ error: error.message }),
       (result: AdminEntity) => {
         const resData = AdminMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -119,7 +119,7 @@ export class AdminService {
             const responseData = AdminMapper.toModel(response);
 
             // Send the updated admin as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }
@@ -140,7 +140,7 @@ export class AdminService {
         res.status(error.status).json({ error: error.message }),
       (admins: AdminEntity[]) => {
         const resData = admins.map((admin) => AdminMapper.toEntity(admin));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }

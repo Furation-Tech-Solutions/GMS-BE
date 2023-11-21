@@ -50,7 +50,7 @@ export class ServerNameService{
             res.status(error.status).json({ error: error.message }),
           (result: ServersNameEntity) => {
             const resData = ServersNameMapper.toEntity(result, true);
-            return res.json(resData);
+            return res.status(201).json(resData);
           }
         );
     }
@@ -71,7 +71,7 @@ export class ServerNameService{
             res.status(error.status).json({ error: error.message }),
           (serverNameList: ServersNameEntity[]) => {
             const resData = serverNameList.map((serverName) => ServersNameMapper.toEntity(serverName));
-            return res.json(resData);
+            return res.status(200).json(resData);
           }
         );
       }
@@ -115,7 +115,7 @@ export class ServerNameService{
             const responseData = ServersNameMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }
@@ -135,7 +135,7 @@ export class ServerNameService{
           (result: void) => {
             const resData = "Deleted successfully";
             // console.log(resData)
-            return res.json(resData);
+            return res.status(204).json(resData);
           }
         );
 

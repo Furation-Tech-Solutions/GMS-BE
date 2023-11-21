@@ -50,7 +50,7 @@ export class ClientServices {
         res.status(error.status).json({ error: error.message }),
       (result: ClientEntity) => {
         const resData = ClientMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(201).json(resData);
       }
     );
   }
@@ -65,7 +65,7 @@ export class ClientServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Client deleted successfully." });
+        return res.status(204).json({ message: "Client deleted successfully." });
       }
     );
   }
@@ -81,10 +81,10 @@ export class ClientServices {
         res.status(error.status).json({ error: error.message }),
       (result: ClientEntity) => {
         if (result == undefined) {
-          return res.json({ message: "Data Not Found" });
+          return res.status(404).json({ message: "Data Not Found" });
         }
         const resData = ClientMapper.toEntity(result);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -192,7 +192,7 @@ export class ClientServices {
           });
         }
 
-        return res.json(responseData);
+        return res.status(200).json(responseData);
       }
     );
   }
@@ -229,7 +229,7 @@ export class ClientServices {
           },
           (result: ClientEntity) => {
             const resData = ClientMapper.toEntity(result, true);
-            res.json(resData);
+            res.status(200).json(resData);
           }
         );
       }

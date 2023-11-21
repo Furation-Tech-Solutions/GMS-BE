@@ -58,7 +58,7 @@ export class GuestServices {
                 res.status(error.status).json({ error: error.message }),
             (result: GuestEntity) => {
                 const resData = GuestMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(201).json(resData);
             }
         );
     }
@@ -77,9 +77,9 @@ export class GuestServices {
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
                 // if (result == undefined) {
-                //     return res.json({ message: "Data Not Found" });
+                //     return res.status(404).json({ message: "Data Not Found" });
                 // }
-                return res.json({ message: "Guest deleted successfully." });
+                return res.status(204).json({ message: "Guest deleted successfully." });
             }
         );
     }
@@ -95,10 +95,10 @@ export class GuestServices {
                 res.status(error.status).json({ error: error.message }),
             (result: GuestEntity) => {
                 if (result == undefined) {
-                    return res.json({ message: "Data Not Found" });
+                    return res.status(404).json({ message: "Data Not Found" });
                 }
                 const resData = GuestMapper.toEntity(result);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -187,7 +187,7 @@ export class GuestServices {
                         return res.status(HttpStatus.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND });
                     }
 
-                    return res.json(responseData);
+                    return res.status(200).json(responseData);
                 }
             );
         } catch (error) {
@@ -238,7 +238,7 @@ export class GuestServices {
                     },
                     (result: GuestEntity) => {
                         const resData = GuestMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }
@@ -275,7 +275,7 @@ export class GuestServices {
                 const responseData = filteredGuests.map((guest) => GuestMapper.toEntity(guest));
 
                 // Send the guests that match the search criteria as a JSON response
-                return res.json(responseData);
+                return res.status(200).json(responseData);
             }
         );
     }
