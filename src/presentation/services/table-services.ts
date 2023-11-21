@@ -54,7 +54,7 @@ export class TableService {
         res.status(error.status).json({ error: error.message }),
       (result: TableEntity) => {
         const resData = TableMapper.toEntity(result, true);
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -104,7 +104,7 @@ export class TableService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.status(204).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }

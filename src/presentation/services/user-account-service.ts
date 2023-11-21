@@ -86,7 +86,7 @@ async createUser(req: Request, res: Response): Promise<void> {
         const emailhandler= new EmailHandler()
         await emailhandler.userEmailHandler(req.body)
 
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -121,7 +121,7 @@ async createUser(req: Request, res: Response): Promise<void> {
             res.status(error.status).json({ error: error.message }),
         (result: void) => {
 
-            return res.status(204).json({ message: "user deleted successfully." });
+            return res.status(200).json({ message: "user deleted successfully." });
         }
     );
 }

@@ -132,7 +132,7 @@ export class AddReservationServices {
             )
       
       // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
-          return res.status(201).json(resData);
+          return res.status(200).json(resData);
         }
       );
     } catch (err) {
@@ -150,7 +150,7 @@ export class AddReservationServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.status(204).json({
+        return res.status(200).json({
           message: "Reservation deleted successfully.",
         });
       }

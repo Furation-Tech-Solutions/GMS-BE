@@ -52,7 +52,7 @@ export class SuperAdminService {
             res.status(error.status).json({ error: error.message }),
             (result: SuperAdminEntity) => {
                 const resData = SuperAdminMapper.toEntity(result, true);
-                return res.status(201).json(resData);
+                return res.status(200).json(resData);
             }
         )
 
@@ -70,7 +70,7 @@ export class SuperAdminService {
             res.status(error.status).json({ error: error.message }),
             (result: void) => {
                 const resData = this.deleteSuccess
-                return res.status(204).json(resData);
+                return res.status(200).json(resData);
             }
         )
 
