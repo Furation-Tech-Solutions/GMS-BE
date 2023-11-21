@@ -10,8 +10,6 @@ import { GetAdminById } from "@domain/admin/usecases/get-admin-by-id";
 import { GetAllAdmins } from "@domain/admin/usecases/get-all-admins";
 import { UpdateAdmin } from "@domain/admin/usecases/update-admin";
 import { validateAdminInputMiddleware } from "@presentation/middlewares/admin/validation-admin";
-// import { authorziedUser } from "@presentation/middlewares/auth-middleware";
-import adminView from "@presentation/Auth/admin-auth";
 
 
 const mongooseConnection = mongoose.connection;
