@@ -65,12 +65,13 @@ export class BookingRequestServices {
 
         const resData = BookingRequestMapper.toEntity(result, true);
 
-        const emailOption = {
-          email: result.email,
-          subject: bookingRequestConfirmationEmailTemplate.subject,
-          message: bookingRequestConfirmationEmailTemplate.message(resData),
-        };
-        this.emailService.sendEmail(emailOption);
+        // const emailOption = {
+        //   from:
+        //   email: result.email,
+        //   subject: bookingRequestConfirmationEmailTemplate.subject,
+        //   message: bookingRequestConfirmationEmailTemplate.message(resData),
+        // };
+        // this.emailService.sendEmail(emailOption);
         return res.json(resData);
       }
     );

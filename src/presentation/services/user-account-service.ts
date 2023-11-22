@@ -83,8 +83,12 @@ async createUser(req: Request, res: Response): Promise<void> {
       
       async(result: UserEntity) => {
         const resData = UserMapper.toEntity(result, true);
-        const emailhandler= new EmailHandler()
-        await emailhandler.userEmailHandler(req.body)
+
+        const userId: string | undefined = resData._id;
+        if (userId) {
+          const emailhandler = new EmailHandler();
+          await emailhandler.userEmailHandler(userId);
+        }
 
         return res.json(resData);
       }

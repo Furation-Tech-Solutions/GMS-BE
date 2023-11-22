@@ -11,11 +11,13 @@ import { createWhatsAppMessage } from '@presentation/services/whatsapp-template'
 import WhatsAppService from '@presentation/services/whatsapp-services';
 import { UserAccount } from '@data/user-account/models/user-account-model';
 import { OutletDataSourceImpl } from '@data/outlet/datasources/outlet-data-source';
+import { UserDataSourceImpl } from '@data/user-account/datasources/user-account-data-source';
 
 
 const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
 const getAddReservationByIdUsecase = new AddReservationDataSourceImpl(mongoose.connection)
 const outletDataSourceImpl = new OutletDataSourceImpl(mongoose.connection)
+const getUserByIdUsecase=new UserDataSourceImpl(mongoose.connection)
 const emailService = new EmailService()
 const whatsAppService = new WhatsAppService()
 
@@ -65,6 +67,7 @@ class EmailHandler {
 
 
         const emailOption = {
+          from:outlet.email,
           email: addReservation.client.email,
           subject: "Booking Request Confirmation",
           message: emailContent,
@@ -131,6 +134,7 @@ class EmailHandler {
         const emailContent = await confirmReservationTemplate(addReservation, date, startTime,outletName);
         
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation Confirmation",
@@ -202,6 +206,7 @@ class EmailHandler {
         const startTime = await formatTime(addReservation.timeSlot);
         const emailContent = await cancelReservationTemplate(addReservation, date, startTime,outletName);
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation cancellation",
@@ -266,6 +271,7 @@ class EmailHandler {
         const startTime = formatTime(addReservation.timeSlot);
         const emailContent = await leftReservationTemplate(addReservation, date, startTime,outletName);
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Thank You for Dining with Us ",
@@ -341,12 +347,15 @@ class EmailHandler {
       const outlet = await outletDataSourceImpl.getById(addReservation.outletId._id)
       const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
 
+      const senderEmail=outlet.outletName.toLowerCase.split(' ').join("")
+
 
       const date = await formatDate(addReservation.date)
       // const date="12121"
       const startTime = await formatTime(addReservation.timeSlot);
       const emailContent = await reminderEmailTemplate(addReservation, date, startTime,outletName);
       const emailOption = {
+        from:outlet.email,
         // email:addReservation.client.email,
         email: addReservation.client.email,
         subject: "Reservation Reminder",
@@ -415,8 +424,12 @@ class EmailHandler {
 
   async userEmailHandler(user: any): Promise<void> {
     try {
+      const userDetail = await getUserByIdUsecase.read(user);
       const emailContent = await userAccountTemplate(user);
+      const outlet = await outletDataSourceImpl.getById(userDetail.outlet[0])
+      const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
       const emailOption = {
+        from:outlet.email,
         email: user.email,
         subject: "User Registration",
         message: emailContent,
