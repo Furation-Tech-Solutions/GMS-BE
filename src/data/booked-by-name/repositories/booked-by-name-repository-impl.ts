@@ -2,7 +2,6 @@ import { BookedByNameRepository} from "@domain/booked-by-name/repositories/booke
 import { BookedByNameDataSource } from "../datasources/booked-by-names-data-source";
 import { Either, Left, Right } from "monet";
 import ApiError, { ErrorClass } from "@presentation/error-handling/api-error";
-import { AdminEntity } from "@domain/admin/entities/admin";
 import { BookedByNameEntity, BookedByNameModel } from "@domain/booked-by-name/entities/booked-by-name";
 
 
@@ -25,6 +24,8 @@ export class BookedByNameRepositoryImpl implements BookedByNameRepository {
           return Left<ErrorClass, BookedByNameEntity>(ApiError.badRequest());
         }
       }
+
+
     async getAllBookedByName(outletId: string): Promise<Either<ErrorClass, BookedByNameEntity[]>> {
         try {
           const response = await this.bookedByNameDataSource.getAllBookedByName(outletId);
