@@ -38,3 +38,6 @@ export const loggsRoute = Router();
 
 loggsRoute.get("/alllogs", loggerService.getAlllogs.bind(loggerService));
 
+
+loggsRoute.get("/alllogs/client/reservation", loggerService.getAlllogsOfClientReservations.bind(loggerService));
+
