@@ -11,6 +11,9 @@ import { GetAllClientsUsecase } from "@domain/client/usecases/get-all-client";
 import { UpdateClientUsecase } from "@domain/client/usecases/update-client";
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
+import { loggerService } from "@presentation/routes/logger-routes";
+import { logTime } from "@presentation/utils/logs-time-format";
+import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
 
 export class ClientServices {
   private readonly createClientUsecases: CreateClientUsecase;
@@ -50,6 +53,22 @@ export class ClientServices {
         res.status(error.status).json({ error: error.message }),
       (result: ClientEntity) => {
         const resData = ClientMapper.toEntity(result, true);
+
+        const time = formatTimeAmPm(resData.createdAt.toString().slice(16, 25));
+
+
+        //  keeping logs in DB 
+
+        const log = loggerService.createLogs(
+          {
+           level: 'info',
+           timestamp: `${logTime()}`, 
+           message: `${user.firstName} added this client at ${time}`,
+           client: resData._id
+          }
+          )
+
+
         return res.status(200).json(resData);
       }
     );
@@ -227,8 +246,20 @@ export class ClientServices {
           (error: ErrorClass) => {
             res.status(error.status).json({ error: error.message });
           },
-          (result: ClientEntity) => {
+          async (result: ClientEntity) => {
             const resData = ClientMapper.toEntity(result, true);
+
+
+
+            const log = loggerService.createLogs(
+              {
+               level: 'info',
+               timestamp: `${logTime()}`, 
+               message: `${user.firstName} updated this client `,
+               client: resData._id
+              }
+              );
+
             res.status(200).json(resData);
           }
         );

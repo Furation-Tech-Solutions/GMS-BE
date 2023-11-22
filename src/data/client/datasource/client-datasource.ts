@@ -3,6 +3,7 @@ import { ClientModel } from "@domain/client/entities/client_entities"; // Import
 import { Client } from "../models/client_model";
 import ApiError from "@presentation/error-handling/api-error";
 
+
 // Create ClientDataSource Interface
 export interface ClientDataSource {
   create(client: ClientModel): Promise<any>;
@@ -78,9 +79,11 @@ export class ClientDataSourceImpl implements ClientDataSource {
   }
 
   async update(id: string, client: ClientModel): Promise<any> {
+
     const updatedClient = await Client.findByIdAndUpdate(id, client, {
       new: true,
     }); // No need for conversion here
+
     return updatedClient ? updatedClient.toObject() : null; // Convert to a plain JavaScript object before returning
   }
 }
