@@ -52,7 +52,7 @@ export class BookedByNameService {
             res.status(error.status).json({ error: error.message }),
           (result: BookedByNameEntity) => {
             const resData = BookedByNameMapper.toEntity(result, true);
-            return res.status(201).json(resData);
+            return res.status(200).json(resData);
           }
         );
       }
@@ -141,7 +141,7 @@ export class BookedByNameService {
             (result: void) => {
               const resData = "Deleted successfully";
               // console.log(resData)
-              return res.status(204).json(resData);
+              return res.status(200).json(resData);
             }
           );
 

@@ -55,7 +55,7 @@ async createTaxRate(req: Request, res: Response): Promise<void> {
       (result: TaxRateEntity) => {
         const resData = TaxRateMapper.toEntity(result, true);
         // console.log(resData,"resData")
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -87,7 +87,7 @@ async createTaxRate(req: Request, res: Response): Promise<void> {
               res.status(error.status).json({ error: error.message }),
           (result: void) => {
 
-              return res.status(204).json({ message: "TaxRate role deleted successfully." });
+              return res.status(200).json({ message: "TaxRate role deleted successfully." });
           }
       );
   }

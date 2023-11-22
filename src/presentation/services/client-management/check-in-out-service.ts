@@ -42,7 +42,7 @@ export class CheckInCheckOutService {
         res.status(error.status).json({ error: error.message }),
       (result: CheckInCheckOutEntity) => {
         const resData = CheckInCheckOutMapper.toEntity(result, true);
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -59,7 +59,7 @@ export class CheckInCheckOutService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.status(204).json({ message: "check-in-check-out deleted successfully." });
+        return res.status(200).json({ message: "check-in-check-out deleted successfully." });
       }
     );
   }

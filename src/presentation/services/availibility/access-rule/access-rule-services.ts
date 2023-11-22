@@ -42,7 +42,7 @@ export class AccessRuleService {
         res.status(error.status).json({ error: error.message }),
       (result: AccessRuleEntity) => {
         const resData = AccessRuleMapper.toEntity(result, true);
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -123,7 +123,7 @@ export class AccessRuleService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.status(204).json({ message: "Shift deleted successfully." });
+        return res.status(200).json({ message: "Shift deleted successfully." });
       }
     );
   }

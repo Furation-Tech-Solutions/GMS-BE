@@ -69,7 +69,7 @@ export class ClientServices {
           )
 
 
-        return res.status(201).json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -84,7 +84,7 @@ export class ClientServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.status(204).json({ message: "Client deleted successfully." });
+        return res.status(200).json({ message: "Client deleted successfully." });
       }
     );
   }
