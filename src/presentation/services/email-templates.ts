@@ -16,21 +16,33 @@ async function readEmailTemplateFromS3(s3Url:string):Promise<string> {
     return ''; // Return an empty string or handle the error as needed
   }
 }
-export async function userAccountTemplate(result: any): Promise<string> {
+export async function userAccountTemplate(result: any,outlet:any,outletName:any,password:string): Promise<string> {
+  
 const userEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/userRegistration.html`);
-  const emailContent = userEmailTemplate
+// console.log(userEmailTemplate,"userEmail template") 
+const address=outlet.address.replace(/Mumbai.*/, '')
+const emailContent = userEmailTemplate
   // .replace("[User's First Name]", result.firstName)
+  .replace("[brandLogo]",outlet.brandLogo)
   .replace("[User Email]", result.email)
-  .replace("[User Password]", result.randomPassword)
+  .replace("[User Password]", password)
+  .replace("[outletAddress]",address)
+  .replace("[outletCity]",outlet.city)
+  .replace("[outletState]",outlet.state)
+  .replace("[outletPincode]",outlet.pincode)
+  .replace(/\[outletName\]/g,outlet.outletName)
+  .replace("[outletContact]",outlet.phone)
   return emailContent;     
 }
-export async function bookingRequestTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
+export async function bookingRequestTemplate(result: any,date:any,startTime:any,outlet:any): Promise<string> {
   const fullName=result.client.firstName+" "+result.client.lastName
+const address=outlet.address.replace(/Mumbai.*/, '')
+
   // const date=await formatDate(result.date)
   // const date="12121"
   // const startTime =await  formatTime(result.timeSlot);
-  console.log(outlet,"outletName")
-  const bookingRequestEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/under_process_reservation.html`);
+  // console.log(outlet,"outletName")
+  const bookingRequestEmailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/under_process_reservation.html`);
     const emailContent = bookingRequestEmailTemplate
     // .replace("[User's First Name]", result.firstName)
     .replace("[Client's Full Name]", result.client.firstName)
@@ -38,13 +50,22 @@ export async function bookingRequestTemplate(result: any,date:any,startTime:any,
     .replace('[Number of Guests]', result.noOfGuests)
     .replace('[Time Slot]', startTime)
     .replace("[Client's First Name]", result.client.firstName)
+  .replace("[brandLogo]",outlet.brandLogo)
+    .replace("[outletAddress]",address)
+    .replace("[outletCity]",outlet.city)
+    .replace("[outletState]",outlet.state)
+    .replace("[outletPincode]",outlet.pincode)
+    .replace(/\[outletName\]/g,outlet.outletName)
+    .replace("[outletContact]",outlet.phone)
+    .replace("[mapLocation]",outlet.location)
     return emailContent;     
   }
 
-export async function confirmReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
+export async function confirmReservationTemplate(result: any,date:any,startTime:any,outlet:any): Promise<string> {
   // Fetch the email template from S3
-  console.log("outlet",outlet)
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/confirm_reservation.html`);
+  
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/confirm_reservation.html`);
+const address=outlet.address.replace(/Mumbai.*/, '')
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
@@ -60,17 +81,27 @@ export async function confirmReservationTemplate(result: any,date:any,startTime:
     .replace('[Time Slot]', startTime)
     .replace("[Client's First Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+  .replace("[brandLogo]",outlet.brandLogo)
+    .replace("[outletAddress]",address)
+    .replace("[outletCity]",outlet.city)
+    .replace("[outletState]",outlet.state)
+    .replace("[outletPincode]",outlet.pincode)
+    .replace(/\[outletName\]/g,outlet.outletName)
+    .replace("[outletContact]",outlet.phone)
+    .replace("[mapLocation]",outlet.location)
     // .replace('[Table Number]', result.table.tableNo)
    
   return emailContent 
 }
 
-export async function cancelReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
+export async function cancelReservationTemplate(result: any,date:any,startTime:any,outlet:any): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/cancelReservation.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/cancelReservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
+const address=outlet.address.replace(/Mumbai.*/, '')
+
   // const date=await formatDate(result.date)
   // // const date="12121"
   // const startTime =await  formatTime(result.timeSlot);
@@ -82,16 +113,26 @@ export async function cancelReservationTemplate(result: any,date:any,startTime:a
     // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
     .replace("[Client's Full Name]",fullName)
+  .replace("[brandLogo]",outlet.brandLogo)
+    .replace("[outletAddress]",address)
+  .replace("[outletCity]",outlet.city)
+  .replace("[outletState]",outlet.state)
+  .replace("[outletPincode]",outlet.pincode)
+  .replace(/\[outletName\]/g,outlet.outletName)
+  .replace("[outletContact]",outlet.phone)
+  .replace("[mapLocation]",outlet.location)
     // .replace('[Seating Area]', result.seatingArea.seatingAreaName)
    
   return emailContent 
 }
-export async function leftReservationTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
+export async function leftReservationTemplate(result: any,date:any,startTime:any,outlet:any): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/leftReservation.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/leftReservation.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName=result.client.firstName+" "+result.client.lastName
+const address=outlet.address.replace(/Mumbai.*/, '')
+
   // const date=await formatDate(result.date)
   // // const date="12121"
   // const startTime =await  formatTime(result.timeSlot);
@@ -106,16 +147,26 @@ export async function leftReservationTemplate(result: any,date:any,startTime:any
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
     .replace('[Table Number]', result.table.tableNo ? " " : " ")
     .replace('[Server Name]',result.serverName)
+  .replace("[brandLogo]",outlet.brandLogo)
+    .replace("[outletAddress]",address)
+    .replace("[outletCity]",outlet.city)
+    .replace("[outletState]",outlet.state)
+    .replace("[outletPincode]",outlet.pincode)
+    .replace(/\[outletName\]/g,outlet.outletName)
+    .replace("[outletContact]",outlet.phone)
+    .replace("[mapLocation]",outlet.location)
    
   return emailContent 
 }
 
-export async function reminderEmailTemplate(result: any,date:any,startTime:any,outlet:string): Promise<string> {
+export async function reminderEmailTemplate(result: any,date:any,startTime:any,outlet:any): Promise<string> {
   // Fetch the email template from S3
-  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/${outlet}/reminder_email.html`);
+  const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/reminder_email.html`);
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
+const address=outlet.address.replace(/Mumbai.*/, '')
+
   // const date=await formatDate(result.date)
   // // const date="12121"
   // const startTime =await  formatTime(result.timeSlot);
@@ -129,6 +180,14 @@ export async function reminderEmailTemplate(result: any,date:any,startTime:any,o
     .replace("[Client's Full Name]",fullName)
     .replace('[Seating Area]', result.seatingArea.seatingAreaName)
     .replace('[Table Number]', result.table.tableNo ? " " :" ")
+  .replace("[brandLogo]",outlet.brandLogo)
+    .replace("[outletAddress]",address)
+    .replace("[outletCity]",outlet.city)
+    .replace("[outletState]",outlet.state)
+    .replace("[outletPincode]",outlet.pincode)
+    .replace(/\[outletName\]/g,outlet.outletName)
+    .replace("[outletContact]",outlet.phone)
+    .replace("[mapLocation]",outlet.location)
    
   return emailContent 
 }

@@ -39,8 +39,8 @@ export default (app: Express): void => {
 
   app.get("/health", (req, res) => {
 
-    const log = loggerService.createLogs({level: 'info', timestamp: `${logTime()}`, message: 'Reservations '})
-    console.log(log);
+    // const log = loggerService.createLogs({level: 'info', timestamp: `${logTime()}`, message: 'Reservations '})
+    // console.log(log);
 
     const sessionId = "1234";
     logger.info('This is an info message', { sessionId } )

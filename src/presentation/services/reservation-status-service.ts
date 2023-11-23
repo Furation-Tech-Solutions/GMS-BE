@@ -56,7 +56,7 @@ export class ReservationStatusService {
         res.status(error.status).json({ error: error.message }),
       (result: ReservationStatusEntity) => {
         const resData = ReservationStatusMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -72,7 +72,7 @@ export class ReservationStatusService {
       },
       (result: ReservationStatusEntity) => {
         const resData = ReservationStatusMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -118,7 +118,7 @@ export class ReservationStatusService {
           });
         }
 
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -134,7 +134,7 @@ export class ReservationStatusService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -187,7 +187,7 @@ export class ReservationStatusService {
             const responseData = ReservationStatusMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }

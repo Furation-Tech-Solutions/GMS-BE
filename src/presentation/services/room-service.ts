@@ -49,7 +49,7 @@ export class RoomService {
         res.status(error.status).json({ error: error.message }),
       (result: RoomEntity) => {
         const resData = RoomMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -65,7 +65,7 @@ export class RoomService {
       },
       (result: RoomEntity) => {
         const resData = RoomMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -85,7 +85,7 @@ export class RoomService {
         res.status(error.status).json({ error: error.message }),
       (rooms: RoomEntity[]) => {
         const resData = rooms.map((room) => RoomMapper.toEntity(room));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -100,7 +100,7 @@ export class RoomService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -142,7 +142,7 @@ export class RoomService {
             const responseData = RoomMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }

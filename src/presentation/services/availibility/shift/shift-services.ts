@@ -55,7 +55,7 @@ export class ShiftService {
         res.status(error.status).json({ error: error.message }),
       (result: ShiftEntity) => {
         const resData = ShiftMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -119,7 +119,7 @@ export class ShiftService {
               // console.log(updatedShift);
 
               // Send the updated shift as a JSON response
-              res.json(responseData);
+              res.status(200).json(responseData);
               return;
             }
             res.status(400).json({ error: "Invalid date or day for override" });
@@ -132,7 +132,7 @@ export class ShiftService {
           //   resData
           // );
 
-          // res.json(updatedShiftEntity);
+          // res.status(200).json(updatedShiftEntity);
 
           // const updatedShift: Either<ErrorClass, ShiftEntity> =
           //   await this.updateShiftUsecase.execute(shiftId, updatedShiftEntity);
@@ -146,7 +146,7 @@ export class ShiftService {
           //     const responseData = ShiftMapper.toModel(response);
 
           //     // Send the updated admin as a JSON response
-          //     res.json(responseData);
+          //     res.status(200).json(responseData);
           //   }
           // );
         }
@@ -177,7 +177,7 @@ export class ShiftService {
         res.status(error.status).json({ error: error.message }),
       (result: ShiftEntity) => {
         const resData = ShiftMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -193,7 +193,7 @@ export class ShiftService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Shift deleted successfully." });
+        return res.status(200).json({ message: "Shift deleted successfully." });
       }
     );
   }
@@ -213,7 +213,7 @@ export class ShiftService {
         res.status(error.status).json({ error: error.message }),
       (shifts: ShiftEntity[]) => {
         const resData = shifts.map((shift) => ShiftMapper.toEntity(shift));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -280,7 +280,7 @@ export class ShiftService {
               });
             }
 
-            return res.json(results);
+            return res.status(200).json(results);
           } else {
             res.status(400).json({
               message: `Shift of ${shift} category not found on a particular date`,

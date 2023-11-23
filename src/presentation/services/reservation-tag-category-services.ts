@@ -48,7 +48,7 @@ export class ReservationTagCategoryServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ReservationTagCategoryEntity) => {
                 const resData = ReservationTagCategoryMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -63,7 +63,7 @@ export class ReservationTagCategoryServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
-                return res.json({ message: "Reservation Tag category deleted successfully." });
+                return res.status(200).json({ message: "Reservation Tag category deleted successfully." });
             }
         );
     }
@@ -79,10 +79,10 @@ export class ReservationTagCategoryServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ReservationTagCategoryEntity) => {
                 if (!result) {
-                    return res.json({ message: "Client Tag category not found." });
+                    return res.status(404).json({ message: "Client Tag category not found." });
                 }
                 const resData = ReservationTagCategoryMapper.toEntity(result);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -103,7 +103,7 @@ export class ReservationTagCategoryServices {
                 const responseData = result.map((tagCategory) =>
                     ReservationTagCategoryMapper.toEntity(tagCategory)
                 );
-                return res.json(responseData);
+                return res.status(200).json(responseData);
             }
         );
     }
@@ -143,7 +143,7 @@ export class ReservationTagCategoryServices {
                     },
                     (result: ReservationTagCategoryEntity) => {
                         const resData = ReservationTagCategoryMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }

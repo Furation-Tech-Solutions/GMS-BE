@@ -54,7 +54,7 @@ export class TableService {
         res.status(error.status).json({ error: error.message }),
       (result: TableEntity) => {
         const resData = TableMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -70,7 +70,7 @@ export class TableService {
       },
       (result: TableEntity) => {
         const resData = TableMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -89,7 +89,7 @@ export class TableService {
         res.status(error.status).json({ error: error.message }),
       (tables: TableEntity[]) => {
         const resData = tables.map((table) => TableMapper.toEntity(table));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -104,7 +104,7 @@ export class TableService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -127,7 +127,7 @@ export class TableService {
       },
       async (result: TableEntity) => {
         const resData = TableMapper.toEntity(result, true);
-        
+
         const updatedTableEntity: TableEntity = TableMapper.toEntity(
           tableData,
           true,
@@ -147,7 +147,7 @@ export class TableService {
             const responseData = TableMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }

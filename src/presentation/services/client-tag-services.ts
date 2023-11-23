@@ -52,7 +52,7 @@ export class ClientTagServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagEntity) => {
                 const resData = ClientTagMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -67,7 +67,7 @@ export class ClientTagServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
-                return res.json({ message: "Client Tag deleted successfully." });
+                return res.status(200).json({ message: "Client Tag deleted successfully." });
             }
         );
     }
@@ -83,10 +83,10 @@ export class ClientTagServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ClientTagEntity) => {
                 if (!result) {
-                    return res.json({ message: "Client Tag not found." });
+                    return res.status(404).json({ message: "Client Tag not found." });
                 }
                 const resData = ClientTagMapper.toEntity(result);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -107,7 +107,7 @@ export class ClientTagServices {
                 const responseData = result.map((tag) =>
                     ClientTagMapper.toEntity(tag)
                 );
-                return res.json(responseData);
+                return res.status(200).json(responseData);
             }
         );
     }
@@ -147,7 +147,7 @@ export class ClientTagServices {
                     },
                     (result: ClientTagEntity) => {
                         const resData = ClientTagMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }

@@ -42,7 +42,7 @@ export class AccessRuleService {
         res.status(error.status).json({ error: error.message }),
       (result: AccessRuleEntity) => {
         const resData = AccessRuleMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -70,7 +70,7 @@ export class AccessRuleService {
           resData
         );
 
-        res.json(updatedShiftEntity);
+        res.status(200).json(updatedShiftEntity);
        
 
         // Call the UpdateAdminUsecase to update the admin
@@ -86,7 +86,7 @@ export class AccessRuleService {
         //     const responseData = ShiftMapper.toModel(response);
 
         //     // Send the updated admin as a JSON response
-        //     res.json(responseData);
+        //     res.status(200).json(responseData);
         //   }
         // );
       }
@@ -107,7 +107,7 @@ export class AccessRuleService {
         res.status(error.status).json({ error: error.message }),
       (result: AccessRuleEntity) => {
         const resData = AccessRuleMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -123,7 +123,7 @@ export class AccessRuleService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Shift deleted successfully." });
+        return res.status(200).json({ message: "Shift deleted successfully." });
       }
     );
   }
@@ -143,7 +143,7 @@ export class AccessRuleService {
         res.status(error.status).json({ error: error.message }),
       (shifts: AccessRuleEntity[]) => {
         const resData = shifts.map((shift) => AccessRuleMapper.toEntity(shift));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }

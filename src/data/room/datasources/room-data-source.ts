@@ -3,6 +3,7 @@ import ApiError from "@presentation/error-handling/api-error";
 import { RoomModel } from "@domain/room/entities/room";
 import { Room } from "../models/room-model";
 // import { Admin } from "@data/admin/models/admin-model";
+import * as HttpStatus from "@presentation/error-handling/http-status";
 
 export interface RoomDataSource {
   create(room: RoomModel): Promise<any>;
@@ -17,12 +18,31 @@ export class RoomDataSourceImpl implements RoomDataSource {
 
   async create(room: RoomModel): Promise<any> {
     const existingRoom = await Room.findOne({
-      roomName: room.roomName,
       outletId: room.outletId,
+      $or: [{ roomName: room.roomName }, { listOrder: room.listOrder }],
     });
+
     if (existingRoom) {
-      throw ApiError.dataExists();
+      if (existingRoom.roomName === room.roomName) {
+        throw ApiError.customError(
+          HttpStatus.CONFLICT,
+          "Room with the same name already exists"
+        );
+      } else {
+        throw ApiError.customError(
+          HttpStatus.CONFLICT,
+          "Room with the same list order already exists"
+        );
+      }
     }
+    // const existingRoom = await Room.findOne({
+    //   roomName: room.roomName,
+    //   outletId: room.outletId,
+    //   listOrder:room.listOrder
+    // });
+    // if (existingRoom) {
+    //   throw ApiError.dataExists();
+    // }
 
     const roomData = new Room(room);
 

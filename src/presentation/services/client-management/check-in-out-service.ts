@@ -42,7 +42,7 @@ export class CheckInCheckOutService {
         res.status(error.status).json({ error: error.message }),
       (result: CheckInCheckOutEntity) => {
         const resData = CheckInCheckOutMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -59,7 +59,7 @@ export class CheckInCheckOutService {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "check-in-check-out deleted successfully." });
+        return res.status(200).json({ message: "check-in-check-out deleted successfully." });
       }
     );
   }
@@ -78,7 +78,7 @@ export class CheckInCheckOutService {
         res.status(error.status).json({ error: error.message }),
       (result: CheckInCheckOutEntity) => {
         const resData = CheckInCheckOutMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -120,7 +120,7 @@ export class CheckInCheckOutService {
             const responseData = CheckInCheckOutMapper.toEntity(response);
 
             // Send the updated admin as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
         }
@@ -143,7 +143,7 @@ export class CheckInCheckOutService {
         res.status(error.status).json({ error: error.message }),
       (checkInCheckOuts: CheckInCheckOutEntity[]) => {
         const resData = checkInCheckOuts.map((checkInCheckOut) => CheckInCheckOutMapper.toEntity(checkInCheckOut));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }

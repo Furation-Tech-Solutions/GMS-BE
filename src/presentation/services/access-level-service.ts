@@ -41,7 +41,7 @@ export class AccessLevelService{
         res.status(error.status).json({ error: error.message }),
       (result: AccessLevelEntity) => {
         const resData = AccessLevelMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
         )
     }
@@ -58,7 +58,7 @@ export class AccessLevelService{
                   res.status(error.status).json({ error: error.message }),
                 (accessLevel: AccessLevelEntity[]) => {
                   const resData = accessLevel.map((role) => AccessLevelMapper.toEntity(role));
-                  return res.json(resData);
+                  return res.status(200).json(resData);
                 }
               );
         }
@@ -74,7 +74,7 @@ export class AccessLevelService{
                   res.status(error.status).json({ error: error.message }),
               (result: void) => {
   
-                  return res.json({ message: "AccessLevel role deleted successfully." });
+                  return res.status(200).json({ message: "AccessLevel role deleted successfully." });
               }
           );
       }
@@ -92,10 +92,10 @@ export class AccessLevelService{
                 res.status(error.status).json({ error: error.message }),
             (result: AccessLevelEntity) => {
                 if (result == undefined) {
-                    return res.json({ message: "Data Not Found" });
+                    return res.status(404).json({ message: "Data Not Found" });
                 }
                 const resData = AccessLevelMapper.toEntity(result);
-                return res.json(resData)
+                return res.status(200).json(resData)
             }
         );
     }
@@ -135,7 +135,7 @@ export class AccessLevelService{
                     },
                     (result: AccessLevelEntity) => {
                         const resData = AccessLevelMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }

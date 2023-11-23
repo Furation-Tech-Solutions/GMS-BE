@@ -28,17 +28,12 @@ export class AddReservationRepositoryImpl implements AddReservationRepository {
 
       return Right<ErrorClass, AddReservationEntity>(createdAddReservation);
     } catch (error: any) {
-      
-      console.log(error.message, "error.message");
-
       if (error instanceof ApiError) {
         return Left<ErrorClass, AddReservationEntity>(
           ApiError.reservationExits()
         );
       }
       return Left<ErrorClass, AddReservationEntity>(
-    
-        
         ApiError.customError(HttpStatus.BAD_REQUEST, error.message)
       );
     }

@@ -52,7 +52,7 @@ export class ReservationTagServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ReservationTagEntity) => {
                 const resData = ReservationTagMapper.toEntity(result, true);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -67,7 +67,7 @@ export class ReservationTagServices {
             (error: ErrorClass) =>
                 res.status(error.status).json({ error: error.message }),
             (result: void) => {
-                return res.json({ message: "Reservation Tag deleted successfully." });
+                return res.status(200).json({ message: "Reservation Tag deleted successfully." });
             }
         );
     }
@@ -83,10 +83,10 @@ export class ReservationTagServices {
                 res.status(error.status).json({ error: error.message }),
             (result: ReservationTagEntity) => {
                 if (!result) {
-                    return res.json({ message: "Reservation Tag not found." });
+                    return res.status(404).json({ message: "Reservation Tag not found." });
                 }
                 const resData = ReservationTagMapper.toEntity(result);
-                return res.json(resData);
+                return res.status(200).json(resData);
             }
         );
     }
@@ -107,7 +107,7 @@ export class ReservationTagServices {
                 const responseData = result.map((tag) =>
                     ReservationTagMapper.toEntity(tag)
                 );
-                return res.json(responseData);
+                return res.status(200).json(responseData);
             }
         );
     }
@@ -147,7 +147,7 @@ export class ReservationTagServices {
                     },
                     (result: ReservationTagEntity) => {
                         const resData = ReservationTagMapper.toEntity(result, true);
-                        res.json(resData);
+                        res.status(200).json(resData);
                     }
                 );
             }

@@ -86,11 +86,12 @@ async createUser(req: Request, res: Response): Promise<void> {
 
         const userId: string | undefined = resData._id;
         if (userId) {
+          const password=req.body.randomPassword
           const emailhandler = new EmailHandler();
-          await emailhandler.userEmailHandler(userId);
+          await emailhandler.userEmailHandler(userId,password);
         }
 
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -109,7 +110,7 @@ async createUser(req: Request, res: Response): Promise<void> {
         res.status(error.status).json({ error: error.message }),
       (users: UserEntity[]) => {
         const resData = users.map((user) => UserMapper.toEntity(user));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -125,7 +126,7 @@ async createUser(req: Request, res: Response): Promise<void> {
             res.status(error.status).json({ error: error.message }),
         (result: void) => {
 
-            return res.json({ message: "user deleted successfully." });
+            return res.status(200).json({ message: "user deleted successfully." });
         }
     );
 }
@@ -142,10 +143,10 @@ async getUserById(req: Request, res: Response): Promise<void> {
       },
       (result: UserEntity) => {
           if (result == undefined) {
-              return res.json({ message: "Data Not Found" });
+              return res.status(404).json({ message: "Data Not Found" });
           }
           const resData = UserMapper.toEntity(result);
-          return res.json(resData);
+          return res.status(200).json(resData);
       }
   );
 }
@@ -189,7 +190,7 @@ async updateUser(req: Request, res: Response): Promise<void> {
               (result: UserEntity) => {
                   const resData = UserMapper.toEntity(result, true);
 
-                  res.json(resData);
+                  res.status(200).json(resData);
               }
           );
       }
@@ -208,10 +209,10 @@ async getUserByEmail(req: Request, res: Response): Promise<void> {
         },
         (result: UserEntity) => {
             if (result == undefined) {
-                return res.json({ message: "Data Not Found" });
+                return res.status(404).json({ message: "Data Not Found" });
             }
             const resData = UserMapper.toEntity(result);
-            return res.cookie('email', resData.email).json(resData);
+            return res.status(200).cookie('email', resData.email).json(resData);
         }
     );
 }
@@ -229,7 +230,7 @@ async logoutUser(req:Request,res:Response):Promise<void>{
     (result: UserEntity) => {
         if (result == undefined) {
           // console.log(result,"result is this in service")
-            return res.json({ message: "Data Not Found" });
+            return res.status(404).json({ message: "Data Not Found" });
         }
       
   //  console.log(user,"user in logout service")

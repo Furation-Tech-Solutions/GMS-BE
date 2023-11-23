@@ -5,7 +5,6 @@ import { GetAllBookedByNameUsecase } from "@domain/booked-by-name/usecase/get-al
 import { GetNameByIdUsecase } from "@domain/booked-by-name/usecase/get-booked-by-name-by-id";
 import { UpdateBookedByNameUseCase } from "@domain/booked-by-name/usecase/update-booked-by-name";
 import { ErrorClass } from "@presentation/error-handling/api-error";
-import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
 import { NextFunction, Request, Response } from "express";
 import { Either } from "monet";
 
@@ -13,8 +12,6 @@ import { Either } from "monet";
 
 export class BookedByNameService {
     private readonly createBookedByNameUseCase: CreateBookedByNameUseCase;
-    // private readonly getBookedByNameByIdUsecase: GetBookedByNameByIdUsecase;
-    // private readonly updateBookedByNameUsecase: UpdateBookedByNameUsecase;
     private readonly getAllBookedByNameUsecase: GetAllBookedByNameUsecase;
     private readonly getNameByIdUseCase:GetNameByIdUsecase;
     private readonly updateBookedByNameUseCase:UpdateBookedByNameUseCase;
@@ -23,8 +20,6 @@ export class BookedByNameService {
   
     constructor(
       createBookedByNameUseCase: CreateBookedByNameUseCase,
-    //   getBookedByNameByIdUsecase: GetBookedByNameByIdUsecase,
-    //   updateBookedByNameUsecase: UpdateBookedByNameUsecase,
       getAllBookedByNameUsecase: GetAllBookedByNameUsecase,
       getNameByIdUseCase:GetNameByIdUsecase,
       updateBookedByNameUseCase:UpdateBookedByNameUseCase,
@@ -32,8 +27,6 @@ export class BookedByNameService {
 
     ) {
       this.createBookedByNameUseCase = createBookedByNameUseCase;
-    //   this.getBookedByNameByIdUsecase = getBookedByNameByIdUsecase;
-    //   this.updateBookedByNameUsecase = updateBookedByNameUsecase;
       this.getAllBookedByNameUsecase = getAllBookedByNameUsecase;
       this.getNameByIdUseCase=getNameByIdUseCase;
       this.updateBookedByNameUseCase=updateBookedByNameUseCase;
@@ -59,7 +52,7 @@ export class BookedByNameService {
             res.status(error.status).json({ error: error.message }),
           (result: BookedByNameEntity) => {
             const resData = BookedByNameMapper.toEntity(result, true);
-            return res.json(resData);
+            return res.status(200).json(resData);
           }
         );
       }
@@ -79,7 +72,7 @@ export class BookedByNameService {
             res.status(error.status).json({ error: error.message }),
           (bookedByNameList: BookedByNameEntity[]) => {
             const resData = bookedByNameList.map((bookedByName) => BookedByNameMapper.toEntity(bookedByName));
-            return res.json(resData);
+            return res.status(200).json(resData);
           }
         );
       }
@@ -127,7 +120,7 @@ export class BookedByNameService {
               const responseData = BookedByNameMapper.toEntity(response);
   
               // Send the updated admin as a JSON response
-              res.json(responseData);
+              res.status(200).json(responseData);
             }
           );
         }
@@ -148,7 +141,7 @@ export class BookedByNameService {
             (result: void) => {
               const resData = "Deleted successfully";
               // console.log(resData)
-              return res.json(resData);
+              return res.status(200).json(resData);
             }
           );
 

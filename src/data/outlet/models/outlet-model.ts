@@ -65,6 +65,10 @@ const outletSchema = new mongoose.Schema({
       ref: "UserAccount",
     },
   ],
+  location:{
+    type:String,
+    default:"https://www.google.com/maps/place/The+Coconut+Boy/@19.0614885,72.8303614,15z/data=!4m6!3m5!1s0x3be7c9f1130a74af:0x3279d4b05f282c06!8m2!3d19.0614885!4d72.8303614!16s%2Fg%2F11y1jxllhg?entry=ttu"
+  }
 });
 
 export const Outlet = mongoose.model("Outlet", outletSchema);

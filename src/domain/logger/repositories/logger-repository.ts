@@ -11,3 +11,4 @@ export interface LoggerRepository {
     // updateName(id: string, data: BookedByNameModel ): Promise<Either<ErrorClass, BookedByNameEntity>> 
     // deleteBookedByName(id: string): Promise<Either<ErrorClass, void>>;
 }
+ 

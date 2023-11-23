@@ -60,17 +60,17 @@ class EmailService {
         this.sesClient = new SESClient({
             region: "ap-south-1",
             credentials: {
-                accessKeyId: "AKIAVYM223P6ZC3JNAGW",
-                secretAccessKey: "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",
+                accessKeyId: "AKIA2DLSFCNA4PT4FYLJ",
+                secretAccessKey: "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",
             },
         });
     }
 
     async sendEmail(mailOptions:EmailOptions):Promise<void> {
     
-
         const params = {
-            Source: "shahzad.shaikh@furation.tech", // Change to your SES verified email address
+            // Source: "shahzad.shaikh@furation.tech", // Change to your SES verified email address
+            Source: mailOptions.from, // Change to your SES verified email address
             Destination: {
                 ToAddresses: [mailOptions.email],
             },
@@ -93,11 +93,10 @@ class EmailService {
 
         try {
             const command = new SendEmailCommand(params);
+
             const response = await this.sesClient.send(command);
-            console.log(response, "Email sent successfully");
             
         } catch (error) {
-            console.error("Error sending email:", error);
             throw error;
         }
     }

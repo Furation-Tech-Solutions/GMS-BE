@@ -72,7 +72,8 @@ export class BookingRequestServices {
         //   message: bookingRequestConfirmationEmailTemplate.message(resData),
         // };
         // this.emailService.sendEmail(emailOption);
-        return res.json(resData);
+        return res.status(200).json(resData);
+
       }
     );
   }
@@ -87,7 +88,7 @@ export class BookingRequestServices {
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
-        return res.json({ message: "Booking Request deleted successfully." });
+        return res.status(200).json({ message: "Booking Request deleted successfully." });
       }
     );
   }
@@ -102,10 +103,10 @@ export class BookingRequestServices {
         res.status(error.status).json({ error: error.message }),
       (result: BookingRequestEntity) => {
         if (result == undefined) {
-          return res.json({ message: "Data Not Found" });
+          return res.status(404).json({ message: "Data Not Found" });
         }
         const resData = BookingRequestMapper.toEntity(result);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -181,7 +182,7 @@ export class BookingRequestServices {
         //     .json({ message: ErrorMessage.NOT_FOUND });
         // }
 
-        return res.json(responseData);
+        return res.status(200).json(responseData);
       }
     );
   }
@@ -224,7 +225,7 @@ export class BookingRequestServices {
             // console.log(result,"bookingrequest in service")
 
             const resData = BookingRequestMapper.toEntity(result, true);
-            res.json(resData);
+            res.status(200).json(resData);
           }
         );
       }

@@ -53,7 +53,7 @@ export class OutletService {
         res.status(error.status).json({ error: error.message }),
       (result: OutletEntity) => {
         const resData = OutletMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -69,7 +69,7 @@ export class OutletService {
       },
       (result: OutletEntity) => {
         const resData = OutletMapper.toEntity(result, true);
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -88,7 +88,7 @@ export class OutletService {
         res.status(error.status).json({ error: error.message }),
       (outlets: OutletEntity[]) => {
         const resData = outlets.map((outlet) => OutletMapper.toEntity(outlet));
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -103,7 +103,7 @@ export class OutletService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Deleted successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -140,7 +140,7 @@ export class OutletService {
             const responseData = OutletMapper.toEntity(response);
 
             // Send the updated outlet as a JSON response
-            res.json(responseData);
+            res.status(200).json(responseData);
           }
         );
       }
@@ -157,7 +157,7 @@ export class OutletService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Suspended successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
@@ -174,7 +174,7 @@ export class OutletService {
         res.status(error.status).json({ error: error.message }),
       (result: void) => {
         const resData = "Reactivated successfully";
-        return res.json(resData);
+        return res.status(200).json(resData);
       }
     );
   }
