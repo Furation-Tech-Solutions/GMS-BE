@@ -11,11 +11,13 @@ import { createWhatsAppMessage } from '@presentation/services/whatsapp-template'
 import WhatsAppService from '@presentation/services/whatsapp-services';
 import { UserAccount } from '@data/user-account/models/user-account-model';
 import { OutletDataSourceImpl } from '@data/outlet/datasources/outlet-data-source';
+import { UserDataSourceImpl } from '@data/user-account/datasources/user-account-data-source';
 
 
 const whatsappRecipient = '919881239491'; // Replace with the recipient's phone number
 const getAddReservationByIdUsecase = new AddReservationDataSourceImpl(mongoose.connection)
 const outletDataSourceImpl = new OutletDataSourceImpl(mongoose.connection)
+const getUserByIdUsecase=new UserDataSourceImpl(mongoose.connection)
 const emailService = new EmailService()
 const whatsAppService = new WhatsAppService()
 
@@ -61,10 +63,11 @@ class EmailHandler {
       if (addReservation.reservationStatus === "unassigned" || addReservation.reservationStatus === "UNASSIGNED") {
         const date = formatDate(addReservation.date)
         const startTime = formatTime(addReservation.timeSlot);
-        const emailContent = await bookingRequestTemplate(addReservation, date, startTime,outletName);
+        const emailContent = await bookingRequestTemplate(addReservation, date, startTime,outlet);
 
 
         const emailOption = {
+          from:outlet.email,
           email: addReservation.client.email,
           subject: "Booking Request Confirmation",
           message: emailContent,
@@ -120,7 +123,8 @@ class EmailHandler {
           await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
 
         } catch (error: any) {
-          console.log('WhatsApp Error:', error.message);
+          throw error.message
+          // console.log('WhatsApp Error:', error.message);
         }
       }
       else if (addReservation.reservationStatus === "confirmed" || addReservation.reservationStatus === "CONFIRMED") {
@@ -128,9 +132,10 @@ class EmailHandler {
 
         const startTime = await formatTime(addReservation.timeSlot);
 
-        const emailContent = await confirmReservationTemplate(addReservation, date, startTime,outletName);
+        const emailContent = await confirmReservationTemplate(addReservation, date, startTime,outlet);
         
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation Confirmation",
@@ -190,18 +195,20 @@ class EmailHandler {
           await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
 
         } catch (error: any) {
-          console.log('WhatsApp Error:', error.message);
+          throw error.message
+
+          // console.log('WhatsApp Error:', error.message);
         }
 
       }
       else if (addReservation.reservationStatus === "cancel" || addReservation.reservationStatus === "cancelled and notify" || addReservation.reservationStatus === "CANCELLED AND NOTIFY" || addReservation.reservationStatus === "CANCEL") {
-        console.log('cancelled and notify 3')
 
         const date = await formatDate(addReservation.date)
         // const date="12121"
         const startTime = await formatTime(addReservation.timeSlot);
-        const emailContent = await cancelReservationTemplate(addReservation, date, startTime,outletName);
+        const emailContent = await cancelReservationTemplate(addReservation, date, startTime,outlet);
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation cancellation",
@@ -257,15 +264,18 @@ class EmailHandler {
           await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
 
         } catch (error:any) {
-          console.log('WhatsApp Error:', error.message);
+          throw error.message
+
+          // console.log('WhatsApp Error:', error.message);
         }
       }
       else if (addReservation.reservationStatus === "left" || addReservation.reservationStatus === 'LEFT' || addReservation.reservationStatus === "Left") {
 
         const date = formatDate(addReservation.date)
         const startTime = formatTime(addReservation.timeSlot);
-        const emailContent = await leftReservationTemplate(addReservation, date, startTime,outletName);
+        const emailContent = await leftReservationTemplate(addReservation, date, startTime,outlet);
         const emailOption = {
+          from:outlet.email,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Thank You for Dining with Us ",
@@ -324,7 +334,9 @@ class EmailHandler {
 
           await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
         } catch (error: any) {
-          console.log('WhatsApp Error:', error.message);
+          throw error.message
+
+          // console.log('WhatsApp Error:', error.message);
         }
       }
 
@@ -332,7 +344,9 @@ class EmailHandler {
     }
 
     catch (error: any) {
-      console.log({"error": error.message});
+      throw error.message
+
+      // console.log({"error": error.message});
     }
   }
   async reminderEmail(user: any): Promise<void> {
@@ -341,12 +355,15 @@ class EmailHandler {
       const outlet = await outletDataSourceImpl.getById(addReservation.outletId._id)
       const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
 
+      const senderEmail=outlet.outletName.toLowerCase.split(' ').join("")
+
 
       const date = await formatDate(addReservation.date)
       // const date="12121"
       const startTime = await formatTime(addReservation.timeSlot);
-      const emailContent = await reminderEmailTemplate(addReservation, date, startTime,outletName);
+      const emailContent = await reminderEmailTemplate(addReservation, date, startTime,outlet);
       const emailOption = {
+        from:outlet.email,
         // email:addReservation.client.email,
         email: addReservation.client.email,
         subject: "Reservation Reminder",
@@ -405,28 +422,40 @@ class EmailHandler {
         await emailService.sendEmail(emailOption);
         await whatsAppService.sendWhatsAppMessage(addReservation.client.phone, whatsappMessage);
       } catch (error: any) {
-        console.log('WhatsApp Error:', error.message);
+        throw error.message
+
+        // console.log('WhatsApp Error:', error.message);
       }
     }
-    catch (err) {
-      console.log(err)
+    catch (error) {
+      throw error
+
+      // console.log(err)
     }
   }
 
-  async userEmailHandler(user: any): Promise<void> {
+  async userEmailHandler(user: any,password:string): Promise<void> {
     try {
-      const emailContent = await userAccountTemplate(user);
+      const userDetail = await getUserByIdUsecase.read(user);
+      const outlet = await outletDataSourceImpl.getById(userDetail.outlet[0])
+      const outletName=outlet.outletName.toLowerCase().split(' ').join("-");
+      const emailContent = await userAccountTemplate(userDetail,outlet,outletName,password);
+      // console.log(userDetail,"userDetail","password:",password)
       const emailOption = {
-        email: user.email,
+        from:outlet.email,
+        email: userDetail.email,
         subject: "User Registration",
         message: emailContent,
       };
+      // console.log(emailOption,"emailOption")
       await emailService.sendEmail(emailOption);
     }
-    catch (err) {
-      console.log(err)
+    catch (error) {
+      throw error
+      
+      // console.log(err)
     }
-    //   }
+    
   }
 }
 export default EmailHandler

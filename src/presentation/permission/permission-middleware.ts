@@ -153,6 +153,7 @@ export const checkPermission = (requiredPermission: number[] = []) => {
       }
 
     } catch (error) {
+      console.log(error)
       const internalError = ApiError.internalError();
       res.status(internalError.status).json({ message: internalError.message });
     }
