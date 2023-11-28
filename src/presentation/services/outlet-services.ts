@@ -89,7 +89,7 @@ export class OutletService {
       (outlets: OutletEntity[]) => {
         const resData = outlets.map((outlet) => OutletMapper.toEntity(outlet));
         return res.status(200).json(resData);
-      }
+      } 
     );
   }
 

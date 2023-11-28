@@ -68,7 +68,6 @@ export class ClientServices {
           }
           )
 
-
         return res.status(200).json(resData);
       }
     );

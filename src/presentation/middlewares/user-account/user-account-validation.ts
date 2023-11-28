@@ -79,16 +79,7 @@ const userAccountValidator = (
     isLogin: Joi.boolean().default(false),
 
     permissions: Joi.array().optional(),
-    // .items(Joi.object({
-    //   key: Joi.number().required(),
-    //   value: Joi.string().required(),
-    // }))
-    // .required()
-    // .min(1) // Ensures the array has at least one element
-    // .messages({
-    //   "array.base": "Permissions must be an array of objects with 'key' (number) and 'value' (string)",
-    //   "array.min": "At least one permission is required",
-    // }),
+
     emailNotification: Joi.array().optional(),
     updatedBy: isUpdate
       ? Joi.string().trim().optional().default(null).messages({
@@ -104,12 +95,7 @@ const userAccountValidator = (
       : Joi.string().trim().optional().default(null).messages({
           "any.required": "Please select the Created By",
         }),
-    firebaseDeviceToken: Joi.array().optional(),
-    // .items(Joi.object({
-    //   key: Joi.number(),
-    //   value: Joi.string(),
-    // }))
-    // .optional(),
+        firebaseDeviceToken: Joi.array().optional(),
   });
 
   const { error, value } = schema.validate(input, {
