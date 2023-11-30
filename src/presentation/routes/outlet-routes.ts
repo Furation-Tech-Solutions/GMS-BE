@@ -13,6 +13,7 @@ import { SuspendOutlet } from "@domain/outlet/usecases/suspend-outlet";
 import { ReactivateOutlet } from "@domain/outlet/usecases/reactivate-outlet";
 import { validateOutletInputMiddleware } from "@presentation/middlewares/outlet/validation-outlet";
 import { verifyLoggedInUser } from "@presentation/middlewares/auth-middleware";
+import { checkPermission } from "@presentation/permission/permission-middleware";
 
 // import { OutletMediaService } from "@presentation/services/mediadata-services";
 
@@ -49,34 +50,47 @@ export const outletRouter = Router();
 outletRouter.post(
   "/create",
   verifyLoggedInUser,
+  checkPermission([100]),
   validateOutletInputMiddleware,outletService.createOutlet.bind(outletService)
 );
 
 //Route handling for getOutletById
 outletRouter.get(
-  "/getById/:outletId",verifyLoggedInUser,
+  "/getById/:outletId",
+  verifyLoggedInUser,
   outletService.getOutletById.bind(outletService)
 );
 
-//Route hanndling for getOutlets
+//Route hanndling for getOutlet
 outletRouter.get(
-  "/getAllOutlets", outletService.getAllOutlets.bind(outletService)
+  "/getAllOutlets", 
+  verifyLoggedInUser,
+  outletService.getAllOutlets.bind(outletService)
 );
 
 outletRouter.put(
-  "/updateOutlet/:outletId",verifyLoggedInUser, outletService.updateOutlet.bind(outletService)
+  "/updateOutlet/:outletId",
+  verifyLoggedInUser, 
+  outletService.updateOutlet.bind(outletService)
 );
 
 outletRouter.delete(
-  "/deleteOutlet/:outletId",verifyLoggedInUser,outletService.deleteOutlet.bind(outletService)
+  "/deleteOutlet/:outletId",
+  verifyLoggedInUser,
+  checkPermission([100]),
+  outletService.deleteOutlet.bind(outletService)
 );
 
 outletRouter.patch(
-  "/suspendOutlet/:outletId",verifyLoggedInUser,outletService.suspendOutlet.bind(outletService)
+  "/suspendOutlet/:outletId",
+  verifyLoggedInUser,
+  outletService.suspendOutlet.bind(outletService)
 );
 
 outletRouter.patch(
-  "/reactivateOutlet/:outletId",verifyLoggedInUser,outletService.reactivateOutlet.bind(
+  "/reactivateOutlet/:outletId",
+  verifyLoggedInUser,
+  outletService.reactivateOutlet.bind(
     outletService
   )
 );
