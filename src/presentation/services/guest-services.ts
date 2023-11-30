@@ -183,9 +183,9 @@ export class GuestServices {
                         });
                     }
 
-                    if (!responseData || responseData.length === 0) {
-                        return res.status(HttpStatus.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND });
-                    }
+                    // if (!responseData || responseData.length === 0) {
+                    //     return res.status(HttpStatus.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND });
+                    // }
 
                     return res.status(200).json(responseData);
                 }

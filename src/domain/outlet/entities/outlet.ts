@@ -14,7 +14,8 @@ export class OutletModel {
     public country: string = "",
     public pincode: number = 0,
     public active: boolean = true,
-    public admins: string[] = []
+    public admins: string[] = [],
+    public location:string=""
   ) {}
 }
 
@@ -33,7 +34,8 @@ export class OutletEntity {
     public country: string,
     public pincode: number,
     public active: boolean,
-    public admins: string[]
+    public admins: string[],
+    public location:string
   ) {}
 }
 
@@ -92,6 +94,10 @@ export class OutletMapper {
           outletData.admins !== undefined
             ? outletData.admins
             : existingOutlet.admins,
+        location:
+            outletData.location !== undefined
+              ? outletData.location
+              : existingOutlet.location,
       };
     } else {
   
@@ -113,6 +119,7 @@ export class OutletMapper {
         pincode: outletData.pincode,
         active: outletData.active,
         admins: outletData.admins,
+        location:outletData.location
       };
       return outletEntity;
     }
@@ -132,6 +139,7 @@ export class OutletMapper {
       pincode: outlet.pincode,
       active: outlet.active,
       admins: outlet.admins,
+      location:outlet.location
     };
   }
 }

@@ -79,18 +79,29 @@ export class OutletService {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const user = req.user
     // Call the GetAllOutletsUsecase to get all outlets
+
     const outlets: Either<ErrorClass, OutletEntity[]> =
       await this.getAllOutletsUsecase.execute();
-    // console.log(outlets);
+
     outlets.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (outlets: OutletEntity[]) => {
         const resData = outlets.map((outlet) => OutletMapper.toEntity(outlet));
-        return res.status(200).json(resData);
-      } 
+
+        if (user.accessLevel === "Superadmin") {
+          return res.status(200).json(resData);
+        } else {
+          const allOutletOfSuperUser = user.outlet.map((outletId: any) => {
+            return resData.find(item => item._id === (outletId).toString());
+        }).filter(Boolean);
+          return res.status(200).json(allOutletOfSuperUser);
+        }
+      }
     );
+
   }
 
   async deleteOutlet(req: Request, res: Response): Promise<void> {

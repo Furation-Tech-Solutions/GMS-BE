@@ -56,7 +56,6 @@ export class ClientServices {
 
         const time = formatTimeAmPm(resData.createdAt.toString().slice(16, 25));
 
-
         //  keeping logs in DB 
 
         const log = loggerService.createLogs(

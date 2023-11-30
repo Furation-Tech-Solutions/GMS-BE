@@ -14,6 +14,7 @@ import {
 
 // Define constants or enums for access levels
 enum AccessLevel {
+  SuperAdmin = "Superadmin",
   SuperUser = "Superuser",
   Manager = "Manager",
   SubManager = "Sub-Manager"
@@ -53,7 +54,7 @@ export const checkPermission = (requiredPermission: number[] = []) => {
 
 
       // Check if the user is a superuser and has required permissions
-      const isSuperuser = permittedUser.accessLevel === AccessLevel.SuperUser;
+      const isSuperAdmin = permittedUser.accessLevel === AccessLevel.SuperAdmin;
       let hasRequiredPermission = false;
 
       permittedUser.permissions.forEach((permission: any) => {
@@ -62,9 +63,16 @@ export const checkPermission = (requiredPermission: number[] = []) => {
         }
       })
 
-      if (isSuperuser && hasRequiredPermission) {
+      if(isSuperAdmin && hasRequiredPermission) {
         next();
         return;
+      }
+
+      if (permittedUser.accessLevel === AccessLevel.SuperUser) {
+        if (req.body.accessLevel == "Superadmin") {
+          unauthorizedResponse(res);
+          return;
+        }
       }
 
 
@@ -133,6 +141,7 @@ export const checkPermission = (requiredPermission: number[] = []) => {
 
       // Check permissions for other access levels
       switch (permittedUser.accessLevel) {
+        case AccessLevel.SuperAdmin:
         case AccessLevel.SuperUser:
         case AccessLevel.Manager:
         case AccessLevel.SubManager:
@@ -153,6 +162,7 @@ export const checkPermission = (requiredPermission: number[] = []) => {
       }
 
     } catch (error) {
+      console.log(error)
       const internalError = ApiError.internalError();
       res.status(internalError.status).json({ message: internalError.message });
     }

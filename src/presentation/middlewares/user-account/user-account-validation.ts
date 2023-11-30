@@ -56,6 +56,7 @@ const userAccountValidator = (
     }),
     accessLevel: Joi.string()
       .valid(
+        "Superadmin",
         "Superuser",
         "Manager",
         "Sub-Manager",
