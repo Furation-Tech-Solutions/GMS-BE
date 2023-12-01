@@ -46,7 +46,7 @@
 
 
 // const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses"
+import { SESClient, SendEmailCommand, SendEmailCommandOutput } from "@aws-sdk/client-ses"
 interface EmailOptions {
     from:string;
     email: string;
@@ -66,7 +66,7 @@ class EmailService {
         });
     }
 
-    async sendEmail(mailOptions:EmailOptions):Promise<void> {
+    async sendEmail(mailOptions:EmailOptions):Promise<SendEmailCommandOutput> {
     
         const params = {
             // Source: "shahzad.shaikh@furation.tech", // Change to your SES verified email address
@@ -93,11 +93,14 @@ class EmailService {
 
         try {
             const command = new SendEmailCommand(params);
-
-            const response = await this.sesClient.send(command);
+            const response:SendEmailCommandOutput  = await this.sesClient.send(command);
             
-        } catch (error) {
-            throw error;
+            return response
+            
+        } catch (error:any) {
+            console.log(error.message,"error inside ses service")
+            return error
+        
         }
     }
 }
