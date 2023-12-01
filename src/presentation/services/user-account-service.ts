@@ -60,6 +60,8 @@ async createUser(req: Request, res: Response): Promise<void> {
       permissions = [201,202,203,204,205,206,207,208,209,210]
     } else if (req.body.accessLevel  === 'Sub-Manager') {
       permissions = [301,302,303,304,305,306,307]
+    } else if (req.body.accessLevel === 'Superadmin') {
+      permissions = [100,101,102,103,104,105,106,107,108,109,110]
     }
     
     const newUserData={

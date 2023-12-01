@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
   accessLevel: {
     type: String,
     enum: [
+      "Superadmin",
       "Superuser",
       "Manager",
       "Sub-Manager"

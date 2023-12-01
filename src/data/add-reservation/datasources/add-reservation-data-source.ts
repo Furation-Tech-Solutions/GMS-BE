@@ -1,28 +1,28 @@
 // Import necessary packages and modules
-import mongoose from "mongoose";
-import ApiError from "@presentation/error-handling/api-error";
-import { AddReservationModel } from "@domain/add-reservation/entities/add-reservation";
-import { AddReservation } from "../models/add-reservation-model";
-import { Client } from "@data/client/models/client_model";
-import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model";
-import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model";
-import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type";
-import logger from "@presentation/logger";
-import { logTime } from "@presentation/utils/logs-time-format";
-import { loggerService } from "@presentation/routes/logger-routes";
+import mongoose from "mongoose"; // MongoDB ORM
+import ApiError from "@presentation/error-handling/api-error"; // Custom API error handler
+import { AddReservationModel } from "@domain/add-reservation/entities/add-reservation"; // Model for adding reservations
+import { AddReservation } from "../models/add-reservation-model"; // Mongoose model for AddReservation
+import { Client } from "@data/client/models/client_model"; // Mongoose model for Client
+import { BookingRequest } from "@data/BookingRequest/models/bookingRequest-model"; // Mongoose model for BookingRequest
+import { CheckInCheckOut } from "@data/client-management/models/check-in-out-model"; // Mongoose model for CheckInCheckOut
+import { IRFilter, Icron } from "types/add-reservation-filter.ts/filter-type"; // Custom types/interfaces
+import logger from "@presentation/logger"; // Logger for logging
+import { logTime } from "@presentation/utils/logs-time-format"; // Utility for time formatting
+import { loggerService } from "@presentation/routes/logger-routes"; // Logger service for routes
 
 // Define the interface for the data source
 export interface AddReservationDataSource {
   // Methods for CRUD operations for reservations
-  create(addReservation: AddReservationModel): Promise<any>;
-  update(id: string, addReservation: AddReservationModel): Promise<any>;
-  delete(id: string): Promise<void>;
-  read(id: string): Promise<any | null>;
-  getAll(filter: IRFilter): Promise<any[]>;
+  create(addReservation: AddReservationModel): Promise<any>; // Create a reservation
+  update(id: string, addReservation: AddReservationModel): Promise<any>; // Update a reservation
+  delete(id: string): Promise<void>; // Delete a reservation
+  read(id: string): Promise<any | null>; // Read a reservation by ID
+  getAll(filter: IRFilter): Promise<any[]>; // Get all reservations based on a filter
   checkTableAvability(
     id: string,
     reservationDetail: AddReservationModel
-  ): Promise<any>;
+  ): Promise<any>; // Check table availability for a reservation
 }
 
 // Implementation of the data source interface
@@ -172,17 +172,24 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
   }
 
   async update(id: string, addReservation: AddReservationModel): Promise<any> {
-    const existResevation = await AddReservation.findById(id);
+    // Find the existing reservation by its ID
+    const existReservation = await AddReservation.findById(id);
+
+    // Find the associated CheckInCheckOut record for this reservation
     const existingCheckInCheckOut = await CheckInCheckOut.findOne({
       reservation: id,
     });
-    const existClient = await Client.findOne({ _id: existResevation?.client });
+
+    // Find the client associated with the existing reservation
+    const existClient = await Client.findOne({ _id: existReservation?.client });
+
+    // Obtain the current date and time in the 'Asia/Kolkata' timezone
     const options = { timeZone: "Asia/Kolkata" };
     const currentDate = new Date().toLocaleString("en-US", options);
     const date = new Date(currentDate);
     const dateObject = new Date(date);
 
-    // Get hours, minutes, and seconds
+    // Extract hours, minutes, and seconds from the current time
     const hours = dateObject.getHours();
     const minutes = dateObject.getMinutes();
     const seconds = dateObject.getSeconds();
@@ -192,15 +199,18 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
+    // Check and update CheckInTime if reservation is changing to 'arrived'
     if (
-      existResevation?.reservationStatus !== "arrived" &&
-      existResevation?.reservationStatus !== "left" &&
+      existReservation?.reservationStatus !== "arrived" &&
+      existReservation?.reservationStatus !== "left" &&
       addReservation.reservationStatus === "arrived"
     ) {
+      // Prepare new CheckInTime data
       const newCheckInData = {
         checkInTime: formattedTime,
       };
 
+      // Update CheckInTime for this reservation in CheckInCheckOut collection
       const updatedCheckInCheckOut = await CheckInCheckOut.findByIdAndUpdate(
         existingCheckInCheckOut?._id,
         newCheckInData,
@@ -212,15 +222,18 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         select: "id salutation firstName lastName phone email gender isClient",
       });
     }
+
+    // Check and update CheckOutTime if reservation is changing to 'left'
     if (
-      existResevation?.reservationStatus !== "left" &&
+      existReservation?.reservationStatus !== "left" &&
       addReservation.reservationStatus === "left"
     ) {
+      // Prepare new CheckOutTime data
       const newCheckOutData = {
         checkOutTime: formattedTime,
       };
 
-      // Increase the visits of the client
+      // Increment client visits and update CheckOutTime in CheckInCheckOut collection
       if (existClient) {
         existClient.visits = existClient.visits + 1; // Increment visits
         await existClient.save(); // Save the changes
@@ -235,16 +248,19 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       );
     }
 
+    // Increase 'reservationCencel' count if reservation status changes to 'cancelled and notify'
     if (
-      existResevation?.reservationStatus !== "cancelled and notify" &&
+      existReservation?.reservationStatus !== "cancelled and notify" &&
       addReservation.reservationStatus === "cancelled and notify"
     ) {
-      // Increase the visits of the client
+      // Increment 'reservationCencel' count for the client
       if (existClient) {
-        existClient.reservationCencel = existClient.reservationCencel + 1; // Increment visits
+        existClient.reservationCencel = existClient.reservationCencel + 1; // Increment cancellation count
         await existClient.save(); // Save the changes
       }
     }
+
+    // Update the reservation with new data
     const updatedAddReservation = await AddReservation.findByIdAndUpdate(
       id,
       addReservation,
@@ -252,52 +268,55 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
         new: true,
       }
     )
+      // Populate associated fields for the updated reservation
       .populate({
-        path: "client", // Populate the 'client' field
-        select: "id salutation firstName lastName phone email gender isClient", // Select specific fields
+        path: "client",
+        select: "id salutation firstName lastName phone email gender isClient",
       })
       .populate({
-        path: "table", // Populate the 'table' field
-        select: "id tableNo partySizeMini partySizeMax", // Select specific fields
+        path: "table",
+        select: "id tableNo partySizeMini partySizeMax",
       })
       .populate({
-        path: "seatingArea", // Populate the 'seatingArea' field
-        select: "id abbreviation seatingAreaName", // Select specific fields
+        path: "seatingArea",
+        select: "id abbreviation seatingAreaName",
       })
       .populate({
-        path: "reservationTags", // Populate the 'reservationTags' field
-        select: "id name categoryNameId", // Select specific fields
+        path: "reservationTags",
+        select: "id name categoryNameId",
         populate: {
-          path: "categoryNameId", // Populate the 'categoryNameId' field within 'reservationTags'
-          select: "id name color", // Select specific fields
-          model: "ReservationTagCategory", // Reference to the Category model
+          path: "categoryNameId",
+          select: "id name color",
+          model: "ReservationTagCategory",
         },
       })
       .exec();
 
-    /*  Logger to log the updation on reservation */
+    /* Logging reservation status update */
 
+    // Log the status change if there's a difference in reservation status
     if (
-      existResevation?.reservationStatus !==
+      existReservation?.reservationStatus !==
       updatedAddReservation?.reservationStatus
     ) {
       const log = loggerService.createLogs({
         level: "info",
         timestamp: `${logTime()}`,
-        message: `Reservation status changed from ${existResevation?.reservationStatus} to  ${updatedAddReservation?.reservationStatus}`,
+        message: `Reservation status changed from ${existReservation?.reservationStatus} to ${updatedAddReservation?.reservationStatus}`,
         reservation: id,
       });
     }
 
-    /** End of */
+    /** End of Logging */
 
+    // Update total spends if prePayment or onSitePayment is modified
     if (addReservation.prePayment !== 0 || addReservation.onSitePayment !== 0) {
       if (existClient) {
         // Fetch all reservations for the client
         const clientReservations = await AddReservation.find({
           client: existClient._id,
         });
-        // Calculate the total spends based on prePayment and onSitePayment
+        // Calculate total spends based on prePayment and onSitePayment
         const totalSpends = clientReservations.reduce((total, reservation) => {
           return (
             total +
@@ -305,20 +324,23 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
             (reservation.onSitePayment || 0)
           );
         }, 0);
-        // Assuming existClient is an object and spends is a property in it.
 
+        // Update 'spends' property for the client
         existClient.spends = totalSpends;
-        await existClient.save();
+        await existClient.save(); // Save the changes
       }
     }
 
+    // Log reservation update information for the client
     if (existClient) {
       logger.info(
-        ` ${updatedAddReservation?.bookedBy} Updated the Reservation of ${
+        `${updatedAddReservation?.bookedBy} Updated the Reservation of ${
           existClient?.firstName + " " + existClient?.lastName
-        } `
+        }`
       );
     }
+
+    // Return the updated reservation object if exists, otherwise null
     return updatedAddReservation ? updatedAddReservation.toObject() : null;
   }
 

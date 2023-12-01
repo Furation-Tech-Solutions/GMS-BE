@@ -984,7 +984,8 @@
             "304": "Ability to update a reservation with left status for pre-payment and on-site spend",
             "305": "Ability to view, edit, create, and delete guestlist",
             "306": "Ability to view, edit, and create clients",
-            "307": "Ability to edit user"
+            "307": "Ability to edit user",
+            "100": "Role as superAdmin who has authority to do all Operations"
 
      
     }
