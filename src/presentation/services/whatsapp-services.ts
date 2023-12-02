@@ -38,7 +38,9 @@ class WhatsAppService {
       const response= await axios.post(apiurl, whatsappData, { headers });
       return response.data;
     } catch (error) {
-      throw error;
+      
+      return error
+      // throw error;
     }
   }
 }
