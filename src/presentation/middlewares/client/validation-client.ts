@@ -71,13 +71,13 @@ const customDateValidator = (fieldName: string) =>
 const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
   const clientSchema = Joi.object<ClientInput>({
     firstName: isUpdate
-      ? Joi.string().max(30).min(2).optional().trim().messages({
+      ? Joi.string().max(30).min(1).optional().trim().messages({
           "string.max": "First name should have less than 30 characters",
-          "string.min": "First name should have more than 2 characters",
+          "string.min": "First name should have more than 1 characters",
         })
-      : Joi.string().max(30).min(2).required().trim().messages({
+      : Joi.string().max(30).min(1).required().trim().messages({
           "string.max": "First name should have less than 30 characters",
-          "string.min": "First name should have more than 2 characters",
+          "string.min": "First name should have more than 1 characters",
           "any.required": "First name is required",
         }),
 
