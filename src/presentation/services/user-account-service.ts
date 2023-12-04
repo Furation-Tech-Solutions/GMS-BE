@@ -87,12 +87,17 @@ async createUser(req: Request, res: Response): Promise<void> {
         const resData = UserMapper.toEntity(result, true);
 
         const userId: string | undefined = resData._id;
-        if (userId) {
-          const password=req.body.randomPassword
-          const emailhandler = new EmailHandler();
-          await emailhandler.userEmailHandler(userId,password);
-        }
+          // Handle Email error
+          try {
+          if (userId) {
+            const password = req.body.randomPassword
+            const emailhandler = new EmailHandler();
+            await emailhandler.userEmailHandler(userId, password);
+          }
 
+        } catch (error) {
+          console.log(error)
+        }
         return res.status(200).json(resData);
       }
     );

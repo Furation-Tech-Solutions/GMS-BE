@@ -111,6 +111,7 @@ export class AddReservationServices {
 
           //called the get reservation by id to send populated data to email template
           const addReservationId: string | undefined = resData._id;
+          
          try {
           if (addReservationId) {
             const emailhandler = new EmailHandler();
@@ -379,10 +380,15 @@ export class AddReservationServices {
             // if (resData.reservationStatus == "isLeft") {
             //called the get reservation by id to send populated data to email template
             const addReservationId: string | undefined = resData._id;
+try{
 
-            if (addReservationId) {
-              const emailhandler = new EmailHandler();
-              await emailhandler.handleReservation(addReservationId);
+  if (addReservationId) {
+    const emailhandler = new EmailHandler();
+    await emailhandler.handleReservation(addReservationId);
+  }
+            }
+            catch(error){
+  console.log(error)
             }
             // }
 
