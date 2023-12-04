@@ -176,7 +176,7 @@ class ApiError extends ErrorClass {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.DATA_CONFLICT, "conflict");
   }
   static guestExist(): ApiError {
-    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
+    return new ApiError(HttpStatus.CONFLICT, ErrorMessage.GUEST_CONFLICT, "conflict");
   }
   static bookingRequestExists(): ApiError {
     return new ApiError(HttpStatus.CONFLICT, ErrorMessage.CONFLICT, "conflict");
