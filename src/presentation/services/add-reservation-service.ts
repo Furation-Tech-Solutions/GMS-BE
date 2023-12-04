@@ -36,10 +36,10 @@ import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
 import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
-import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
+// import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
 import {
   sendNotification,
-  sendNotificationExample,
+  sendPushNotifications,
 } from "@presentation/middlewares/notification/notification-middleware-backend";
 
 import { logTime } from "@presentation/utils/logs-time-format";
@@ -87,7 +87,7 @@ export class AddReservationServices {
   async createAddReservation(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
-      const outletId = req.outletId;
+      const outletId: string | undefined = req.outletId;
 
       const newReservationData = {
         ...req.body,
@@ -111,23 +111,18 @@ export class AddReservationServices {
 
           //called the get reservation by id to send populated data to email template
           const addReservationId: string | undefined = resData._id;
-          try{
-
-            if (addReservationId) {
-              const emailhandler = new EmailHandler();
-              const sesResponse=await emailhandler.handleReservation(addReservationId);
-              console.log(sesResponse,"sesResponse")
-            }
+          
+         try {
+          if (addReservationId) {
+            const emailhandler = new EmailHandler();
+            await emailhandler.handleReservation(addReservationId);
           }
-          catch(err){
-            console.log(err)
-          }
+         } catch (error) {
+          console.log(error)
+         }
 
           const time = formatTimeAmPm(resData.timeSlot);
 
-          // const title = logger.info(
-          //   `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
-          // );
 
           const log = loggerService.createLogs(
             {
@@ -138,7 +133,8 @@ export class AddReservationServices {
             }
             )
       
-      // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
+      await sendPushNotifications(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`, outletId);
+
           return res.status(200).json(resData);
         }
       );

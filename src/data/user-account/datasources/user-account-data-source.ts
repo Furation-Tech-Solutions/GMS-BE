@@ -7,7 +7,7 @@ import { Admin } from "@data/admin/models/admin-model";
 
 export interface UserDataSource{
   create(user: UserModel): Promise<any>; // Return type should be Promise of AdminEntity
-  getAllUsers(): Promise<any[]>;
+  getAllUsers(outletId: string): Promise<any[]>;
   delete(id:string):Promise<void>;
   read(id: string): Promise<any | null>;
   update(id:string,user_account:UserModel):Promise<any>;
@@ -38,10 +38,10 @@ async create(user: UserModel): Promise<any> {
     
   }
 
-  async getAllUsers(): Promise<any[]> {
+  async getAllUsers(outletId: string): Promise<any[]> {
     try{
     
-    const users = await UserAccount.find();
+    const users = await UserAccount.find({outlet:outletId});
 
     return users.map((user) => user.toObject());
     
@@ -95,30 +95,36 @@ async update(id: string, user_account: UserModel): Promise<any> {
       throw ApiError.badRequest();
   }
 }
-async userLogin(email: string, firebaseToken: string):Promise<any| null>{
-  try{
 
+
+async userLogin(email: string, firebaseToken: string): Promise<any | null> {
+  try {
     const userData = await UserAccount.findOne({ email: email });
 
-    if(userData){
-       // Check if the Firebase token exists in the array
-       const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
-        
-       if (!firebaseTokenExists) {
-         // If not found, add the Firebase token to the array
-         userData.firebaseDeviceToken.push(firebaseToken);
-         await userData.save(); // Save the updated document
-       }
-       userData.isLogin = true;
-       await userData.save(); // Save the updated isLogin value
+    if (userData) {
+      userData.isLogin = true;
+      await userData.save(); // Save the updated isLogin value
+
+      const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
+
+      if (!firebaseTokenExists) {
+        userData.firebaseDeviceToken.push(firebaseToken);
+        try {
+          await userData.save(); // Attempt to save the updated document with the new token
+        } catch (tokenSaveError) {
+          // Handle token save error (optional)
+          console.error("Error saving Firebase token:", tokenSaveError);
+        }
+      }
       return userData.toObject();
     }
+
     return null;
-  } 
-  catch(err){
+  } catch (err) {
     throw ApiError.badRequest();
   }
 }
+
 
 async userLogout(email:string):Promise<any|null>{
   try{
