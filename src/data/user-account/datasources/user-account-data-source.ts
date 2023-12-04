@@ -105,15 +105,17 @@ async userLogin(email: string, firebaseToken: string): Promise<any | null> {
       userData.isLogin = true;
       await userData.save(); // Save the updated isLogin value
 
-      const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
+      if(firebaseToken !== undefined && firebaseToken !== ""){
+        const firebaseTokenExists = userData.firebaseDeviceToken.includes(firebaseToken);
 
-      if (!firebaseTokenExists) {
-        userData.firebaseDeviceToken.push(firebaseToken);
-        try {
-          await userData.save(); // Attempt to save the updated document with the new token
-        } catch (tokenSaveError) {
-          // Handle token save error (optional)
-          console.error("Error saving Firebase token:", tokenSaveError);
+        if (!firebaseTokenExists) {
+          userData.firebaseDeviceToken.push(firebaseToken);
+          try {
+            await userData.save(); // Attempt to save the updated document with the new token
+          } catch (tokenSaveError) {
+            // Handle token save error (optional)
+            console.error("Error saving Firebase token:", tokenSaveError);
+          }
         }
       }
       return userData.toObject();
@@ -121,6 +123,7 @@ async userLogin(email: string, firebaseToken: string): Promise<any | null> {
 
     return null;
   } catch (err) {
+    console.log(err, "err")
     throw ApiError.badRequest();
   }
 }
@@ -139,7 +142,7 @@ async userLogout(email:string):Promise<any|null>{
        } catch (error) {
         console.log(error)
        }
-       
+
       return userData.toObject();
     }
     return null
