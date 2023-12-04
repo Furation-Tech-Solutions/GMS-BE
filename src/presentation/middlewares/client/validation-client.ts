@@ -75,9 +75,9 @@ const clientValidator = (input: ClientInput, isUpdate: boolean = false) => {
           "string.max": "First name should have less than 30 characters",
           "string.min": "First name should have more than 2 characters",
         })
-      : Joi.string().max(30).min(3).required().trim().messages({
+      : Joi.string().max(30).min(2).required().trim().messages({
           "string.max": "First name should have less than 30 characters",
-          "string.min": "First name should have more than 3 characters",
+          "string.min": "First name should have more than 2 characters",
           "any.required": "First name is required",
         }),
 
