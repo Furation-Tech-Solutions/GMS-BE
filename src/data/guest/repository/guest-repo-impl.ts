@@ -19,7 +19,7 @@ export class GuestRepositoryImpl implements GuestRepository {
       return Right<ErrorClass, GuestEntity>(i);
     } catch (error: any) {
       if (error instanceof ApiError && error.name === "conflict") {
-        return Left<ErrorClass, GuestEntity>(ApiError.emailExist());
+        return Left<ErrorClass, GuestEntity>(ApiError.guestExist());
       }
       return Left<ErrorClass, GuestEntity>(
         ApiError.customError(400, error.message)

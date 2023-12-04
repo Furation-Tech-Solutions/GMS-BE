@@ -20,6 +20,8 @@ export const SERVICE_UNAVAILABLE = "service unavailable";
 
 export const CONFLICT = "email already exist";
 
+export const GUEST_CONFLICT = "guest already exist";
+
 export const DATA_CONFLICT = "data already exist";
 
 export const INTERNAL_SERVER_ERROR = "something went wrong";
