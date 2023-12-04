@@ -95,3 +95,8 @@ outletRouter.patch(
   )
 );
 
+outletRouter.get(
+  "/",
+  outletService.getAllOutletsForBookingRequests.bind(outletService)
+);
+
