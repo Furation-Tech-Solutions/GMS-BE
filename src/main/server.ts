@@ -33,11 +33,11 @@ async function connectToDatabase() {
     
     // Handle specific error cases if needed
     if (error instanceof ApiError) {
-      console.log(error.message);
+      console.log(error.message,"line 36");
     }
   
     const intererror = ApiError.internalError();
-    console.log(intererror);
+    // console.log(intererror);
     // // console.log("error is this-",error,"error")
     // if (error instanceof ApiError) {
     //   console.log(error.message);
