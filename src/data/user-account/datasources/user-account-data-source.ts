@@ -142,7 +142,6 @@ async userLogout(email:string):Promise<any|null>{
        } catch (error) {
         console.log(error)
        }
-
       return userData.toObject();
     }
     return null
