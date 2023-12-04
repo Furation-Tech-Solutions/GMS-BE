@@ -134,7 +134,12 @@ async userLogout(email:string):Promise<any|null>{
        // Check if the Firebase token exists in the array        
       
        userData.isLogin = false;
-       await userData.save(); // Save the updated isLogin value
+       try {
+        await userData.save(); 
+       } catch (error) {
+        console.log(error)
+       }
+       
       return userData.toObject();
     }
     return null
