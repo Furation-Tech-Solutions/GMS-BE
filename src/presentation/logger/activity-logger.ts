@@ -27,22 +27,22 @@ export const ReservationLogger = (): any => {
             myFormat
           ),
         transports: [
-          new transports.Console(),
+          // new transports.Console(),
           new transports.File({ filename: 'error.log', level: 'error' }), // showing logs in error.log file
           new transports.File({ filename: 'combined.log' }), // showing logs in combined.log file
-          new MongoDB({
-            level: 'info', 
-            db: `${process.env.MONGO_URL_WINSTON}`,
-            collection: 'logs', 
-            options:{
-              useNewUrlParser: true,
-              useUnifiedTopology: true,
-            },
-            format: combine( // Define a separate format for MongoDB
-            timestamp(),
-            json() // This will include additional fields as JSON in the log entry
-          ),
-        }),
+        //   new MongoDB({
+        //     level: 'info', 
+        //     db: `${process.env.MONGO_URL_WINSTON}`,
+        //     collection: 'logs', 
+        //     options:{
+        //       useNewUrlParser: true,
+        //       useUnifiedTopology: true,
+        //     },
+        //     format: combine( // Define a separate format for MongoDB
+        //     timestamp(),
+        //     json() // This will include additional fields as JSON in the log entry
+        //   ),
+        // }),
         ],
       }); 
 }

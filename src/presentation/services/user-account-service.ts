@@ -103,9 +103,11 @@ async createUser(req: Request, res: Response): Promise<void> {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+
+    const outletId = req.outletId as string
     // Call the GetAllAdminsUsecase to get all admins
     const users: Either<ErrorClass, UserEntity[]> =
-      await this.getAllUserUseCase.execute();
+      await this.getAllUserUseCase.execute(outletId);
 
     users.cata(
       (error: ErrorClass) =>

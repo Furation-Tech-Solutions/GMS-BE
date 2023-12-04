@@ -57,6 +57,7 @@ userRouter.post(
 userRouter.get(
     "/getAll",
     verifyLoggedInUser,
+    verifyOutlet,
     userService.getAllUsers.bind(userService)
 )
 userRouter.delete(

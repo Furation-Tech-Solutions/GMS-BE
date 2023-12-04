@@ -4,7 +4,7 @@ import { UserEntity } from "../entities/user-account";
 import { UserRepository } from "../repositories/user-repository";
 
 export interface GetAllUserUseCase {
-    execute: () => Promise<Either<ErrorClass, UserEntity[]>>;
+    execute: (outletId: string) => Promise<Either<ErrorClass, UserEntity[]>>;
   }
   
   export class GetAllUsers implements GetAllUserUseCase {
@@ -14,8 +14,8 @@ export interface GetAllUserUseCase {
       this.userRepository = userRepository;
     }
   
-    async execute(): Promise<Either<ErrorClass, UserEntity[]>> {
-      return await this.userRepository.getAllUser();
+    async execute(outletId: string): Promise<Either<ErrorClass, UserEntity[]>> {
+      return await this.userRepository.getAllUser(outletId);
     }
   }
   
