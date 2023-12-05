@@ -66,6 +66,8 @@ export async function confirmReservationTemplate(result: any,date:any,startTime:
   
   const emailTemplate = await readEmailTemplateFromS3(`${s3ReservationEmailTemplateUrl}/confirm_reservation.html`);
 const address=outlet.address.replace(/Mumbai.*/, '')
+
+    console.log(emailTemplate,"emailTemplate inside template folder")
   
   // Replace placeholders with actual data in the email template
   const fullName= result.client.firstName+" "+result.client.lastName
@@ -74,13 +76,13 @@ const address=outlet.address.replace(/Mumbai.*/, '')
   // const startTime =await  formatTime(result.timeSlot);
   
   const emailContent = emailTemplate
+   .replace('[Salutation]',result.client.salutation)
     .replace("[Client's Full Name]", fullName)
+    .replace('[shift]', result.shift.shiftName)
     .replace('[Reservation Date]', date)
     .replace('[Number of Guests]', result.noOfGuests)
-    // .replace('[Shift]', result.shift.shiftName)
     .replace('[Time Slot]', startTime)
-    .replace("[Client's First Name]",fullName)
-    .replace('[Seating Area]', result.seatingArea.seatingAreaName)
+    // .replace("[Client's First Name]",fullName)
   .replace("[brandLogo]",outlet.brandLogo)
     .replace("[outletAddress]",address)
     .replace("[outletCity]",outlet.city)

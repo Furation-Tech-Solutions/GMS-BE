@@ -67,10 +67,21 @@ class EmailService {
     }
 
     async sendEmail(mailOptions:EmailOptions):Promise<SendEmailCommandOutput> {
-    
+        console.log(mailOptions,"mailoptions")
+
+        let sender:string=""
+       if(mailOptions.from=="nixon.dsouza@reserve1st.com"){
+        sender="estellamumbai@reserve1st.com"
+       }
+       else{
+        sender=`${mailOptions.from}`
+       }
+       
+       
+       
         const params = {
             // Source: "shahzad.shaikh@furation.tech", // Change to your SES verified email address
-            Source: mailOptions.from, // Change to your SES verified email address
+            Source: sender, // Change to your SES verified email address
             Destination: {
                 ToAddresses: [mailOptions.email],
             },
@@ -90,8 +101,10 @@ class EmailService {
                 },
             },
         };
+    
 
         try {
+            console.log(params,"inside try block")
             const command = new SendEmailCommand(params);
             const response:SendEmailCommandOutput  = await this.sesClient.send(command);
             

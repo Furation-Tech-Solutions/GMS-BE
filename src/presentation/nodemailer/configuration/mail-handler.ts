@@ -48,6 +48,42 @@ function formatTime(inputTime: string): string {
 
   return `${formattedHours}:${minutes} ${period}`;
 }
+function endTimeFormat(inputTime: string, duration: string): string {
+  const [timePart, period] = inputTime.split(" ");
+  const [hoursStr, minutesStr] = timePart.split(":");
+  const hours = parseInt(hoursStr, 10);
+  const minutes = parseInt(minutesStr, 10);
+
+  const [durationHoursStr, durationMinutesStr] = duration.split(":");
+  const durationHours = parseInt(durationHoursStr, 10);
+  const durationMinutes = parseInt(durationMinutesStr, 10);
+
+  let totalHours = hours + durationHours;
+  let totalMinutes = minutes + durationMinutes;
+
+  // Adjust minutes and hours if they exceed their limits
+  if (totalMinutes >= 60) {
+    totalMinutes %= 60;
+    totalHours++;
+  }
+
+  // Ensure hours stay within 12-hour format
+  totalHours %= 12;
+  if (totalHours === 0) {
+    totalHours = 12;
+  }
+
+  // Calculate the new period (AM/PM)
+  const newPeriod = (period === "AM" && totalHours < 12) || (period === "PM" && totalHours < 11) ? period : period === "AM" ? "PM" : "AM";
+
+  // Format the time components to ensure they have leading zeros if needed
+  const formattedHours = totalHours.toString().padStart(2, "0");
+  const formattedMinutes = totalMinutes.toString().padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes} ${newPeriod}`;
+}
+
+
 interface CombinedResponses {
   emailResponse?: SendEmailCommandOutput;
   whatsappResponse?: any;
@@ -70,7 +106,7 @@ class EmailHandler {
         addReservation.client.phone,
         whatsappMessage
       );
-      // console.log("whatsappResponse:-", whatsappResponse);
+      console.log("whatsappResponse:-", whatsappResponse);
 
       return { emailResponse, whatsappResponse };
     } catch (error: any) {
@@ -167,11 +203,16 @@ class EmailHandler {
 //         }
       }
       else if (addReservation.reservationStatus === "confirmed" || addReservation.reservationStatus === "CONFIRMED") {
+        console.log("inside confirmed",addReservation.client.salutation)
+        let salutation="Mr"
         const date = await formatDate(addReservation.date)
 
         const startTime = await formatTime(addReservation.timeSlot);
+        const endTime= await endTimeFormat(startTime,addReservation.duration)
 
          emailContent = await confirmReservationTemplate(addReservation, date, startTime,outlet);
+  const fullName= addReservation.client.firstName+" "+addReservation.client.lastName
+
         
          emailOption = {
           from:outlet.email,
@@ -181,22 +222,39 @@ class EmailHandler {
           message: emailContent,
         };
         
-         whatsappMessage = {
-          "name": "confirm_reservation",
+         whatsappMessage =  {
+          "name": "confirmed_reservation",
           "language": {
             "code": "en_US"
           },
           "components": [
+              {
+               "type": "header",
+          "parameters": [
+            {
+              "type": "location",
+              "location": {
+                "latitude": 37.85473,
+                "longitude": 45.825798,
+                "name": "NAME",
+                "address": `${outlet.outletName}`
+              }
+            }
+          ]},
             {
               "type": "body",
               "parameters": [
                 {
                   "type": "text",
-                  "text": `${outlet.outletName}`
+                  "text": `${salutation}`
                 },
                 {
                   "type": "text",
-                  "text": `${addReservation.client.firstName}`
+                  "text": `${fullName}`
+                },
+                {
+                  "type": "text",
+                  "text": `${addReservation.shift.shiftName}`
                 },
                 {
                   "type": "date_time",
@@ -214,20 +272,35 @@ class EmailHandler {
                 },
                 {
                   "type": "text",
-                  "text": `${addReservation.seatingArea.seatingAreaName}`
+                  "text": `${endTime}`
                 },
+                  {
+                  "type": "text",
+                  "text":`${outlet.outletName}`
+                },
+                 {
+                  "type": "text",
+                  "text":`${outlet.outletName}`
+                },
+                 {
+                  "type": "text",
+                  "text": `+91 ${outlet.phone}`
+                },
+        
+        
                 {
                   "type": "text",
-                  "text": `${outlet.address}`
+                  "text": `${outlet.location}`
                 },
                 {
                   "type": "text",
                   "text": `+91 ${outlet.phone}`
-                },
+                }
               ]
             }
           ]
         }
+        
 
         // try {
         //   await emailService.sendEmail(emailOption);
