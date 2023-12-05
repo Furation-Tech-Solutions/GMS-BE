@@ -46,13 +46,13 @@ const customDateValidator = (fieldName: string) => {
 const guestValidator = (input: GuestInput, isUpdate: boolean = false) => {
   const guestSchema = Joi.object<GuestInput>({
     firstName: isUpdate
-      ? Joi.string().max(30).min(3).optional().trim().messages({
+      ? Joi.string().max(30).min(1).optional().trim().messages({
           "string.max": "First name should have less than 30 characters",
-          "string.min": "First name should have more than 3 characters",
+          "string.min": "First name should have more than 1 characters",
         })
-      : Joi.string().max(30).min(3).required().trim().messages({
+      : Joi.string().max(30).min(1).required().trim().messages({
           "string.max": "First name should have less than 30 characters",
-          "string.min": "First name should have more than 3 characters",
+          "string.min": "First name should have more than 1 characters",
           "any.required": "First name is required",
         }),
 
