@@ -197,7 +197,7 @@ class EmailHandler {
           addReservation.client.lastName;
 
         whatsappMessage = {
-          name: "confirmed_reservation",
+          name: "confirmed_reservation_v2",
           language: {
             code: "en_US",
           },
@@ -363,7 +363,7 @@ class EmailHandler {
         };
 
         whatsappMessage = {
-          name: "confirmed_reservation",
+          name: "confirmed_reservation_v2",
           language: {
             code: "en_US",
           },
