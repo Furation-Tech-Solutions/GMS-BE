@@ -174,7 +174,7 @@ class EmailHandler {
         const startTime = formatTime(addReservation.timeSlot);
         const endTime = endTimeFormat(startTime, addReservation.duration);
         //emailContent = await bookingRequestTemplate(addReservation, date, startTime,outlet);
-        let salutation = addReservation.client.salutation;
+        let salutation = addReservation.client.salutation ?? 'Mr.';
         emailContent = await confirmReservationTemplate(
           addReservation,
           date,
@@ -336,7 +336,7 @@ class EmailHandler {
         addReservation.reservationStatus === "CONFIRMED"
       ) {
         console.log("inside confirmed", addReservation.client.salutation);
-        let salutation = addReservation.client.salutation;
+        let salutation = addReservation.client.salutation ?? 'Mr.';
         const date = formatDate(addReservation.date);
 
         const startTime = formatTime(addReservation.timeSlot);
