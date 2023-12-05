@@ -12,6 +12,7 @@ const notificationOptions = {
 
 
 export async function sendNotification(title: string, outletId: string | undefined) {
+  
   try {
     // Fetch users with isLogin === true
     const loggedInUsers = await UserAccount.find({ 
@@ -48,8 +49,6 @@ export async function sendNotification(title: string, outletId: string | undefin
               options: notificationOptions,
             });
 
-
-            // console.log(response, "response");
 
             const successResults = response.responses.filter((result: any) => result.success);
 
