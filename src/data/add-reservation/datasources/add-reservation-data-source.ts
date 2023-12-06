@@ -111,7 +111,7 @@ export class AddReservationDataSourceImpl implements AddReservationDataSource {
       })
       .populate({
         path: "client", // Populate the 'client' field
-        select: "id firstName lastName phone email", // Select specific fields
+        select: "id firstName lastName phone email salutation", // Select specific fields
       })
       .populate({
         path: "table", // Populate the 'table' field
