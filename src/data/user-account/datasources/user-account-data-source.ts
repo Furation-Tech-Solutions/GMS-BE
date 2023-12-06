@@ -51,6 +51,8 @@ async create(user: UserModel): Promise<any> {
    throw ApiError.notFound();
   }
  }
+
+ 
  async delete(id:string):Promise<void>{
   try{
        await UserAccount.findByIdAndDelete(id)

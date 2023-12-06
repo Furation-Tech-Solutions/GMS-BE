@@ -38,10 +38,10 @@ export class ClientServices {
 
   async createClient(req: Request, res: Response): Promise<void> {
     const user = req.user;
-    const outletId=req.outletId
+    const outletId = req.outletId
     const newClientData = {
       ...req.body,
-      outletId:outletId,
+      outletId: outletId,
       createdBy: user._id,
       updatedBy: user._id,
     };
@@ -60,12 +60,12 @@ export class ClientServices {
 
         const log = loggerService.createLogs(
           {
-           level: 'info',
-           timestamp: `${logTime()}`, 
-           message: `${user.firstName} added this client at ${time}`,
-           client: resData._id
+            level: 'info',
+            timestamp: `${logTime()}`,
+            message: `${user.firstName} added this client at ${time}`,
+            client: resData._id
           }
-          )
+        )
 
         return res.status(200).json(resData);
       }
@@ -111,7 +111,7 @@ export class ClientServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const outletId=req.outletId as string
+    const outletId = req.outletId as string
     const clients: Either<ErrorClass, ClientEntity[]> =
       await this.getAllClientsUsecases.execute(outletId);
 
@@ -196,7 +196,7 @@ export class ClientServices {
 
           return sort === "1" ? dateB - dateA : dateA - dateB;
         });
- 
+
         // Search
         if (search && typeof search === "string") {
           const regex = new RegExp(search, "i");
@@ -248,15 +248,36 @@ export class ClientServices {
             const resData = ClientMapper.toEntity(result, true);
 
 
+            const changedFields: string[] = [];
+
+            // Compare existingClientData with newClientData to determine changes
+            for (const key in newClientData) {
+              if (
+                Object.prototype.hasOwnProperty.call(existingClientData, key) &&
+                existingClientData[key as keyof ClientEntity] !== newClientData[key]
+              ) {
+                changedFields.push(`${key}`);
+              }
+            }
+
+            let logMessage = `${user.firstName} updated this client`;
+
+            if (changedFields.length > 0) {
+              const changedFieldsMessage = `Changed fields: ${changedFields.join(', ')}`;
+              logMessage += ` - ${changedFieldsMessage}`;
+            }
+
 
             const log = loggerService.createLogs(
               {
-               level: 'info',
-               timestamp: `${logTime()}`, 
-               message: `${user.firstName} updated this client `,
-               client: resData._id
+                level: 'info',
+                timestamp: `${logTime()}`,
+                message: logMessage,
+                client: resData._id
               }
-              );
+            );
+
+   
 
             res.status(200).json(resData);
           }
