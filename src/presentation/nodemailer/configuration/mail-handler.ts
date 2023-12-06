@@ -227,10 +227,10 @@ class EmailHandler {
                   type: "text",
                   text: `${fullName}`,
                 },
-                {
-                  type: "text",
-                  text: `${addReservation.shift.shiftName}`,
-                },
+                // {
+                //   type: "text",
+                //   text: `${addReservation.shift.shiftName}`,
+                // },
                 {
                   type: "date_time",
                   date_time: {
@@ -393,10 +393,10 @@ class EmailHandler {
                   type: "text",
                   text: `${fullName}`,
                 },
-                {
-                  type: "text",
-                  text: `${addReservation.shift.shiftName}`,
-                },
+                // {
+                //   type: "text",
+                //   text: `${addReservation.shift.shiftName}`,
+                // },
                 {
                   type: "date_time",
                   date_time: {

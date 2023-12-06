@@ -98,7 +98,7 @@ export async function confirmReservationTemplate(
 
   const emailContent = emailTemplate
     .replace("[Salutation]", result.client.salutation)
-    .replace("endTime", endTime)
+    .replace("[endTime]", endTime)
     .replace("[Client's Full Name]", fullName)
     .replace("[shift]", result.shift.shiftName)
     .replace("[Reservation Date]", date)
