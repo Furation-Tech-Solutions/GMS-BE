@@ -197,7 +197,7 @@ class EmailHandler {
           addReservation.client.lastName;
 
         whatsappMessage = {
-          name: "confirmed_reservation_v2",
+          name: "confirmed_reservation_v3",
           language: {
             code: "en_US",
           },
@@ -245,10 +245,10 @@ class EmailHandler {
                   type: "text",
                   text: `${startTime}`,
                 },
-                {
-                  type: "text",
-                  text: `${endTime}`,
-                },
+                // {
+                //   type: "text",
+                //   text: `${endTime}`,
+                // },
                 {
                   type: "text",
                   text: `${outlet.outletName}`,
@@ -363,7 +363,7 @@ class EmailHandler {
         };
 
         whatsappMessage = {
-          name: "confirmed_reservation_v2",
+          name: "confirmed_reservation_v3",
           language: {
             code: "en_US",
           },
@@ -411,10 +411,10 @@ class EmailHandler {
                   type: "text",
                   text: `${startTime}`,
                 },
-                {
-                  type: "text",
-                  text: `${endTime}`,
-                },
+                // {
+                //   type: "text",
+                //   text: `${endTime}`,
+                // },
                 {
                   type: "text",
                   text: `${outlet.outletName}`,
