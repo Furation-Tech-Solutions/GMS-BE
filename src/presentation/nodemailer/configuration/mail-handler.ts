@@ -1,7 +1,4 @@
-import { Request, Response } from "express"; // Import necessary modules and types
-// import { Either, ErrorClass, AddReservationEntity } from './types'; // Import your types here
-// import { createWhatsAppMessage } from './whatsappTemplates'; // Import your WhatsApp template function
-// import { generateEmailContent } from './emailTemplates'; // Import your email template function
+
 import { GetAddReservationById } from "@domain/add-reservation/usecases/get-add-reservation-by-id";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
 import mongoose from "mongoose";
@@ -25,7 +22,7 @@ import {
   SendEmailCommandOutput,
 } from "@aws-sdk/client-ses";
 
-const whatsappRecipient = "919881239491"; // Replace with the recipient's phone number
+
 const getAddReservationByIdUsecase = new AddReservationDataSourceImpl(
   mongoose.connection
 );
@@ -34,11 +31,7 @@ const getUserByIdUsecase = new UserDataSourceImpl(mongoose.connection);
 const emailService = new EmailService();
 const whatsAppService = new WhatsAppService();
 
-const managerArr = [
-  "amul.shinde@furation.tech",
-  "shahzad.shaikh@furation.tech",
-  "shehzadmalik123.sm@gmail.com",
-];
+
 
 function formatDate(inputDate: string): string {
   const date = new Date(inputDate);
@@ -144,7 +137,6 @@ class EmailHandler {
         addReservation.client.phone,
         whatsappMessage
       );
-      console.log("whatsappResponse:-", whatsappResponse);
 
       return { emailResponse, whatsappResponse };
     } catch (error: any) {
@@ -210,8 +202,8 @@ class EmailHandler {
                   location: {
                     latitude: 37.85473,
                     longitude: 45.825798,
-                    name: "NAME",
-                    address: `${outlet.outletName}`,
+                    name: `${outlet.outletName}`,
+                    address: `${outlet.city}`,
                   },
                 },
               ],
@@ -335,7 +327,6 @@ class EmailHandler {
         addReservation.reservationStatus === "confirmed" ||
         addReservation.reservationStatus === "CONFIRMED"
       ) {
-        console.log("inside confirmed", addReservation.client.salutation);
         let salutation = addReservation.client.salutation ?? 'Mr.';
         const date = formatDate(addReservation.date);
 
@@ -376,8 +367,8 @@ class EmailHandler {
                   location: {
                     latitude: 37.85473,
                     longitude: 45.825798,
-                    name: "NAME",
-                    address: `${outlet.outletName}`,
+                    name: `${outlet.outletName}`,
+                    address: `${outlet.city}`,
                   },
                 },
               ],
@@ -419,13 +410,13 @@ class EmailHandler {
                   type: "text",
                   text: `${outlet.outletName}`,
                 },
-                {
-                  type: "text",
-                  text: `${outlet.outletName}`,
+                  {
+                  "type": "text",
+                  "text":`${outlet.outletName}`
                 },
-                {
-                  type: "text",
-                  text: `${outlet.phone}`,
+                 {
+                  "type": "text",
+                  "text": `${outlet.phone}`
                 },
 
                 {
@@ -531,6 +522,7 @@ class EmailHandler {
         addReservation.reservationStatus === "LEFT" ||
         addReservation.reservationStatus === "Left"
       ) {
+
         const date = formatDate(addReservation.date);
         const startTime = formatTime(addReservation.timeSlot);
         emailContent = await leftReservationTemplate(

@@ -88,7 +88,7 @@ export async function confirmReservationTemplate(
   );
   const address = outlet.address.replace(/Mumbai.*/, "");
 
-  console.log(emailTemplate, "emailTemplate inside template folder");
+  // console.log(emailTemplate, "emailTemplate inside template folder");
 
   // Replace placeholders with actual data in the email template
   const fullName = result.client.firstName + " " + result.client.lastName;

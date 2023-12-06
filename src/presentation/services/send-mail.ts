@@ -70,7 +70,7 @@ class EmailService {
   }
 
   async sendEmail(mailOptions: EmailOptions): Promise<SendEmailCommandOutput> {
-    console.log(mailOptions, "mailoptions");
+    // console.log(mailOptions, "mailoptions");
 
     let sender: string = "";
     if (mailOptions.from == "nixon.dsouza@reserve1st.com") {
@@ -103,7 +103,7 @@ class EmailService {
     };
 
     try {
-      console.log(params, "inside try block");
+      // console.log(params, "inside try block");
       const command = new SendEmailCommand(params);
       const response: SendEmailCommandOutput = await this.sesClient.send(
         command
@@ -111,7 +111,7 @@ class EmailService {
 
       return response;
     } catch (error: any) {
-      console.log(error.message, "error inside ses service");
+      // console.log(error.message, "error inside ses service");
       return error;
     }
   }
