@@ -2,17 +2,24 @@
 
 import admin from '@main/config/firebase-sdk/firebase-config';
 import { UserAccount } from '@data/user-account/models/user-account-model';
+import logger from '@presentation/logger';
+import mongoose from 'mongoose';
 
 const notificationOptions = {
   priority: 'high',
   timeToLive: 60 * 60 * 24,
-};
+}; 
 
 
-export async function sendNotification(title: string) {
+export async function sendNotification(title: string, outletId: string | undefined) {
+  
   try {
     // Fetch users with isLogin === true
-    const loggedInUsers = await UserAccount.find({ isLogin: true });
+    const loggedInUsers = await UserAccount.find({ 
+      outlet: new mongoose.Types.ObjectId(outletId), // Convert outletId string to ObjectId
+      isLogin: true,
+     });
+
 
     if (loggedInUsers.length === 0) {
       return { error: 'No logged-in users found' };
@@ -27,7 +34,7 @@ export async function sendNotification(title: string) {
           const payload = {
             notification: {
               title: title,
-              body: `Hello! This is a broadcasted notification.`,
+              body: `Powered by Reserve 1st.`,
             },
           };
 
@@ -43,8 +50,6 @@ export async function sendNotification(title: string) {
             });
 
 
-            // console.log(response, "response");
-
             const successResults = response.responses.filter((result: any) => result.success);
 
 
@@ -54,10 +59,21 @@ export async function sendNotification(title: string) {
                 messageId: result.messageId,
                 deviceId: result.canonicalRegistrationToken || result.token,
               });
-
             });
     
             const failures = response.responses.filter((result: any) => !result.success);
+
+
+            // const failedTokens = failures.map((result: any) => result.canonicalRegistrationToken || result.token);
+            // user.firebaseDeviceToken = user.firebaseDeviceToken.filter((token: string) => !failedTokens.includes(token));
+
+            try {
+
+              await user.save();
+
+            } catch (error) {
+              logger.errro(error)
+            }
   
             failures.forEach((result: any) => {
               failureResults.push({
@@ -66,7 +82,7 @@ export async function sendNotification(title: string) {
               });
             });
           } catch (error) {
-            console.error('Error sending multicast message:', error);
+            logger.error('Token is expired:', 'error');
           }
         }
       }
@@ -87,15 +103,12 @@ export async function sendNotification(title: string) {
 }
 
 
-// Example of how to call the sendNotification function
 
- export async function sendNotificationExample(newtitle: string) {
+ export async function sendPushNotifications(newtitle: string, outletId: string | undefined) {
   const title = newtitle;
+ await sendNotification(title, outletId);
 
-  // console.log(title, newtitle, "title")
-  const notificationResult = await sendNotification(title);
-  // console.log(notificationResult);
 }
 
-// Call this function to send a notification
-// sendNotificationExample();
+
+  

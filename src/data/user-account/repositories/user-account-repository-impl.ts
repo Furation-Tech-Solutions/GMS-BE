@@ -27,9 +27,9 @@ export class UserRepositoryImpl implements UserRepository {
       }
      }
 
-     async getAllUser(): Promise<Either<ErrorClass, UserEntity[]>> {
+     async getAllUser(outletId: string): Promise<Either<ErrorClass, UserEntity[]>> {
         try {
-          const response = await this.dataSource.getAllUsers();
+          const response = await this.dataSource.getAllUsers(outletId);
           return Right<ErrorClass, UserEntity[]>(response);
         } catch (error) {
           if (error instanceof ApiError && error.status === 409) {

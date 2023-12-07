@@ -8,13 +8,14 @@ import { CreateLoggerUsecase } from "@domain/logger/usecases/create-logger-useca
 import { LoggerEntity, LoggerMapper, LoggerModel } from "@domain/logger/entities/logger-entity";
 import { ILoggerData, IlogsFilter } from "types/logger/logger-schema-type";
 import { GetAllLogsUsecase } from "@domain/logger/usecases/get-all-logs-usecase";
+import { groupLogsByMonth } from "./getlogs-by-month";
 
 export class LoggerServices {
   private readonly createLoggerUsecase: CreateLoggerUsecase;
-    private readonly getAllLogsUsecase: GetAllLogsUsecase;
-//   private readonly deleteClientUsecases: DeleteClientUsecase;
-//   private readonly getClientByIdUsecases: GetClientByIdUsecase;
-//   private readonly updateClientUsecases: UpdateClientUsecase;
+  private readonly getAllLogsUsecase: GetAllLogsUsecase;
+  //   private readonly deleteClientUsecases: DeleteClientUsecase;
+  //   private readonly getClientByIdUsecases: GetClientByIdUsecase;
+  //   private readonly updateClientUsecases: UpdateClientUsecase;
 
   constructor(
     createLoggerUsecase: CreateLoggerUsecase,
@@ -31,24 +32,24 @@ export class LoggerServices {
   }
 
   async createLogs(loggerData: ILoggerData): Promise<any> {
- 
+
     const newlogs: Either<ErrorClass, LoggerEntity> =
       await this.createLoggerUsecase.execute(loggerData);
 
-      newlogs.fold(
-        (error: ErrorClass) => {
-          console.error(error);
-        },
-        (result: LoggerEntity) => {
-          return result;
-        }
-      );
+    newlogs.fold(
+      (error: ErrorClass) => {
+        console.error(error);
+      },
+      (result: LoggerEntity) => {
+        return result;
+      }
+    );
 
-      return 
-   
+    return
+
   }
 
-async getAlllogs(
+  async getAlllogs(
     req: Request,
     res: Response,
     next: NextFunction
@@ -59,12 +60,12 @@ async getAlllogs(
 
     const filter: IlogsFilter = {}
 
-    if(clientId ) {
-        filter.client = clientId
+    if (clientId) {
+      filter.client = clientId
     }
 
-    if(reservationId ) {
-        filter.reservation = reservationId
+    if (reservationId) {
+      filter.reservation = reservationId
     }
 
     // Call the GetAllAdminsUsecase to get all admins
@@ -72,12 +73,17 @@ async getAlllogs(
       await this.getAllLogsUsecase.execute(filter);
 
 
-      allLogs.cata(
+    allLogs.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (logs: LoggerEntity[]) => {
         const resData = logs.map((log) => LoggerMapper.toEntity(log));
-        return res.status(200).json(resData);
+
+        // Grouping logs by month and year
+        const groupedLogs = groupLogsByMonth(resData);
+        console.log(groupedLogs);
+
+        return res.status(200).json(groupedLogs);
       }
     );
   }
@@ -92,15 +98,16 @@ async getAlllogs(
 
     const filter: IlogsFilter = {}
 
-    if(clientId ) {
-        filter.client = clientId
+    if (clientId) {
+      filter.client = clientId
     }
 
     // Call the GetAllAdminsUsecase to get all admins
     const allLogs: Either<ErrorClass, LoggerEntity[]> =
       await this.getAllLogsUsecase.execute(filter);
 
-      allLogs.cata(
+
+    allLogs.cata(
       (error: ErrorClass) =>
         res.status(error.status).json({ error: error.message }),
       (logs: LoggerEntity[]) => {
@@ -111,3 +118,39 @@ async getAlllogs(
   }
 
 }
+
+
+/**
+ [
+  {
+    jan 2023: [
+    {
+        level: "info",
+        timestamp: "Tue, Dec 5, 2023, 12:27:06"
+        message: "user created this log"
+    },
+    {
+        level: "info",
+        timestamp: "Tue, Dec 5, 2023, 12:27:06"
+        message: "user created this log"
+    },
+
+    ]
+  },
+  {
+    Feb 2023: [
+    {
+        level: "info",
+        timestamp: "Tue, Dec 5, 2023, 12:27:06"
+        message: "user created this log"
+    },
+    {
+        level: "info",
+        timestamp: "Tue, Dec 5, 2023, 12:27:06"
+        message: "user created this log"
+    },
+
+    ]
+  }
+ ]
+ */

@@ -36,10 +36,10 @@ import { formatTimeAmPm } from "@presentation/utils/time-format-am-pm";
 import { LogModel } from "@data/logger/models/logger-model";
 import { TableDataSourceImpl } from "@data/table/datasources/table-data-source";
 import { AddReservationDataSourceImpl } from "@data/add-reservation/datasources/add-reservation-data-source";
-import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
+// import { sendPushNotification } from "@presentation/middlewares/notification/notification-middleware";
 import {
   sendNotification,
-  sendNotificationExample,
+  sendPushNotifications,
 } from "@presentation/middlewares/notification/notification-middleware-backend";
 
 import { logTime } from "@presentation/utils/logs-time-format";
@@ -87,7 +87,7 @@ export class AddReservationServices {
   async createAddReservation(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
-      const outletId = req.outletId;
+      const outletId: string | undefined = req.outletId;
 
       const newReservationData = {
         ...req.body,
@@ -111,34 +111,30 @@ export class AddReservationServices {
 
           //called the get reservation by id to send populated data to email template
           const addReservationId: string | undefined = resData._id;
-          try{
 
+          try {
             if (addReservationId) {
               const emailhandler = new EmailHandler();
-              const sesResponse=await emailhandler.handleReservation(addReservationId);
-              console.log(sesResponse,"sesResponse")
+              await emailhandler.handleReservation(addReservationId);
             }
-          }
-          catch(err){
-            console.log(err)
+          } catch (error) {
+            console.log(error)
           }
 
           const time = formatTimeAmPm(resData.timeSlot);
 
-          // const title = logger.info(
-          //   `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`
-          // );
 
           const log = loggerService.createLogs(
             {
-             level: 'info',
-             timestamp: `${logTime()}`, 
-             message: `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`,
-             reservation: resData._id
+              level: 'info',
+              timestamp: `${logTime()}`,
+              message: `${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`,
+              reservation: resData._id
             }
-            )
-      
-      // await sendNotificationExample(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`);
+          )
+
+          await sendPushNotifications(`${user.firstName} added a Reservation at ${time} for ${resData.noOfGuests} guests`, outletId);
+
           return res.status(200).json(resData);
         }
       );
@@ -274,17 +270,17 @@ export class AddReservationServices {
         if (sort) {
           sort === "1"
             ? responseData.sort((a, b) => {
-                return (
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-                );
-              })
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              );
+            })
             : responseData.sort((a, b) => {
-                return (
-                  new Date(a.createdAt).getTime() -
-                  new Date(b.createdAt).getTime()
-                );
-              });
+              return (
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+              );
+            });
         }
 
         if (coverflow) {
@@ -384,26 +380,26 @@ export class AddReservationServices {
             // if (resData.reservationStatus == "isLeft") {
             //called the get reservation by id to send populated data to email template
             const addReservationId: string | undefined = resData._id;
-try{
+            try {
 
-  if (addReservationId) {
-    const emailhandler = new EmailHandler();
-    await emailhandler.handleReservation(addReservationId);
-  }
+              if (addReservationId) {
+                const emailhandler = new EmailHandler();
+                await emailhandler.handleReservation(addReservationId);
+              }
             }
-            catch(error){
-  console.log(error)
+            catch (error) {
+              console.log(error)
             }
             // }
 
             const log = loggerService.createLogs(
               {
-               level: 'info',
-               timestamp: `${logTime()}`, 
-               message: `${user.firstName} updated the Reservation`,
-               reservation: resData._id
+                level: 'info',
+                timestamp: `${logTime()}`,
+                message: `${user.firstName} updated the Reservation`,
+                reservation: resData._id
               }
-              )
+            )
             res.status(200).json(resData);
           }
         );
@@ -426,7 +422,7 @@ try{
 
       filter.outletId = outletId;
 
-      if (date) {   
+      if (date) {
         filter.date = date;
       }
 
@@ -440,7 +436,7 @@ try{
       const addReservations: Either<ErrorClass, AddReservationEntity[]> =
         await this.getAllAddReservationUsecase.execute(filter);
 
-        // console.log(addReservations, "addReservations");
+      // console.log(addReservations, "addReservations");
 
       addReservations.cata(
         (error: ErrorClass) =>
@@ -501,9 +497,7 @@ try{
     try {
       const outletId = req.outletId as string;
       const reservtionId = req.query.id as string;
-      // const date = req.query.date as string
-      // const shift = req.query.shift as string
-      // const time = req.query.time as string
+
 
       const getReservationById = await this.addReservationDataSourceImpl.read(
         reservtionId
@@ -514,6 +508,7 @@ try{
         date: getReservationById?.date,
         shift: getReservationById?.shift._id,
         timeSlot: getReservationById?.timeSlot,
+
       };
 
 
@@ -521,10 +516,13 @@ try{
         await this.getAllAddReservationUsecase.execute(filter);
 
 
+
+
       const particularDateReservations =
         await this.addReservationDataSourceImpl.getAll({
           date: getReservationById.date,
           outletId: outletId,
+          reservationStatus: "booked"
         });
 
 
@@ -546,13 +544,10 @@ try{
               .json({ message: "not found any reservations " });
           }
 
-          // const reservedTableIds: any[] = responseData
-          //   .map((reservation) => reservation.table)
-          //   .filter((tableId) => tableId !== undefined);
-  
+
           const reservedTableIds: any[] = responseData
             .map((reservation) => reservation.table)
-            .flat(); 
+            .flat();
 
 
           const availableTables = allTables.filter((table: any) => {
@@ -575,10 +570,10 @@ try{
             .clone()
             .add(getReservationById.duration, "minutes");
 
-
           const conflictTables = [];
 
           for (const reservation of particularDateReservations) {
+
             const requestedTime = moment.tz(
               `${reservation.date}T${reservation.timeSlot}`,
               "YYYY-MM-DDTHH:mm:ss",
@@ -587,14 +582,16 @@ try{
 
             const requestedEndTime = requestedTime
               .clone()
-              .add(reservation.duration, "minutes");
+              .add(reservation.duration, "minutes")
+              .subtract(2, "minutes");
+
 
             if (
               requestedTime.isBetween(
                 reservationStartTime,
                 reservationEndTime,
                 null,
-                "[)" // Use `[)` for inclusive start and exclusive end
+                "[)" // Use `[)` for inclusive st art and exclusive end
               ) ||
               requestedEndTime.isBetween(
                 reservationStartTime,
@@ -610,8 +607,8 @@ try{
                 }
               }
             }
-          }
 
+          }
 
           const updatedAvailableTables = [];
 
@@ -629,6 +626,7 @@ try{
               updatedAvailableTables.push(table);
             }
           }
+
 
           return res.status(200).json(updatedAvailableTables);
         }

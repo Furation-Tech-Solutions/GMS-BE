@@ -27,7 +27,7 @@ import { notificationRouter } from "@presentation/routes/notification/notificati
 import { userRouter } from "@presentation/routes/user-route";
 import { superAdminRouter } from "@presentation/routes/super-admin-routes";
 import { checkInCheckOutRouter } from "@presentation/routes/client-management/check-in-out-route";
-import { sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
+// import { sendNotificationExample } from "@presentation/middlewares/notification/notification-middleware-backend";
 import logger from "@presentation/logger";
 import { logTime } from "@presentation/utils/logs-time-format";
 import { loggerService, loggsRoute } from "@presentation/routes/logger-routes";

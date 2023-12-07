@@ -101,7 +101,6 @@ export class OutletService {
         }
       }
     );
-
   }
 
   async deleteOutlet(req: Request, res: Response): Promise<void> {
@@ -186,6 +185,27 @@ export class OutletService {
       (result: void) => {
         const resData = "Reactivated successfully";
         return res.status(200).json(resData);
+      }
+    );
+  }
+
+  async getAllOutletsForBookingRequests(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    
+
+    const outlets: Either<ErrorClass, OutletEntity[]> =
+      await this.getAllOutletsUsecase.execute();
+
+    outlets.cata(
+      (error: ErrorClass) =>
+        res.status(error.status).json({ error: error.message }),
+      (outlets: OutletEntity[]) => {
+        const resData = outlets.map((outlet) => OutletMapper.toEntity(outlet));
+        
+          return res.status(200).json(resData);
       }
     );
   }

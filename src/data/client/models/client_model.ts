@@ -16,7 +16,7 @@ const clientSchema = new mongoose.Schema({
   firstName: {
     type: String,
     maxlength: [30, "firstName name should have less than 30 charcters"],
-    minLength: [3, "firstName name should have more than 3 character"],
+    minLength: [1, "firstName name should have more than 1 character"],
     required: [true, "please enter first Name"],
     // unique: true,
     trim: true,

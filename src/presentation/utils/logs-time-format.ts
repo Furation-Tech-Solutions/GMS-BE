@@ -15,5 +15,6 @@ export function logTime() {
     return dateTimeString;
   }
   
+
 //   const currentDateTime = getCurrentDateTime();
 //   console.log(currentDateTime);
