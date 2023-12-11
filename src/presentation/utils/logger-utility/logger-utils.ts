@@ -1,11 +1,13 @@
-
-
 import { NextFunction, Request, Response } from "express";
 
 import { Either } from "monet";
 import { ErrorClass } from "@presentation/error-handling/api-error";
 import { CreateLoggerUsecase } from "@domain/logger/usecases/create-logger-usecase";
-import { LoggerEntity, LoggerMapper, LoggerModel } from "@domain/logger/entities/logger-entity";
+import {
+  LoggerEntity,
+  LoggerMapper,
+  LoggerModel,
+} from "@domain/logger/entities/logger-entity";
 import { ILoggerData, IlogsFilter } from "types/logger/logger-schema-type";
 import { GetAllLogsUsecase } from "@domain/logger/usecases/get-all-logs-usecase";
 import { groupLogsByMonth } from "./getlogs-by-month";
@@ -19,7 +21,7 @@ export class LoggerServices {
 
   constructor(
     createLoggerUsecase: CreateLoggerUsecase,
-    getAllLogsUsecase: GetAllLogsUsecase,
+    getAllLogsUsecase: GetAllLogsUsecase
     // deleteClientUsecases: DeleteClientUsecase,
     // getClientByIdUsecases: GetClientByIdUsecase,
     // updateClientUsecases: UpdateClientUsecase
@@ -32,7 +34,6 @@ export class LoggerServices {
   }
 
   async createLogs(loggerData: ILoggerData): Promise<any> {
-
     const newlogs: Either<ErrorClass, LoggerEntity> =
       await this.createLoggerUsecase.execute(loggerData);
 
@@ -45,8 +46,7 @@ export class LoggerServices {
       }
     );
 
-    return
-
+    return;
   }
 
   async getAlllogs(
@@ -54,24 +54,22 @@ export class LoggerServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
     const reservationId = req.query.reservation as string;
     const clientId = req.query.client as string;
 
-    const filter: IlogsFilter = {}
+    const filter: IlogsFilter = {};
 
     if (clientId) {
-      filter.client = clientId
+      filter.client = clientId;
     }
 
     if (reservationId) {
-      filter.reservation = reservationId
+      filter.reservation = reservationId;
     }
 
     // Call the GetAllAdminsUsecase to get all admins
     const allLogs: Either<ErrorClass, LoggerEntity[]> =
       await this.getAllLogsUsecase.execute(filter);
-
 
     allLogs.cata(
       (error: ErrorClass) =>
@@ -81,7 +79,6 @@ export class LoggerServices {
 
         // Grouping logs by month and year
         const groupedLogs = groupLogsByMonth(resData);
-        console.log(groupedLogs);
 
         return res.status(200).json(groupedLogs);
       }
@@ -93,19 +90,17 @@ export class LoggerServices {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
     const clientId = req.query.client as string;
 
-    const filter: IlogsFilter = {}
+    const filter: IlogsFilter = {};
 
     if (clientId) {
-      filter.client = clientId
+      filter.client = clientId;
     }
 
     // Call the GetAllAdminsUsecase to get all admins
     const allLogs: Either<ErrorClass, LoggerEntity[]> =
       await this.getAllLogsUsecase.execute(filter);
-
 
     allLogs.cata(
       (error: ErrorClass) =>
@@ -116,41 +111,19 @@ export class LoggerServices {
       }
     );
   }
-
 }
 
-
-/**
- [
+/*
+[
   {
-    jan 2023: [
-    {
+    monthYear: "Jan 2023",
+    logs: [
+      {
         level: "info",
-        timestamp: "Tue, Dec 5, 2023, 12:27:06"
-        message: "user created this log"
-    },
-    {
-        level: "info",
-        timestamp: "Tue, Dec 5, 2023, 12:27:06"
-        message: "user created this log"
-    },
-
-    ]
+        timestamp: "Tue, Jan 5, 2023, 12:26:33",
+        message: "Kiran added a Reservation at 09:00 PM for 6 guests",
+      },
+    ],
   },
-  {
-    Feb 2023: [
-    {
-        level: "info",
-        timestamp: "Tue, Dec 5, 2023, 12:27:06"
-        message: "user created this log"
-    },
-    {
-        level: "info",
-        timestamp: "Tue, Dec 5, 2023, 12:27:06"
-        message: "user created this log"
-    },
-
-    ]
-  }
- ]
- */
+];
+*/
