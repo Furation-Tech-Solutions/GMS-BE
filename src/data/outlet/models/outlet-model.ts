@@ -19,6 +19,11 @@ const outletSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
+  fromEmail:{
+    type: String,
+    required: true,
+    lowercase: true,
+  },
   phone: {
     type: Number,
     required: true,

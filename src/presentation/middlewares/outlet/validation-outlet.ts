@@ -6,6 +6,7 @@ interface OutletInput {
   brandLogo: string;
   outletName: string;
   email: string;
+  fromEmail: string;
   phone: number;
   altPhone?: number;
   address: string;
@@ -28,6 +29,16 @@ const outletValidator = function (input: OutletInput): OutletInput {
       "any.required": "Brand name is required",
     }),
     email: Joi.string()
+      .required()
+      .email({ tlds: { allow: false } })
+      .lowercase()
+      .messages({
+        "string.base": "Email must be a string",
+        "string.empty": "Email is required",
+        "string.email": "Invalid email format",
+        "any.required": "Email is required",
+      }),
+    fromEmail: Joi.string()
       .required()
       .email({ tlds: { allow: false } })
       .lowercase()
