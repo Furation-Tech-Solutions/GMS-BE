@@ -325,7 +325,7 @@ class EmailHandler {
         //         }
       } else if (
         addReservation.reservationStatus === "confirmed" ||
-        addReservation.reservationStatus === "CONFIRMED"
+        addReservation.reservationStatus === "booked"
       ) {
         let salutation = addReservation.client.salutation ?? 'Mr.';
         const date = formatDate(addReservation.date);
