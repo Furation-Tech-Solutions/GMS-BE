@@ -715,18 +715,18 @@ class EmailHandler {
         outletName,
         password
       );
-      console.log(userDetail,"userDetail","password:",password)
+      // console.log(userDetail,"userDetail","password:",password)
       const emailOption = {
         from: outlet.fromEmail,
         email: userDetail.email,
         subject: "User Registration",
         message: emailContent,
       };
-      console.log(emailOption,"emailOption")
+      // console.log(emailOption,"emailOption")
       await emailService.sendEmail(emailOption);
 
     } catch (error) {
-      console.log(error,"error")
+      // console.log(error,"error")
       throw error;
 
       // console.log(err)
