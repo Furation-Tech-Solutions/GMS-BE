@@ -724,7 +724,9 @@ class EmailHandler {
       };
       // console.log(emailOption,"emailOption")
       await emailService.sendEmail(emailOption);
+
     } catch (error) {
+      // console.log(error,"error")
       throw error;
 
       // console.log(err)
