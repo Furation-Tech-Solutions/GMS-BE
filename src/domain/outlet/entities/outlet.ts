@@ -6,6 +6,7 @@ export class OutletModel {
     public brandLogo: string = "",
     public outletName: string = "",
     public email: string = "",
+    public fromEmail: string = "",
     public phone: string = "",
     public altPhone: string = "",
     public address: string = "",
@@ -26,6 +27,7 @@ export class OutletEntity {
     public brandLogo: string,
     public outletName: string,
     public email: string,
+    public fromEmail: string,
     public phone: string,
     public altPhone: string,
     public address: string,
@@ -60,6 +62,10 @@ export class OutletMapper {
           outletData.email !== undefined
             ? outletData.email
             : existingOutlet.email,
+        fromEmail:
+          outletData.fromEmail !== undefined
+            ? outletData.fromEmail
+            : existingOutlet.fromEmail,
         phone:
           outletData.phone !== undefined
             ? outletData.phone
@@ -110,6 +116,7 @@ export class OutletMapper {
         brandLogo: outletData.brandLogo,
         outletName: outletData.outletName,
         email: outletData.email,
+        fromEmail: outletData.fromEmail,
         phone: outletData.phone,
         altPhone: outletData.altPhone,
         address: outletData.address,
@@ -130,6 +137,7 @@ export class OutletMapper {
       brandLogo: outlet.brandLogo,
       outletName: outlet.outletName,
       email: outlet.email,
+      fromEmail: outlet.fromEmail,
       phone: outlet.phone,
       altPhone: outlet.altPhone,
       address: outlet.address,

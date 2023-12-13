@@ -176,7 +176,7 @@ class EmailHandler {
         );
         // console.log(emailContent,"emailContent")
         emailOption = {
-          from: outlet.email,
+          from: outlet.fromEmail,
           email: addReservation.client.email,
           subject: "Reservation Confirmation",
           message: emailContent,
@@ -325,7 +325,7 @@ class EmailHandler {
         //         }
       } else if (
         addReservation.reservationStatus === "confirmed" ||
-        addReservation.reservationStatus === "CONFIRMED"
+        addReservation.reservationStatus === "booked"
       ) {
         let salutation = addReservation.client.salutation ?? 'Mr.';
         const date = formatDate(addReservation.date);
@@ -346,7 +346,7 @@ class EmailHandler {
           addReservation.client.lastName;
 
         emailOption = {
-          from: outlet.email,
+          from: outlet.fromEmail,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation Confirmation",
@@ -457,7 +457,7 @@ class EmailHandler {
           outlet
         );
         emailOption = {
-          from: outlet.email,
+          from: outlet.fromEmail,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Reservation cancellation",
@@ -532,7 +532,7 @@ class EmailHandler {
           outlet
         );
         emailOption = {
-          from: outlet.email,
+          from: outlet.fromEmail,
           // email:addReservation.client.email,
           email: addReservation.client.email,
           subject: "Thank You for Dining with Us ",
@@ -628,7 +628,7 @@ class EmailHandler {
         outlet
       );
       const emailOption = {
-        from: outlet.email,
+        from: outlet.fromEmail,
         // email:addReservation.client.email,
         email: addReservation.client.email,
         subject: "Reservation Reminder",
@@ -717,14 +717,16 @@ class EmailHandler {
       );
       // console.log(userDetail,"userDetail","password:",password)
       const emailOption = {
-        from: outlet.email,
+        from: outlet.fromEmail,
         email: userDetail.email,
         subject: "User Registration",
         message: emailContent,
       };
       // console.log(emailOption,"emailOption")
       await emailService.sendEmail(emailOption);
+
     } catch (error) {
+      // console.log(error,"error")
       throw error;
 
       // console.log(err)
