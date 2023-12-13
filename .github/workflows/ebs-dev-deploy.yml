@@ -1,4 +1,4 @@
-name: gms backend development deployment workflow
+name: gms backend deployment workflow
 run-name: development server deployment
 on:
   workflow_dispatch:
