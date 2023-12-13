@@ -55,10 +55,14 @@ jobs:
         run: ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} '. /etc/profile; export PATH=$PATH:$HOME/.nvm/versions/node/v20.10.0/bin; cd $HOME/gms-backend/ && yarn install && unzip distOut.zip && pm2 restart 0'
       - name: remove git sha file from server
         run: | 
-          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; rm sha-*'
+          if [ -e "$HOME/sha-*" ]; then
+            echo "sha file exists Removing old sha-version"
+            ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; rm sha-*'
+          fi;
       - name: create sha-version file
         run: |
-          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{vars.GITHUB_SHA}}"
+            echo "creating new sha-file with version ${{vars.GITHUB_SHA}}"
+            ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{vars.GITHUB_SHA}}"
       - name: clean up
         run: |
           rm distOut.zip && \
