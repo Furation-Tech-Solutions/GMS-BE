@@ -51,6 +51,12 @@ jobs:
         run: scp -r  -i "~/.ssh/gms_deploy_access.pem" distOut.zip package.json yarn.lock ubuntu@${{vars.HOST}}:~/gms-backend/
       - name: export pm2 and restart pm2 with updated code
         run: ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} '. /etc/profile; export PATH=$PATH:$HOME/.nvm/versions/node/v20.10.0/bin; cd $HOME/gms-backend/ && yarn install && unzip distOut.zip && pm2 restart 0'
+      - name: remove git sha file from server
+        run: | 
+          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; rm sha-*'
+      - name: create sha-version file
+        run: |
+          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{GIT_SHA}}"
       - name: clean up
         run: |
           rm distOut.zip && \
