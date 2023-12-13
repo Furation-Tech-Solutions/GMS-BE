@@ -1,7 +1,10 @@
-name: GMS Beanstalk Deploy Development
-run-name: Elastic Beanstalk Deploy
+name: gms backend deployment workflow
+run-name: development server deployment
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "main"
   pull_request:
       types:
           - closed
@@ -14,42 +17,50 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
-      - name: Configure aws client
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "ap-south-1"
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
-          cache: "npm"
-      - run: npm install
+          cache: "yarn"
+      - run: yarn install
       - name: Execute application build Script
-        run: npm run build
-      - name: copy email-templates form src to dist
+        run: yarn run build
+      - name: Build code bundle
+        run: zip distOut.zip -r dist/
+      - name: Check Certificate, host variable and keytype
         run: |
-          cp -r ./src/presentation/nodemailer/email-template/ ./dist/presentation/nodemailer/email-template/
-      - name: Create code bundle for deployment
-        run: zip code-bundle.zip -r ./dist/ package.json package-lock.json Procfile
-      - name: Copy code bundle to s3 bucket for code
-        run: aws s3 cp code-bundle.zip s3://gms-backend-ebs-deploy/code-bundle-${{github.sha}}.zip
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: create new ElasticBeanstalk Application version
+          if [ -z "$CERTIFICATE_BASE64" ]; 
+          then 
+            echo "Certificate is absent";
+            exit 1;
+          else 
+            echo "Certificate Present"; 
+          fi;
+      - name: Retrieve the secret and decode it to a file
         run: |
-          aws elasticbeanstalk create-application-version \
-          --application-name guest-management-system \
-          --source-bundle S3Bucket="gms-backend-ebs-deploy",S3Key="code-bundle-${{github.sha}}.zip" \
-          --version-label "${{github.sha}}" \
-          --description "commit-sha-${{github.sha}} created at ${{ steps.date.outputs.date }} "
-      - name: Update elasticbeanstalk environment with latest application-version
+          mkdir ~/.ssh
+          echo $CERTIFICATE_BASE64 | base64 --decode > ~/.ssh/gms_deploy_access.pem
+      - name: change permission for key
         run: |
-          aws elasticbeanstalk update-environment \
-          --application-name guest-management-system \
-          --environment-id "${{vars.ENVIRONMENT_ID}}" \
-          --version-label "${{github.sha}}"
-      - name: Success
+          sudo chmod 600 ~/.ssh/gms_deploy_access.pem 
+      - name: Add server to know Hosts
         run: |
-          echo "Successfull"
+          ssh-keyscan -t ${{vars.KEYTYPE}} ${{vars.HOST}} >> ~/.ssh/known_hosts
+      - name: remove remote files
+        run: ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ~/gms-backend/; rm -rf dist/ distOut.zip yarn.lock package.json'
+      - name: Copy files over at server
+        run: scp -r  -i "~/.ssh/gms_deploy_access.pem" distOut.zip package.json yarn.lock ubuntu@${{vars.HOST}}:~/gms-backend/
+      - name: export pm2 and restart pm2 with updated code
+        run: ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} '. /etc/profile; export PATH=$PATH:$HOME/.nvm/versions/node/v20.10.0/bin; cd $HOME/gms-backend/ && yarn install && unzip distOut.zip && pm2 restart 0'
+      - name: remove git sha file from server
+        run: | 
+          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; rm sha-*'
+      - name: create sha-version file
+        run: |
+          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{GIT_SHA}}"
+      - name: clean up
+        run: |
+          rm distOut.zip && \
+          rm ~/.ssh/gms_deploy_access.pem
+      - name: Completion
+        run: echo "Completed"
+
