@@ -56,7 +56,7 @@ jobs:
           ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; rm sha-*'
       - name: create sha-version file
         run: |
-          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{GIT_SHA}}"
+          ssh -i "~/.ssh/gms_deploy_access.pem" ubuntu@${{vars.HOST}} 'cd ${HOME}; date +"%d-%m-%Y %T" > "sha-${{GITHUB_SHA}}"
       - name: clean up
         run: |
           rm distOut.zip && \
