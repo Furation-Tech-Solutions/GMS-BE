@@ -20,6 +20,7 @@ const clientSchema = new mongoose.Schema({
     required: [true, "please enter first Name"],
     // unique: true,
     trim: true,
+    // index: true, // Index on firstName field
   },
   lastName: {
     type: String,
@@ -28,6 +29,7 @@ const clientSchema = new mongoose.Schema({
     // unique: true,
     default: "",
     trim: true,
+    // index: true, // Index on lastName field
   },
   salutation: {
     type: String,
@@ -158,6 +160,7 @@ const clientSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Outlet",
     default: null,
+    index: true, // Index on outletId field
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -171,11 +174,11 @@ const clientSchema = new mongoose.Schema({
   },
   activityLogs: [
     {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Log",
-    default: null,
-  }
-],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Log",
+      default: null,
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { GuestModel } from "@domain/guest/entities/guest_entities";
 import { Guest } from "../models/guest_model";
 import ApiError from "@presentation/error-handling/api-error";
+import { formattedDateFunc } from "@presentation/utils/formatt-date";
 
 export interface GuestDataSource {
   create(guest: GuestModel): Promise<any>;
@@ -22,7 +23,7 @@ export class GuestDataSourceImpl implements GuestDataSource {
       date: guest.date,
       outletId: guest.outletId,
     }).populate("bookedBy");
-    
+
     if (existingGuest) {
       throw ApiError.guestExist();
     }
@@ -63,6 +64,15 @@ export class GuestDataSourceImpl implements GuestDataSource {
 
   async getAllGuests(outletId: string): Promise<any[]> {
     try {
+      const oneMonthPreviousDate = formattedDateFunc(new Date(), -1);
+
+      const oldGuests = await Guest.find(
+        { date: { $lt: oneMonthPreviousDate } },
+        "_id"
+      );
+      // Fetching only the necessary _id field for deletion
+      console.log(oldGuests);
+
       const guests = await Guest.find({ outletId: outletId })
         .populate({
           path: "reservationTags", // Populate the reservationTags field

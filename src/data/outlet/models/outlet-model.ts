@@ -12,6 +12,7 @@ const outletSchema = new mongoose.Schema({
     required: true,
     maxLength: [30, "Brand name should be under 30 Characters"],
     trim: true,
+    index: true, // Index on outletId field
   },
   email: {
     type: String,

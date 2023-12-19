@@ -7,6 +7,7 @@ import * as Message from "@presentation/error-handling/message-error";
 import { sendMailConfirmedReservations } from "@presentation/middlewares/node-cron/cron";
 import { unblockTableWithCron } from "@presentation/middlewares/node-cron/unblock-table-cron";
 import logger from "@presentation/logger";
+import { deleteOldGuestsWithCron } from "@presentation/middlewares/node-cron/delete-guests-cron";
 
 const app = setupApp();
 
@@ -28,14 +29,15 @@ async function connectToDatabase() {
 
     sendMailConfirmedReservations();
     unblockTableWithCron();
+    deleteOldGuestsWithCron();
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-    
+
     // Handle specific error cases if needed
     if (error instanceof ApiError) {
-      console.log(error.message,"line 36");
+      console.log(error.message, "line 36");
     }
-  
+
     const intererror = ApiError.internalError();
     // console.log(intererror);
     // // console.log("error is this-",error,"error")

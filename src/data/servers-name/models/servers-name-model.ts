@@ -10,6 +10,7 @@ const serversName = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Outlet",
     default: null,
+    index: true, // Index on outletId field
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
