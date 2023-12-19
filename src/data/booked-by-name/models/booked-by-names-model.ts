@@ -7,7 +7,8 @@ const bookedByNameSchema = new mongoose.Schema({
   },
   outletId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Outlet"
+    ref: "Outlet",
+    index: true, // Index on outletId field
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,

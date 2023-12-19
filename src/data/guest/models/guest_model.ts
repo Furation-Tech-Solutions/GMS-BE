@@ -101,6 +101,7 @@ const guestSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserAccount",
       default: null,
+      index: true, // Index on outletId field
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

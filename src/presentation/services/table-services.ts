@@ -175,7 +175,7 @@ export class TableService {
         const errorMessage = isBlocked
           ? "Failed to block tables"
           : "Failed to unblock tables";
-        res.status(200).json({ message: errorMessage });
+        res.status(400).json({ message: errorMessage });
       }
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });

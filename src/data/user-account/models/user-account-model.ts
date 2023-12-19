@@ -32,16 +32,11 @@ const userSchema = new mongoose.Schema({
   },
   accessLevel: {
     type: String,
-    enum: [
-      "Superadmin",
-      "Superuser",
-      "Manager",
-      "Sub-Manager"
-    ],
+    enum: ["Superadmin", "Superuser", "Manager", "Sub-Manager"],
   },
   profileImage: {
     type: String,
-    default: false
+    default: false,
   },
   managerSettings: {
     emailAlertsEnabled: {
@@ -71,7 +66,7 @@ const userSchema = new mongoose.Schema({
   },
   permissions: {
     type: [],
-    default: false
+    default: false,
   },
   updatedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -85,14 +80,15 @@ const userSchema = new mongoose.Schema({
   },
   firebaseDeviceToken: {
     type: [String],
-    default: []
+    default: [],
   },
   outlet: [
-    { 
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Outlet",
-    }
-  ]
+      index: true,
+    },
+  ],
 });
 
 export const UserAccount = mongoose.model("UserAccount", userSchema);
